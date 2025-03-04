@@ -1,0 +1,40 @@
+@use './dark.scss';
+@use './utils' as *;
+
+$color-temp-1: #0f126b;
+$color-temp-2: #52b597;
+$color-temp-3: #29b0f8;
+$color-temp-4: #cadef2;
+
+$colors: () !default;
+$colors: (
+  'color-gray': #808080,
+  'color-white': #ffffff,
+  'color-black': #000000,
+  'color-pink': #fb7979,
+  'color-purple': #9699f8,
+  'color-orange': #fe8b4d,
+  'color-temp-1': $color-temp-1,
+  'color-temp-2': $color-temp-2,
+  'color-temp-3': $color-temp-3,
+  'color-temp-4': $color-temp-4,
+  'bg-color-main': $color-temp-1,
+  'bg-color-white': #ffffff,
+  'bg-color-black': #000000,
+  'bg-color-blank': #ffffff,
+  'bg-color-tab': $color-temp-2,
+  'bg-color-tab-s': #ffffff,
+  'border-color': #ffffff,
+  'border-color-tab': $color-temp-2,
+  'border-color-tab-s': #ffffff,
+  'border-color-round': $color-temp-2,
+  'border-color-gray': '#e4e4e4',
+);
+
+:root {
+  @each $name, $item in $colors {
+    @include set-css-var-value($name, $item);
+  }
+}
+
+//@import './dark.scss';

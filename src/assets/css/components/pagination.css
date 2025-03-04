@@ -1,0 +1,61 @@
+.customPagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.customPagination button {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+/* arrow */
+.customPagination .btn-arrow {
+  margin: 0 2px;
+  background: #e8e8e8;
+}
+
+.customPagination .btn-arrow:not(:disabled):hover {
+  background: #52b597;
+}
+
+.customPagination .btn-arrow:not(:disabled):hover svg path {
+  fill: #fff;
+}
+
+.customPagination .btn-arrow:disabled {
+  cursor: not-allowed;
+}
+
+/* number */
+.customPagination .num-wrap {
+  display: inline-flex;
+  align-items: center;
+}
+
+.customPagination .btn-num {
+  margin: 0 1px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #757575;
+}
+
+.customPagination .btn-num:first-child {
+  margin-left: 15px;
+}
+
+.customPagination .btn-num:last-child {
+  margin-right: 15px;
+}
+
+.customPagination .btn-num:hover {
+  color: #52b597;
+}
+
+.customPagination .btn-num.active {
+  background: #52b597;
+  color: #fff;
+}

@@ -1,0 +1,287 @@
+.monitoringInfo {
+  width: 100%;
+  height: 100%;
+  padding: 15px 12px;
+}
+
+/* ==================== 주소 */
+.monitoringInfo-top {
+  min-height: 50px;
+  display: flex;
+  align-items: flex-start;
+  padding: 14px 12px;
+}
+
+.monitoringInfo-top .title {
+  display: inline-flex;
+  white-space: nowrap;
+  align-items: center;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #000;
+}
+
+.monitoringInfo-top .title svg {
+  margin-right: 6px;
+}
+
+/* ==================== 상단 탭 */
+.monitoringInfo-tab {
+  width: 100%;
+  overflow: visible;
+  margin-top: 10px;
+}
+
+.monitoringInfo-tab > li {
+  flex: auto;
+  height: 36px;
+  padding: 0 10px;
+}
+
+.monitoringInfo-tab > li svg {
+  margin-left: 4px;
+  fill: #757575;
+}
+
+.monitoringInfo-tab > li.active svg {
+  fill: #fff;
+}
+
+.monitoringInfo-tab .customTooltip-box {
+  transform: translateX(-100%);
+}
+
+/* ==================== 탭 내용(공통) */
+.monitoringInfo-content {
+  height: calc(100% - 99px);
+  display: flex;
+  flex-flow: column;
+  overflow: hidden;
+}
+
+.monitoringInfo-content .container.customScroll {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.monitoringInfo-content .customCard,
+.monitoringInfo-content .customTab {
+  margin-top: 10px;
+}
+
+.monitoringInfo-content .customTab.top {
+  width: max-content;
+  height: 31px;
+  min-height: 31px;
+}
+
+.monitoringInfo-content .customCard {
+  padding: 20px;
+}
+
+.monitoringInfo-content .card-title {
+  padding-bottom: 18px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #212121;
+}
+
+.monitoringInfo-content .table-group .customTable:not(:first-child) {
+  margin-top: 16px;
+}
+
+.monitoringInfo-content .customTable {
+  border-color: #e0e0e0;
+}
+
+.monitoringInfo-content .customTable td,
+.monitoringInfo-content .customTable th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.monitoringInfo-content .customTable td:not(:first-child),
+.monitoringInfo-content .customTable th:not(:first-child) {
+  border-left: 1px solid #e0e0e0;
+}
+
+.monitoringInfo-content .customTable td.btn {
+  vertical-align: middle;
+}
+
+.monitoringInfo-content .customTable .btn-basic {
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.24px;
+  background: #44619b;
+  color: #fff;
+}
+
+.monitoringInfo-content .customTable td.map {
+  position: relative;
+  border-left: 1px solid #e0e0e0;
+}
+
+.monitoringInfo-content .customTable td.map .btn-basic {
+  position: absolute;
+  top: 7px;
+  right: 14px;
+}
+
+.monitoringInfo-content .no-data.table {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.monitoringInfo-content .customTab {
+  border-color: #d2d2d2;
+}
+
+.monitoringInfo-content .customTab-item {
+  color: #9e9e9e;
+}
+
+.monitoringInfo-content .customTab-item.active {
+  background-color: #44619b;
+  color: #fff;
+}
+
+/* ==================== 탭: 토지정보 */
+/* 토지이용계획 테이블 */
+.monitoringInfo-content.land .customTable.use-plan td {
+  padding: 17px 20px;
+}
+
+/* ==================== 탭: 지형정보 */
+.monitoringInfo-content.geographic .customCard > div:not(.card-title):not(.customScroll) {
+  margin-top: 10px;
+}
+
+.monitoringInfo-content.geographic .card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.monitoringInfo-content.geographic .card-title > span:last-child {
+  font-weight: 500;
+}
+
+.monitoringInfo-content .chart-wrap {
+  display: flex;
+  flex-flow: column;
+}
+
+.monitoringInfo-content .chart {
+  width: 100%;
+  height: 245px;
+  background-color: #eee;
+}
+
+.monitoringInfo-content .chart:not(:first-child) {
+  margin-top: 14px;
+}
+
+.monitoringInfo-content.geographic .color-box {
+  width: 100%;
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+}
+
+.monitoringInfo-content.geographic .color-select {
+  width: 383px;
+  min-width: 383px;
+  height: 34px;
+  border-color: #bdbdbd;
+}
+
+.monitoringInfo-content.geographic .color-select .customSelect-label {
+  background: #f4f4f4;
+  border-radius: 4px;
+}
+
+.monitoringInfo-content.geographic .color-select .customSelect-value {
+  width: calc(100% - 26px);
+  padding: 0 6px;
+}
+
+.monitoringInfo-content.geographic .color-select .customSelect-value > img {
+  width: 100%;
+}
+
+.monitoringInfo-content.geographic .color-select .customSelect-dropdown {
+  max-height: auto;
+  overflow: hidden;
+  padding: 8px;
+  background: #fff;
+  border-color: #bdbdbd;
+  border-top: 1px solid #bdbdbd;
+}
+
+.monitoringInfo-content.geographic .color-select .customSelect-dropdown > ul {
+  max-height: 175px;
+}
+
+.monitoringInfo-content.geographic .color-select .customSelect-item {
+  max-width: 343px;
+  height: 20px;
+  min-height: 20px;
+  padding: 0;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.monitoringInfo-content.geographic .color-select .customSelect-item:last-child {
+  margin-bottom: 0;
+}
+
+.monitoringInfo-content.geographic .color-select .customSelect-item > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.monitoringInfo-content.geographic .color-select .customSelect-item:hover {
+  border: 1px solid #000;
+}
+
+.monitoringInfo-content.geographic .btn-group {
+  width: calc(100% - 383px);
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+}
+
+.monitoringInfo-content.geographic .btn-color {
+  height: 34px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.monitoringInfo-content.geographic .btn-color:not(:disabled):hover {
+  opacity: 0.8;
+}
+
+.monitoringInfo-content.geographic .btn-color:first-child {
+  width: 44px;
+  background: #fff;
+  border: 1px solid #52b597;
+  color: #52b597;
+}
+
+.monitoringInfo-content.geographic .btn-color:last-child {
+  width: 68px;
+  margin-left: 10px;
+  background: #52b597;
+}

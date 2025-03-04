@@ -1,0 +1,556 @@
+#reference {
+  width: 100%;
+  height: 100%;
+  min-width: 1600px;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /*padding-left: 70px;*/
+  background-color: #fff;
+  z-index: 98;
+}
+
+#reference.active {
+  display: flex;
+}
+
+/*==================== sidebar */
+#reference .sidebar {
+  width: 355px;
+  min-width: 355px;
+  padding: 12px;
+  border-right: 1px solid #656565;
+  background: #fff;
+}
+
+#reference .sidebar-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  padding: 17px 12px;
+  background-color: #52b597;
+}
+
+#reference .sidebar-top .text {
+  padding-left: 8px;
+  text-decoration: underline;
+  text-underline-position: under;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.32px;
+  color: #fff;
+}
+
+#reference .sidebar-menu .menu-list {
+  display: flex;
+  flex-flow: column;
+}
+
+#reference .sidebar-menu .menu-item {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  color: #757575;
+}
+
+#reference .sidebar-menu .menu-item:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+#reference .sidebar-menu .menu-item:hover {
+  color: #52b597;
+  cursor: pointer;
+}
+
+#reference .sidebar-menu .menu-item.active {
+  background: #f4f4f4;
+  color: #52b597;
+}
+
+#reference .sidebar-menu .title {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  color: #282828;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+/*==================== header */
+#reference .l-header {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  background-color: #fff;
+}
+
+#reference .l-header .right {
+  display: inline-flex;
+  align-items: center;
+}
+
+#reference .l-header .header-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: #282828;
+}
+
+#reference .l-header .search {
+  position: relative;
+}
+
+#reference .l-header .btn-search {
+  position: absolute;
+  top: 9px;
+  right: 12px;
+}
+
+#reference .l-header .customInput {
+  width: 312px;
+  height: 36px;
+  padding: 0 42px 0 12px;
+  border-radius: 4px;
+}
+
+#reference .l-header .btn-group {
+  margin-left: 15px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #fafafa;
+}
+
+#reference .l-header .btn-list {
+  width: 41px;
+  height: 34px;
+  background-color: #fafafa;
+}
+
+#reference .l-header .btn-list:hover svg * {
+  fill: #52b597;
+}
+
+#reference .l-header .btn-list.active {
+  background-color: #52b597;
+}
+
+#reference .l-header .btn-list.active svg * {
+  fill: #fff;
+}
+
+/*==================== footer */
+#reference .l-footer {
+  width: 100%;
+  height: 53px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background-color: #fff;
+}
+
+#reference .l-footer .num {
+  position: absolute;
+  top: 13px;
+  left: 30px;
+  color: #757575;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: -0.36px;
+}
+
+#reference .l-footer .customPagination {
+  height: 100%;
+}
+
+/*==================== content */
+#reference .container {
+  width: calc(100% - 355px);
+  position: relative;
+  background-color: #f4f4f4;
+}
+
+#reference .content-wrap {
+  height: calc(100% - 80px);
+  padding: 24px 30px 77px;
+}
+
+/* 고시조서 */
+#reference .card-list {
+  margin: 0 -14px;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+#reference .card {
+  width: calc(100% / 3 - 28px);
+  margin: 14px;
+  padding: 22px 20px;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+#reference .card .img-wrap {
+  width: 100%;
+  height: 170px;
+}
+
+#reference .card .img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#reference .card .card-title {
+  padding: 14px 0;
+  border-bottom: 1px solid #f4f4f4;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.32px;
+  color: #000;
+}
+
+#reference .card .card-bottom {
+  padding-top: 14px;
+}
+
+#reference .card .card-bottom .row {
+  display: flex;
+  align-items: center;
+}
+
+#reference .card .card-bottom .row svg {
+  margin-right: 13px;
+}
+
+#reference .card .card-bottom .row .text {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: -0.28px;
+  color: #757575;
+}
+
+#reference .customCard {
+  padding: 20px;
+}
+
+/* maple */
+#reference .customCard.maple th,
+#reference .customCard.maple td {
+  text-align: left;
+  vertical-align: middle;
+}
+
+#reference .customCard.maple td.file .row {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 지도 다운로드 */
+#reference .content.download {
+  width: 100%;
+  height: 100%;
+  margin: 0 -8px;
+  display: flex;
+  align-items: stretch;
+  align-content: stretch;
+  align-self: stretch;
+}
+
+#reference .content.download .customCard {
+  width: calc(100% / 3 - 16px);
+  flex: 1;
+  margin: 0 8px;
+}
+
+#reference .content.download .customCard-header {
+  width: 100%;
+  height: 53px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#reference .content.download .customCard-header .title {
+  color: #212121;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+#reference .content.download .customCard-header .btn-group {
+  display: inline-flex;
+  align-items: center;
+}
+
+#reference .content.download .customCard-header .btn-group > button {
+  height: 28px;
+  padding: 0 16px;
+  border-radius: 4px;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.28px;
+  color: #fff;
+}
+
+#reference .content.download .customCard-header .btn-green {
+  background: #52b597;
+}
+
+#reference .content.download .customCard-header .btn-gray {
+  margin-left: 10px;
+  background: #9e9e9e;
+}
+
+#reference .content.download .search {
+  width: 100%;
+  position: relative;
+}
+
+#reference .content.download .search .customInput {
+  width: 100%;
+  height: 36px;
+  border-radius: 4px;
+}
+
+#reference .content.download .btn-search {
+  position: absolute;
+  top: 9px;
+  right: 12px;
+}
+
+#reference .content.download .customTable th,
+#reference .content.download .customTable td {
+  text-align: left;
+  padding: 8px 14px;
+}
+
+#reference .content.download .customTable .checkbox {
+  vertical-align: middle;
+}
+
+#reference .content.download .customTable .checkbox input {
+  margin: 0 auto;
+}
+
+#reference .content.download .form {
+  width: 100%;
+  padding: 12px 13px 13px;
+  border-radius: 4px;
+  border: 1px solid #eee;
+}
+
+#reference .content.download .form:not(:last-child) {
+  margin-bottom: 12px;
+}
+
+#reference .content.download .form-title {
+  padding-bottom: 8px;
+  color: #212121;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 135%;
+  letter-spacing: -0.28px;
+}
+
+/* tree */
+#reference .tree-wrap {
+  width: calc(100% + 40px);
+  margin: 0 -20px;
+  display: flex;
+  flex-flow: column;
+}
+
+#reference .tree {
+  display: flex;
+  flex-flow: column;
+}
+
+#reference .tree-header {
+  width: 100%;
+  height: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+#reference .tree-header .tree-title {
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+}
+
+#reference .tree-header .tree-num {
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background-color: #b9eddd;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.24px;
+  color: #0f825f;
+}
+
+#reference .tree-list {
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+#reference .tree-item {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  padding: 15px 20px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #616161;
+}
+
+#reference .tree-item:hover {
+  background-color: #fafafa;
+}
+
+#reference .tree-item input {
+  margin-right: 16px;
+}
+
+#reference .tree-item .customCheckbox-text {
+  display: flex;
+  align-items: center;
+}
+
+#reference .tree-item .customCheckbox-text svg {
+  margin-right: 8px;
+}
+
+/* tree active */
+#reference .tree.active .tree-header {
+  background: #f4f4f4;
+}
+
+#reference .tree.active .tree-list {
+  height: auto;
+  opacity: 1;
+  visibility: visible;
+}
+
+#reference .tree.active .tree-header .btn-treeToggle svg {
+  transform: rotate(180deg);
+}
+
+/* 상세페이지 */
+#reference .content.detail {
+  height: 100%;
+  display: flex;
+}
+
+#reference .content.detail .customCard {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  padding: 30px 30px 40px;
+}
+
+#reference .content.detail .customCard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#reference .content.detail .title {
+  color: #282828;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+#reference .content.detail .right {
+  display: inline-flex;
+  align-items: center;
+}
+
+#reference .content.detail .right span {
+  display: inline-flex;
+  align-items: center;
+  color: #757575;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: -0.28px;
+}
+
+#reference .content.detail .right span:not(:first-child) {
+  margin-left: 12px;
+}
+
+#reference .content.detail .right span svg {
+  margin-right: 13px;
+}
+
+#reference .content.detail .text-wrap {
+  padding: 60px 0;
+  flex: 1;
+  color: #616161;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: -0.32px;
+}
+
+#reference .content.detail .file-wrap {
+  width: 100%;
+  padding: 15px 12px;
+  border-radius: 4px;
+  border: 1px solid #eee;
+  background: #f4f4f4;
+}
+
+#reference .content.detail .file {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  color: #616161;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: -0.3px;
+}
+
+#reference .content.detail .file svg {
+  margin-right: 8px;
+}
+
+#reference .content.detail .btn-list {
+  width: 424px;
+  height: 43px;
+  margin: 40px auto 0;
+  background: #52b597;
+  color: #fff;
+}

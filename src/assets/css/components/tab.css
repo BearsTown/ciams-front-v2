@@ -1,0 +1,59 @@
+.customTab {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #eee;
+}
+
+.customTab-item {
+  height: 31px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #757575;
+}
+
+.customTab.max {
+  width: 100%;
+}
+
+.customTab.max .customTab-item {
+  flex: 1;
+}
+
+.customTab-item:not(.disabled):hover {
+  cursor: pointer;
+  color: #52b597;
+}
+
+.customTab-item:not(.disabled).active {
+  background: #52b597;
+  color: #fff;
+}
+
+/* blue tab */
+.customTab.blue {
+  border-color: #d2d2d2;
+}
+
+.customTab.blue .customTab-item {
+  color: #656565;
+}
+
+.customTab.blue .customTab-item:not(.disabled):hover {
+  cursor: pointer;
+  color: #44619b;
+}
+
+.customTab.blue .customTab-item:not(.disabled).active {
+  background-color: #44619b;
+  color: #fff;
+}

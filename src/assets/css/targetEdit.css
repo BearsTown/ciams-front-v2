@@ -1,0 +1,227 @@
+.targetEdit {
+  width: 100%;
+  height: 100%;
+  padding: 15px 12px;
+}
+
+/* ==================== top */
+.targetEdit-top {
+  height: 206px;
+  padding: 20px;
+}
+
+.targetEdit-top .customTable th {
+  text-align: center !important;
+}
+
+.targetEdit-top .customTable td b {
+  color: #212121;
+}
+
+.targetEdit-top .customTable .map {
+  position: relative;
+}
+
+.targetEdit-top .customTable .btn-map {
+  height: 24px;
+  position: absolute;
+  top: 4px;
+  right: 12px;
+  border-radius: 4px;
+  padding: 0 7px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.24px;
+  background-color: #9e9e9e;
+  color: #fff;
+}
+
+/* ==================== 상단 탭 */
+.targetEdit-tab {
+  width: 100%;
+  overflow: visible;
+  margin-top: 10px;
+}
+
+.targetEdit-tab > li {
+  flex: auto;
+  height: 36px;
+  padding: 0 10px;
+}
+
+.targetEdit-tab > li svg {
+  margin-left: 4px;
+  fill: #757575;
+}
+
+.targetEdit-tab > li.active svg {
+  fill: #fff;
+}
+
+/* ==================== 탭 내용(공통) */
+.targetEdit-content {
+  height: calc(100% - 254px);
+  display: flex;
+  flex-flow: column;
+  overflow: hidden;
+}
+
+.targetEdit-content .container.customScroll {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.targetEdit-content .customCard {
+  max-height: 100%;
+}
+
+.targetEdit-content .customCard,
+.targetEdit-content .customTab {
+  margin-top: 10px;
+}
+
+.targetEdit-content .customTab.top {
+  width: max-content;
+  height: 31px;
+  min-height: 31px;
+}
+
+.targetEdit-content .customCard {
+  padding: 20px;
+}
+
+.targetEdit-content .customCard .img-wrap {
+  width: 100%;
+  height: 245px;
+  background: #eee;
+}
+
+.targetEdit-content .card-title {
+  padding-bottom: 18px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #212121;
+}
+
+.targetEdit-content .text-wrap {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.28px;
+  color: #616161;
+}
+
+.targetEdit-content .table-group .customTable:not(:first-child) {
+  margin-top: 16px;
+}
+
+.targetEdit .customTable {
+  border-color: #e0e0e0;
+}
+
+.targetEdit .customTable td,
+.targetEdit .customTable th {
+  padding: 6px 10px;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.targetEdit .customTable th {
+  vertical-align: middle;
+}
+
+.targetEdit .customTable td {
+  font-weight: 400;
+}
+
+.targetEdit .customTable td:not(:first-child),
+.targetEdit .customTable th:not(:first-child) {
+  border-left: 1px solid #e0e0e0;
+}
+
+.targetEdit .customTable td.btn {
+  vertical-align: middle;
+}
+
+.targetEdit .customTable .btn-basic {
+  height: 24px;
+  position: relative;
+  padding: 0 7px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.24px;
+  background: #44619b;
+  color: #fff;
+}
+
+.targetEdit .customTable td.map {
+  position: relative;
+  border-left: 1px solid #e0e0e0;
+}
+
+.targetEdit .customTable td.map .btn-basic {
+  position: absolute;
+  top: 7px;
+  right: 14px;
+}
+
+.targetEdit-content .customTable td,
+.targetEdit-content .customTable th {
+  padding: 10px 12px;
+}
+
+.targetEdit .no-data.table {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.targetEdit-content .customTab {
+  border-color: #d2d2d2;
+}
+
+.targetEdit-content .customTab-item {
+  color: #9e9e9e;
+}
+
+.targetEdit-content .customTab-item.active {
+  background-color: #44619b;
+  color: #fff;
+}
+
+.targetEdit-content .card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.targetEdit-content .btn-green {
+  height: 28px;
+  padding: 0 16px;
+  border-radius: 4px;
+  background: #52b597;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.28px;
+}
+
+.targetEdit-content .btn-delete {
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 4px;
+  background: #9e9e9e;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.28px;
+}
+
+/* 인센티브정보 */
+.targetEdit-content.info .customTable th,
+.targetEdit-content.info .customTable td {
+  text-align: center;
+}

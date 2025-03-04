@@ -1,0 +1,29 @@
+@use './utils' as *;
+
+$color-dark-1: #121212;
+$color-dark-2: #4c4d4f;
+
+$colors: () !default;
+$colors: (
+  'color-dark-1': $color-dark-1,
+  'color-dark-2': $color-dark-2,
+  'bg-color-main': #121212,
+  'bg-color-white': $color-dark-1,
+  'bg-color-black': #4c4d4f,
+  'bg-color-blank': transparent,
+  'bg-color-tab': #121212,
+  'bg-color-tab-s': #121212,
+  'border-color': $color-dark-2,
+  'border-color-tab': $color-dark-2,
+  'border-color-tab-s': $color-dark-2,
+  'border-color-round': $color-dark-2,
+  'border-color-gray': $color-dark-2,
+);
+
+html.dark {
+  color-scheme: dark;
+
+  @each $name, $item in $colors {
+    @include set-css-var-value($name, $item);
+  }
+}

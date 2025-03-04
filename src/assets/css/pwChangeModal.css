@@ -1,0 +1,113 @@
+.pwChangeModal .customModal-window {
+  width: 496px;
+  padding: 26px 36px 36px;
+  border-radius: 10px;
+}
+
+.pwChangeModal .customModal-header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.pwChangeModal .modal-title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #000;
+}
+
+.pwChangeModal .form {
+  display: flex;
+  flex-flow: column;
+  padding-top: 48px;
+}
+
+.pwChangeModal .form-group {
+  position: relative;
+}
+
+.pwChangeModal .form-group:not(:first-child) {
+  margin-top: 24px;
+}
+
+.pwChangeModal .form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pwChangeModal .form-label {
+  width: max-content;
+  position: relative;
+  display: block;
+  padding-bottom: 12px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+  color: #000;
+}
+
+.pwChangeModal .form-label.required:before {
+  content: '*';
+  position: absolute;
+  top: 0;
+  right: -12px;
+  color: #d71920;
+}
+
+.pwChangeModal .required-text {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #9e9e9e;
+}
+
+.pwChangeModal .required-text > b {
+  color: #d71920;
+}
+
+.pwChangeModal .customInput {
+  height: 40px;
+}
+
+.pwChangeModal .form-feedback {
+  height: 28px;
+  padding-top: 10px;
+}
+
+.pwChangeModal .btn-reload {
+  margin-top: 28px;
+  margin-left: auto;
+  color: #757575;
+}
+
+.pwChangeModal .btn-reload svg {
+  margin-right: 4px;
+}
+
+.pwChangeModal .btn-apply {
+  width: 100%;
+  height: 43px;
+  margin-top: 24px;
+  border-radius: 4px;
+  background: #e0e0e0;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #9e9e9e;
+}
+
+.pwChangeModal .btn-apply:not(:disabled):hover {
+  background: #52b597;
+  color: #fff;
+}
+
+.pwChangeModal .btn-apply.cancel {
+  margin-top: 12px;
+  background: #bdbdbd;
+  color: #fff;
+}

@@ -1,0 +1,67 @@
+.customRadio {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 24px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.customRadio:not(.disabled) {
+  cursor: pointer;
+}
+
+.customRadio-text {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #757575;
+}
+
+.customRadio input[type='radio'] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.customRadio-check {
+  content: '';
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  background-color: #fff;
+  border: solid 1px #9e9e9e;
+}
+
+.customRadio input[type='radio']:checked ~ .customRadio-check {
+  border-color: #52b597;
+}
+
+.customRadio input[type='radio']:checked ~ .customRadio-text {
+  color: #52b597;
+}
+
+.customRadio-check:after {
+  content: '';
+  position: absolute;
+  display: none;
+}
+
+.customRadio input[type='radio']:checked ~ .customRadio-check:after {
+  display: block;
+}
+
+.customRadio .customRadio-check:after {
+  width: 10px;
+  height: 10px;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  background: #52b597;
+  transform: translate(-50%, -50%);
+}

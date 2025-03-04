@@ -1,0 +1,93 @@
+/* ==================== 에러 페이지 */
+#error {
+  width: 100%;
+  min-width: 1200px;
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+  position: relative;
+}
+
+/* ==================== header */
+#error header {
+  width: 100%;
+  height: 63px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 1%;
+  background: #52b597;
+}
+
+#error header .logo a {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+#error .container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  padding: 98px 27px 35px;
+}
+
+/* ==================== content */
+#error .box {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  text-align: center;
+}
+
+#error .img-wrap {
+  width: 432px;
+  height: 289px;
+}
+
+#error .img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+#error .text {
+  margin-top: 60px;
+}
+
+#error .text dt {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.21;
+  color: #000;
+}
+
+#error .text dd {
+  padding-top: 39px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #757575;
+}
+
+#error .btn-back {
+  margin-top: 112px;
+  width: 234px;
+  height: 43px;
+  border-radius: 4px;
+  background: #52b597;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+#error .btn-back:hover {
+  opacity: 0.8;
+}

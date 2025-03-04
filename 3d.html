@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>%VITE_APP_TITLE%</title>
+</head>
+<body>
+<style>
+    html,
+    body,
+    #vmap {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+    }
+</style>
+
+<div id="vmap"></div>
+
+<script>
+  const apiKey = getParamValue("apiKey");
+  const script = `<script type=\"text/javascript\" src=\"https://map.vworld.kr/js/webglMapInit.js.do?version=2.0&apiKey=${apiKey}\"><\/script>`;
+  let polygonList = []
+  let threeId ;
+  let map;
+  document.write(script)
+
+  function getParamValue(paramName) {
+    var url = window.location.search.substring(1);
+    var qArray = url.split("&");
+    for (var i = 0; i < qArray.length; i++) {
+      var pArr = qArray[i].split("=");
+      if (pArr[0] == paramName)
+        return pArr[1];
+    }
+  }
+
+  function movePostion (center,zoom) {
+    const posi= new vw.CameraPosition(
+        new vw.CoordZ(center[0], center[1], zoom),
+        new vw.Direction(0, -60, 0)
+      )
+      map.moveTo(posi)
+  }
+
+
+  function vwmap(center,zoom) {
+    if(map) {
+      const posi= new vw.CameraPosition(
+        new vw.CoordZ(center[0], center[1], zoom),
+        new vw.Direction(0, -60, 0)
+      )
+      map.moveTo(posi)
+      return 
+    }
+    const mapOptions = new vw.MapOptions(
+      vw.BasemapType.GRAPHIC,
+      "",
+      eval("vw.DensityType.BASIC"),
+      eval("vw.DensityType.BASIC"),
+      false,
+      new vw.CameraPosition(
+        new vw.CoordZ(127.425, 38.196, 13487000),
+        new vw.Direction(-90, 0, 0)
+      ),
+      new vw.CameraPosition(
+        new vw.CoordZ(center[0], center[1], zoom),
+        new vw.Direction(0, -60, 0)
+      )
+    );  
+    map = new vw.Map("vmap", mapOptions);
+  }
+
+  function geojson({ data }) {
+    if ( polygonList.length > 0 ) {
+      map.clear()
+      polygonList = []
+    }
+    data.forEach((d, idx) => {
+      const arr = [];
+      d.coordinates.forEach(coordinate => {
+        arr.push(new vw.Coord(coordinate[0], coordinate[1]));
+      });
+      const coordCol = new vw.Collection(arr);
+      const polygon = new vw.geom.Polygon(coordCol);
+      polygon.setId("polygon" + idx);
+      polygonList.push("polygon"+idx)
+      polygon.setFillColor(new vw.Color(d.color.r, d.color.g, d.color.b, d.color.a));
+      polygon.create();
+    });
+  }
+
+  async function init(e) {
+    const {center, data,zoom,id} = JSON.parse(e.data) 
+    //vw 모듈 없어서 지도가 안보이는 부분 수정(?)
+    if(id && threeId === id) {
+      geojson({ data });
+      return 
+    }
+    threeId = id
+    await new Promise ((res,rej) => {
+      const checkState = ()=>{
+        if (window.vw) return res(1)
+        else {
+          setTimeout(()=>checkState(),300)
+        }
+      }
+      checkState()
+    })
+    vwmap(center,zoom);
+    setTimeout(() => {
+      geojson({ data });
+    }, 500);
+  }
+
+
+
+  window.addEventListener("message", init);
+
+</script>
+
+</body>
+</html>

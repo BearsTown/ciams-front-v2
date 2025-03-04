@@ -1,0 +1,182 @@
+/* ==================== 회원가입 페이지 */
+#join {
+  width: 100%;
+  min-width: 1200px;
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+  position: relative;
+}
+
+/* ==================== header */
+#join header {
+  width: 100%;
+  height: 63px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 1%;
+  background: #52b597;
+}
+
+#join header .logo a {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+#join .container {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: 98px 27px 35px;
+}
+
+#join .title {
+  width: 100%;
+  margin-bottom: 50px;
+  padding-bottom: 35px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  font-size: 28px;
+  font-weight: 700;
+  color: #111;
+}
+
+/* ==================== 회원가입 폼 */
+#join .form {
+  max-width: 424px;
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+#join .form-group:not(:first-child) {
+  margin-top: 24px;
+}
+
+#join .form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+#join .form-label {
+  width: max-content;
+  position: relative;
+  display: block;
+  padding-bottom: 12px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+  color: #000;
+}
+
+#join .form-label.required:before {
+  content: '*';
+  position: absolute;
+  top: 0;
+  right: -12px;
+  color: #d71920;
+}
+
+#join .required-text {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #9e9e9e;
+}
+
+#join .required-text > b {
+  color: #d71920;
+}
+
+#join .customInput {
+  height: 40px;
+}
+
+#join .form-feedback {
+  height: 28px;
+  padding-top: 10px;
+}
+
+#join .pw-wrap {
+  position: relative;
+}
+
+#join .btn-pw {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
+
+#join .btn-pw img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 비밀번호변경 */
+#join .form-group.pw {
+  display: flex;
+  flex-flow: column;
+}
+
+#join .form-group.pw .form-label:nth-child(3) {
+  margin-top: 24px;
+}
+
+/* ==================== 회원가입 버튼 */
+/* 초기화 버튼 */
+#join .btn-reload {
+  margin: 36px 0 24px auto;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #757575;
+}
+
+#join .btn-reload:not(:disabled):hover {
+  color: #52b597;
+}
+
+#join .btn-reload:not(:disabled):hover svg path {
+  fill: #52b597;
+}
+
+/* 회원가입, 취소 버튼 */
+#join .btn-join,
+#join .btn-cancel {
+  width: 100%;
+  height: 43px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+#join .btn-join {
+  background: #e0e0e0;
+  color: #9e9e9e;
+}
+
+#join .btn-join:not(:disabled):hover,
+#join .btn-join:not(:disabled).active {
+  background: #52b597;
+  color: #fff;
+}
+
+#join .btn-cancel {
+  margin-top: 12px;
+  background: #bdbdbd;
+  color: #fff;
+}
+
+#join .btn-cancel:not(:disabled):hover {
+  opacity: 0.8;
+}

@@ -1,0 +1,30 @@
+.cursorChange {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.cursorChange.info {
+  cursor: url('../img/cursor_info.svg'), auto;
+}
+
+.cursorChange.distance {
+  cursor: url('../img/cursor_distance.svg'), auto;
+}
+
+.cursorChange.area {
+  cursor: url('../img/cursor_area.svg'), auto;
+}
+
+.cursorChange.radius {
+  cursor: url('../img/cursor_radius.svg'), auto;
+}
+
+.cursorChange.zoomIn {
+  cursor: url('../img/cursor_zoomIn.svg'), auto;
+}
+
+.cursorChange.zoomOut {
+  cursor: url('../img/cursor_zoomOut.svg'), auto;
+}

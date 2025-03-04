@@ -1,0 +1,46 @@
+.dp__input {
+  padding: 1px 30px 1px 26px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.dp__input_icons {
+  padding: 6px 4px 6px 6px;
+}
+
+.dp__overlay_cell_active {
+  background: #52b597;
+}
+
+/* dropdown */
+.dp__overlay {
+  color: #757575;
+}
+
+.dp__selection_preview {
+  color: #757575;
+}
+
+.dp__action_cancel {
+  background: #eee;
+  border-color: #eee;
+  color: #757575;
+}
+
+.dp__action_select {
+  background: #52b597;
+}
+
+.dp__range_end,
+.dp__range_start,
+.dp__active_date {
+  background: #52b597;
+}
+
+.dp__action_buttons > button {
+  min-width: 52px;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 400;
+}

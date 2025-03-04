@@ -1,0 +1,113 @@
+.customInput {
+  width: 100%;
+  padding: 4px 10px;
+  background: #fff;
+  border-radius: 2px;
+  border: 1px solid #e0e0e0;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  color: #000;
+  transition: all 0.2s;
+}
+
+.customInput[type='number']::-webkit-inner-spin-button,
+.customInput[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.customInput::-moz-placeholder {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  color: #9e9e9e;
+}
+
+.customInput::placeholder {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  color: #9e9e9e;
+}
+
+.customInput:not(:disabled):not([readonly]):hover,
+.customInput:not(:disabled):not([readonly]):focus {
+  border-color: #52b597 !important;
+}
+
+.customInput[readonly] {
+  border-color: #d8dce1;
+  color: #9e9e9e;
+  cursor: default;
+}
+
+/* common validation */
+.has-error .form-feedback,
+.has-success .form-feedback {
+  height: auto;
+  opacity: 0;
+  animation-name: errorValidation;
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+
+.has-error,
+.has-success {
+  height: auto;
+}
+
+.form-feedback {
+  width: 100%;
+  height: 0;
+  display: flex;
+  font-size: 12px;
+  letter-spacing: -0.025em;
+  line-height: 1.5;
+  opacity: 0;
+}
+
+.form-feedback svg {
+  margin-right: 6px;
+}
+
+.form-feedback .feedback-text {
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+/* error validation */
+.has-error .customInput {
+  border-color: #d71920 !important;
+}
+
+.has-error .form-feedback {
+  color: #d71920;
+}
+
+/* success validation */
+.has-success .customInput {
+  border-color: #58aa47 !important;
+}
+
+.has-success .form-feedback {
+  color: #58aa47;
+}
+
+/* validation animation */
+@keyframes errorValidation {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

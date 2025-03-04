@@ -1,0 +1,85 @@
+.customTooltip {
+  position: relative;
+}
+
+.customTooltip-box {
+  width: 253px;
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  padding: 15px;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #eee;
+  text-align: left;
+  box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.12);
+  visibility: hidden;
+  opacity: 0;
+  transform: translate(-50%, -5%);
+  transition: 0.3s;
+  z-index: 9;
+}
+
+.customTooltip-box.active {
+  visibility: visible;
+  opacity: 1;
+  transform: translate(-50%, 0%);
+  transition: 0.3s;
+}
+
+/* .customTooltip-box:before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  background: #fff;
+  transform: translate(-50%, -50%) rotate(135deg);
+} */
+
+.customTooltip-box .tooltip-title {
+  display: flex;
+  align-items: center;
+  padding-bottom: 8px;
+  word-break: break-all;
+  font-size: 12px;
+  font-weight: 600;
+  left: -0.02em;
+  line-height: 1.33;
+  color: #212121;
+}
+
+.customTooltip-box .tooltip-title img {
+  margin-right: 4px;
+}
+
+.customTooltip-box .tooltip-text {
+  word-break: break-all;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  color: #424242;
+}
+
+.customTooltip-box .tooltip-bottom {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.btn-tooltipView {
+  justify-self: flex-end;
+  text-decoration: underline;
+  text-underline-position: under;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a1f25;
+}
+
+.btn-tooltipView:not(:disabled):hover {
+  color: #52b597;
+}

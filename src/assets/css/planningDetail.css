@@ -1,0 +1,335 @@
+.planningDetail {
+  width: 100%;
+  height: 100%;
+  padding: 15px 12px;
+}
+
+/* ==================== 주소 */
+.planningDetail-top {
+  height: 200px;
+  padding: 11px 12px 16px;
+}
+
+.planningDetail-top .title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 11px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #000;
+}
+
+.planningDetail-top .title .row {
+  display: inline-flex;
+  align-items: center;
+}
+
+.planningDetail-top .title svg {
+  margin-right: 6px;
+}
+
+.planningDetail-top .title .tag {
+  width: 104px;
+  height: 31px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid #9e9e9e;
+  font-size: 13px;
+  font-weight: 600;
+  color: #9e9e9e;
+}
+
+/* ==================== 상단 탭 */
+.planningDetail-tab {
+  width: 100%;
+  overflow: visible;
+  margin-top: 10px;
+}
+
+.planningDetail-tab > li {
+  flex: auto;
+  height: 36px;
+  padding: 0 10px;
+}
+
+.planningDetail-tab > li svg {
+  margin-left: 4px;
+  fill: #757575;
+}
+
+.planningDetail-tab > li.active svg {
+  fill: #fff;
+}
+
+/* ==================== 탭 내용(공통) */
+.planningDetail-content {
+  height: calc(100% - 245px);
+  display: flex;
+  flex-flow: column;
+  overflow: hidden;
+}
+
+.planningDetail-content .container.customScroll {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.planningDetail-content .customCard,
+.planningDetail-content .customTab {
+  margin-top: 10px;
+}
+
+.planningDetail-content .customTab.top {
+  width: max-content;
+  height: 31px;
+  min-height: 31px;
+}
+
+.planningDetail-content .customCard {
+  padding: 20px;
+}
+
+.planningDetail-content .customCard .img-wrap {
+  width: 100%;
+  height: 245px;
+  background: #eee;
+}
+
+.planningDetail-content .card-title {
+  padding-bottom: 18px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #212121;
+}
+
+.planningDetail-content .text-wrap {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.28px;
+  color: #616161;
+}
+
+.planningDetail-content .table-group .customTable:not(:first-child) {
+  margin-top: 16px;
+}
+
+.planningDetail .customTable {
+  border-color: #e0e0e0;
+}
+
+.planningDetail .customTable td,
+.planningDetail .customTable th {
+  padding: 6px 10px;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.planningDetail .customTable th {
+  vertical-align: middle;
+}
+
+.planningDetail .customTable td {
+  font-weight: 400;
+}
+
+.planningDetail .customTable td:not(:first-child),
+.planningDetail .customTable th:not(:first-child) {
+  border-left: 1px solid #e0e0e0;
+}
+
+.planningDetail .customTable td.btn {
+  vertical-align: middle;
+}
+
+.planningDetail .customTable .btn-basic {
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.24px;
+  background: #44619b;
+  color: #fff;
+}
+
+.planningDetail .customTable td.map {
+  position: relative;
+  border-left: 1px solid #e0e0e0;
+}
+
+.planningDetail .customTable td.map .btn-basic {
+  position: absolute;
+  top: 7px;
+  right: 14px;
+}
+
+.planningDetail .no-data.table {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.planningDetail-content .customTab {
+  border-color: #d2d2d2;
+}
+
+.planningDetail-content .customTab-item {
+  color: #9e9e9e;
+}
+
+.planningDetail-content .customTab-item.active {
+  background-color: #44619b;
+  color: #fff;
+}
+
+.planningDetail-content.plan .card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 13px;
+}
+
+.planningDetail-content.plan .card-title {
+  padding-bottom: 0;
+}
+
+.planningDetail-content.plan .card-content {
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  padding: 0 14px 0;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #52b597;
+}
+
+.planningDetail-content.plan .box-wrap {
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.planningDetail-content.plan .box-wrap.active {
+  height: auto;
+  opacity: 1;
+  visibility: visible;
+  padding: 12px 14px 14px;
+}
+
+/* tree active */
+.planningDetail-content.plan .card-content.active {
+  height: auto;
+  opacity: 1;
+  visibility: visible;
+  padding: 12px 14px 14px;
+}
+
+.planningDetail-content.plan .btn-treeToggle.active svg {
+  transform: rotate(180deg);
+}
+
+.planningDetail-content.plan .card-content .header {
+  display: flex;
+  align-items: center;
+}
+
+.planningDetail-content.plan .card-content .title {
+  margin-right: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.28px;
+  color: #0f825f;
+}
+
+.planningDetail-content.plan .card-content .tag-wrap {
+  display: inline-flex;
+  align-items: center;
+}
+
+.planningDetail-content.plan .card-content .tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.24px;
+  color: #fff;
+}
+
+.planningDetail-content.plan .card-content .tag:not(:first-child) {
+  margin-left: 8px;
+}
+
+.planningDetail-content.plan .card-content .tag.pink {
+  background-color: #fb7979;
+}
+
+.planningDetail-content.plan .card-content .tag.purple {
+  background-color: #9699f8;
+}
+
+.planningDetail-content.plan .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.planningDetail-content.plan .header .row {
+  display: inline-flex;
+  align-items: center;
+}
+
+.planningDetail-content.plan .box {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid #e0e0e0;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.planningDetail-content.plan .box-title {
+  padding-bottom: 12px;
+  color: #424242;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.28px;
+}
+
+.planningDetail-content.plan .box .row {
+  display: flex;
+  align-items: center;
+}
+
+.planningDetail-content.plan .box .row > span {
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: auto;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.planningDetail-content.plan .box .row > span.green {
+  background-color: #52b597;
+}
+
+.planningDetail-content.plan .box .row > span.navy {
+  background-color: #44619b;
+}
+
+.planningDetail-content.plan .box .row > span.gray {
+  background-color: #9e9e9e;
+}
+
+.planningDetail-content.plan .box .row > span:not(:first-child) {
+  margin-left: 4px;
+}

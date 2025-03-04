@@ -1,0 +1,164 @@
+.customTable {
+  width: 100%;
+  position: relative;
+  border-collapse: collapse;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.customTable th,
+.customTable td {
+  min-width: 40px;
+  padding: 8px 7px;
+  text-align: center;
+  scroll-snap-align: start;
+  background-clip: padding-box;
+  word-break: break-all;
+  font-size: 12px;
+  letter-spacing: -0.02em;
+  line-height: 1.5;
+}
+
+.customTable th {
+  font-weight: 600;
+  color: #424242;
+}
+
+.customTable td {
+  font-weight: 500;
+  color: #616161;
+}
+
+.customTable tbody th,
+.customTable tbody td {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.customTable tbody tr:last-child th,
+.customTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.customTable thead th,
+.customTable tbody th {
+  background: #f4f4f4;
+}
+
+.customTable th:not(:first-child),
+.customTable td:not(:first-child) {
+  border-left: 1px solid #e0e0e0;
+}
+
+/* verticalTable */
+.customTable.verticalTable {
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  margin-bottom: 2px;
+}
+
+.customTable.verticalTable thead,
+.customTable.verticalTable tbody {
+  display: flex;
+}
+
+.customTable.verticalTable tr {
+  display: flex;
+  flex-flow: column;
+}
+
+.customTable.verticalTable tr:last-child td {
+  border-right: 0;
+}
+
+.customTable.verticalTable th,
+.customTable.verticalTable td {
+  width: 272px;
+  min-width: 272px;
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee !important;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.customTable.verticalTable td {
+  color: #757575;
+}
+
+.customTable.verticalTable .header th {
+  width: 155px;
+  min-width: 155px;
+  background: #f4f4f4;
+  color: #1a1f25;
+}
+
+.customTable.verticalTable tr > th:first-child,
+.customTable.verticalTable tr > td:first-child {
+  font-weight: 600;
+  color: #1a1f25;
+}
+
+.customTable.verticalTable .primary th {
+  background: #daebfe;
+  color: #757575;
+}
+
+.customTable.verticalTable .primary th:first-child {
+  color: #52b597;
+}
+
+/* scroll */
+.customTable.body {
+  border-top: 0;
+}
+
+.customScroll .customTable.body {
+  border-top: 0;
+}
+
+.customTable tr > td > .customScroll {
+  max-height: 180px;
+}
+
+.customScroll.scrollActive {
+  border-top: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+}
+
+.customScroll.scrollActive table {
+  border-top: 0;
+  border-right: 0;
+}
+
+/* hover */
+.customTable.hover tbody > tr:not(.disabled):hover td {
+  background: #0679e3;
+  color: #fff;
+  cursor: pointer;
+}
+
+.customTable.hover tbody > tr:not(.disabled).active td {
+  background: #0679e3;
+  color: #fff;
+}
+
+.customTable.row tbody[row]:hover {
+  background: #0679e3;
+  cursor: pointer;
+}
+
+.customTable.row tbody[row]:hover td {
+  color: #fff;
+}
+
+.customTable.row tbody[row].active {
+  background: #0679e3;
+  cursor: pointer;
+}
+
+.customTable.row tbody[row].active td {
+  color: #fff;
+}

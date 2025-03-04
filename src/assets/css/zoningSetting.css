@@ -1,0 +1,294 @@
+.zoningSetting {
+  width: 100%;
+  height: 100%;
+  padding: 15px 12px;
+}
+
+.zoningSetting-top {
+  min-height: 82px;
+  padding: 17px 12px;
+}
+
+/* 고시 */
+.zoningSetting-top .form-group {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 4px 0 0 4px;
+  border: 1px solid #eee;
+}
+
+.zoningSetting-top .form-label {
+  width: 53px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
+  border-radius: 4px 0 0 4px;
+  background: #f4f4f4;
+  border-right: 1px solid #eee;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1f25;
+}
+
+.zoningSetting-top .form-group > div {
+  width: calc(100% - 53px);
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 6px 6px 6px 12px;
+}
+
+.zoningSetting-top .text {
+  width: calc(100% - 48px);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.28px;
+  line-height: 1.2;
+  color: #111;
+}
+
+.zoningSetting-top .title {
+  display: inline-flex;
+  white-space: nowrap;
+  align-items: center;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #000;
+}
+
+.zoningSetting-top .form-group .btn-toggle,
+.zoningSetting-top .form-group .btn-file {
+  width: 24px;
+  height: 24px;
+}
+
+/* 탭 */
+.zoningSetting-tab {
+  margin: 12px 0;
+  background-color: transparent;
+  border: 0;
+}
+
+.zoningSetting-tab .customTab-item {
+  position: relative;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #424242;
+}
+
+.zoningSetting-tab .customTab-item.focus {
+  background-color: #2f353a;
+}
+
+.zoningSetting-tab .customTab-item:first-child {
+  padding: 0 12px;
+  margin-right: 9px;
+}
+
+.zoningSetting-tab .customTab-item:not(:first-child) {
+  margin-left: 5px;
+  padding: 0 15px 0 8px;
+  background: url('../img/bg_tab.svg') no-repeat center right/cover;
+}
+
+.zoningSetting-tab .customTab-item:not(:first-child).active {
+  background-image: url('../img/bg_tab_active.svg');
+}
+
+/* content */
+.zoningSetting-content {
+  height: calc(100% - 99px);
+  display: flex;
+  flex-flow: column;
+  overflow: hidden;
+}
+
+.zoningSetting .container.customScroll {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.zoningSetting .customCard {
+  padding: 16px 12px;
+}
+
+.zoningSetting .customCard:not(:first-child) {
+  margin-top: 10px;
+}
+
+.zoningSetting .no-data {
+  border-bottom: 1px solid #eee;
+}
+
+.zoningSetting .card-title {
+  padding-bottom: 12px;
+}
+
+.zoningSetting .card-title .row {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.zoningSetting .customTooltip-box {
+  width: 200px;
+  left: 100%;
+  transform: translate(-5%, 5%);
+}
+
+.zoningSetting .card-title .row .btn-tooltip {
+  margin-left: 4px;
+}
+
+.zoningSetting .btn-view {
+  width: 55px;
+  height: 24px;
+  border-radius: 4px;
+  background: #44619b;
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.zoningSetting .btn-view:not(:disabled):hover {
+  opacity: 0.8;
+}
+
+/* 총괄표 */
+.zoningSetting .customCard.summary .card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.zoningSetting .customTable th {
+  vertical-align: middle;
+  border-bottom: 1px solid #eee;
+  color: #616161;
+}
+
+.zoningSetting .customTable th:not(:first-child) {
+  border-left: 1px solid #eee;
+}
+
+.zoningSetting .customTable th:first-child:last-child {
+  border-top: 1px solid #eee;
+  border-left: 1px solid #eee;
+}
+
+.zoningSetting .customTable td {
+  vertical-align: middle;
+  color: #212121;
+}
+
+.zoningSetting .customTable td,
+.zoningSetting .customTable thead tr:nth-child(2) th:first-child {
+  border-left: 1px solid #eee;
+}
+
+.zoningSetting .customTable tbody th {
+  color: #424242;
+}
+
+.zoningSetting .customTable td:first-child:last-child {
+  border-left: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+/* 구역설정, 계획구역유형 */
+.zoningSetting .customTab.blue {
+  margin-bottom: 14px;
+}
+
+.zoningSetting .set-wrap {
+  max-height: 190px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #eee;
+}
+
+.zoningSetting .set-item {
+  width: calc((100% / 3) - 6px);
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 3px;
+  padding: 6px;
+  background-color: #fff;
+  border-radius: 4px;
+  word-break: break-all;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.21;
+  color: #616161;
+}
+
+.zoningSetting .set-item:not(.disabled):hover {
+  cursor: pointer;
+  border-color: #52b597;
+  color: #52b597;
+}
+
+.zoningSetting .set-item:not(.disabled).active {
+  background: #52b597;
+  border-color: #52b597;
+  color: #fff;
+}
+
+/* 성장관리수립대상지 */
+.zoningSetting .customCard.target .set-item {
+  width: calc(50% - 6px);
+}
+
+/* 구역설정 */
+.zoningSetting .customCard.checkbox {
+  padding: 17px 12px 10px;
+}
+
+.zoningSetting .customCard.checkbox .card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: #282828;
+}
+
+.zoningSetting .customCard.checkbox .btn-toggle {
+  width: 18px;
+  height: 18px;
+}
+
+.zoningSetting .checkbox-wrap {
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.zoningSetting .checkbox-wrap .customCheckbox {
+  width: 100%;
+  position: relative;
+  padding: 9px 0;
+}
+
+/* checkbox active */
+.zoningSetting .customCard.checkbox.active .checkbox-wrap {
+  height: auto;
+  opacity: 1;
+  visibility: visible;
+}
+
+.zoningSetting .customCard.checkbox.active .btn-toggle svg {
+  transform: rotate(180deg);
+}

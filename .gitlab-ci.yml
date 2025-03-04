@@ -1,0 +1,37 @@
+stages:
+  - Build
+  - Deploy
+
+.job_template: &job_template
+  only:
+    - main
+  tags:
+    - ciams-front-runner
+
+variables:
+  GIT_CLEAN_FLAGS: -ffdx -e node_modules/
+  BUILD_PATH: './dist/*'
+  DEPLOY_PATH: '/home/ciams/uitgis/www/ciams'
+
+before_script:
+  # - nvm use 16.20.1
+  - node -v
+
+build:
+  stage: Build
+  script:
+    - npm install
+    - npm run build:pro
+  artifacts:
+    paths:
+      - $BUILD_PATH
+  <<: *job_template
+
+deploy:
+  stage: Deploy
+  script:
+    - sudo rm -rf $DEPLOY_PATH/*
+    - sudo mv $BUILD_PATH $DEPLOY_PATH
+    - sudo chown -R ciams $DEPLOY_PATH
+    - sudo chmod -R 775 $DEPLOY_PATH
+  <<: *job_template

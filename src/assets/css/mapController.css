@@ -1,0 +1,683 @@
+.mapController {
+  width: 50px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 46px;
+  display: flex;
+  flex-flow: column-reverse;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+  z-index: 20;
+}
+
+.mapController.active {
+  right: 630px;
+  transition: 0.3s;
+}
+
+.mapController-bottom {
+  display: flex;
+  flex-flow: column-reverse;
+  padding-top: 12vh;
+}
+
+.mapController .btn-wrap {
+  position: relative;
+  padding: 6px 0;
+}
+
+.mapController .btn-control {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12);
+}
+
+.mapController .btn-control svg {
+  fill: #616161;
+}
+
+.mapController .control-tooltip {
+  width: max-content;
+  min-width: 72px;
+  height: 26px;
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px 0 4px 4px;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-20px, -50%);
+  z-index: 20;
+}
+
+.mapController .control-tooltip:before {
+  content: '';
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-top: 8px solid rgba(0, 0, 0, 0.5);
+  border-left: 0px solid transparent;
+  border-right: 10px solid transparent;
+  border-top-right-radius: 2px;
+  transform: translateX(100%);
+}
+
+.mapController .btn-wrap .dropdown {
+  position: absolute;
+  top: 6px;
+  right: calc(100% + 12px);
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(10%);
+  transition: 0.3s;
+  z-index: 21;
+}
+
+/* hover */
+.mapController .btn-control:not(:disabled):hover svg {
+  fill: #212121;
+}
+
+.mapController .btn-control:not(:disabled):not(.active):hover .control-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* active */
+.mapController .btn-control:not(:disabled).active {
+  background-color: #52b597;
+  transition: 0.3s;
+}
+
+.mapController .btn-control:not(:disabled).active svg {
+  fill: #fff;
+}
+
+.mapController .btn-control:not(:disabled).active + .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  transition: 0.3s;
+}
+
+/* disabled */
+.mapController .btn-control:disabled > svg {
+  fill: #cbcbcb !important;
+}
+
+/* ==================== group */
+.mapController .btn-wrap.button .btn-control.group:not(:disabled).open {
+  transition: 0.3s;
+  background-color: #52b597;
+}
+
+.mapController .btn-wrap.button .btn-control.group:not(:disabled).open svg {
+  fill: #fff;
+}
+
+.mapController .btn-wrap.button .btn-control.group:not(:disabled).open + .dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+  transform: translateX(0);
+  transition: 0.3s;
+}
+
+.mapController .btn-wrap.button .btn-control.group:not(:disabled).active + .dropdown {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ==================== select */
+.mapController .btn-wrap.select .dropdown > .customSelect {
+  width: 145px;
+  min-width: 145px;
+  height: 36px;
+}
+
+/* ==================== button */
+.mapController .btn-wrap.button .dropdown .btn-control {
+  position: relative;
+}
+
+.mapController .btn-wrap.button .dropdown > .bottom {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  display: flex;
+  align-items: center;
+}
+
+.mapController .btn-wrap.button .dropdown .btn-control .control-tooltip {
+  min-width: 47px;
+  top: calc(100% + 13px);
+  left: 0;
+  padding: 0 13px;
+  border-radius: 0 4px 4px 4px;
+  transform: translate(0, 0);
+}
+
+.mapController .btn-wrap.button .dropdown .btn-control .control-tooltip::before {
+  top: 0;
+  left: 0;
+  border-top: 8px solid transparent;
+  border-left: 6px solid rgba(19, 32, 65, 0.54);
+  border-right: 0px solid transparent;
+  border-top-left-radius: 2px;
+  transform: translate(0, -100%);
+}
+
+.mapController .btn-wrap.button .dropdown .btn-control:not(:first-child) {
+  margin-left: 12px;
+}
+
+/* ==================== popup */
+.mapController .btn-wrap.popup .dropdown {
+  flex-flow: column;
+  padding: 20px 7px 0 16px;
+  border-radius: 8px;
+  /*background: rgba(255, 255, 255, 0.9);*/
+  background: rgba(255, 255, 255, 95%);
+  box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.12);
+}
+
+.mapController .btn-wrap.popup .dropdown-header {
+  width: 100%;
+  padding-bottom: 16px;
+  position: relative;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.21;
+  color: #000;
+}
+
+.mapController .btn-wrap.popup .btn-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* ==================== popup - 배경지도 */
+.mapController .dropdown.bgMap {
+  min-width: 325px;
+  padding: 15px !important;
+}
+
+.mapController .dropdown.bgMap .form {
+  display: flex;
+  /*padding: 13px 13px 13px 13px;*/
+  flex-flow: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.mapController .dropdown.bgMap .form-group {
+  display: flex;
+  flex-flow: column;
+  /*padding: 15px 0 20px;*/
+  padding: 15px 0 15px;
+}
+
+.mapController .dropdown.bgMap .form-group:not(:first-child) {
+  border-top: 1px solid #eee;
+}
+
+.mapController .dropdown.bgMap .form-group:first-child {
+  padding-top: 0;
+}
+
+.mapController .dropdown.bgMap .form-group.checkbox .form-row {
+  flex-wrap: wrap;
+  margin: 0 -6.5px;
+}
+
+.mapController .dropdown.bgMap .form-group.checkbox .form-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 4.5px;
+}
+
+/* 관리 버튼 */
+.mapController .dropdown.bgMap .btn-setLayer {
+  width: 35px;
+  height: 24px;
+  border-radius: 4px;
+  background-color: #44619b;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.24px;
+  color: #fff;
+}
+
+.mapController .dropdown.bgMap .btn-setLayer:not(:disabled):hover {
+  opacity: 0.8;
+}
+
+.mapController .dropdown.bgMap .form-group.checkbox .customCheckbox {
+  width: calc(50% - 13px);
+  flex: auto;
+  margin: 6.5px;
+}
+
+.mapController .dropdown.bgMap .form-row {
+  display: flex;
+  align-items: center;
+}
+
+.mapController .dropdown.bgMap .form-label {
+  padding-bottom: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.21;
+  color: #000;
+}
+
+.mapController .dropdown.bgMap .form-label.video {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mapController .dropdown.bgMap .form-label.video .customSelect {
+  width: 85px;
+  min-width: 85px;
+}
+
+.mapController .dropdown.bgMap .form-label.video .customSelect:not(:first-child) {
+  margin-left: 11px;
+}
+
+.mapController .dropdown.bgMap .form-label.video .customSelect-label {
+  background: #f4f4f4;
+}
+
+.mapController .dropdown.bgMap .form-label.video .customSelect-value {
+  padding: 0 6px;
+}
+
+/* radio, checkbox */
+.mapController .dropdown.bgMap .customRadio,
+.mapController .dropdown.bgMap .customCheckbox {
+  flex: 1;
+  height: 38px;
+  padding: 0 10px;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #eee;
+}
+
+.mapController .dropdown.bgMap .customRadio:not(:first-child),
+.mapController .dropdown.bgMap .customCheckbox:not(:first-child) {
+  margin-left: 13px;
+}
+
+.mapController .dropdown.bgMap .customRadio-check {
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+
+.mapController .dropdown.bgMap .customRadio-text {
+  padding-left: 24px;
+}
+
+.mapController .dropdown.bgMap .customCheckbox {
+  display: flex;
+}
+
+.mapController .dropdown.bgMap .customCheckbox .customTooltip {
+  margin-left: auto;
+}
+
+/* style */
+.mapController .dropdown.bgMap .style-list {
+  justify-content: space-between;
+}
+
+.mapController .dropdown.bgMap .style-item {
+  padding: 8px 6px 11px;
+  display: inline-flex;
+  flex-flow: column;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.mapController .dropdown.bgMap .style-item:not(.disabled):hover {
+  cursor: pointer;
+}
+
+.mapController .dropdown.bgMap .style-item:not(.disabled):hover .img-wrap {
+  border-color: #52b597;
+}
+
+.mapController .dropdown.bgMap .style-item:not(.disabled):hover .style-text {
+  color: #52b597;
+}
+
+.mapController .dropdown.bgMap .style-item:not(.disabled).active {
+  background: #52b597;
+}
+
+.mapController .dropdown.bgMap .style-item:not(.disabled).active .img-wrap {
+  border-color: #fff;
+}
+
+.mapController .dropdown.bgMap .style-item:not(.disabled).active .style-text {
+  color: #fff;
+}
+
+.mapController .dropdown.bgMap .style-item .img-wrap {
+  width: 69px;
+  min-width: 69px;
+  height: 69px;
+  min-height: 69px;
+  padding: 2px;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #eee;
+}
+
+.mapController .dropdown.bgMap .style-item .img-wrap > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mapController .dropdown.bgMap .style-item .style-text {
+  padding-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.21;
+  color: #757575;
+}
+
+/* ==================== popup - 레이어설정 */
+.mapController .btn-wrap.layerSet {
+  position: relative;
+  top: 0;
+  right: 360px;
+}
+
+.mapController .btn-wrap.layerSet .dropdown {
+  width: 369px;
+}
+
+/* ==================== popup - 도엽선택 */
+.mapController .dropdown.leaf {
+  width: 631px;
+}
+
+.mapController .dropdown.leaf .dropdown-header {
+  border-bottom: 1px solid #eee;
+}
+
+.mapController .dropdown.leaf .leaf-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.mapController .dropdown.leaf .leaf-header > div {
+  display: flex;
+  align-items: center;
+}
+
+.mapController .dropdown.leaf .leaf-header > div:not(:first-child) {
+  margin-left: 12px;
+}
+
+.mapController .dropdown.leaf .form-row {
+  display: flex;
+  align-items: center;
+}
+
+.mapController .dropdown.leaf .form-label {
+  padding-right: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.21;
+  color: #000;
+}
+
+.mapController .dropdown.leaf .customSelect {
+  width: 118px;
+  min-width: 118px;
+  height: 28px;
+}
+
+.mapController .dropdown.leaf .form-row .customSelect {
+  width: 72px;
+  min-width: 72px;
+}
+
+.mapController .dropdown.leaf .customSelect:not(:first-child) {
+  margin-left: 5px;
+}
+
+.mapController .dropdown.leaf .customRadio:not(:first-child) {
+  margin-left: 16px;
+}
+
+.mapController .dropdown.leaf .leaf-wrap {
+  width: 100%;
+  height: 501px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  border: 1px solid #eee;
+  background: #f2fcf8;
+}
+
+.mapController .dropdown.leaf .leaf-wrap > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mapController .dropdown.leaf .btn-group {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-flow: column;
+}
+
+.mapController .dropdown.leaf .btn-tool {
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  min-height: 36px;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #eee;
+}
+
+.mapController .dropdown.leaf .btn-tool:not(:first-child) {
+  margin-top: 8px;
+}
+
+.mapController .dropdown.leaf .btn-tool:not(:disabled):hover {
+  background: #52b597;
+}
+
+.mapController .dropdown.leaf .btn-tool:not(:disabled):hover svg path {
+  fill: #fff;
+}
+
+/* ==================== popup - 도엽선택 */
+.mapController .btn-wrap.popup .dropdown.miniMap {
+  width: 411px;
+  min-width: 411px;
+  height: 262px;
+  min-height: 262px;
+  top: 100%;
+  right: calc(100% + 12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e6edf6;
+  transform: translateY(-100%);
+  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.12);
+}
+
+/* ==================== map slider */
+.mapController .btn-wrap.slider {
+  display: flex;
+  flex-flow: column;
+  padding: 0;
+  margin: 6px 0;
+}
+
+.mapController .btn-wrap.slider .btn-control {
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  position: relative;
+  border-radius: 0;
+  box-shadow: none;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.mapController .btn-wrap.slider .btn-control:not(:disabled):hover svg path {
+  fill: #52b597;
+}
+
+.mapController .btn-wrap.slider .btn-control.plus {
+  margin-bottom: 1px;
+}
+
+.mapController .btn-wrap.slider .btn-control.minus {
+  margin-top: 1px;
+}
+
+.mapController .btn-wrap.slider .btn-control:before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  background: #e0e0e0;
+  transform: translateX(-50%);
+}
+
+.mapController .btn-wrap.slider .btn-control.minus:before {
+  top: -1px;
+}
+
+.mapController .btn-wrap.slider .slider-wrap {
+  width: 100%;
+  height: 167px;
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  border-radius: 4px;
+  background: #fff url('../img/bg_mapSlider.svg') no-repeat center;
+}
+
+.mapController .btn-wrap.slider .tooltip-wrap {
+  width: 100px;
+  position: absolute;
+  top: 0;
+  right: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 99;
+  transition: opacity 0.2s;
+}
+
+.mapController .btn-wrap.slider:hover .tooltip-wrap {
+  visibility: visible;
+  opacity: 1;
+}
+
+.mapController .btn-wrap.slider .tooltip-wrap .control-tooltip {
+  position: static;
+  margin: 6px 0;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, 0);
+}
+
+.mapController .btn-wrap.slider .slider-text {
+  width: 36px;
+  height: 36px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1px;
+  text-align: center;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #52b597;
+}
+
+.mapController .btn-wrap.slider .slider-text:before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  background: #e0e0e0;
+  transform: translateX(-50%);
+}
+
+/* custom vue3-slider */
+.mapController .btn-wrap.slider .vue3-slider {
+  margin: 0;
+}
+
+.mapController .btn-wrap.slider .vue3-slider .track {
+  border-radius: 0;
+}
+
+.mapController .btn-wrap.slider .vue3-slider .track-filled {
+  border-radius: 0;
+}
+
+.mapController .btn-wrap.slider .vue3-slider .handle {
+  width: 25px;
+  height: 9px;
+  left: calc(50% - 12.5px);
+  border-radius: 2px;
+  background: #fff;
+  border: 1px solid #52b597;
+}
