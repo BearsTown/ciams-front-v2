@@ -9,7 +9,8 @@ import {
 // import MapControl from './mapControl'
 // import { getAllLayersByPropertyName, getBaseLayerState } from '../layers'
 import BaseLayer from 'ol/layer/Base'
-import { LayerType, MapType } from '@/enums/mapEnum'
+import type { MapType } from '@/enums/mapEnum'
+import { LayerType } from '@/enums/mapEnum'
 import { FeatureOption, MapStudioParam, MapStudioParamWithZ } from '@/types/map'
 import { moveType, useMapInfoStore } from '@/stores/mapInfo'
 // import useKeyLayerStore from '@/stores/map/keyLayer'
@@ -36,6 +37,7 @@ import { Extent } from 'ol/extent'
 import { Interaction } from 'ol/interaction'
 import { useMapStore } from '@/stores/map/map'
 import commonUtil from '@/utils/commonUtil'
+import CommonUtil from '@/utils/commonUtil'
 // import { useMapConfig } from '@/stores/map/mapConfig'
 import { vWorldAxiosInstance } from '@/api/vWorld'
 import { AxiosResponse } from 'axios'
@@ -45,10 +47,9 @@ import { getKrasData } from '@/api/app/land/kras'
 // import { usePlanAreaStore } from '@/stores/app/operation/planArea'
 import { DrawEvent } from 'ol/interaction/Draw'
 import { getKgeoUnionData } from '@/api/app/land/kgeo'
-import CommonUtil from '@/utils/commonUtil'
 
 import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-import { useMapStore } from '@/stores/map/map'
+
 const cmmConfigStore = useCmmConfigStore()
 
 const url = import.meta.env.VITE_API_MAPSTUDIO_URL

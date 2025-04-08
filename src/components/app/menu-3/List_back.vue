@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-  import AreaPageList from '@/components/common/AreaTable/AreaPageList.vue'
+  import AreaPageList from '@/components/common/ZoneTable/ZonePageList.vue'
 
   import { onMounted, ref } from 'vue'
 

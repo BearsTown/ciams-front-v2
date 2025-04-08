@@ -57,11 +57,12 @@
   const { layoutSelected } = storeToRefs(globalStore)
   const { status: isActive, toggle } = useBoolean(false)
 
-  const mapType = MapType.MAP_3
+  // const mapType = MapType.MAP_3
+  const mapType: MapType = 'Map-3'
   const mapLayerGroupType: MapLayerGroupType = 'Menu_3_Sub_1'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
-  const layerGroupName = ViewLayerTypes[mapType][mapLayerGroupType]
+  const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
   const components: Record<Menu3Sub2TabIdType, DefineComponent> = {
     TabA: TabAComp,
@@ -172,7 +173,7 @@
     mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
   }
 
-  // async function planZoneItemSelect(item: PlanZone.Search.Row) {
+  // async function zoneAnalysisItemSelect(item: PlanZone.Search.Row) {
   //   layoutSelected.value?.right?.collapse?.on()
   //   mapStore.locationInfoVisible = false
   //

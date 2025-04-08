@@ -31,7 +31,8 @@
 
   const mapConfig = ref<MapWrapperConfig>()
 
-  const mapType = MapType.MAP_1
+  // const mapType = MapType.MAP_1
+  const mapType: MapType = 'Map-1'
   const commonLayerType: CommonLayerGroup = 'COMMON_LAYER_GROUP_1'
   const mapStore = useMapStore(mapType)
   const mapWrap = ref<MapWrapper>()

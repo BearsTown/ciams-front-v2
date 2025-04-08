@@ -1,40 +1,30 @@
 <template>
-  <div class="container customScroll">
-    <InsideCollapse title="도시공업지역" :is-open="true" style="margin: 0 0 10px">
-      <template #content>
-        <Table :records="tempList" />
+  <div class="border-container" style="display: flex; flex-direction: column">
+    <div class="customScroll" style="flex: 1; overflow-y: auto">
+      <template v-for="(category, idx) in state.categories" :key="category.id">
+        <InsideCollapse
+          :title="category.name"
+          :is-open="category.active.status"
+          style="margin: 0 0 10px"
+        >
+          <template #sub>
+            <div style="display: flex">
+              <div style="flex: 1"></div>
+              <el-switch
+                size="small"
+                v-model="category.active.status"
+                @change="handleSwitchChange($event, idx, category.id)"
+                @click.prevent.stop
+              />
+            </div>
+          </template>
+        </InsideCollapse>
       </template>
+    </div>
 
-      <template #sub>
-        <div style="display: flex">
-          <div style="flex: 1"></div>
-          <el-switch
-            size="small"
-            v-model="mapLayers[0].userVisible"
-            @change="userActiveChangeListener($event, 0)"
-            @click.prevent.stop
-          />
-        </div>
-      </template>
-    </InsideCollapse>
-
-    <InsideCollapse title="수립제외지역" :is-open="true" style="margin: 0 0 10px">
-      <template #content>
-        <Table :records="tempList2" />
-      </template>
-
-      <template #sub>
-        <div style="display: flex">
-          <div style="flex: 1"></div>
-          <el-switch
-            size="small"
-            v-model="mapLayers[1].userVisible"
-            @change="userActiveChangeListener($event, 1)"
-            @click.prevent.stop
-          />
-        </div>
-      </template>
-    </InsideCollapse>
+    <div style="flex: 1; overflow-y: hidden">
+      <ZoneList :page-size="50" @item-select="zoneItemSelect" @clear="clear" />
+    </div>
   </div>
 </template>
 
@@ -42,9 +32,10 @@
   import { onActivated, onBeforeMount, onMounted, reactive, ref } from 'vue'
 
   import { InsideCollapse } from '@/components/common/collapse'
-  import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
 
   import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
+  import { useMenu1_2_2Store } from '@/stores/app/menu-1/sub-2/tab-b'
+
   // import { useManagementStore } from '@/stores/app/zoneEstablish/management'
   import { MapLayer } from '@/js/layer'
   import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
@@ -54,74 +45,34 @@
   import { useMapStore } from '@/stores/map/map'
   import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
   import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
+  import ZoneList from '@/components/common/DistList/DistList.vue'
+  import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
+  import { Style } from 'ol/style'
 
   const globalStore = useGlobalStore()
   const menu1sub2store = useMenu1Sub2store()
+  const menu1_2_2Store = useMenu1_2_2Store()
 
-  const mapType = MapType.MAP_1
-  const mapLayerGroupType: MapLayerGroupType = 'Menu_1_Tab_B'
+  // const mapType = MapType.MAP_1
+  const mapType: MapType = 'Map-1-2-2'
+  const mapLayerGroupType: MapLayerGroupType = 'Menu-1-2-2'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
-  const layerGroupName = ViewLayerTypes[mapType][mapLayerGroupType]
+  const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
   const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
-  // const layers = reactive<LayerState[]>([
-  //   {
-  //     layer: undefined,
-  //     userVisible: true,
-  //   },
-  //   {
-  //     layer: undefined,
-  //     userVisible: false,
-  //   },
-  // ])
-
-  const tempList: object[] = [
-    {
-      layer: '일반공업지역',
-      area: 65.45,
-      percent: 6.5,
-    },
-    {
-      layer: '준공업지역',
-      area: 312.55,
-      percent: 31.1,
-    },
-  ]
-
-  const tempList2: object[] = [
-    {
-      layer: '산업단지',
-      area: 65.45,
-      percent: 6.5,
-    },
-    {
-      layer: '문화산업단지',
-      area: 312.55,
-      percent: 31.1,
-    },
-    {
-      layer: '경제자유구역',
-      area: 312.55,
-      percent: 31.1,
-    },
-    {
-      layer: '항만배후단지',
-      area: 312.55,
-      percent: 31.1,
-    },
-  ]
+  const state = menu1_2_2Store.state
 
   const uitWMSLayer1 = new UitWMSLayer({
     baseUrl: mapStudioUrl,
     sourceParams: {
-      KEY: 'C71716C0-8435-688A-D737-F2A4A4BBF4FD',
-      LAYERS: ['CIAMS_P1_UQA300_URBAN'],
+      KEY: '7DFEAB9C-E26B-50B9-10CF-3BC803FBF2F1',
+      LAYERS: ['LAND_USE_TEST'],
     },
     crossOrigin: 'Anonymous',
     properties: {
-      id: 'ciams_p1_uqa300_urban',
+      id: 'LAND_USE_TEST',
       type: 'wms',
     },
     layerType: 'wms',
@@ -133,12 +84,63 @@
   const uitWMSLayer2 = new UitWMSLayer({
     baseUrl: mapStudioUrl,
     sourceParams: {
-      KEY: 'C411380C-E985-DF54-62F7-22890F1D300B',
-      LAYERS: ['CIAMS_P1_LIMIT'],
+      KEY: '7DFEAB9C-E26B-50B9-10CF-3BC803FBF2F1',
+      LAYERS: ['LAND_USE_TEST'],
     },
     crossOrigin: 'Anonymous',
     properties: {
-      id: 'ciams_p1_limit',
+      id: 'LAND_USE_TEST',
+      type: 'wms',
+    },
+    layerType: 'wms',
+    isSingleTile: false,
+    opacity: 0.8,
+    zIndex: 1111,
+  })
+
+  const uitWMSLayer3 = new UitWMSLayer({
+    baseUrl: mapStudioUrl,
+    sourceParams: {
+      KEY: '7DFEAB9C-E26B-50B9-10CF-3BC803FBF2F1',
+      LAYERS: ['LAND_USE_TEST'],
+    },
+    crossOrigin: 'Anonymous',
+    properties: {
+      id: 'LAND_USE_TEST',
+      type: 'wms',
+    },
+    layerType: 'wms',
+    isSingleTile: false,
+    opacity: 0.8,
+    zIndex: 1111,
+  })
+
+  const uitWMSLayer4 = new UitWMSLayer({
+    baseUrl: mapStudioUrl,
+    sourceParams: {
+      KEY: '2F7C7B85-708C-0D8E-B981-BA4DE042E051',
+      LAYERS: ['BUILD_TEST'],
+    },
+    crossOrigin: 'Anonymous',
+    properties: {
+      id: 'BUILD_TEST',
+      type: 'wms',
+    },
+    layerType: 'wms',
+    isSingleTile: false,
+    opacity: 0.8,
+    zIndex: 1111,
+  })
+
+  const uitWMSLayer5 = new UitWMSLayer({
+    baseUrl: mapStudioUrl,
+    sourceParams: {
+      KEY: '2F7C7B85-708C-0D8E-B981-BA4DE042E051',
+      LAYERS: ['BUILD_TEST'],
+    },
+    crossOrigin: 'Anonymous',
+    properties: {
+      id: 'BUILD_TEST',
       type: 'wms',
     },
     layerType: 'wms',
@@ -156,35 +158,61 @@
       layer: uitWMSLayer2,
       userVisible: false,
     }),
+    new MapLayer({
+      layer: uitWMSLayer3,
+      userVisible: false,
+    }),
+    new MapLayer({
+      layer: uitWMSLayer4,
+      userVisible: false,
+    }),
+    new MapLayer({
+      layer: uitWMSLayer5,
+      userVisible: false,
+    }),
   ])
 
-  function userActiveChangeListener(value: boolean, index: number) {
-    mapLayers.forEach((_, i) => {
-      mapLayers[i].userVisible = i === index && value
-      mapLayers[i].setUserVisible(mapLayers[i].userVisible)
-    })
+  async function handleSwitchChange(value: boolean, index: number, categoryId) {
+    // mapLayers.forEach((_, i) => {
+    //   if (mapLayers[i].getLayer().getProperties()?.visibleIgnore) {
+    //     return
+    //   }
+    //   mapLayers[i].userVisible = i === index && value
+    //   mapLayers[i].setUserVisible(mapLayers[i].userVisible)
+    // })
+
+    await menu1_2_2Store.setActiveCategory(categoryId)
   }
 
   function load() {
-    mapLayers.forEach((item) => {
-      if (item) {
-        const uLayer = item.getLayer()
-        if (uLayer instanceof UitWMSLayer) {
-          mapWrap.value?.getUitMap().addWMSLayer(uLayer as UitWMSLayer)
-        } else if (uLayer instanceof UitWFSLayer) {
-          mapWrap.value?.getUitMap().addWFSLayer(uLayer as UitWFSLayer)
-        } else if (uLayer instanceof UitWMTSLayer) {
-          mapWrap.value?.getUitMap().addWMTSLayer(uLayer as UitWMTSLayer)
-        }
+    // mapLayers.forEach((item) => {
+    //   if (item) {
+    //     const uLayer = item.getLayer()
+    //     if (uLayer instanceof UitWMSLayer) {
+    //       mapWrap.value?.getUitMap().addWMSLayer(uLayer as UitWMSLayer)
+    //     } else if (uLayer instanceof UitWFSLayer) {
+    //       mapWrap.value?.getUitMap().addWFSLayer(uLayer as UitWFSLayer)
+    //     } else if (uLayer instanceof UitWMTSLayer) {
+    //       mapWrap.value?.getUitMap().addWMTSLayer(uLayer as UitWMTSLayer)
+    //     }
+    //
+    //     mapWrap.value?.addViewLayer({
+    //       key: layerGroupName!,
+    //       layers: [item] as MapLayer[],
+    //     })
+    //   }
+    // })
+    //
+    // mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
+  }
 
-        mapWrap.value?.addViewLayer({
-          key: layerGroupName!,
-          layers: [item] as MapLayer[],
-        })
-      }
-    })
+  async function zoneItemSelect(item: GisCiamsDistDTO.Search.Row) {
+    await menu1_2_2Store.callSelectDist(item.distNo)
+  }
 
-    mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
+  function clear() {
+    // overview.value = null
+    menu1_2_2Store.distVectorLayer.clear()
   }
 
   onMounted(async () => {})
@@ -192,11 +220,16 @@
   onBeforeMount(async () => {
     mapWrap.value = await mapStore.getMapInstance()
     // mapWrap.value = await mapCacheStore.getMapObject(mapType).getMapInstance()
+
+    await menu1_2_2Store.init(1)
+
     load()
+
+    await handleSwitchChange(true, 0, menu1_2_2Store.state.categories[0].id)
   })
 
   onActivated(() => {
-    mapStore.currentMapGroup = 'Menu_1_Tab_B'
+    mapStore.currentMapGroup = 'Menu-1-2-2'
 
     mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
   })

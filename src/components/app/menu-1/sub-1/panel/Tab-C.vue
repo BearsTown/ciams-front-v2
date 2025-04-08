@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TargetList @item-select="areaItemSelect" @clear="clear" />
+    <ZoneSegList @item-select="zoneSegItemSelect" @clear="clear" />
   </div>
 </template>
 
@@ -17,7 +17,7 @@
   } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import TargetList from '@/components/common/TargetList.vue'
+  import ZoneSegList from '@/components/common/ZoneSegList.vue'
 
   import { Plan } from '@/api/app/menu-1/model'
   import { useGlobalStore } from '@/stores/app'
@@ -46,11 +46,12 @@
   const { layoutSelected } = storeToRefs(globalStore)
   const { overview } = storeToRefs(menu1StepCStore)
 
-  const mapType = MapType.MAP_1
+  // const mapType = MapType.MAP_1
+  const mapType: MapType = 'Map-1'
   const mapLayerGroupType: MapLayerGroupType = 'Menu_1_Tab_C'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
-  const layerGroupName = ViewLayerTypes[mapType][mapLayerGroupType]
+  const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
   const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
@@ -68,12 +69,14 @@
   const uitWMSLayer1 = new UitWMSLayer({
     baseUrl: mapStudioUrl,
     sourceParams: {
-      KEY: 'EDAE2DC5-ACD7-0847-DD96-991BF9E64CF9',
-      LAYERS: ['CIAMS_P1_PLAN'],
+      KEY: '585C994F-2629-20C9-3EB8-619B3547E42F',
+      // LAYERS: ['CIAMS_P1_PLAN'],
+      LAYERS: ['CIAMS_DIST'],
     },
     crossOrigin: 'Anonymous',
     properties: {
-      id: 'ciams_p1_plan',
+      // id: 'ciams_p1_plan',
+      id: 'ciams_dist',
       type: 'wms',
     },
     layerType: 'wms',
@@ -136,7 +139,7 @@
     mapWrap.value?.setTocViewLayerGroups('VIEW_LAYER_GROUP_3', tocViewLayerGroups)
   }
 
-  async function areaItemSelect(item: Plan.Search.Row) {
+  async function zoneSegItemSelect(item: Plan.Search.Row) {
     layoutSelected.value?.right?.collapse?.on()
     mapStore.locationInfoVisible = false
 
@@ -144,15 +147,16 @@
 
     await menu1StepCStore.setOverview({
       planId: 'p1',
-      name: item.name,
+      zoneNo: item.zoneNo,
     })
 
     const res = await fetchFeatures({
       url: mapStudioUrl,
-      key: 'EDAE2DC5-ACD7-0847-DD96-991BF9E64CF9',
+      key: '585C994F-2629-20C9-3EB8-619B3547E42F',
       featureRequestProps: {
-        layers: 'CIAMS_P1_PLAN',
-        filter: likeFilter('name', item.name),
+        // layers: 'CIAMS_P1_PLAN',
+        layers: 'CIAMS_DIST',
+        filter: likeFilter('zone_no', item.zoneNo),
         srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
       },
     })

@@ -2,8 +2,8 @@
   <div class="urbanInfo active">
     <div class="container" style="height: 100%">
       <div class="title">
-        {{ overview ? `${overview.name} (${commonUtil.comma(overview.area.toFixed(3))}㎢)` : '-' }}
-        {{ overview ? `${overview.remark}` : '' }}
+        {{ overview ? `${overview.zoneName} (${commonUtil.comma(overview.zoneArea.toFixed(3))}㎡)` : '-' }}
+        {{ overview ? `${overview.useDist}` : '' }}
       </div>
 
       <table class="customTable">

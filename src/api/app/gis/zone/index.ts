@@ -1,18 +1,17 @@
 import qs from 'qs'
 import { AxiosRequestConfig } from 'axios'
-
-import { PlanZone } from '@/api/app/planZone/model'
 import { ResultData } from '@/api/app/model'
 import { ciamsAxiosInstance as http } from '@/api/app'
+import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
 
-const prefix = '/api/v1/plan/zone'
+const prefix = '/api/v1/zone'
 
-export function getGisCiamsPlanZoneList(params: PlanZone.Search.Params) {
+export function getCiamsZoneSegList(params: GisCiamsZoneDTO.Search.Params) {
   const config: AxiosRequestConfig = {
     params,
     paramsSerializer: (params) => {
       return qs.stringify(params, { arrayFormat: 'comma' })
     },
   }
-  return http.get<ResultData<PlanZone.Search.Result>>(`${prefix}/list`, config)
+  return http.get<ResultData<GisCiamsZoneDTO.Search.Result>>(`${prefix}/list`, config)
 }

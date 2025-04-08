@@ -27,7 +27,7 @@
     <el-collapse-transition>
       <div style="height: calc(100% - 40px)" v-show="isOpen">
         <el-scrollbar
-          style="height: 100%; background-color: white"
+          style="height: 100%; background-color: white; padding: 5px"
           class="border-box-round"
           :class="{ 'is-disabled': useDisabled && !isActive }"
         >
@@ -118,7 +118,7 @@
     border-radius: 8px;
     background: #fff;
     text-align: center;
-    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.12);
     transition: 0.2s;
 
     &:hover {

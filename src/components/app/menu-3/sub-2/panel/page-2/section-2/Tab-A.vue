@@ -95,7 +95,7 @@
 
       <el-divider border-style="dashed" />
 
-      <InsideCollapse title="건축물 권장용도(업종) 계획" :is-open="true">
+      <InsideCollapse title="건축물 밀도계획" :is-open="true">
         <template #content>
           <div class="text-wrap">
             건축물의 밀도계획에 관한 사항은 「도시 공업지역의 관리 및 활성화를 위한 계획 및

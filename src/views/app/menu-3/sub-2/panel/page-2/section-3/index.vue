@@ -19,7 +19,7 @@
 
   import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
   import PagePane from '@/components/common/PagePane.vue'
-  import TabA from '@/components/app/menu-3/sub-2/panel/page-2/section-1/Tab-A.vue'
+  import TabA from '@/components/app/menu-3/sub-2/panel/page-2/section-3/Tab-A.vue'
 
   import { API_INFO_CIAMS } from '@/config/config'
 

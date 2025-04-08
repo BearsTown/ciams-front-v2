@@ -49,7 +49,7 @@
 
     .center {
       flex: 1;
-      height: 0px;
+      height: 0;
       display: flex;
       flex-direction: row;
 
@@ -66,7 +66,7 @@
         width: 50%;
         height: 100%;
 
-        padding: 10px;
+        padding: 5px;
         background: #fff;
         margin-left: 8px;
         border-radius: 8px;

@@ -17,15 +17,15 @@
 <script setup lang="ts">
   import { ref, toRefs, watch } from 'vue'
 
-  import AreaListItem from '@/components/common/AreaTable/AreaListItem.vue'
+  import AreaListItem from '@/components/common/ZoneTable/ZoneListItem.vue'
 
-  import { Plan } from '@/api/app/plan/model'
+  import { PlanZone } from '@/api/app/zone/model'
 
   type CompAreaListItem = InstanceType<typeof AreaListItem> | null
 
   const props = withDefaults(
     defineProps<{
-      areaListItems?: Plan.Search.Row[]
+      areaListItems?: PlanZone.Search.Row[]
     }>(),
     {
       areaListItems: () => {
@@ -35,7 +35,7 @@
   )
 
   const emits = defineEmits<{
-    (e: 'item-select', type: Plan.Search.Row): void
+    (e: 'item-select', type: PlanZone.Search.Row): void
   }>()
 
   const selected = ref<CompAreaListItem>()

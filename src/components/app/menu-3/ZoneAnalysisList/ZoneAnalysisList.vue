@@ -9,9 +9,22 @@
               type="text"
               class="customInput"
               placeholder="검색어"
-              v-model="name"
+              v-model="keyword"
               @keyup.enter="keyEnter"
             />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">관리유형</label>
+          <div>
+            <el-select v-model="mngType" placeholder="관리유형을 선택하세요" size="small">
+              <el-option
+                v-for="state in statusCode"
+                :key="state.value"
+                :label="state.label"
+                :value="state.value"
+              />
+            </el-select>
           </div>
         </div>
       </div>
@@ -27,10 +40,10 @@
       <div style="display: flex; flex-direction: column; height: 100%">
         <div class="result-header">검색결과 총 {{ pageInfo.totalCount }}건</div>
         <div class="result-wrap" style="flex: 1; overflow-y: auto">
-          <AreaPageList
-            ref="areaPageListRef"
-            :area-list-items="areaItems"
-            @item-select="areaItemSelect"
+          <ZoneAnalysisPageList
+            ref="zoneAnalysisPageListRef"
+            :zone-analysis-list-items="zoneAnalysisItems"
+            @item-select="zoneAnalysisItemSelect"
           />
         </div>
         <div class="result-pagination">
@@ -51,20 +64,13 @@
 </template>
 
 <script setup lang="ts">
-  import AreaPageList from '@/components/common/AreaTable/AreaPageList.vue'
-
   import { onMounted, ref } from 'vue'
 
-  import { getPlanArea } from '@/api/app/plan'
-  import { Plan } from '@/api/app/plan/model'
+  import ZoneAnalysisPageList from '@/components/app/menu-3/ZoneAnalysisList/ZoneAnalysisPageList.vue'
+
+  import { getCiamsZoneSegList } from 'src/api/app/gis/zone'
+  import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
   import { pageObject } from '@/js/common'
-  import mittBus from '@/utils/mittBus'
-
-  // import { usePlanAreaStore } from '@/stores/app/operation/planArea'
-  import { storeToRefs } from 'pinia'
-
-  // const planAreaStore = usePlanAreaStore()
-  // const { isMainLink, planArea, modal } = storeToRefs(planAreaStore)
 
   const props = withDefaults(
     defineProps<{
@@ -75,21 +81,30 @@
     },
   )
 
-  const name = ref('')
+  const keyword = ref('')
   const pageObj = pageObject()
   const pageInfo = pageObj.pageInfo
   pageInfo.currentPageSize = props!.pageSize
 
-  const currentParams = ref<Plan.Search.Params>()
-  const areaItems = ref<Plan.Search.Row[]>()
-  const areaPageListRef = ref<InstanceType<typeof AreaPageList>>()
+  const currentParams = ref<GisCiamsZoneDTO.Search.Params>()
+  const zoneAnalysisItems = ref<GisCiamsZoneDTO.Search.Row[]>()
+  const zoneAnalysisPageListRef = ref<InstanceType<typeof ZoneAnalysisPageList>>()
 
   const emits = defineEmits<{
-    (e: 'item-select', type: Plan.Search.Row): void
+    (e: 'item-select', type: GisCiamsZoneDTO.Search.Row): void
     (e: 'clear'): void
   }>()
 
-  function setParams(params: Plan.Search.Params) {
+  const mngType = ref()
+  const statusCode = [
+    { value: '', label: '전체' },
+    { value: '산업관리형', label: '산업관리형' },
+    { value: '산업정비형', label: '산업정비형' },
+    { value: '산업혁신형', label: '산업혁신형' },
+    { value: '산업혁신·정비형', label: '산업혁신·정비형' },
+  ]
+
+  function setParams(params: GisCiamsZoneDTO.Search.Params) {
     currentParams.value = params
   }
 
@@ -98,14 +113,15 @@
       size,
       pageNo,
       ...currentParams.value,
-    } as Plan.Search.Params
+    } as GisCiamsZoneDTO.Search.Params
 
-    const { data } = await getPlanArea(params)
+    const { data } = await getCiamsZoneSegList(params)
     responseData(data)
   }
 
   function clear() {
-    name.value = ''
+    keyword.value = ''
+    mngType.value = ''
 
     runSearch()
     emits('clear')
@@ -117,15 +133,16 @@
 
   function runSearch() {
     const params = {
-      name: name.value,
+      keyword: keyword.value,
+      mngType: mngType.value,
     }
 
     setParams(params)
     search(1, pageInfo.currentPageSize)
   }
 
-  function responseData(data: Plan.Search.Result) {
-    areaItems.value = data.list
+  function responseData(data: GisCiamsZoneDTO.Search.Result) {
+    zoneAnalysisItems.value = data.list
     pageObj.setPageData(data.page)
   }
 
@@ -133,7 +150,7 @@
     search(pageNo, pageInfo.currentPageSize)
   }
 
-  function areaItemSelect(item: Plan.Search.Row) {
+  function zoneAnalysisItemSelect(item: GisCiamsZoneDTO.Search.Row) {
     emits('item-select', item)
   }
 
@@ -159,7 +176,7 @@
   })
 
   defineExpose({
-    areaItemSelect,
+    zoneAnalysisItemSelect,
   })
 </script>
 

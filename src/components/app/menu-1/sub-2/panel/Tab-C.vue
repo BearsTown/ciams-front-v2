@@ -1,268 +1,368 @@
 <template>
-  <div>
-    <TargetList @item-select="areaItemSelect" @clear="clear" />
+  <div class="container">
+    <div class="center">
+      <div class="left">
+        <MapWrapperView v-if="mapConfig" :map-type="mapType" :map-config="mapConfig">
+          <template #control>
+            <Controls :map-type="mapType" />
+          </template>
+        </MapWrapperView>
+      </div>
+      <div class="right">
+        <TabCDetail />
+      </div>
+    </div>
+    <div class="bottom customScroll">
+      <div class="text-wrap">{{ text }}</div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import {
-    computed,
-    onActivated,
-    onBeforeMount,
-    onDeactivated,
-    onMounted,
-    reactive,
-    ref,
-    watch,
-  } from 'vue'
-  import { storeToRefs } from 'pinia'
+  import { computed, onActivated, onBeforeMount, onMounted, reactive, ref } from 'vue'
 
-  import TargetList from '@/components/common/TargetList.vue'
-
-  import { Plan } from '@/api/app/menu-1/model'
   import { useGlobalStore } from '@/stores/app'
   import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
-  import { useMenu1StepCStore } from '@/stores/app/menu-1/step-c'
-  import { MapLayer } from '@/js/layer'
-  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
-  import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
-  import { UitWFSLayer, UitWMSLayer } from '@uitgis/ol-ugis-test/layer'
-
-  import { Stroke, Style } from 'ol/style'
-  import Feature from 'ol/Feature'
-  import { GeoJSON } from 'ol/format'
-  import VectorSource from 'ol/source/Vector'
-  import { like as likeFilter } from 'ol/format/filter'
+  import { useMenu1_2_3Store } from '@/stores/app/menu-1/sub-2/tab-c'
+  import Controls from '@/components/map/control/Controls.vue'
+  import MapWrapperView from '@/components/map/MapWrapper.vue'
+  import {
+    CommonLayerGroup,
+    MapLayerGroupType,
+    MapType,
+    MapWrapperConfig,
+    ViewLayerTypes,
+  } from '@/enums/mapEnum'
   import { MapWrapper } from '@/js/mapWrapper'
 
-  import UitMap from '@uitgis/ol-ugis-test/uitMap'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+
+  import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
+  import { MapLayer } from '@/js/layer'
+  import CommonUtil from '@/utils/commonUtil'
   import { useMapStore } from '@/stores/map/map'
+  import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
   import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
+  import TabCDetail from '@/components/app/menu-1/sub-2/panel/Tab-C-Detail.vue'
 
   const globalStore = useGlobalStore()
   const menu1sub2store = useMenu1Sub2store()
-  const menu1StepCStore = useMenu1StepCStore()
+  const menu1_2_3Store = useMenu1_2_3Store()
+  const cmmConfigStore = useCmmConfigStore()
 
-  const { layoutSelected } = storeToRefs(globalStore)
-  const { overview } = storeToRefs(menu1StepCStore)
-
-  const mapType = MapType.MAP_1
-  const mapLayerGroupType: MapLayerGroupType = 'Menu_1_Tab_C'
-  const mapWrap = ref<MapWrapper>()
+  const mapConfig = ref<MapWrapperConfig>()
+  const test = ref(false)
+  // const mapType = MapType.MAP_1
+  const mapType: MapType = 'Map-1-2-3'
+  const mapLayerGroupType: MapLayerGroupType = 'Menu-1-2-3'
+  const commonLayerType: CommonLayerGroup = 'COMMON_LAYER_GROUP_1-2-3'
+  const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
   const mapStore = useMapStore(mapType)
-  const layerGroupName = ViewLayerTypes[mapType][mapLayerGroupType]
+  const mapWrap = ref<MapWrapper>()
 
   const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
-  // const layers = reactive<LayerState[]>([
-  //   {
-  //     layer: undefined,
-  //     userVisible: true,
-  //   },
-  //   {
-  //     layer: undefined,
-  //     userVisible: true,
-  //   },
-  // ])
+  async function loadConfig() {
+    try {
+      await cmmConfigStore.loadMapConfig()
+    } catch (err) {
+      CommonUtil.errorMessage(err)
+    }
+  }
 
   const uitWMSLayer1 = new UitWMSLayer({
     baseUrl: mapStudioUrl,
     sourceParams: {
-      KEY: 'EDAE2DC5-ACD7-0847-DD96-991BF9E64CF9',
-      LAYERS: ['CIAMS_P1_PLAN'],
+      KEY: '5CE56438-29A3-83A2-F5EC-157133C5E823',
+      LAYERS: ['CIAMS_P1_SGG'],
     },
     crossOrigin: 'Anonymous',
     properties: {
-      id: 'ciams_p1_plan',
+      id: 'ciams_p1_sgg',
+      type: 'wms',
+    },
+    layerType: 'wms',
+    isSingleTile: false,
+    visible: true,
+    opacity: 1,
+    zIndex: 1110,
+  })
+
+  const uitWMSLayer2 = new UitWMSLayer({
+    baseUrl: mapStudioUrl,
+    sourceParams: {
+      KEY: '5CE56438-29A3-83A2-F5EC-157133C5E823',
+      LAYERS: ['CIAMS_P1_EMD'],
+    },
+    crossOrigin: 'Anonymous',
+    properties: {
+      id: 'ciams_p1_sgg',
+      type: 'wms',
+    },
+    layerType: 'wms',
+    isSingleTile: false,
+    visible: true,
+    opacity: 1,
+    zIndex: 1110,
+  })
+
+  const uitWMSLayerT = new UitWMSLayer({
+    baseUrl: mapStudioUrl,
+    sourceParams: {
+      KEY: '585C994F-2629-20C9-3EB8-619B3547E42F',
+      LAYERS: ['CIAMS_DIST'],
+    },
+    crossOrigin: 'Anonymous',
+    properties: {
+      // id: 'ciams_p1_plan',
+      id: 'ciams_dist',
       type: 'wms',
     },
     layerType: 'wms',
     isSingleTile: false,
     opacity: 0.8,
-    zIndex: 1111,
-  })
-
-  const uitVectorLayer2 = new UitWFSLayer({
-    baseUrl: '',
-    layerType: 'vector',
-    source: new VectorSource(),
-    visible: true,
     zIndex: 2222,
-    style: new Style({
-      stroke: new Stroke({
-        color: '#0F825F',
-        width: 4,
-      }),
-      zIndex: 100,
-    }),
   })
 
-  const mapLayers = reactive<MapLayer[]>([
-    new MapLayer({
-      layer: uitWMSLayer1,
-      title: '대상지C',
-      userVisible: true,
-      useLayerSetting: true,
-    }),
-    new MapLayer({
-      layer: uitVectorLayer2,
-      userVisible: true,
-    }),
-  ])
+  async function init() {
+    await loadConfig()
 
-  function load() {
+    mapConfig.value = {
+      center: JSON.parse(cmmConfigStore.mapConfigState['MAP_INIT_CENTER'].confValue),
+      zoom: Number(cmmConfigStore.mapConfigState['MAP_INIT_ZOOM'].confValue),
+      kakao: cmmConfigStore.mapConfigState['KAKAO_KEY'].confValue,
+      vWorld: cmmConfigStore.mapConfigState['VWORLD_KEY'].confValue,
+      baseMapKey: 'vWorld_normal',
+      baseMapOption: 'NORMAL',
+      olMapId: `ol-map-${mapType}`,
+      baseMapId: `base-map-${mapType}`,
+      isMapLocation: true,
+    }
+
+    mapWrap.value = await mapStore.getMapInstance()
+
+    const uitMap = mapWrap.value?.getUitMap()
+
+    // uitMap.addWMSLayer(uitWMSLayer)
+
+    const mapLayers = reactive<MapLayer[]>([
+      new MapLayer({
+        layer: uitWMSLayer1,
+        title: '시군구',
+        userVisible: true,
+        useLegend: true,
+        useLayerSetting: true,
+      }),
+      new MapLayer({
+        layer: uitWMSLayer2,
+        title: '읍면동',
+        userVisible: true,
+        useLegend: true,
+        useLayerSetting: true,
+      }),
+      new MapLayer({
+        layer: uitWMSLayerT,
+        title: '대상지',
+        userVisible: true,
+        useLayerSetting: true,
+      }),
+    ])
+
     mapLayers.forEach((item) => {
       if (item) {
         const uLayer = item.getLayer()
         if (uLayer instanceof UitWMSLayer) {
-          mapWrap.value?.getUitMap().addWMSLayer(uLayer as UitWMSLayer)
+          uitMap.addWMSLayer(uLayer as UitWMSLayer)
         } else if (uLayer instanceof UitWFSLayer) {
-          mapWrap.value?.getUitMap().addWFSLayer(uLayer as UitWFSLayer)
+          uitMap.addWFSLayer(uLayer as UitWFSLayer)
         } else if (uLayer instanceof UitWMTSLayer) {
-          mapWrap.value?.getUitMap().addWMTSLayer(uLayer as UitWMTSLayer)
+          uitMap.addWMTSLayer(uLayer as UitWMTSLayer)
         }
 
-        mapWrap.value?.addViewLayer({
-          key: layerGroupName!,
+        mapWrap.value?.addCommonLayer({
+          key: commonLayerType!,
           layers: [item] as MapLayer[],
         })
       }
     })
 
-    mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
+    mapWrap.value?.setCommonLayersVisible(commonLayerType!, true)
 
-    const tocViewLayerGroups = mapLayers[0] as MapLayer
+    const tocLayerGroups = {
+      title: '행정구역',
+      layers: [mapLayers[0], mapLayers[1]] as MapLayer[],
+    }
 
-    mapWrap.value?.setTocViewLayerGroups('VIEW_LAYER_GROUP_3', tocViewLayerGroups)
+    mapWrap.value?.setTocCommonLayerGroups(commonLayerType, tocLayerGroups)
+
+    const tocViewLayerGroups = mapLayers[2] as MapLayer
+
+    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
   }
 
-  async function areaItemSelect(item: Plan.Search.Row) {
-    layoutSelected.value?.right?.collapse?.on()
-    mapStore.locationInfoVisible = false
-
-    mapStore.controlManager?.closeAll()
-
-    await menu1StepCStore.setOverview({
-      planId: 'p1',
-      name: item.name,
-    })
-
-    const res = await fetchFeatures({
-      url: mapStudioUrl,
-      key: 'EDAE2DC5-ACD7-0847-DD96-991BF9E64CF9',
-      featureRequestProps: {
-        layers: 'CIAMS_P1_PLAN',
-        filter: likeFilter('name', item.name),
-        srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
-      },
-    })
-    let text = await res.text()
-    text = text.replace(/\n/gi, '\\r\n')
-    const features = new GeoJSON().readFeatures(text) as Feature[]
-
-    uitVectorLayer2.clear()
-    uitVectorLayer2.addFeatures(features)
-
-    mapWrap.value
-      ?.getUitMap()
-      .getView()
-      .fit(uitVectorLayer2.getSource().getExtent(), {
-        padding: [200, 100, 200, 100],
-      })
-  }
-
-  function clear() {
-    overview.value = null
-    uitVectorLayer2.clear()
-  }
-
-  watch(overview, async (value) => {
-    // console.log(value)
-  })
-
-  const isActive = computed({
-    get: () => {
-      // return mapStore.controlManager?.getControl('mini-map')?.isVisible
-      return mapStore.interactionManager?.getInteraction('drag-zoom-out')?.getActive()
+  const summay = {
+    11: {
+      DIST_KEY_001:
+        '사업체는 지속적으로 증가하였으며 총 116개 중 C(제조업)가 48개(41.4%)로 가장 많음',
+      DIST_KEY_002:
+        '사업체는 지속적으로 증가하였으며 총 24개 중 C(제조업)가 16개(66.7%)로 가장 많음',
+      DIST_KEY_003:
+        '사업체는 큰 변화를 보이지 않고있으며 총 6개 중 C(제조업)가 3개(50.0%)로 가장 많음',
+      DIST_KEY_004:
+        '사업체는 큰 변화를 보이지 않고 있으며 총 4개 중 C(제조업)가 2개(66.7%)로 가장 많음',
+      DIST_KEY_005: '사업체는 증가 추세를 보이고 있으며 총 3개 중 H, N, S가 각각 1곳(33.3%)씩 입지',
     },
-    set: (newValue: boolean) => {
-      // mapStore.controlManager?.getControl('mini-map')?.setVisible(newValue)
-      mapStore.interactionManager?.getInteraction('drag-zoom-out')?.setActive(newValue)
+    12: {
+      DIST_KEY_001:
+        '종사자는 지속적으로 증가하였으며 5명 미만 종사자 수가 54곳(46.6%)으로 가장 많음',
+      DIST_KEY_002:
+        '종사자는 지속적으로 증가하였으며 5명 미만 종사자 수가 16곳(66.7%)으로 가장 많음',
+      DIST_KEY_003:
+        '종사자는 큰 변화를 보이지 않고 있으며 5명 미만 종사자 수가 3곳(50.0%)으로 가장 많음',
+      DIST_KEY_004:
+        '종사자는 큰 변화를 보이지 않고 있으며 5~9명, 20~99명, 100~299명 종사자 수가 각각 1곳(33.3%)씩 차지하고 있음',
+      DIST_KEY_005:
+        '종사자는 증가 추세를 보이고 있으며 5명 미만 종사자 수가 2곳(66.7%)으로 가장 많음',
     },
+    13: {
+      DIST_KEY_001:
+        '제조업은 증가추세를 보이다 감소하고 있으며 제조업 48개(41.4%), 관련 서비스업이 68개(58.6%)임',
+      DIST_KEY_002:
+        '제조업은 증가추세를 보이고 있으며 제조업 16개(66.7%), 관련 서비스업이 8개(33.3%)임',
+      DIST_KEY_003:
+        '제조업은 큰 변화를 보이지 않고 있으며 제조업 3개(50.0%), 관련 서비스업이 3개(50.0%)임',
+      DIST_KEY_004:
+        '제조업은 큰 변화를 보이지않고 있으며 제조업 2개(66.7%), 관련 서비스업이 1개(33.3%)임',
+      DIST_KEY_005: '제조업은 존재하지 않으며 제조업 0개(0.0%), 관련 서비스업이 3개(100.0%)임',
+    },
+    14: {
+      DIST_KEY_001: '',
+      DIST_KEY_002: '',
+      DIST_KEY_003: '',
+      DIST_KEY_004: '',
+      DIST_KEY_005: '',
+    },
+  }
+
+  const state = menu1_2_3Store.state
+
+  const text = computed(() => {
+    if (!CommonUtil.isEmpty(state.activeCategory) && !CommonUtil.isEmpty(state.activeDistFeature)) {
+      return `최근 10년간(2011~2021년) ${state.activeDistFeature!.get('DIST_NAME')}의 ${
+        state.activeCategory!.name
+      } 결과 ${summay[state.activeCategory!.id][state.activeDistFeature!.get('DIST_NO')]}`
+    }
+    return ''
   })
 
-  onBeforeMount(async () => {
-    mapWrap.value = await mapStore.getMapInstance()
-    // mapObject = mapCacheStore.getMapObject(mapType)
-    // mapWrap.value = await mapObject.getMapInstance()
-
-    const uitMap = ref<UitMap>()
-    uitMap.value = mapWrap.value?.getUitMap()
-    const olMap = uitMap.value?.getMap()
-
-    load()
-  })
+  function makeChart() {
+    test.value = true
+  }
 
   onMounted(async () => {
-    globalStore.layoutSelected?.right?.collapse?.on()
+    makeChart()
   })
 
-  onActivated(() => {
-    mapStore.currentMapGroup = 'Menu_1_Tab_C'
-
-    mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
-    // uitVectorLayer2.setVisible(true)
+  onBeforeMount(() => {
+    init()
   })
 
-  onDeactivated(() => {
-    // uitVectorLayer2.setVisible(false)
-  })
+  onActivated(() => {})
 </script>
 
 <style scoped lang="scss">
-  .urbanInfo {
+  .container {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-  }
 
-  .urbanInfo .search .btn-group {
-    flex: 1;
-  }
+    .center {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      overflow-y: hidden;
+      height: 100%;
 
-  .urbanInfo .result-wrap {
-    height: auto;
-  }
+      .left {
+        width: 50%;
 
-  .btn-fixed {
-    display: block;
-
-    :deep(.el-radio-button) {
-      width: 100%;
-      min-width: 70px;
-      max-width: 75px;
-
-      .el-radio-button__inner {
-        width: 100%;
-        padding: 8px;
+        padding: 10px;
+        background: #fff;
+        border-radius: 8px;
       }
+
+      .right {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+
+        //padding: 10px;
+        //background: #fff;
+        margin-left: 8px;
+        //border-radius: 8px;
+      }
+
+      .right-top {
+        //flex: 1;
+        //max-height: 50%;
+        //height: 50%;
+        height: auto;
+        //min-height: 30%;
+        max-height: 35%;
+
+        padding: 10px;
+        background: #fff;
+        border-radius: 8px;
+      }
+
+      .right-bottom {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        //flex: 0.5;
+        //height: auto;
+        height: 100%;
+        //max-height: 70%;
+
+        //max-height: 50%;
+        //height: auto;
+
+        //overflow-y: hidden;
+        margin-top: 8px;
+        padding: 10px;
+        background: #fff;
+        border-radius: 8px;
+      }
+    }
+
+    .bottom {
+      height: 80px;
+      margin-top: 8px;
+      min-height: 100px;
+      max-height: 200px;
+
+      padding: 10px;
+      background: #fff;
+      border-radius: 8px;
+    }
+
+    .customScroll {
+      height: max-content;
+      overflow-y: auto;
+    }
+
+    .text-wrap {
+      color: #616161;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.5;
     }
   }
 
-  .select-bottom {
-    :deep(.el-input) {
-      & > .is-focus {
-        box-shadow: none !important;
-      }
-
-      :hover {
-        box-shadow: none !important;
-      }
-    }
-
-    :deep(.el-input__wrapper) {
-      box-shadow: none;
-      border-radius: 0;
-      border-bottom: 1px solid;
-    }
+  .legend {
+    align-items: center;
+    display: inline-flex;
+    vertical-align: middle;
   }
 </style>

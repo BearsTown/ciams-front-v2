@@ -63,16 +63,17 @@
     font-size: 14px;
     padding: 10px;
     color: #616161;
-    //border-radius: 8px;
+    border-radius: 8px;
     background: #fff;
     //text-align: center;
     box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12);
     transition: 0.2s;
 
     &:hover {
-      color: var(--ugis-color-white);
+      //color: var(--ugis-color-white);
+      color: var(--ugis-color-temp-2);
       opacity: 0.95;
-      background-color: var(--ugis-color-temp-2);
+      //background-color: var(--ugis-color-temp-2);
     }
 
     &:not(:first-child) {
@@ -81,8 +82,9 @@
   }
 
   .is-active {
-    color: var(--ugis-color-white);
+    //color: var(--ugis-color-white);
+    color: var(--ugis-color-temp-2);
     opacity: 0.95;
-    background-color: var(--ugis-color-temp-2);
+    //background-color: var(--ugis-color-temp-2);
   }
 </style>

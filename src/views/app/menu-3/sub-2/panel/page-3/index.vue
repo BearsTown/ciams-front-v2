@@ -16,8 +16,8 @@
 
   import CommonUtil from '@/utils/commonUtil'
 
-  import TabAComp from '@/components/app/menu-3/sub-2/panel/page-3/Tab-A.vue'
-  import TabBComp from '@/components/app/menu-3/sub-2/panel/page-3/Tab-B.vue'
+  import TabAComp from '@/views/app/menu-3/sub-2/panel/page-3/section-1'
+  // import TabBComp from '@/views/app/menu-3/sub-2/panel/page-3/section-2'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page3Store = useMenu3Sub2Page3Store()
@@ -25,7 +25,7 @@
 
   const components: Record<Menu3Sub2Page3TabIdType, DefineComponent> = {
     TabA: TabAComp,
-    TabB: TabBComp,
+    // TabB: TabBComp,
   }
 
   const currentTabComponent = computed(

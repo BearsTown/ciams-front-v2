@@ -53,11 +53,29 @@
         </div>
       </template>
     </InsideCollapse>
+
+    <InsideCollapse title="수립제외지역" :is-open="true" style="margin: 0 0 10px">
+      <template #content>
+        <Table :records="tempList3" />
+      </template>
+
+      <template #sub>
+        <div style="display: flex">
+          <div style="flex: 1"></div>
+          <el-switch
+            size="small"
+            v-model="mapLayers[3].userVisible"
+            @change="userActiveChangeListener($event, 3)"
+            @click.prevent.stop
+          />
+        </div>
+      </template>
+    </InsideCollapse>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { onActivated, onBeforeMount, reactive, ref } from 'vue'
+  import { onActivated, onBeforeMount, onMounted, reactive, ref } from 'vue'
 
   import { InsideCollapse } from '@/components/common/collapse'
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
@@ -65,7 +83,7 @@
   import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
 
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu1Sub1store } from '@/stores/app/menu-1/sub-1'
+  import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
   import { MapLayer } from '@/js/layer'
   import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
   import { MapWrapper } from '@/js/mapWrapper'
@@ -76,11 +94,12 @@
   const globalStore = useGlobalStore()
   const menu1sub2store = useMenu1Sub2store()
 
-  const mapType = MapType.MAP_1
-  const mapLayerGroupType: MapLayerGroupType = 'Menu_1_Tab_A'
+  // const mapType = MapType.MAP_1
+  const mapType: MapType = 'Map-1-2-1'
+  const mapLayerGroupType: MapLayerGroupType = 'Menu-1-2-1'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
-  const layerGroupName = ViewLayerTypes[mapType][mapLayerGroupType]
+  const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
   const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
@@ -125,6 +144,28 @@
     },
   ]
 
+  const tempList3: object[] = [
+    {
+      layer: '산업단지',
+      area: 65.45,
+      percent: 6.5,
+    },
+    {
+      layer: '문화산업단지',
+      area: 312.55,
+      percent: 31.1,
+    },
+    {
+      layer: '경제자유구역',
+      area: 312.55,
+      percent: 31.1,
+    },
+    {
+      layer: '항만배후단지',
+      area: 312.55,
+      percent: 31.1,
+    },
+  ]
 
   const uitWMSLayer1 = new UitWMSLayer({
     baseUrl: mapStudioUrl,
@@ -172,32 +213,22 @@
     zIndex: 1111,
   })
 
-  const mapLayerss = reactive([
-    {
-      title: '용도지역',
-      table: {} as object[],
-      mapLayer: new MapLayer({
-        layer: uitWMSLayer1,
-        userVisible: true,
-      }),
+  const uitWMSLayer4 = new UitWMSLayer({
+    baseUrl: mapStudioUrl,
+    sourceParams: {
+      KEY: 'C411380C-E985-DF54-62F7-22890F1D300B',
+      LAYERS: ['CIAMS_P1_LIMIT'],
     },
-    {
-      title: '공업지역',
-      table: {} as object[],
-      mapLayer: new MapLayer({
-        layer: uitWMSLayer2,
-        userVisible: false,
-      }),
+    crossOrigin: 'Anonymous',
+    properties: {
+      id: 'ciams_p1_limit',
+      type: 'wms',
     },
-    {
-      title: '도시공업지역',
-      table: {} as object[],
-      mapLayer: new MapLayer({
-        layer: uitWMSLayer3,
-        userVisible: false,
-      }),
-    },
-  ])
+    layerType: 'wms',
+    isSingleTile: false,
+    opacity: 0.8,
+    zIndex: 1111,
+  })
 
   const mapLayers = reactive<MapLayer[]>([
     new MapLayer({
@@ -210,6 +241,10 @@
     }),
     new MapLayer({
       layer: uitWMSLayer3,
+      userVisible: false,
+    }),
+    new MapLayer({
+      layer: uitWMSLayer4,
       userVisible: false,
     }),
   ])
@@ -243,10 +278,7 @@
     mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
   }
 
-  // onMounted(async () => {
-  //   mapWrap.value = await mapStore.getMapInstance()
-  //   load()
-  // })
+  onMounted(async () => {})
 
   onBeforeMount(async () => {
     mapWrap.value = await mapStore.getMapInstance()
@@ -255,7 +287,7 @@
   })
 
   onActivated(() => {
-    mapStore.currentMapGroup = 'Menu_1_Tab_A'
+    mapStore.currentMapGroup = 'Menu-1-2-1'
 
     mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
 

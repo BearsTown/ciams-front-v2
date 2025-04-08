@@ -4,8 +4,8 @@
       <div class="title">지역여건 분석</div>
 
       <div class="title">
-        {{ overview ? `${overview.name} (${commonUtil.comma(overview.area.toFixed(3))}㎢)` : '-' }}
-        {{ overview ? `${overview.remark}` : '' }}
+        {{ overview ? `${overview.zoneName} (${commonUtil.comma(overview.zoneArea.toFixed(3))}㎡)` : '-' }}
+        {{ overview ? `${overview.useDist}` : '' }}
       </div>
 
       <table class="customTable analysis">
@@ -63,8 +63,8 @@
   const menu2Sub2Store = useMenu2Sub2Store()
   const { overview } = storeToRefs(menu2Sub2Store)
 
-  const didgh = computed(() => overview?.value?.locala === '양호')
-  const qnffid = computed(() => overview?.value?.locala === '불량')
+  const didgh = computed(() => overview?.value?.locResult === '양호')
+  const qnffid = computed(() => overview?.value?.locResult === '불량')
 
   onBeforeMount(() => {})
 

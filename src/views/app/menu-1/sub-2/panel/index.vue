@@ -18,6 +18,7 @@
   import TabAComp from '@/components/app/menu-1/sub-2/panel/Tab-A.vue'
   import TabBComp from '@/components/app/menu-1/sub-2/panel/Tab-B.vue'
   import TabCComp from '@/components/app/menu-1/sub-2/panel/Tab-C.vue'
+  import TabDComp from '@/components/app/menu-1/sub-2/panel/Tab-D.vue'
 
   const globalStore = useGlobalStore()
   const menu1sub2store = useMenu1Sub2store()
@@ -27,7 +28,7 @@
     TabA: TabAComp,
     TabB: TabBComp,
     TabC: TabCComp,
-    TabD: TabCComp,
+    TabD: TabDComp,
   }
 
   const currentTabComponent = computed(() => components[menu1sub2store.selectedTabId] || TabAComp)

@@ -93,7 +93,7 @@
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
 
   const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
-  const imgSrc = prefixPath + '7421991a-f026-41b0-aa3c-7644ebb04695'
+  const imgSrc = prefixPath + '859e3a82-c6df-40df-942c-0036847aff06'
 
   onMounted(async () => {})
 

@@ -9,9 +9,9 @@
 <script setup lang="ts">
   import { computed, DefineComponent, onBeforeMount } from 'vue'
 
-  import TabAComp from 'src/views/app/menu-3/sub-2/panel/page-1'
-  import TabBComp from 'src/views/app/menu-3/sub-2/panel/page-2'
-  import TabCComp from 'src/views/app/menu-3/sub-2/panel/page-3'
+  import TabAComp from '@/views/app/menu-3/sub-2/panel/page-1'
+  import TabBComp from '@/views/app/menu-3/sub-2/panel/page-2'
+  import TabCComp from '@/views/app/menu-3/sub-2/panel/page-3'
 
   import CommonUtil from '@/utils/commonUtil'
   import { useGlobalStore } from '@/stores/app'

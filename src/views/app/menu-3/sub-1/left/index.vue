@@ -11,7 +11,7 @@
         color: #616161;
         background: #fff;
         margin-top: 8px;
-        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12);
+        box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.12);
       "
     >
       <div
@@ -35,7 +35,7 @@
           overflow-y: hidden;
         "
       >
-        <List :page-size="5" @item-select="planZoneItemSelect" @clear="clear" />
+        <ZoneAnalysisList :page-size="4" @item-select="zoneAnalysisItemSelect" @clear="clear" />
       </div>
     </div>
     <button class="popButton" @click="showImage(2)">도시공업지역 기본구상(안)</button>
@@ -50,12 +50,12 @@
 </template>
 
 <script setup lang="ts">
-  import { onActivated, onMounted, reactive, ref, watch, nextTick } from 'vue'
+  import { nextTick, onActivated, onMounted, reactive, ref, watch } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import { useBoolean } from '@/hooks/useBoolean'
   import { useGlobalStore } from '@/stores/app'
-  import { PlanZone } from '@/api/app/planZone/model'
+  import { PlanZone } from '@/api/app/zone/model'
   import { useMenu3store } from '@/stores/app/menu-3'
   import { useMenu3Sub1Store } from '@/stores/app/menu-3/sub-1'
   import { MapLayer } from '@/js/layer'
@@ -74,7 +74,7 @@
   import { useMapStore } from '@/stores/map/map'
   import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
   import { API_INFO_CIAMS } from '@/config/config'
-  import List from '@/components/app/menu-3/List.vue'
+  import ZoneAnalysisList from '@/components/app/menu-3/ZoneAnalysisList/ZoneAnalysisList.vue'
 
   const menu3store = useMenu3store()
   const menu3Sub1Store = useMenu3Sub1Store()
@@ -84,11 +84,12 @@
   const { layoutSelected } = storeToRefs(globalStore)
   const { status: isActive, toggle } = useBoolean(false)
 
-  const mapType = MapType.MAP_3
+  // const mapType = MapType.MAP_3
+  const mapType: MapType = 'Map-3'
   const mapLayerGroupType: MapLayerGroupType = 'Menu_3_Sub_1'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
-  const layerGroupName = ViewLayerTypes[mapType][mapLayerGroupType]
+  const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
   const r1 = ref(true)
 
@@ -169,7 +170,7 @@
     mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
   }
 
-  async function planZoneItemSelect(item: PlanZone.Search.Row) {
+  async function zoneAnalysisItemSelect(item: PlanZone.Search.Row) {
     layoutSelected.value?.right?.collapse?.on()
     mapStore.locationInfoVisible = false
 
@@ -293,7 +294,7 @@
     border-radius: 8px;
     background: #fff;
     text-align: center;
-    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.12);
     transition: 0.2s;
 
     &:hover {

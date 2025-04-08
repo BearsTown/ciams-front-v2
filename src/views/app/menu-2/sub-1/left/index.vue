@@ -1,12 +1,12 @@
 <template>
-  <TargetList :page-size="5" @item-select="areaItemSelect" @clear="clear" />
+  <ZoneSegList :page-size="6" @item-select="zoneSegItemSelect" @clear="clear" />
 </template>
 
 <script setup lang="ts">
   import { onActivated, onMounted, reactive, ref, watch } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import TargetList from '@/components/common/TargetList.vue'
+  import ZoneSegList from '@/components/common/ZoneSegList.vue'
 
   import { useBoolean } from '@/hooks/useBoolean'
   import { useGlobalStore } from '@/stores/app'
@@ -35,11 +35,12 @@
   const { layoutSelected } = storeToRefs(globalStore)
   const { status: isActive, toggle } = useBoolean(false)
 
-  const mapType = MapType.MAP_2
+  // const mapType = MapType.MAP_2
+  const mapType: MapType = 'Map-2'
   const mapLayerGroupType: MapLayerGroupType = 'Menu_2_Sub_1'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
-  const layerGroupName = ViewLayerTypes[mapType][mapLayerGroupType]
+  const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
   const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
@@ -47,7 +48,7 @@
     baseUrl: mapStudioUrl,
     sourceParams: {
       KEY: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
-      LAYERS: ['CIAMS_ANALYSIS_2'],
+      LAYERS: ['CIAMS_ZONE_2'],
     },
     crossOrigin: 'Anonymous',
     properties: {
@@ -114,22 +115,23 @@
     mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
   }
 
-  async function areaItemSelect(item: Plan.Search.Row) {
+  async function zoneSegItemSelect(item: Plan.Search.Row) {
     layoutSelected.value?.right?.collapse?.on()
     mapStore.locationInfoVisible = false
 
     mapStore.controlManager?.closeAll()
 
     await menu2Sub1Store.setOverview({
-      name: item.name,
+      zoneNo: item.zoneNo,
     })
 
     const res = await fetchFeatures({
       url: mapStudioUrl,
-      key: 'EDAE2DC5-ACD7-0847-DD96-991BF9E64CF9',
+      key: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
       featureRequestProps: {
-        layers: 'CIAMS_P1_PLAN',
-        filter: likeFilter('name', item.name),
+        // layers: 'CIAMS_P1_PLAN',
+        layers: 'CIAMS_ZONE_2',
+        filter: likeFilter('zone_no', item.zoneNo),
         srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
       },
     })

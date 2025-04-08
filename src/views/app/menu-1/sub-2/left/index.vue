@@ -50,9 +50,10 @@
 <script setup lang="ts">
   import { computed, DefineComponent, onActivated, onMounted, ref } from 'vue'
 
-  import TabAComp from '@/components/app/menu-1/sub-1/left/Tab-A.vue'
-  import TabBComp from '@/components/app/menu-1/sub-1/left/Tab-B.vue'
-  import TabCComp from '@/components/app/menu-1/sub-1/left/Tab-C.vue'
+  import TabAComp from '@/components/app/menu-1/sub-2/left/Tab-A.vue'
+  import TabBComp from '@/components/app/menu-1/sub-2/left/Tab-B.vue'
+  import TabCComp from '@/components/app/menu-1/sub-2/left/Tab-C.vue'
+  import TabDComp from '@/components/app/menu-1/sub-2/left/Tab-D.vue'
   import { getConfigList } from '@/api/app/config'
   import { useBoolean } from '@/hooks/useBoolean'
   import { useGlobalStore } from '@/stores/app'
@@ -92,7 +93,7 @@
     TabA: TabAComp,
     TabB: TabBComp,
     TabC: TabCComp,
-    TabD: TabCComp,
+    TabD: TabDComp,
   }
 
   // const currentTabComponent = computed(() => {

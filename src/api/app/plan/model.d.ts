@@ -8,19 +8,18 @@ namespace Plan {
     }
 
     export interface Params extends PageReq {
-      planId: string
+      // planId: string
       name?: string
       remark?: string
     }
 
     export interface Row {
       rn: number
-      mnum: string
-      alias: string
-      remark: string
-      name: string
-      csC: number
-      area: number
+      zoneNo: string
+      zoneName: string
+      useDist: string
+      baseCsC: number
+      zoneArea: number
     }
 
     export interface Result {

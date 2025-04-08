@@ -1,23 +1,22 @@
 <template>
   <li class="" :class="{ active: isActive }">
     <div class="address-title">
-      <b>{{ areaItem.name }}</b>
+      <b>{{ zoneAnalysisItem.zoneName }}</b>
     </div>
-    <div class="address-text">면적 : {{ areaItem.area }}</div>
-    <div class="address-text">용도지역 : {{ areaItem.remark }}</div>
-    <div class="address-text">편입토지 : -필지</div>
-    <div class="address-text">사업체수 : {{ areaItem.csC }}개</div>
+    <div class="address-text">관리유형 : {{ zoneAnalysisItem.mngType }}</div>
+    <div class="address-text">면적 : {{ zoneArea }}</div>
+    <div class="address-text">용도지역 : {{ zoneAnalysisItem.useDist }}</div>
   </li>
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, toRefs, watch } from 'vue'
+  import { computed, ref, toRefs } from 'vue'
 
-  import { Plan } from '@/api/app/plan/model'
+  import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
   import { useBoolean } from '@/hooks/useBoolean'
   import { useAuthStore } from '@/stores/auth'
   import { useGlobalStore } from '@/stores/app'
-  import { storeToRefs } from 'pinia'
+  import commonUtil from '@/utils/commonUtil'
 
   // import { usePlanAreaStore } from '@/stores/app/operation/planArea'
   // const planAreaStore = usePlanAreaStore()
@@ -30,7 +29,7 @@
   const props = withDefaults(
     defineProps<{
       isActive?: boolean
-      areaItem: Plan.Search.Row
+      zoneAnalysisItem: GisCiamsZoneDTO.Search.Row
     }>(),
     {
       isActive: false,
@@ -41,26 +40,30 @@
     (e: 're-click'): void
   }>()
 
-  const { areaItem } = toRefs(props)
+  const { zoneAnalysisItem } = toRefs(props)
   const { status: isActive } = useBoolean(props.isActive)
 
-  const planAreaArea = Math.round((parseFloat(areaItem.value.planAreaArea) / 1000000) * 100) / 100
+  // const planPlanZoneArea = Math.round((parseFloat(zoneAnalysisItem.value.planPlanZoneArea) / 1000000) * 100) / 100
   const dialogVisible = ref(false)
 
   function setActive(active: boolean) {
     isActive.value = active
   }
 
+  const zoneArea = computed(() => {
+    return `${commonUtil.comma(zoneAnalysisItem.value.zoneArea.toFixed(1))}㎡`
+  })
+
   function cancel() {}
 
   const getSelectedData = computed(() => {
-    return areaItem.value
+    return zoneAnalysisItem.value
   })
 
   // watch(modal.value, () => {
   //   //계획지역 수정 후 액션
-  //   if (modal.value.modifyAction && areaItem.value.rn == modal.value.selectItem.rn) {
-  //     Object.assign(areaItem.value, modal.value.selectItem)
+  //   if (modal.value.modifyAction && zoneAnalysisItem.value.rn == modal.value.selectItem.rn) {
+  //     Object.assign(zoneAnalysisItem.value, modal.value.selectItem)
   //     emits('re-click')
   //   }
   // })

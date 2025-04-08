@@ -9,22 +9,9 @@
               type="text"
               class="customInput"
               placeholder="검색어"
-              v-model="zoneName"
+              v-model="name"
               @keyup.enter="keyEnter"
             />
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">관리유형</label>
-          <div>
-            <el-select v-model="mngType" placeholder="관리유형을 선택하세요" size="small">
-              <el-option
-                v-for="state in statusCode"
-                :key="state.value"
-                :label="state.label"
-                :value="state.value"
-              />
-            </el-select>
           </div>
         </div>
       </div>
@@ -40,10 +27,10 @@
       <div style="display: flex; flex-direction: column; height: 100%">
         <div class="result-header">검색결과 총 {{ pageInfo.totalCount }}건</div>
         <div class="result-wrap" style="flex: 1; overflow-y: auto">
-          <PlanZonePageList
-            ref="planZonePageListRef"
-            :plan-zone-list-items="planZoneItems"
-            @item-select="planZoneItemSelect"
+          <AreaPageList
+            ref="areaPageListRef"
+            :area-list-items="areaItems"
+            @item-select="areaItemSelect"
           />
         </div>
         <div class="result-pagination">
@@ -64,13 +51,21 @@
 </template>
 
 <script setup lang="ts">
-  import PlanZonePageList from '@/components/app/menu-3/PlanZoneTable/PlanZonePageList.vue'
+  import AreaPageList from '@/components/common/ZoneTable/ZonePageList.vue'
 
   import { onMounted, ref } from 'vue'
 
-  import { getGisCiamsPlanZoneList } from '@/api/app/planZone'
-  import { PlanZone } from '@/api/app/planZone/model'
+  import { getCiamsZoneList } from '@/api/app/zone'
+  // import { Plan } from '@/api/app/plan/model'
+  import { PlanZone } from '@/api/app/zone/model'
   import { pageObject } from '@/js/common'
+  import mittBus from '@/utils/mittBus'
+
+  // import { usePlanAreaStore } from '@/stores/app/operation/planArea'
+  import { storeToRefs } from 'pinia'
+
+  // const planAreaStore = usePlanAreaStore()
+  // const { isMainLink, planArea, modal } = storeToRefs(planAreaStore)
 
   const props = withDefaults(
     defineProps<{
@@ -81,28 +76,19 @@
     },
   )
 
-  const zoneName = ref('')
+  const name = ref('')
   const pageObj = pageObject()
   const pageInfo = pageObj.pageInfo
   pageInfo.currentPageSize = props!.pageSize
 
   const currentParams = ref<PlanZone.Search.Params>()
-  const planZoneItems = ref<PlanZone.Search.Row[]>()
-  const planZonePageListRef = ref<InstanceType<typeof PlanZonePageList>>()
+  const areaItems = ref<PlanZone.Search.Row[]>()
+  const areaPageListRef = ref<InstanceType<typeof AreaPageList>>()
 
   const emits = defineEmits<{
     (e: 'item-select', type: PlanZone.Search.Row): void
     (e: 'clear'): void
   }>()
-
-  const mngType = ref()
-  const statusCode = [
-    { value: '', label: '전체' },
-    { value: '산업관리형', label: '산업관리형' },
-    { value: '산업정비형', label: '산업정비형' },
-    { value: '산업혁신형', label: '산업혁신형' },
-    { value: '산업혁신·정비형', label: '산업혁신·정비형' },
-  ]
 
   function setParams(params: PlanZone.Search.Params) {
     currentParams.value = params
@@ -115,13 +101,12 @@
       ...currentParams.value,
     } as PlanZone.Search.Params
 
-    const { data } = await getGisCiamsPlanZoneList(params)
+    const { data } = await getCiamsZoneList(params)
     responseData(data)
   }
 
   function clear() {
-    zoneName.value = ''
-    mngType.value = ''
+    name.value = ''
 
     runSearch()
     emits('clear')
@@ -133,8 +118,7 @@
 
   function runSearch() {
     const params = {
-      zoneName: zoneName.value,
-      mngType: mngType.value,
+      zoneName: name.value,
     }
 
     setParams(params)
@@ -142,7 +126,7 @@
   }
 
   function responseData(data: PlanZone.Search.Result) {
-    planZoneItems.value = data.list
+    areaItems.value = data.list
     pageObj.setPageData(data.page)
   }
 
@@ -150,7 +134,7 @@
     search(pageNo, pageInfo.currentPageSize)
   }
 
-  function planZoneItemSelect(item: PlanZone.Search.Row) {
+  function areaItemSelect(item: PlanZone.Search.Row) {
     emits('item-select', item)
   }
 
@@ -176,7 +160,7 @@
   })
 
   defineExpose({
-    planZoneItemSelect,
+    areaItemSelect,
   })
 </script>
 

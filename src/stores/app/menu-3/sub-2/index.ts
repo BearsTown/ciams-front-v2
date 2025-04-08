@@ -11,7 +11,7 @@ interface Menu3Sub2 {
 const tabList = [
   { name: '산업육성 및 지원 방안', id: 'TabA', isActive: false },
   { name: '공간관리방안', id: 'TabB', isActive: false },
-  { name: '환경관리방안', id: 'TabC', isActive: false },
+  { name: '환경관리방안', id: 'TabC', isActive: true },
 ] as const
 
 export type Menu3Sub2TabIdType = (typeof tabList)[number]['id']

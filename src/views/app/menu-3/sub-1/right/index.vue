@@ -193,6 +193,7 @@
     font-size: 13px;
     font-weight: 600;
     color: white;
+    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.12);
   }
 
   .customTable tr > td:not([rowspan]) {

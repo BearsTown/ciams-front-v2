@@ -15,12 +15,11 @@ namespace Plan {
 
     export interface Row {
       rn: number
-      mnum: string
-      alias: string
-      remark: string
-      name: string
-      csC: number
-      area: number
+      zoneNo: string
+      zoneName: string
+      useDist: string
+      baseCsC: number
+      zoneArea: number
     }
 
     export interface Result {
@@ -33,7 +32,7 @@ namespace Plan {
     namespace Find {
       export interface Params {
         planId: string
-        name: string
+        zoneNo: string
       }
 
       export interface Result extends CiamsPlanArea {
@@ -44,12 +43,11 @@ namespace Plan {
 }
 
 export interface CiamsPlanArea {
-  mnum: string
-  alias: string
-  remark: string
-  name: string
-  csC: number
-  area: number
+  zoneNo: string
+  zoneName: string
+  useDist: string
+  baseCsC: number
+  zoneArea: number
 }
 
 export { Plan }

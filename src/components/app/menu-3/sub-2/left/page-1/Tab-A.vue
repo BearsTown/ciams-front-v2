@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 5px">
     <template v-for="(tab, index) in menu3Sub2Page1Store.tabList" :key="tab">
       <ActiveButton
         ref="childRefs"

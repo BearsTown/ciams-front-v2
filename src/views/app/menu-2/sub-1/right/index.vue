@@ -4,8 +4,12 @@
       <div class="title">산업기반 분석</div>
 
       <div class="title">
-        {{ overview ? `${overview.name} (${commonUtil.comma(overview.area.toFixed(3))}㎢)` : '-' }}
-        {{ overview ? `${overview.remark}` : '' }}
+        {{
+          overview
+            ? `${overview.zoneName} (${commonUtil.comma(overview.zoneArea.toFixed(3))}㎡)`
+            : '-'
+        }}
+        {{ overview ? `${overview.useDist}` : '' }}
       </div>
 
       <table class="customTable analysis">

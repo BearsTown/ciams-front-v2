@@ -30,7 +30,8 @@ export const useGlobalStore = defineStore('globalStore', () => {
 
   const state = reactive({
     loading: false,
-    currentMapType: MapType.MAP_1,
+    // currentMapType: MapType.MAP_1,
+    currentMapType: '' as MapType,
     layouts: new Map() as Layouts,
     layoutSelected: {} as Ref<Partial<LayoutState> | undefined>,
   })

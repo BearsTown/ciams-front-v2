@@ -3,7 +3,7 @@
     class="border-box-square"
     style="display: flex; flex-direction: column; height: 100%; border: none; box-shadow: none"
   >
-    <div class="header-title" style="">산업정비구역 지정기준 및 기본방향</div>
+    <div class="header-title" style="">산업혁신구역 지정기준 및 기본방향</div>
     <div class="customScroll" style="display: flex">
       <div style="flex: 1">
         <div class="border-box-square" style="">

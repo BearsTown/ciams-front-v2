@@ -124,7 +124,7 @@ const routes: RouteRecordRaw[] = [
         name: 'Menu-2',
         redirect: '/menu-2/sub-1',
         meta: {
-          mapType: MapType.MAP_2,
+          mapType: 'Map-2',
           title: '도시공업지역<br/>유형화분석',
           icon: menu2Icon,
         },
@@ -223,7 +223,7 @@ const routes: RouteRecordRaw[] = [
         name: 'Menu-3',
         redirect: '/menu-3/sub-1',
         meta: {
-          mapType: MapType.MAP_3,
+          mapType: 'Map-3',
           title: '도시공업지역<br/>기본계획',
           icon: menu3Icon,
         },

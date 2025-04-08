@@ -10,7 +10,7 @@ interface Menu3Sub2Page3 {
 
 const tabList = [
   { name: '환경관리 기본방향', id: 'TabA', isActive: false },
-  { name: '분야별 환경관리방안', id: 'TabB', isActive: true },
+  // { name: '분야별 환경관리방안', id: 'TabB', isActive: false },
 ] as const
 
 export type Menu3Sub2Page3TabIdType = (typeof tabList)[number]['id']
@@ -18,7 +18,7 @@ export type Menu3Sub2Page3TabIdType = (typeof tabList)[number]['id']
 export const useMenu3Sub2Page3Store = defineStore('menu3-Sub2-Page3-Store', () => {
   const state = reactive<Menu3Sub2Page3>({
     showInfo: useBoolean(false),
-    selectedTabId: 'TabB',
+    selectedTabId: 'TabA',
   })
 
   function selectTab(tabId: Menu3Sub2Page3TabIdType) {

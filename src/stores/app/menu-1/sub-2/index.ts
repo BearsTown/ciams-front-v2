@@ -20,7 +20,7 @@ export type Menu1Sub2TabIdType = (typeof tabList)[number]['id']
 export const useMenu1Sub2store = defineStore('menu1sub2store', () => {
   const state = reactive<Menu1Sub2>({
     showInfo: useBoolean(false),
-    selectedTabId: 'TabA',
+    selectedTabId: 'TabB',
   })
 
   return {

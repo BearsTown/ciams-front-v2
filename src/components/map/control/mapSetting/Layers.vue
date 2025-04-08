@@ -47,13 +47,13 @@
 
   const tocCommonLayers = computed(() => {
     return mapWrap.value?.getTocCommonLayerGroups()[
-      CommonLayerTypes[props.mapType][mapStore?.currentMapGroup]!
+      CommonLayerTypes[props.mapType]![mapStore?.currentMapGroup]!
     ]
   })
 
   const tocViewLayers = computed(() => {
     return mapWrap.value?.getTocViewLayerGroups()[
-      ViewLayerTypes[props.mapType][mapStore?.currentMapGroup]!
+      ViewLayerTypes[props.mapType]![mapStore?.currentMapGroup]!
     ]
   })
 

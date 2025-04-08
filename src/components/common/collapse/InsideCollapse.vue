@@ -58,7 +58,7 @@
 
     & > div {
       .title {
-        flex: 0.3;
+        //flex: 0.3;
       }
       .noSub {
         flex: 1 !important;

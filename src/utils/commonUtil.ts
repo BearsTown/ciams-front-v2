@@ -68,7 +68,8 @@ export default {
   },
 
   isEmpty: function (param) {
-    return param != null && param != undefined && Object.keys(param).length === 0
+    // return param != null && param != undefined && Object.keys(param).length === 0
+    return param == null || Object.keys(param).length === 0
   },
 
   loading: function (message?) {
@@ -113,12 +114,13 @@ export default {
       type: 'warning',
     })
   },
-  hex2rgb: (hex) => {
+
+  hex2rgb: (hex, alpha) => {
     const r = parseInt(hex.slice(1, 3), 16)
     const g = parseInt(hex.slice(3, 5), 16)
     const b = parseInt(hex.slice(5, 7), 16)
 
-    return { r, g, b }
+    return alpha !== undefined ? `rgba(${r}, ${g}, ${b}, ${alpha})` : `rgb(${r}, ${g}, ${b})`
   },
   rgbaToHex: (r, g, b, a) => {
     const toHex = (x) => {

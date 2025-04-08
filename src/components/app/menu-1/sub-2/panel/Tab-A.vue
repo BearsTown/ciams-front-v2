@@ -25,12 +25,12 @@
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted, reactive, ref } from 'vue'
 
+  import TabAMap from '@/components/app/menu-1/sub-2/panel/Tab-A-Map.vue'
+
   import { useGlobalStore } from '@/stores/app'
   import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
 
   import VChart from 'vue-echarts'
-  import Controls from '@/components/map/control/Controls.vue'
-  import MapWrapperView from '@/components/map/MapWrapper.vue'
   import { CommonLayerGroup, MapType, MapWrapperConfig } from '@/enums/mapEnum'
   import { MapWrapper } from '@/js/mapWrapper'
 
@@ -42,6 +42,8 @@
   import { useMapStore } from '@/stores/map/map'
   import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
   import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
+  import Controls from '@/components/map/control/Controls.vue'
+  import MapWrapperView from '@/components/map/MapWrapper.vue'
 
   const globalStore = useGlobalStore()
   const menu1sub2store = useMenu1Sub2store()
@@ -49,8 +51,9 @@
 
   const mapConfig = ref<MapWrapperConfig>()
 
-  const mapType = MapType.MAP_1
-  const commonLayerType: CommonLayerGroup = 'COMMON_LAYER_GROUP_1'
+  // const mapType = MapType.MAP_1
+  const mapType: MapType = 'Map-1-2-1'
+  const commonLayerType: CommonLayerGroup = 'COMMON_LAYER_GROUP_1-2-1'
   const mapStore = useMapStore(mapType)
   const mapWrap = ref<MapWrapper>()
 
@@ -426,7 +429,7 @@
       flex-direction: row;
 
       .left {
-        flex: 1;
+        width: 50%;
 
         padding: 10px;
         background: #fff;
@@ -434,7 +437,7 @@
       }
 
       .right {
-        flex: 1;
+        width: 50%;
 
         padding: 10px;
         background: #fff;

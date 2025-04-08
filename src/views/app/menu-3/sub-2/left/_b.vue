@@ -53,7 +53,7 @@
 
   import { useBoolean } from '@/hooks/useBoolean'
   import { useGlobalStore } from '@/stores/app'
-  import { PlanZone } from '@/api/app/planZone/model'
+  import { PlanZone } from '@/api/app/zone/model'
   import { useMenu3store } from '@/stores/app/menu-3'
   import { useMenu3Sub2Store } from '@/stores/app/menu-3/sub-2'
   import { MapLayer } from '@/js/layer'
@@ -85,11 +85,12 @@
   const { layoutSelected } = storeToRefs(globalStore)
   const { status: isActive, toggle } = useBoolean(false)
 
-  const mapType = MapType.MAP_3
+  // const mapType = MapType.MAP_3
+  const mapType: MapType = 'Map-3'
   const mapLayerGroupType: MapLayerGroupType = 'Menu_3_Sub_1'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
-  const layerGroupName = ViewLayerTypes[mapType][mapLayerGroupType]
+  const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
   const components: Record<Menu3Sub2TabIdType, DefineComponent> = {
     TabA: TabAComp,
@@ -114,7 +115,7 @@
     },
     crossOrigin: 'Anonymous',
     properties: {
-      id: 'ciams_zone',
+      id: 'ciams_dist',
       type: 'wms',
     },
     layerType: 'wms',
@@ -177,7 +178,7 @@
     mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
   }
 
-  // async function planZoneItemSelect(item: PlanZone.Search.Row) {
+  // async function zoneAnalysisItemSelect(item: PlanZone.Search.Row) {
   //   layoutSelected.value?.right?.collapse?.on()
   //   mapStore.locationInfoVisible = false
   //

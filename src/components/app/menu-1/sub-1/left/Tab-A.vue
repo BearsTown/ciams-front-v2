@@ -76,11 +76,12 @@
   const globalStore = useGlobalStore()
   const menu1sub1store = useMenu1Sub1store()
 
-  const mapType = MapType.MAP_1
+  // const mapType = MapType.MAP_1
+  const mapType: MapType = 'Map-1'
   const mapLayerGroupType: MapLayerGroupType = 'Menu_1_Tab_A'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
-  const layerGroupName = ViewLayerTypes[mapType][mapLayerGroupType]
+  const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
   const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
@@ -124,7 +125,6 @@
       percent: 31.1,
     },
   ]
-
 
   const uitWMSLayer1 = new UitWMSLayer({
     baseUrl: mapStudioUrl,

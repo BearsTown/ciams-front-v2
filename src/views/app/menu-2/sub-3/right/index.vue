@@ -4,8 +4,8 @@
       <div class="title">유형화 종합 분석</div>
 
       <div class="title">
-        {{ overview ? `${overview.name} (${commonUtil.comma(overview.area.toFixed(3))}㎢)` : '-' }}
-        {{ overview ? `${overview.remark}` : '' }}
+        {{ overview ? `${overview.zoneName} (${commonUtil.comma(overview.zoneArea.toFixed(3))}㎡)` : '-' }}
+        {{ overview ? `${overview.useDist}` : '' }}
       </div>
 
       <table class="customTable analysis">
@@ -124,9 +124,11 @@
         <tbody>
           <tr>
             <td style="text-align: center; vertical-align: middle">
-              {{ result }}
+              {{ overview ? `${overview.dvsType}` : '' }}
             </td>
-            <td style="text-align: center; vertical-align: middle">혁신형</td>
+            <td style="text-align: center; vertical-align: middle">
+              {{ overview ? `${overview.mngType}` : '' }}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -163,25 +165,25 @@
   const dialog = ref<boolean>(false)
 
   const tjdwkd1 = computed(
-    () => overview?.value?.itaResult === '성장' && overview?.value?.locala === '양호',
+    () => overview?.value?.itaResult === '성장' && overview?.value?.locResult === '양호',
   )
   const tjdwkd2 = computed(
-    () => overview?.value?.itaResult === '유지' && overview?.value?.locala === '양호',
+    () => overview?.value?.itaResult === '유지' && overview?.value?.locResult === '양호',
   )
   const tjdwkd3 = computed(
-    () => overview?.value?.itaResult === '쇠퇴' && overview?.value?.locala === '양호',
+    () => overview?.value?.itaResult === '쇠퇴' && overview?.value?.locResult === '양호',
   )
   const tjdwkd4 = computed(
-    () => overview?.value?.itaResult === '성장' && overview?.value?.locala === '불량',
+    () => overview?.value?.itaResult === '성장' && overview?.value?.locResult === '불량',
   )
   const tjdwkd5 = computed(
-    () => overview?.value?.itaResult === '유지' && overview?.value?.locala === '불량',
+    () => overview?.value?.itaResult === '유지' && overview?.value?.locResult === '불량',
   )
   const tjdwkd6 = computed(
-    () => overview?.value?.itaResult === '쇠퇴' && overview?.value?.locala === '불량',
+    () => overview?.value?.itaResult === '쇠퇴' && overview?.value?.locResult === '불량',
   )
 
-  const result = computed(() => (overview?.value?.locala === '양호' ? '관리형' : '정비형'))
+  const result = computed(() => (overview?.value?.locResult === '양호' ? '관리형' : '정비형'))
 
   function dialogChangeListener(state: boolean) {
     dialog.value = state

@@ -61,7 +61,7 @@
   </div>
 </template>
 <script setup lang="ts">
-  import AreaPageList from '@/components/common/AreaTable/AreaPageList.vue'
+  import AreaPageList from '@/components/common/ZoneTable/ZonePageList.vue'
   import { onMounted, ref } from 'vue'
   import { Search } from '@element-plus/icons-vue'
   import { getPlanArea, getPlanAreaLink } from '@/api/app/plan'
@@ -108,7 +108,7 @@
   }
 
   function selectData(item) {
-    selectItem.value = item.planAreaId
+    selectItem.value = item.zoneNo
     emits('selectArea', item)
   }
 
@@ -116,7 +116,7 @@
     getPlanArea({
       size: 6,
       pageNo: data.value.page.pageNo,
-      planAreaName: search.value,
+      name: search.value,
     }).then((res) => {
       if (res) {
         data.value.page = res.data.page

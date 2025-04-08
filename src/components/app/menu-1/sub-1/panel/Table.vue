@@ -11,7 +11,7 @@
       <thead>
         <tr>
           <th scope="col" style="text-align: center">구분</th>
-          <th scope="col" style="text-align: center">면적(㎢)</th>
+          <th scope="col" style="text-align: center">면적(㎡)</th>
           <th scope="col" style="text-align: center">비율(%)</th>
         </tr>
       </thead>

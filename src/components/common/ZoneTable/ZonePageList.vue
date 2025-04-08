@@ -1,13 +1,13 @@
 <template>
   <ul class="result-list customScroll" ref="scrollbarRef">
-    <template v-if="Object.keys(planZoneListItems).length">
-      <PlanZoneListItem
-        v-for="(item, index) in planZoneListItems"
+    <template v-if="Object.keys(areaListItems).length">
+      <ZoneListItem
+        v-for="(item, index) in areaListItems"
         :key="index"
-        :planZone-item="item"
+        :zone-item="item"
         ref="itemRefs"
-        @click="selectPlanZoneItem(index)"
-        @re-click="selectPlanZoneItem(index)"
+        @click="selectAreaItem(index)"
+        @re-click="selectAreaItem(index)"
       />
     </template>
     <Empty v-else />
@@ -17,36 +17,36 @@
 <script setup lang="ts">
   import { ref, toRefs, watch } from 'vue'
 
-  import PlanZoneListItem from '@/components/app/menu-3/PlanZoneTable/PlanZoneListItem.vue'
+  import ZoneListItem from '@/components/common/ZoneTable/ZoneListItem.vue'
 
-  import { PlanZone } from '@/api/app/planZone/model'
+  import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
 
-  type CompPlanZoneListItem = InstanceType<typeof PlanZoneListItem> | null
+  type CompAreaListItem = InstanceType<typeof ZoneListItem> | null
 
   const props = withDefaults(
     defineProps<{
-      planZoneListItems?: PlanZone.Search.Row[]
+      areaListItems?: GisCiamsZoneDTO.Search.Row[]
     }>(),
     {
-      planZoneListItems: () => {
+      areaListItems: () => {
         return []
       },
     },
   )
 
   const emits = defineEmits<{
-    (e: 'item-select', type: PlanZone.Search.Row): void
+    (e: 'item-select', type: GisCiamsZoneDTO.Search.Row): void
   }>()
 
-  const selected = ref<CompPlanZoneListItem>()
-  const itemRefs = ref<CompPlanZoneListItem[]>([])
-  const items = toRefs(props).planZoneListItems
+  const selected = ref<CompAreaListItem>()
+  const itemRefs = ref<CompAreaListItem[]>([])
+  const items = toRefs(props).areaListItems
 
   const scrollbarRef = ref()
 
   // const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 
-  function selectPlanZoneItem(idx) {
+  function selectAreaItem(idx) {
     // 한번더 클릭시 액션 발생하도록
     // if (selected.value === itemRefs.value[idx]) {
     //   return

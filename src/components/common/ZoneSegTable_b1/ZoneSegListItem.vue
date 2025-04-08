@@ -1,16 +1,19 @@
 <template>
   <li class="" :class="{ active: isActive }">
     <div class="address-title">
-      <b>{{ planZoneItem.zoneName }}</b>
+      <b>{{ areaItem.zoneName }}</b>
     </div>
-    <div class="address-text">관리유형 : {{ planZoneItem.mngType }}</div>
+    <div class="address-text">면적 : {{ areaItem.zoneArea }}</div>
+    <div class="address-text">용도지역 : {{ areaItem.useDist }}</div>
+    <div class="address-text">편입토지 : -필지</div>
+    <div class="address-text">사업체수 : {{ areaItem.baseCsC }}개</div>
   </li>
 </template>
 
 <script setup lang="ts">
   import { computed, ref, toRefs, watch } from 'vue'
 
-  import { PlanZone } from '@/api/app/planZone/model'
+  import { PlanZone } from '@/api/app/zone/model'
   import { useBoolean } from '@/hooks/useBoolean'
   import { useAuthStore } from '@/stores/auth'
   import { useGlobalStore } from '@/stores/app'
@@ -27,7 +30,7 @@
   const props = withDefaults(
     defineProps<{
       isActive?: boolean
-      planZoneItem: PlanZone.Search.Row
+      areaItem: PlanZone.Search.Row
     }>(),
     {
       isActive: false,
@@ -38,10 +41,10 @@
     (e: 're-click'): void
   }>()
 
-  const { planZoneItem } = toRefs(props)
+  const { zoneSegItem } = toRefs(props)
   const { status: isActive } = useBoolean(props.isActive)
 
-  // const planPlanZoneArea = Math.round((parseFloat(planZoneItem.value.planPlanZoneArea) / 1000000) * 100) / 100
+  const planAreaArea = Math.round((parseFloat(areaItem.value.planAreaArea) / 1000000) * 100) / 100
   const dialogVisible = ref(false)
 
   function setActive(active: boolean) {
@@ -51,13 +54,13 @@
   function cancel() {}
 
   const getSelectedData = computed(() => {
-    return planZoneItem.value
+    return areaItem.value
   })
 
   // watch(modal.value, () => {
   //   //계획지역 수정 후 액션
-  //   if (modal.value.modifyAction && planZoneItem.value.rn == modal.value.selectItem.rn) {
-  //     Object.assign(planZoneItem.value, modal.value.selectItem)
+  //   if (modal.value.modifyAction && areaItem.value.rn == modal.value.selectItem.rn) {
+  //     Object.assign(areaItem.value, modal.value.selectItem)
   //     emits('re-click')
   //   }
   // })
