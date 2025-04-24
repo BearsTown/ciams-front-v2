@@ -9,7 +9,7 @@
           class="title"
           style="align-items: center; display: flex; font-weight: 700; padding-bottom: 0"
         >
-          <SvgIcon name="loc" style="color: #52b597" />
+          <SvgIcon name="loc" style="color: #7AAAD1" />
           {{ overview ? `${overview.zoneName}` : '' }}
         </div>
         <div>

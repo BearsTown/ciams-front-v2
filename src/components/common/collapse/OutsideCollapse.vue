@@ -45,7 +45,7 @@
             v-model="isActive"
             @click.prevent.stop
             @change="handleSwitchChange"
-            style="--el-switch-on-color: #0f825f; --el-switch-off-color: var(--ugis-color-gray)"
+            style="--el-switch-on-color: #4D7D99; --el-switch-off-color: var(--ugis-color-gray)"
           />
         </div>
       </div>
@@ -133,7 +133,7 @@
 
 <style scoped lang="scss">
   .outside-collapse {
-    background-color: #52b597;
+    background-color: #7AAAD1;
     transition: opacity var(--el-transition-duration);
 
     &:deep(.btn-toggle) {

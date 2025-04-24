@@ -19,7 +19,7 @@
   display: flex;
   align-items: center;
   padding: 0 1%;
-  background: #52b597;
+  background: #7AAAD1;
 }
 
 #error header .logo a {
@@ -81,7 +81,7 @@
   width: 234px;
   height: 43px;
   border-radius: 4px;
-  background: #52b597;
+  background: #7AAAD1;
   font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.02em;

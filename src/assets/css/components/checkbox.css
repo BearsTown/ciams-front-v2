@@ -40,13 +40,13 @@
 }
 
 .customCheckbox input[type='checkbox']:checked {
-  background-color: #52b597;
-  border-color: #52b597;
+  background-color: #7AAAD1;
+  border-color: #7AAAD1;
   color: #fff;
 }
 
 .customCheckbox input[type='checkbox']:checked + .customCheckbox-text {
-  color: #52b597;
+  color: #7AAAD1;
 }
 
 .customCheckbox input[type='checkbox']:checked::before {

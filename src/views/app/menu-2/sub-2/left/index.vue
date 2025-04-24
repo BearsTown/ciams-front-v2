@@ -74,7 +74,7 @@
     zIndex: 2222,
     style: new Style({
       stroke: new Stroke({
-        color: '#0F825F',
+        color: '#4D7D99',
         width: 4,
       }),
       zIndex: 100,
@@ -189,7 +189,7 @@
   }
 
   .zoningSetting .customTab-item:not(.disabled).active {
-    background: #52b597;
+    background: #7AAAD1;
     color: #fff;
   }
 </style>

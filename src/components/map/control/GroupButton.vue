@@ -64,7 +64,7 @@
 
   //.mapController .btn-control:not(:disabled).open {
   //  transition: 0.3s;
-  //  background-color: #52b597;
+  //  background-color: #7AAAD1;
   //}
 
   //.mapController .btn-control:not(:disabled).open svg {

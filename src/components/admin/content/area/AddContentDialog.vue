@@ -274,6 +274,6 @@
   }
 
   .checked {
-    border: 2px solid #52b597 !important;
+    border: 2px solid #7AAAD1 !important;
   }
 </style>

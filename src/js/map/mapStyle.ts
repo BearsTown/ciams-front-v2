@@ -163,8 +163,8 @@ const customVectorChangeColorStyle = (features, color: string) => {
   )
 }
 
-const color_main = '#0F825F'
-const color_sub_main = '#52B597'
+const color_main = '#4D7D99'
+const color_sub_main = '#7AAAD1'
 
 export const defaultLabelText = (feature: Feature) =>
   new Text({

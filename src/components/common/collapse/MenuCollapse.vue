@@ -18,7 +18,7 @@
             v-model="isActive"
             @click.prevent.stop
             @change="handleSwitchChange"
-            style="--el-switch-on-color: #0f825f; --el-switch-off-color: var(--ugis-color-gray)"
+            style="--el-switch-on-color: #4D7D99; --el-switch-off-color: var(--ugis-color-gray)"
           />
         </div>
       </div>

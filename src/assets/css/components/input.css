@@ -36,7 +36,7 @@
 
 .customInput:not(:disabled):not([readonly]):hover,
 .customInput:not(:disabled):not([readonly]):focus {
-  border-color: #52b597 !important;
+  border-color: #7AAAD1 !important;
 }
 
 .customInput[readonly] {

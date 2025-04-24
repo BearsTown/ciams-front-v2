@@ -15,16 +15,16 @@
 }
 
 .customSelect:not(.disabled):hover .customSelect-value {
-  color: #52b597;
+  color: #7AAAD1;
 }
 
 .customSelect:not(.disabled):hover .customSelect-arrow svg path {
-  stroke: #52b597;
+  stroke: #7AAAD1;
 }
 
 /* select active */
 .customSelect:not(.disabled).active .customSelect-value {
-  color: #52b597;
+  color: #7AAAD1;
 }
 
 .customSelect:not(.disabled).active .customSelect-arrow svg {
@@ -32,7 +32,7 @@
 }
 
 .customSelect:not(.disabled).active .customSelect-arrow svg path {
-  stroke: #52b597;
+  stroke: #7AAAD1;
 }
 
 .customSelect:not(.disabled).active .customSelect-dropdown {
@@ -129,13 +129,13 @@
 }
 
 .customSelect-item:not(.disabled):hover {
-  background: #52b597;
+  background: #7AAAD1;
   color: #fff;
   cursor: pointer;
 }
 
 .customSelect-item:not(.disabled).active {
-  background: #52b597;
+  background: #7AAAD1;
   color: #fff;
 }
 

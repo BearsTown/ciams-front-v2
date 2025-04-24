@@ -31,11 +31,11 @@
 
 .customTab-item:not(.disabled):hover {
   cursor: pointer;
-  color: #52b597;
+  color: #7AAAD1;
 }
 
 .customTab-item:not(.disabled).active {
-  background: #52b597;
+  background: #7AAAD1;
   color: #fff;
 }
 

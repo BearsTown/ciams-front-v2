@@ -53,7 +53,7 @@ import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 const cmmConfigStore = useCmmConfigStore()
 
 const url = import.meta.env.VITE_API_MAPSTUDIO_URL
-const color_main = '#0F825F'
+const color_main = '#4D7D99'
 const overlay = (container: HTMLElement, id: string) =>
   new Overlay({
     id,

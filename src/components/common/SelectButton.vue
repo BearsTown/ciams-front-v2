@@ -248,13 +248,13 @@
 
   .set-item:not(.disabled):hover {
     cursor: pointer;
-    border-color: #52b597;
-    color: #52b597;
+    border-color: #7AAAD1;
+    color: #7AAAD1;
   }
 
   .set-item:not(.disabled).active {
-    background: #52b597;
-    border-color: #52b597;
+    background: #7AAAD1;
+    border-color: #7AAAD1;
     color: #fff;
   }
 

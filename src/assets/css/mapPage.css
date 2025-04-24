@@ -142,12 +142,12 @@
   top: 50%;
   right: 0;
   border-radius: 4px;
-  background: #52b597;
+  background: #7aaad1;
   transform: translateY(-50%);
 }
 
 .mapSearch .btn-search:not(:disabled):hover {
-  background: #0f825f;
+  background: #4d7d99;
 }
 
 /* search-dropdown */
@@ -223,13 +223,13 @@
 }
 
 .mapSearch .search-dropdown .tab-item:not(.disabled):hover {
-  color: #52b597;
+  color: #7aaad1;
   cursor: pointer;
 }
 
 .mapSearch .search-dropdown .tab-item:not(.disabled).active {
   font-weight: 700;
-  color: #52b597;
+  color: #7aaad1;
 }
 
 .mapSearch .search-dropdown .tab-item:not(.disabled).active:before {
@@ -239,7 +239,7 @@
   position: absolute;
   bottom: -4px;
   left: 0;
-  background: #52b597;
+  background: #7aaad1;
 }
 
 .mapSearch .search-dropdown .result-list {
@@ -349,11 +349,11 @@
 }
 
 .mapLegend .btn-legend:not(:disabled):hover {
-  color: #52b597;
+  color: #7aaad1;
 }
 
 .mapLegend .btn-legend:not(:disabled):hover svg {
-  fill: #52b597;
+  fill: #7aaad1;
 }
 
 .mapLegend .popup {
@@ -399,7 +399,7 @@
 .mapLegend .customTab-item.active {
   background-color: transparent;
   font-weight: 700;
-  color: #52b597;
+  color: #7aaad1;
 }
 
 .mapLegend .customTab-item:not(:first-child):before {
@@ -852,7 +852,7 @@
 
 .map-sideBar .btn-sideBarUser:hover,
 .map-sideBar .btn-sideBarUser.active {
-  background: #52b597;
+  background: #7aaad1;
 }
 
 .map-sideBar .btn-sideBarUser:hover svg path,
@@ -870,23 +870,35 @@
   padding: 15px 0 18px;
 }
 
-.map-sideBar .btn-sideBarMenu:not(:disabled):hover .title {
-  color: #52b597;
+/* 공통 */
+.map-sideBar .btn-sideBarMenu:not(:disabled),
+.map-sideBar .btn-sideBarMenu:not(:disabled) .title,
+.map-sideBar .btn-sideBarMenu:not(:disabled) svg * {
+  transition: 0.1s;
 }
 
-.map-sideBar .btn-sideBarMenu:not(:disabled):hover svg * {
-  fill: #52b597;
-}
-
-.map-sideBar .btn-sideBarMenu:not(:disabled).active {
-  background: #52b597;
-}
-
-.map-sideBar .btn-sideBarMenu:not(:disabled).active svg * {
+/* 기본 SVG 색상 */
+.map-sideBar .btn-sideBarMenu:not(:disabled) svg * {
   fill: #fff;
 }
 
+/* 호버 상태 스타일 */
+.map-sideBar .btn-sideBarMenu:not(:disabled):hover .title {
+  color: #7aaad1;
+}
+
+.map-sideBar .btn-sideBarMenu:not(:disabled):hover svg * {
+  fill: #7aaad1;
+}
+
+/* 활성화 상태 스타일 */
+.map-sideBar .btn-sideBarMenu:not(:disabled).active {
+  background: #7aaad1;
+}
+
+.map-sideBar .btn-sideBarMenu:not(:disabled).active svg *,
 .map-sideBar .btn-sideBarMenu:not(:disabled).active .title {
+  fill: #fff;
   color: #fff;
 }
 
@@ -948,14 +960,16 @@
 }
 
 .map-sideBar .menu-list > li:not(.disabled):hover {
-  color: #52b597;
+  color: #7aaad1;
   cursor: pointer;
+  transition: 0.1s;
 }
 
 .map-sideBar .menu-list > li:not(.disabled).active {
   background: #fff;
   font-weight: 700;
-  color: #52b597;
+  color: #7aaad1;
+  transition: 0.1s;
 }
 
 /* 사용자 하위메뉴 */
@@ -967,7 +981,7 @@
 .map-sideBar .menu-list.user .user-name {
   position: relative;
   background: #fff;
-  color: #52b597;
+  color: #7aaad1;
 }
 
 .map-sideBar .menu-list.user .user-name:before {
@@ -983,7 +997,7 @@
 
 .map-sideBar .menu-list.user .user-name:hover {
   cursor: default;
-  color: #52b597;
+  color: #7aaad1;
 }
 
 /* ==================== drawer toggle button */
@@ -1025,11 +1039,11 @@
 }
 
 .map-bookmark .btn-bookmark:not(:disabled):hover {
-  color: #52b597;
+  color: #7aaad1;
 }
 
 .map-bookmark .btn-bookmark:not(:disabled).active {
-  background: #52b597;
+  background: #7aaad1;
   color: #fff;
 }
 

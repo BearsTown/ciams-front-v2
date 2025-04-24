@@ -281,7 +281,7 @@
 
   :deep .is-current {
     font-weight: bold;
-    color: #52b597;
+    color: #7AAAD1;
   }
 </style>
 <style scoped>

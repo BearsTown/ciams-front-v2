@@ -454,7 +454,7 @@
     padding: 20px !important;
   }
   tr.active {
-    background-color: #52b597;
+    background-color: #7AAAD1;
     td {
       color: white !important;
     }

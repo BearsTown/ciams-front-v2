@@ -92,7 +92,7 @@
   }
 
   .zoningSetting .customTab-item:not(.disabled).active {
-    background: #52b597;
+    background: #7AAAD1;
     color: #fff;
   }
 </style>

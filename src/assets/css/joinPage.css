@@ -19,7 +19,7 @@
   display: flex;
   align-items: center;
   padding: 0 1%;
-  background: #52b597;
+  background: #7AAAD1;
 }
 
 #join header .logo a {
@@ -142,11 +142,11 @@
 }
 
 #join .btn-reload:not(:disabled):hover {
-  color: #52b597;
+  color: #7AAAD1;
 }
 
 #join .btn-reload:not(:disabled):hover svg path {
-  fill: #52b597;
+  fill: #7AAAD1;
 }
 
 /* 회원가입, 취소 버튼 */
@@ -167,7 +167,7 @@
 
 #join .btn-join:not(:disabled):hover,
 #join .btn-join:not(:disabled).active {
-  background: #52b597;
+  background: #7AAAD1;
   color: #fff;
 }
 

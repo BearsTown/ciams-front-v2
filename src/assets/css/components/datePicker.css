@@ -10,7 +10,7 @@
 }
 
 .dp__overlay_cell_active {
-  background: #52b597;
+  background: #7AAAD1;
 }
 
 /* dropdown */
@@ -29,13 +29,13 @@
 }
 
 .dp__action_select {
-  background: #52b597;
+  background: #7AAAD1;
 }
 
 .dp__range_end,
 .dp__range_start,
 .dp__active_date {
-  background: #52b597;
+  background: #7AAAD1;
 }
 
 .dp__action_buttons > button {

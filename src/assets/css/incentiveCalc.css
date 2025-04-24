@@ -148,7 +148,7 @@
   height: 43px;
   margin-top: 20px;
   border-radius: 4px;
-  background: #52b597;
+  background: #7AAAD1;
   font-size: 16px;
   font-weight: 600;
   color: #fff;
@@ -178,7 +178,7 @@
   padding: 0 14px 0;
   border-radius: 8px;
   background: #fff;
-  border: 1px solid #52b597;
+  border: 1px solid #7AAAD1;
 }
 
 .incentiveCalc .box-wrap {
@@ -215,7 +215,7 @@
   font-size: 14px;
   font-weight: 600;
   letter-spacing: -0.28px;
-  color: #0f825f;
+  color: #4D7D99;
 }
 
 .incentiveCalc .card-content .tag-wrap {
@@ -294,7 +294,7 @@
 }
 
 .incentiveCalc .box .row > span.green {
-  background-color: #52b597;
+  background-color: #7AAAD1;
 }
 
 .incentiveCalc .box .row > span.navy {
@@ -326,13 +326,13 @@
   align-items: center;
   border-radius: 4px;
   background-color: #fff;
-  border: 1px solid #52b597;
+  border: 1px solid #7AAAD1;
 }
 
 .incentiveCalc .box .form-group .percent {
   width: 87px;
   text-align: center;
-  color: var(--primary-green-dark, #0f825f);
+  color: var(--primary-green-dark, #4D7D99);
   font-size: 14px;
   font-weight: 700;
   letter-spacing: -0.28px;
@@ -379,7 +379,7 @@
   background: transparent;
   border-radius: 0;
   border: 0;
-  border-bottom: 1px solid #0f825f;
+  border-bottom: 1px solid #4D7D99;
 }
 
 .incentiveCalc .box.disabled {

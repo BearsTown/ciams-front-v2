@@ -112,7 +112,7 @@
     width: 56px;
     height: 28px;
     border-radius: 4px;
-    background: #52b597;
+    background: #7AAAD1;
     font-size: 14px;
     font-weight: 500;
     letter-spacing: -0.02em;

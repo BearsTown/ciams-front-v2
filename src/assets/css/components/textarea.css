@@ -27,5 +27,5 @@
 
 .customTextarea:not(:disabled):not([readonly]):hover,
 .customTextarea:not(:disabled):not([readonly]):focus {
-  border-color: #52b597;
+  border-color: #7AAAD1;
 }

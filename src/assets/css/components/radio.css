@@ -39,11 +39,11 @@
 }
 
 .customRadio input[type='radio']:checked ~ .customRadio-check {
-  border-color: #52b597;
+  border-color: #7AAAD1;
 }
 
 .customRadio input[type='radio']:checked ~ .customRadio-text {
-  color: #52b597;
+  color: #7AAAD1;
 }
 
 .customRadio-check:after {
@@ -62,6 +62,6 @@
   top: 50%;
   left: 50%;
   border-radius: 50%;
-  background: #52b597;
+  background: #7AAAD1;
   transform: translate(-50%, -50%);
 }

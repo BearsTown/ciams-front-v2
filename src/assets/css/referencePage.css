@@ -30,7 +30,7 @@
   align-items: center;
   border-radius: 8px;
   padding: 17px 12px;
-  background-color: #52b597;
+  background-color: #7AAAD1;
 }
 
 #reference .sidebar-top .text {
@@ -66,13 +66,13 @@
 }
 
 #reference .sidebar-menu .menu-item:hover {
-  color: #52b597;
+  color: #7AAAD1;
   cursor: pointer;
 }
 
 #reference .sidebar-menu .menu-item.active {
   background: #f4f4f4;
-  color: #52b597;
+  color: #7AAAD1;
 }
 
 #reference .sidebar-menu .title {
@@ -143,11 +143,11 @@
 }
 
 #reference .l-header .btn-list:hover svg * {
-  fill: #52b597;
+  fill: #7AAAD1;
 }
 
 #reference .l-header .btn-list.active {
-  background-color: #52b597;
+  background-color: #7AAAD1;
 }
 
 #reference .l-header .btn-list.active svg * {
@@ -312,7 +312,7 @@
 }
 
 #reference .content.download .customCard-header .btn-green {
-  background: #52b597;
+  background: #7AAAD1;
 }
 
 #reference .content.download .customCard-header .btn-gray {
@@ -413,7 +413,7 @@
   font-size: 12px;
   font-weight: 400;
   letter-spacing: -0.24px;
-  color: #0f825f;
+  color: #4D7D99;
 }
 
 #reference .tree-list {
@@ -551,6 +551,6 @@
   width: 424px;
   height: 43px;
   margin: 40px auto 0;
-  background: #52b597;
+  background: #7AAAD1;
   color: #fff;
 }

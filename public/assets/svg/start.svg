@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="39.966" height="48.009" viewBox="0 0 39.966 48.009">
   <g id="그룹_1507" data-name="그룹 1507" transform="translate(-1123.163 -431.5)">
-    <path id="패스_533" data-name="패스 533" d="M586.483,37.11a19.486,19.486,0,0,1,19.483,19.483,19.442,19.442,0,0,1-5.274,13.318L586.483,84.119,572.274,69.911a19.474,19.474,0,0,1,14.209-32.8Z" transform="translate(556.663 394.89)" fill="#0F825F" stroke="rgba(0,0,0,0.12)" stroke-linejoin="round" stroke-width="1"/>
+    <path id="패스_533" data-name="패스 533" d="M586.483,37.11a19.486,19.486,0,0,1,19.483,19.483,19.442,19.442,0,0,1-5.274,13.318L586.483,84.119,572.274,69.911a19.474,19.474,0,0,1,14.209-32.8Z" transform="translate(556.663 394.89)" fill="#4D7D99" stroke="rgba(0,0,0,0.12)" stroke-linejoin="round" stroke-width="1"/>
     <text id="출발" transform="translate(1130.146 456.504)" fill="#fff" font-size="13" font-family="MalgunGothicBold, Malgun Gothic"><tspan x="0" y="0">시작</tspan></text>
   </g>
 </svg>

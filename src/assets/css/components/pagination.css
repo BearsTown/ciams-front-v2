@@ -18,7 +18,7 @@
 }
 
 .customPagination .btn-arrow:not(:disabled):hover {
-  background: #52b597;
+  background: #7AAAD1;
 }
 
 .customPagination .btn-arrow:not(:disabled):hover svg path {
@@ -52,10 +52,10 @@
 }
 
 .customPagination .btn-num:hover {
-  color: #52b597;
+  color: #7AAAD1;
 }
 
 .customPagination .btn-num.active {
-  background: #52b597;
+  background: #7AAAD1;
   color: #fff;
 }

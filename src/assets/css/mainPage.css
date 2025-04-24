@@ -99,7 +99,7 @@
 }
 
 #main .loginModal .btn-login:not(:disabled):hover {
-  background: #52b597;
+  background: #7AAAD1;
   color: #fff;
 }
 
@@ -141,7 +141,7 @@
 }
 
 #main .userDropdown .btn-userMenu:not(:disabled):hover {
-  background: #52b597;
+  background: #7AAAD1;
   font-weight: 500;
   color: #fff;
 }
@@ -262,7 +262,7 @@
 }
 
 #main header .btn-user.logout:not(:disabled):hover svg path {
-  /* fill: #52B597 */
+  /* fill: #7AAAD1 */
 }
 
 /* ==================== main-box */
@@ -339,7 +339,7 @@
   top: 50%;
   right: 10px;
   border-radius: 999px;
-  background: #52b597;
+  background: #7AAAD1;
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -348,7 +348,7 @@
 }
 
 #main .btn-search:not(:disabled):hover {
-  background: #0f825f;
+  background: #4D7D99;
 }
 
 /* search-dropdown */
@@ -391,12 +391,12 @@
 }
 
 #main .search-dropdown .tab-item:not(.disabled):hover {
-  color: #52b597;
+  color: #7AAAD1;
   cursor: pointer;
 }
 
 #main .search-dropdown .tab-item:not(.disabled).active {
-  color: #52b597;
+  color: #7AAAD1;
 }
 
 #main .search-dropdown .tab-item:not(.disabled).active:before {
@@ -406,7 +406,7 @@
   position: absolute;
   bottom: -4px;
   left: 0;
-  background: #52b597;
+  background: #7AAAD1;
 }
 
 #main .search-dropdown .result-list {
@@ -499,7 +499,7 @@
 }
 
 #main .btn-menu:not(:disabled):hover .icon {
-  background: #52b597;
+  background: #7AAAD1;
 }
 
 #main .btn-menu:not(:disabled):hover svg path {

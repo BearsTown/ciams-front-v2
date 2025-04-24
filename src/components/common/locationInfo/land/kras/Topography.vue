@@ -131,7 +131,7 @@
               </button>
               <button
                 type="button"
-                style="width: 88px; cursor: auto; margin-left: 10px; background: #52b597"
+                style="width: 88px; cursor: auto; margin-left: 10px; background: #7AAAD1"
                 class="btn-color"
               >
                 <input
@@ -951,8 +951,8 @@
     padding: 20px !important;
   }
   .seleted {
-    background: #52b597;
-    border-color: #52b597;
+    background: #7AAAD1;
+    border-color: #7AAAD1;
     color: #fff;
   }
 
@@ -1011,7 +1011,7 @@
   }
   .slider-label {
     font-weight: bold;
-    color: #0f825f;
+    color: #4D7D99;
     width: 50px;
   }
 

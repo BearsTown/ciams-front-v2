@@ -39,11 +39,11 @@
 }
 
 .customSwitch input:checked + .slider {
-  background-color: #52b597;
+  background-color: #7AAAD1;
 }
 
 .customSwitch input:focus + .slider {
-  box-shadow: 0 0 1px #52b597;
+  box-shadow: 0 0 1px #7AAAD1;
 }
 
 .customSwitch input:checked + .slider:before {

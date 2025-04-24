@@ -173,7 +173,7 @@
     },
     style: new Style({
       stroke: new Stroke({
-        color: '#0F825F',
+        color: '#4D7D99',
         width: 4,
       }),
       zIndex: 100,

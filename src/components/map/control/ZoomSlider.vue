@@ -10,7 +10,7 @@
         v-if="showSlider"
         v-model="sliderValue"
         orientation="vertical"
-        color="#52B597"
+        color="#7AAAD1"
         :handleScale="1"
         track-color="#E0E0E0"
         :step="1"

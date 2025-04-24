@@ -78,7 +78,7 @@
       display: flex;
       flex-wrap: wrap;
       overflow-wrap: break-word;
-      border: 1px solid #52b597;
+      border: 1px solid #7AAAD1;
       border-radius: 3px;
       padding: 0px 3px;
       margin-bottom: 10px;
@@ -104,10 +104,10 @@
     input[type='range'] {
       appearance: none;
       background: linear-gradient(to right, #f4f4f4 0%, #747474 100%);
-      accent-color: #52b597;
+      accent-color: #7AAAD1;
       margin: 0 3px;
       cursor: pointer;
-      border: #52b597;
+      border: #7AAAD1;
       border-style: solid;
       border-width: 1px;
       border-radius: 10px;
@@ -118,7 +118,7 @@
     }
     .btn-tooltip {
       &.active {
-        color: #52b597;
+        color: #7AAAD1;
       }
     }
   }

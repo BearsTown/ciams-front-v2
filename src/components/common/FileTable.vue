@@ -89,7 +89,7 @@
             padding: 0 10px;
             font-size: 12px;
             border-radius: 4px;
-            background-color: #52b597;
+            background-color: #7AAAD1;
           "
           @click="handleDownLoad(item?.id as string)"
         >

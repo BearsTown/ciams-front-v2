@@ -88,13 +88,13 @@
 
 .planningMonitoring .set-item:not(.disabled):hover {
   cursor: pointer;
-  border-color: #52b597;
-  color: #52b597;
+  border-color: #7AAAD1;
+  color: #7AAAD1;
 }
 
 .planningMonitoring .set-item:not(.disabled).active {
-  background: #52b597;
-  border-color: #52b597;
+  background: #7AAAD1;
+  border-color: #7AAAD1;
   color: #fff;
 }
 
@@ -193,7 +193,7 @@
 }
 
 .planningMonitoring .search .btn-search {
-  background-color: #52b597;
+  background-color: #7AAAD1;
   color: #fff;
 }
 
@@ -207,7 +207,7 @@
 }
 
 .planningMonitoring .search .btn-reload:not(:disabled):hover {
-  background-color: #52b597;
+  background-color: #7AAAD1;
   color: #fff;
 }
 
@@ -294,8 +294,8 @@
 .planningMonitoring .result-list > li:not(.disabled):hover,
 .planningMonitoring .result-list > li:not(.disabled).active {
   cursor: pointer;
-  background: #52b597;
-  border-color: #52b597;
+  background: #7AAAD1;
+  border-color: #7AAAD1;
   color: #fff;
 }
 

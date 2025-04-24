@@ -102,7 +102,7 @@
 
 /* active */
 .mapController .btn-control:not(:disabled).active {
-  background-color: #52b597;
+  background-color: #7AAAD1;
   transition: 0.3s;
 }
 
@@ -125,7 +125,7 @@
 /* ==================== group */
 .mapController .btn-wrap.button .btn-control.group:not(:disabled).open {
   transition: 0.3s;
-  background-color: #52b597;
+  background-color: #7AAAD1;
 }
 
 .mapController .btn-wrap.button .btn-control.group:not(:disabled).open svg {
@@ -368,15 +368,15 @@
 }
 
 .mapController .dropdown.bgMap .style-item:not(.disabled):hover .img-wrap {
-  border-color: #52b597;
+  border-color: #7AAAD1;
 }
 
 .mapController .dropdown.bgMap .style-item:not(.disabled):hover .style-text {
-  color: #52b597;
+  color: #7AAAD1;
 }
 
 .mapController .dropdown.bgMap .style-item:not(.disabled).active {
-  background: #52b597;
+  background: #7AAAD1;
 }
 
 .mapController .dropdown.bgMap .style-item:not(.disabled).active .img-wrap {
@@ -520,7 +520,7 @@
 }
 
 .mapController .dropdown.leaf .btn-tool:not(:disabled):hover {
-  background: #52b597;
+  background: #7AAAD1;
 }
 
 .mapController .dropdown.leaf .btn-tool:not(:disabled):hover svg path {
@@ -565,7 +565,7 @@
 }
 
 .mapController .btn-wrap.slider .btn-control:not(:disabled):hover svg path {
-  fill: #52b597;
+  fill: #7AAAD1;
 }
 
 .mapController .btn-wrap.slider .btn-control.plus {
@@ -646,7 +646,7 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: -0.02em;
-  color: #52b597;
+  color: #7AAAD1;
 }
 
 .mapController .btn-wrap.slider .slider-text:before {
@@ -679,5 +679,5 @@
   left: calc(50% - 12.5px);
   border-radius: 2px;
   background: #fff;
-  border: 1px solid #52b597;
+  border: 1px solid #7AAAD1;
 }

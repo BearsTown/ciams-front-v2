@@ -71,7 +71,7 @@
 </script>
 <style scoped lang="scss">
   .hover-point:hover {
-    color: #52b597;
+    color: #7AAAD1;
     cursor: pointer;
   }
 </style>
