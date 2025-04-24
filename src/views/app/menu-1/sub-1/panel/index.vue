@@ -15,9 +15,9 @@
 
   import CommonUtil from '@/utils/commonUtil'
 
-  import TabAComp from '@/components/app/menu-1/sub-1/panel/Tab-A.vue'
-  import TabBComp from '@/components/app/menu-1/sub-1/panel/Tab-B.vue'
-  import TabCComp from '@/components/app/menu-1/sub-1/panel/Tab-C.vue'
+  import TabAComp from '@/components/app/menu-1/sub-1/panel/tab-A'
+  import TabBComp from '@/components/app/menu-1/sub-1/panel/tab-B'
+  import TabCComp from '@/components/app/menu-1/sub-1/panel/tab-C'
 
   const globalStore = useGlobalStore()
   const menu1sub1store = useMenu1Sub1store()
@@ -50,8 +50,10 @@
 
 <style scoped lang="scss">
   .panel {
+    width: 100%;
     height: 100%;
-    padding: 15px 12px;
+    padding: 10px;
+    //padding: 15px 12px;
     background-color: #f4f4f4;
   }
 </style>

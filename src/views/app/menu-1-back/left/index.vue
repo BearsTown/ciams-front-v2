@@ -56,8 +56,8 @@
   import { computed, onActivated, onMounted, ref } from 'vue'
 
   import TabA from '@/components/app/menu-1/sub-1/left/Tab-A.vue'
-  import TabB from '@/components/app/menu-1/sub-1/left/Tab-B.vue'
-  import TabC from '@/components/app/menu-1/sub-1/left/Tab-C.vue'
+  import TabB from 'src/components/app/menu-1/sub-1/left/tab-B'
+  import TabC from '@/components/app/menu-1/sub-1/left/Tab-CC.vue'
   import { getConfigList } from '@/api/app/config'
   import { useBoolean } from '@/hooks/useBoolean'
   import { useGlobalStore } from '@/stores/app'

@@ -9,12 +9,14 @@ import InlineSvg from 'vue-inline-svg'
 
 import { use as echartsUse } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
-import { BarChart, LineChart, ScatterChart } from 'echarts/charts'
+import { BarChart, LineChart, PieChart, ScatterChart } from 'echarts/charts'
 import {
   GridComponent,
   LegendComponent,
   TitleComponent,
   TooltipComponent,
+  DataZoomComponent,
+  MarkLineComponent,
   VisualMapComponent,
 } from 'echarts/components'
 
@@ -47,6 +49,7 @@ app.use(CKEditor)
 app.component('Empty', Empty)
 app.component('SvgIcon', SvgIcon)
 app.component('InlineSvg', InlineSvg)
+// app.component(ElCollapseTransition.name, ElCollapseTransition)
 
 app.mount('#app')
 
@@ -54,10 +57,13 @@ echartsUse([
   CanvasRenderer,
   LineChart,
   BarChart,
+  PieChart,
   ScatterChart,
   GridComponent,
   TitleComponent,
   TooltipComponent,
+  MarkLineComponent,
+  DataZoomComponent,
   VisualMapComponent,
   LegendComponent,
 ])

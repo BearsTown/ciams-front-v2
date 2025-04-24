@@ -3,7 +3,7 @@
     <div class="header border-container">
       <div class="title">
         <template v-for="(item, index) in title" :key="index">
-          <span>{{ item }}</span>
+          <span style="vertical-align: middle">{{ item }}</span>
           <el-divider direction="vertical" v-if="index < title.length - 1" />
         </template>
       </div>

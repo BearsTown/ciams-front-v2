@@ -75,8 +75,8 @@
   import MenuCollapse from '@/components/common/collapse/MenuCollapse.vue'
   import { Menu3Sub2TabIdType } from '@/stores/app/menu-3/sub-2'
   import TabAComp from '@/components/app/menu-1/sub-1/left/Tab-A.vue'
-  import TabBComp from '@/components/app/menu-1/sub-1/left/Tab-B.vue'
-  import TabCComp from '@/components/app/menu-1/sub-1/left/Tab-C.vue'
+  import TabBComp from 'src/components/app/menu-1/sub-1/left/tab-B'
+  import TabCComp from '@/components/app/menu-1/sub-1/left/Tab-CC.vue'
 
   const menu3store = useMenu3store()
   const menu3Sub2Store = useMenu3Sub2Store()

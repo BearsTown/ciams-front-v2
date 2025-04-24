@@ -29,6 +29,9 @@ export type MapLayerGroup = {
 
 // 나머지 타입 정의 (변경 없음)
 export type MapLayerGroupType =
+  | 'Menu-1-1-1'
+  | 'Menu-1-1-2'
+  | 'Menu-1-1-3'
   | 'Menu-1-2-1'
   | 'Menu-1-2-2'
   | 'Menu-1-2-3'
@@ -44,6 +47,9 @@ export type MapLayerGroupType =
 
 export type CommonLayerGroup =
   | 'COMMON_LAYER_GROUP_1'
+  // | 'COMMON_LAYER_GROUP_1-1-1'
+  | 'COMMON_LAYER_GROUP_1-1-2'
+  | 'COMMON_LAYER_GROUP_1-1-3'
   | 'COMMON_LAYER_GROUP_1-2-1'
   | 'COMMON_LAYER_GROUP_1-2-2'
   | 'COMMON_LAYER_GROUP_1-2-3'
@@ -78,6 +84,13 @@ export const CommonLayerTypes: CommonLayerConfig = {
     Menu_1_Tab_A: 'COMMON_LAYER_GROUP_1',
     Menu_1_Tab_B: 'COMMON_LAYER_GROUP_1',
     Menu_1_Tab_C: 'COMMON_LAYER_GROUP_1',
+  },
+  'Map-1-1-2': {
+    'Menu-1-1-2': 'COMMON_LAYER_GROUP_1-1-2',
+    'Menu-1-1-3': 'COMMON_LAYER_GROUP_1-1-3',
+  },
+  'Map-1-1-3': {
+    'Menu-1-1-2': 'COMMON_LAYER_GROUP_1-1-3',
   },
   'Map-1-2-1': {
     'Menu-1-2-1': 'COMMON_LAYER_GROUP_1-2-1',
@@ -125,6 +138,12 @@ export const ViewLayerTypes: ViewLayerConfig = {
     Menu_1_Tab_A: 'VIEW_LAYER_GROUP_1',
     Menu_1_Tab_B: 'VIEW_LAYER_GROUP_2',
     Menu_1_Tab_C: 'VIEW_LAYER_GROUP_3',
+  },
+  'Map-1-1-2': {
+    'Menu-1-2-1': 'VIEW_LAYER_GROUP_1-2-1',
+  },
+  'Map-1-1-3': {
+    'Menu-1-2-1': 'VIEW_LAYER_GROUP_1-2-1',
   },
   'Map-1-2-1': {
     'Menu-1-2-1': 'VIEW_LAYER_GROUP_1-2-1',

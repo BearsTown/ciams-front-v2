@@ -53,7 +53,7 @@ export async function test_getMenu1_2_3(parentId: number): Promise<any[]> {
           // active: false,
         },
       ])
-    }, 300)
+    }, 100)
   })
 }
 
@@ -165,7 +165,7 @@ export async function test_getAttributes(parentId: number): Promise<object> {
       //     seriesType: 'line',
       //   },
       // ])
-    }, 300)
+    }, 100)
   })
 }
 
@@ -275,6 +275,6 @@ export async function test_getMenu1_2_3Data(id: number): Promise<any[]> {
           },
         ])
       }
-    }, 300)
+    }, 100)
   })
 }

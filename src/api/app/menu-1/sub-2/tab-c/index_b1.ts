@@ -33,7 +33,7 @@ export async function test_getAttributes(): Promise<any[]> {
           useRatio: true,
         },
       ])
-    }, 300)
+    }, 100)
   })
 }
 

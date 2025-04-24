@@ -16,8 +16,8 @@
 
   import CommonUtil from '@/utils/commonUtil'
 
-  // import TabAComp from '@/components/app/menu-3/sub-2/panel/page-1/Tab-A.vue'
-  // import TabBComp from '@/components/app/menu-3/sub-2/panel/page-1/Tab-B.vue'
+  // import TabAComp from '@/components/app/menu-3/sub-2/panel/page-1/index.vue'
+  // import TabBComp from '@/components/app/menu-3/sub-2/panel/page-1/index.vue'
   import TabAComp from '@/views/app/menu-3/sub-2/panel/page-1/section-1'
   import TabBComp from '@/views/app/menu-3/sub-2/panel/page-1/section-2'
 
@@ -52,9 +52,9 @@
 </script>
 
 <style scoped lang="scss">
-  .panel {
-    height: 100%;
-    padding: 15px 12px;
-    background-color: #f4f4f4;
-  }
+  //.panel {
+  //  height: 100%;
+  //  padding: 15px 12px;
+  //  background-color: #f4f4f4;
+  //}
 </style>

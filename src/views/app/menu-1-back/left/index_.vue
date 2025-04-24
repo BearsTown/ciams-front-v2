@@ -56,8 +56,8 @@
   import { computed, onActivated, onMounted, ref } from 'vue'
 
   import StepA from '@/components/app/menu-1/sub-1/left/Tab-A.vue'
-  import StepB from '@/components/app/menu-1/sub-1/left/Tab-B.vue'
-  import StepC from '@/components/app/menu-1/sub-1/left/Tab-C.vue'
+  import StepB from 'src/components/app/menu-1/sub-1/left/tab-B'
+  import StepC from '@/components/app/menu-1/sub-1/left/Tab-CC.vue'
 
   import { MapType } from '@/enums/mapEnum'
   import { getConfigList } from '@/api/app/config'

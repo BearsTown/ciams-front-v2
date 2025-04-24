@@ -179,4 +179,57 @@ export default {
   isFinite(v: number) {
     return isNaN(v) || !isFinite(v) ? 0.0 : v
   },
+
+  calculatePercentages(data, decimalPlaces = 1) {
+    if (!Number.isInteger(decimalPlaces) || decimalPlaces < 0) {
+      throw new Error('decimalPlaces must be a non-negative integer')
+    }
+    if (!Array.isArray(data) || data.some((item) => typeof item.value !== 'number' || !item.name)) {
+      throw new Error('Invalid data format: each item must have a numeric value and a name')
+    }
+
+    // 1. 합계 계산
+    const total = data.reduce((sum, item) => sum + item.value, 0)
+    // if (total === 0) {
+    //   throw new Error('Total value cannot be zero')
+    // }
+
+    // 2. 초기 비율 계산
+    const result = data.map((item) => ({ ...item, percentage: 0 }))
+    let sumPercent = 0
+    const factor = Math.pow(10, decimalPlaces)
+
+    result.forEach((item) => {
+      const percent = (item.value / total) * 100
+      item.percentage = Math.round(percent * factor) / factor // 지정된 소수점 자리수
+      sumPercent += item.percentage
+    })
+
+    // 3. 총합이 100%가 되도록 보정
+    let diff = 100 - sumPercent
+    if (Math.abs(diff) > 1e-10) {
+      // 부동소수점 오차 고려
+      // 비율을 정렬하여 가장 큰 값부터 보정
+      const sortedItems = result
+        .map((item, index) => ({
+          index,
+          percentage: item.percentage,
+          originalValue: item.value,
+        }))
+        .sort((a, b) => b.percentage - a.percentage || b.originalValue - a.originalValue) // 비율 같으면 원래 값 큰 순
+
+      let index = 0
+      const adjust = 1 / factor // 소수점 자리수에 맞는 조정 단위
+      while (Math.abs(diff) > 1e-10 && index < sortedItems.length) {
+        const step = diff > 0 ? adjust : -adjust
+        result[sortedItems[index].index].percentage += step
+        result[sortedItems[index].index].percentage =
+          Math.round(result[sortedItems[index].index].percentage * factor) / factor
+        diff = Math.round((diff - step) * factor) / factor
+        index = (index + 1) % sortedItems.length // 순환
+      }
+    }
+
+    return result
+  },
 }

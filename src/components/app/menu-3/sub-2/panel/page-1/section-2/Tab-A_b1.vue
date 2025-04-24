@@ -2,7 +2,7 @@
   <InsideCollapse title="경상북도 산업지원 제도" :is-open="true">
     <template #content>
       <div>
-        <spam>경상북도 산업지원 제도와 연계하여 미래전략산업을 지원</spam>
+        <span>경상북도 산업지원 제도와 연계하여 미래전략산업을 지원</span>
       </div>
       <el-table :data="tableData" style="width: 100%">
         <el-table-column prop="data1" label="구분" width="150" />

@@ -56,9 +56,9 @@
 <script setup lang="ts">
   import { computed, onActivated, onMounted, ref } from 'vue'
 
-  import StepA from '@/components/app/menu-1/sub1/left/Tab-A.vue'
-  import StepB from '@/components/app/menu-1/sub1/left/Tab-B.vue'
-  import StepC from '@/components/app/menu-1/sub1/left/Tab-C.vue'
+  import StepA from '@/components/app/menu-1/sub1/left/index.vue'
+  import StepB from '@/components/app/menu-1/sub1/left/index.vue'
+  import StepC from '@/components/app/menu-1/sub1/left/Page-3.vue'
 
   import { MapType } from '@/enums/mapEnum'
   import { getConfigList } from '@/api/app/config'

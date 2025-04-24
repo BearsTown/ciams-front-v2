@@ -6,6 +6,10 @@ import Config from '@/api/admin/config/model'
 
 const prefix = '/api/v1'
 
+export function getCode(code: string) {
+  return http.get<ResultData<any[]>>(`${prefix}/codes/${code}`)
+}
+
 export function getCodeSublist(params: object) {
   const config: AxiosRequestConfig = {
     params,

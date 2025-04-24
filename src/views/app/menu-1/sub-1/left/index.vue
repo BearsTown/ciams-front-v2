@@ -5,7 +5,7 @@
         <div style="flex: 1">김천시 현황</div>
         <div style="">
           <button type="button" class="btn-control" @click="showImage()">
-            <SvgIcon name="view-type" :size="15" />
+            <SvgIcon name="view-info" :size="15" />
           </button>
 
           <el-image
@@ -43,8 +43,8 @@
   import { computed, DefineComponent, onActivated, onMounted, ref } from 'vue'
 
   import TabAComp from '@/components/app/menu-1/sub-1/left/Tab-A.vue'
-  import TabBComp from '@/components/app/menu-1/sub-1/left/Tab-B.vue'
-  import TabCComp from '@/components/app/menu-1/sub-1/left/Tab-C.vue'
+  import TabBComp from '@/components/app/menu-1/sub-1/left/tab-B'
+  import TabCComp from '@/components/app/menu-1/sub-1/left/Tab-C'
   import { getConfigList } from '@/api/app/config'
   import { useBoolean } from '@/hooks/useBoolean'
   import { useGlobalStore } from '@/stores/app'
