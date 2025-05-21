@@ -25,7 +25,7 @@
     </div>
 
     <el-collapse-transition>
-      <div v-if="isChild" style="height: calc(100% - 40px)" v-show="isOpen">
+      <div v-if="isChild" style="" v-show="isOpen">
         <el-scrollbar
           style="height: 100%; background-color: white; padding: 5px"
           class="border-box-round"

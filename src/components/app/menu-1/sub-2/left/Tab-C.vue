@@ -1,5 +1,5 @@
 <template>
-  <div class="border-container" style="display: flex; flex-direction: column">
+  <div class="" style="display: flex; flex-direction: column; height: 100%">
     <div class="customScroll" style="flex: 1; overflow-y: auto">
       <template v-for="category in state.categories" :key="category.id">
         <InsideCollapse

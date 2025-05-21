@@ -19,8 +19,10 @@ interface TabItem {
 export const useMenu1Sub1Tab3Page2Store = defineStore('menu1-Sub1-Tab3-Page2-Store', () => {
   const state = reactive<Menu1Sub1Tab3Page2>({
     showInfo: useBoolean(false),
-    selectedTab: { name: '산업기반분석 비교', id: 'TabA', isActive: false, type: 'TabA' },
-    tabList: [{ name: '산업기반분석 비교', id: 'TabA', isActive: false, type: 'TabA' }],
+    selectedTab: {},
+    tabList: [],
+    // selectedTab: { name: '산업기반분석 비교', id: 'TabA', isActive: false, type: 'TabA' },
+    // tabList: [{ name: '산업기반분석 비교', id: 'TabA', isActive: false, type: 'TabA' }],
   })
 
   function selectTab(tab: any) {
@@ -30,6 +32,8 @@ export const useMenu1Sub1Tab3Page2Store = defineStore('menu1-Sub1-Tab3-Page2-Sto
   function addTabList(tabs: any[]) {
     // state.selectedTab = tab
     state.tabList = [...state.tabList, ...tabs]
+
+    selectTab(state.tabList[0])
   }
 
   return {

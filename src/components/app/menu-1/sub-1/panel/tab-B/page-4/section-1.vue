@@ -17,9 +17,7 @@
                 >※「산업발전법」 제2조에 따른 산업을 대상으로 함</span
               >
               <div style="display: flex; height: 100%">
-                <div style="flex: 1">
-                  <v-chart class="chart" :option="chartData" autoresize />
-                </div>
+                <v-chart class="chart" :option="chartData" autoresize />
               </div>
             </div>
           </div>
@@ -37,17 +35,13 @@
               <div>
                 <div class="header-title" style="">지역별 종사자 밀도</div>
                 <div class="" style="display: flex">
-                  <div style="flex: 1">
-                    <Table1 :data="density" />
-                  </div>
+                  <Table1 :data="density" />
                 </div>
               </div>
 
               <div style="display: flex; flex-direction: column; flex: 1; margin-top: 8px">
                 <div class="header-title" style="">산업별 현황</div>
-                <div style="flex: 1">
-                  <Table2 group="사업체수(개소)" :data="industry" :columns="columns" />
-                </div>
+                <Table2 group="사업체수(개소)" :data="industry" :columns="columns" />
               </div>
             </div>
           </div>

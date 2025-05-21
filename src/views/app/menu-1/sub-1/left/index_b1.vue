@@ -42,7 +42,7 @@
 <script setup lang="ts">
   import { computed, DefineComponent, onActivated, onMounted, ref } from 'vue'
 
-  import TabAComp from '@/components/app/menu-1/sub-1/left/Tab-A.vue'
+  import TabAComp from '@/components/app/menu-1/sub-1/left/Tab-A_.vue'
   import TabBComp from '@/components/app/menu-1/sub-1/left/tab-B'
   import TabCComp from '@/components/app/menu-1/sub-1/left/Tab-CC.vue'
   import { getConfigList } from '@/api/app/config'

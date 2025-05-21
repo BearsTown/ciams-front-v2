@@ -147,3 +147,6 @@
 .el-tabs--border-card > .el-tabs__header .el-tabs__item:not(.is-disabled):hover {
   color: var(--el-color-success);
 }
+.el-tabs__item:hover {
+  transition: 0.2s;
+}

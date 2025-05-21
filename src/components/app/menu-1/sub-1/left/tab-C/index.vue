@@ -1,28 +1,26 @@
 <template>
   <div style="display: flex; width: 100%; height: 100%; flex-direction: column">
-    <div class="border-container">
-      <template v-for="(tab, index) in menu1Sub1Store.tabList" :key="tab">
-        <MenuCollapse
-          class="menuButton"
-          ref="childRefs"
-          :title="tab.name"
-          type=""
-          :is-open="menu1Sub1Store.selectedTabId === tab.id"
-          :is-child="tab.isChild"
-          @open-change="(isOpen: boolean) => handleCustomEvent(isOpen, tab.id, index)"
-        >
-          <template #content>
-            <component :is="tabRef(tab.id)" />
-          </template>
-        </MenuCollapse>
+    <template v-for="(tab, index) in menu1Sub1Store.tabList" :key="tab">
+      <MenuCollapse
+        class="menuButton"
+        ref="childRefs"
+        :title="tab.name"
+        type=""
+        :is-open="menu1Sub1Store.selectedTabId === tab.id"
+        :is-child="tab.isChild"
+        @open-change="(isOpen: boolean) => handleCustomEvent(isOpen, tab.id, index)"
+      >
+        <template #content>
+          <component :is="tabRef(tab.id)" />
+        </template>
+      </MenuCollapse>
 
-        <el-divider
-          v-if="index < menu1Sub1Store.tabList.length - 1"
-          style="margin: 10px 0"
-          border-style="dashed"
-        />
-      </template>
-    </div>
+      <el-divider
+        v-if="index < menu1Sub1Store.tabList.length - 1"
+        style="margin: 10px 0"
+        border-style="dashed"
+      />
+    </template>
   </div>
 </template>
 
@@ -92,7 +90,7 @@
   }
 
   .zoningSetting .customTab-item:not(.disabled).active {
-    background: #7AAAD1;
+    background: #7aaad1;
     color: #fff;
   }
 </style>

@@ -87,7 +87,7 @@
       </h2>
 
       <!--검색바-->
-      <SearchBar ref="mapSearchBarRef" :is-main="true" />
+      <!--      <SearchBar ref="mapSearchBarRef" :is-main="true" />-->
 
       <div class="menu">
         <template v-for="item in menus[0].children" :key="item">

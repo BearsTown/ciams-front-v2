@@ -2,7 +2,7 @@
   <div class="zoningSetting">
     <div class="zoningSetting-top customCard">
       <div style="display: flex">
-        <div style="flex: 1">도시공업지역 현황</div>
+        <div style="flex: 1; display: flex; align-items: center">도시공업지역 현황</div>
         <div style="">
           <button type="button" class="btn-control" @click="showInfoRef = true">
             <SvgIcon name="view-info" :size="15" />
@@ -39,7 +39,7 @@
       </li>
     </ul>
 
-    <div class="zoningSetting-content">
+    <div class="zoningSetting-content border-container">
       <keep-alive>
         <component :is="currentTabComponent" />
       </keep-alive>
@@ -90,7 +90,7 @@
   // const tabList = menu1store.tabList
 
   const components: Record<Menu1Sub2TabIdType, DefineComponent> = {
-    TabA: TabAComp,
+    // TabA: TabAComp,
     TabB: TabBComp,
     TabC: TabCComp,
     TabD: TabDComp,
@@ -118,11 +118,11 @@
 
     switch (menu1sub2store.selectedTabId) {
       // 용도지역현황
-      case 'TabA': {
+      // case 'TabA': {
         // isActiveTimePoint.value = false
         // layoutSelected.value?.right?.visible.off()
-        break
-      }
+      //   break
+      // }
       // 수립대상지역
       case 'TabB': {
         // isActiveTimePoint.value = false
@@ -261,7 +261,7 @@
   }
 
   .zoningSetting .customTab-item:not(.disabled).active {
-    background: #7AAAD1;
+    background: #7aaad1;
     color: #fff;
   }
 </style>

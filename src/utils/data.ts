@@ -194,7 +194,7 @@ export function processChartData(params) {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
-        type: 'cross',
+        type: 'shadow',
         crossStyle: {
           // color: '#999',
         },
@@ -207,5 +207,24 @@ export function processChartData(params) {
     //   : axis === 'Y'
     //   ? { xAxis: values, yAxis: categories }
     //   : null),
+  }
+}
+
+export function axisMinMax(data: number[]) {
+  const minValue = Math.min(...data)
+  const maxValue = Math.max(...data)
+
+  const digits = Math.floor(Math.log10(maxValue)) + 1
+
+  let unit
+  if (digits <= 2) {
+    unit = Math.pow(10, digits - 1) // 1자리: 1, 2자리: 10
+  } else {
+    unit = Math.pow(10, digits - 2) // 3자리: 100, 4자리: 1000, 5자리: 10000, 6자리: 10000
+  }
+
+  return {
+    axisMin: Math.floor(minValue / unit) * unit,
+    axisMax: Math.ceil(maxValue / unit) * unit,
   }
 }

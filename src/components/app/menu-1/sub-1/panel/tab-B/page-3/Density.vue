@@ -32,20 +32,19 @@
   import { computed, onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
-
+  // import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import { useMenu1_2_3Store } from '@/stores/app/menu-1/sub-2/tab-c'
+  // import { useMenu1_2_3Store } from '@/stores/app/menu-1/sub-2/tab-c'
   import { getDensityInfos } from '@/api/app/menu-1/sub-1/tab-b/page-3'
   import { API_INFO_CIAMS } from '@/config/config'
   import { Density } from '@/api/app/menu-1/sub-1/tab-b/model'
 
   const globalStore = useGlobalStore()
   const cmmConfigStore = useCmmConfigStore()
-  const menu1sub2store = useMenu1Sub2store()
-  const menu1_2_3Store = useMenu1_2_3Store()
+  // const menu1sub2store = useMenu1Sub2store()
+  // const menu1_2_3Store = useMenu1_2_3Store()
 
-  const state = menu1_2_3Store.state
+  // const state = menu1_2_3Store.state
 
   const props = withDefaults(
     defineProps<{

@@ -2,7 +2,7 @@
   <div class="zoningSetting">
     <div class="zoningSetting-top customCard">
       <div style="display: flex">
-        <div style="flex: 1">김천시 현황</div>
+        <div style="flex: 1; display: flex; align-items: center">{{ sggName }} 현황</div>
         <div style="">
           <button type="button" class="btn-control" @click="showImage()">
             <SvgIcon name="view-info" :size="15" />
@@ -31,7 +31,7 @@
       </li>
     </ul>
 
-    <div class="zoningSetting-content">
+    <div class="zoningSetting-content border-container">
       <keep-alive>
         <component :is="currentTabComponent" />
       </keep-alive>
@@ -42,7 +42,7 @@
 <script setup lang="ts">
   import { computed, DefineComponent, onActivated, onMounted, ref } from 'vue'
 
-  import TabAComp from '@/components/app/menu-1/sub-1/left/Tab-A.vue'
+  import TabAComp from '@/components/app/menu-1/sub-1/left/tab-A'
   import TabBComp from '@/components/app/menu-1/sub-1/left/tab-B'
   import TabCComp from '@/components/app/menu-1/sub-1/left/Tab-C'
   import { getConfigList } from '@/api/app/config'
@@ -54,6 +54,7 @@
   import { storeToRefs } from 'pinia'
   import { API_INFO_CIAMS } from '@/config/config'
   import type { ImageInstance } from 'element-plus'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   // const managementStore = useManagementStore()
   // const { planId, planConfig, isActiveTimePoint, features } = storeToRefs(managementStore)
@@ -63,6 +64,7 @@
 
   const { status: isActive, toggle } = useBoolean(false)
 
+  const cmmConfigStore = useCmmConfigStore()
   const menu1sub1store = useMenu1Sub1store()
 
   const timePoint = ref()
@@ -73,6 +75,7 @@
 
   const imageRef = ref<ImageInstance>()
   const srcList = ref<string[]>([prefixPath + '2044e732-c692-4ea0-9a8d-fc3554768949'])
+  const sggName = computed(() => `${cmmConfigStore.cmmConfigState['SGG_NAME']?.confValue}`)
 
   // const currentTab = ref('TabA')
   // const tabList = [
@@ -229,8 +232,8 @@
 
     .customTab-item {
       flex: 1;
-      padding: 0;
-      margin-left: 5px;
+      padding: 0 !important;
+      margin-left: 5px !important;
       background-color: white;
     }
 
@@ -251,7 +254,7 @@
   }
 
   .zoningSetting .customTab-item:not(.disabled).active {
-    background: #7AAAD1;
+    background: #7aaad1;
     color: #fff;
   }
 </style>

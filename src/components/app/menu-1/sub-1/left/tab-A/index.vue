@@ -1,22 +1,29 @@
 <template>
   <div style="display: flex; width: 100%; height: 100%; flex-direction: column">
-    <template v-for="(tab, index) in menu3Sub2Store.tabList" :key="tab">
+    <template v-for="(tab, index) in statusList" :key="tab.id">
       <MenuCollapse
         class="menuButton"
         ref="childRefs"
-        :title="tab.name"
+        :title="tab.title"
         type=""
-        :is-open="menu3Sub2Store.selectedTabId === tab.id"
-        :is-child="tab.isChild"
-        @open-change="(isOpen: boolean) => handleCustomEvent(isOpen, tab.id, index)"
+        :is-open="false"
+        :is-child="tab.children?.length > 0"
+        @open-change="(isOpen: boolean) => handleCustomEvent(isOpen, tab, index)"
       >
         <template #content>
-          <component :is="tabRef(tab.id)" />
+          <template v-for="child in tab.children" :key="child.id">
+            <ActiveButton
+              ref="activeBtnChildRefs"
+              :title="child.title"
+              :is-active="selectedItem?.id === child?.id"
+              @change:active="(isActive: boolean) => handleStatusGroupChange(isActive, child)"
+            />
+          </template>
         </template>
       </MenuCollapse>
 
       <el-divider
-        v-if="index < menu3Sub2Store.tabList.length - 1"
+        v-if="index < statusList.length - 1"
         style="margin: 10px 0"
         border-style="dashed"
       />
@@ -25,13 +32,12 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, DefineComponent, onActivated, onMounted, ref } from 'vue'
+  import { DefineComponent, nextTick, onActivated, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import { useBoolean } from '@/hooks/useBoolean'
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu3store } from '@/stores/app/menu-3'
-  import { Menu1Sub1Tab2TabIdType, useMenu1Sub1Tab2Store } from 'src/stores/app/menu-1/sub-1/tab-B'
+  import { useMenu1Sub1Tab1Store } from '@/stores/app/menu-1/sub-1/tab-A'
 
   import { Style } from 'ol/style'
   import MenuCollapse from '@/components/common/collapse/MenuCollapse.vue'
@@ -39,13 +45,34 @@
   import Page4Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-4.vue'
   import Page5Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-5.vue'
   import Page6Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-6.vue'
+  import ActiveButton from '@/components/common/ActiveButton.vue'
+  import { test_getMenu1_1_1Data } from '@/api/app/menu-1/sub-1/tab-a'
 
-  const menu3store = useMenu3store()
-  const menu3Sub2Store = useMenu1Sub1Tab2Store()
+  const menu1Sub1Tab1Store = useMenu1Sub1Tab1Store()
 
   const globalStore = useGlobalStore()
   const { layoutSelected } = storeToRefs(globalStore)
+
+  const { selectedItem } = storeToRefs(menu1Sub1Tab1Store)
+
   const { status: isActive, toggle } = useBoolean(false)
+
+  // const statusList = ref([
+  //   { name: '토지', id: 'Page1', isActive: false, isChild: true },
+  //   { name: '인구', id: 'Page2', isActive: false, isChild: true },
+  //   { name: '경제', id: 'Page3', isActive: false, isChild: true },
+  //   { name: '산업', id: 'Page4', isActive: false, isChild: true },
+  // ])
+
+  const statusList = ref<any[]>([])
+
+  const selectedMenu = ref<object | null>(null)
+  // const selectedStatusGroup = ref<object | null>(null)
+
+  const params = ref({
+    title: '',
+    menu: '',
+  })
 
   const components: Record<string, DefineComponent> = {
     // Page1: TabAComp,
@@ -55,16 +82,11 @@
     Page5: Page5Comp,
     Page6: Page6Comp,
   }
-  const currentTabComponent = computed(() => components[menu3Sub2Store.selectedTabId] || Page3Comp)
-
-  const tabRef = computed(() => (type: Menu1Sub1Tab2TabIdType) => components[type])
-
   const childRefs = ref<MenuCollapse[]>([])
+  const activeBtnChildRefs = ref<ActiveButton[]>([])
 
-  function handleCustomEvent(isOpen: boolean, id: Menu1Sub1Tab2TabIdType, index: number) {
+  function handleCustomEvent(isOpen: boolean, menu: object, index: number) {
     if (!isOpen) return
-
-    console.log(menu3Sub2Store.tabList.filter((value) => value.id !== id))
 
     childRefs.value.forEach((child, i) => {
       if (i !== index && child?.setOpen) {
@@ -72,13 +94,31 @@
       }
     })
 
-    menu3Sub2Store.selectTab(id)
+    selectedMenu.value = menu
   }
 
-  function load() {}
+  function handleStatusGroupChange(isActive: boolean, item: object) {
+    if (!isActive) return
+    // selectedItem.value = item
+
+    console.log(`item ${item}; ${isActive}`)
+    menu1Sub1Tab1Store.setStatusGroup(selectedMenu.value!, item)
+  }
+
+  async function load() {
+    const { data } = await test_getMenu1_1_1Data()
+    statusList.value = data
+
+    await nextTick()
+
+    childRefs.value[0]?.setOpen(true)
+    selectedItem.value = statusList.value[0]?.children?.[0]
+  }
+
+  // const selected = ref()
 
   onMounted(async () => {
-    load()
+    await load()
   })
 
   onActivated(() => {})

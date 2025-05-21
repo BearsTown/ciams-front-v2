@@ -9,7 +9,7 @@ interface Menu1Sub2 {
 }
 
 const tabList = [
-  { name: '일반현황', id: 'TabA' },
+  // { name: '일반현황', id: 'TabA' },
   { name: '대상지현황', id: 'TabB' },
   { name: '사업체현황', id: 'TabC' },
   { name: '산업특성분석', id: 'TabD' },

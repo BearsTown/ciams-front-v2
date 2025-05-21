@@ -55,7 +55,7 @@
 <script setup lang="ts">
   import { computed, onActivated, onMounted, ref } from 'vue'
 
-  import StepA from '@/components/app/menu-1/sub-1/left/Tab-A.vue'
+  import StepA from '@/components/app/menu-1/sub-1/left/Tab-A_.vue'
   import StepB from 'src/components/app/menu-1/sub-1/left/tab-B'
   import StepC from '@/components/app/menu-1/sub-1/left/Tab-CC.vue'
 

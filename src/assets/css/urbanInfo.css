@@ -107,6 +107,7 @@
 
 .urbanInfo .search .btn-search:not(:disabled):hover {
   opacity: 0.8;
+  transition: 0.1s;
 }
 
 .urbanInfo .search .btn-reload {
@@ -117,6 +118,7 @@
 .urbanInfo .search .btn-reload:not(:disabled):hover {
   background-color: #7AAAD1;
   color: #fff;
+  transition: 0.1s;
 }
 
 /* ==================== 리스트 */
@@ -206,6 +208,7 @@
   background: #7AAAD1;
   border-color: #7AAAD1;
   color: #fff;
+  transition: 0.2s;
 }
 
 .urbanInfo .result-list > li:not(.disabled):hover .address-title,
@@ -213,6 +216,7 @@
 .urbanInfo .result-list > li:not(.disabled):hover .address-title b,
 .urbanInfo .result-list > li:not(.disabled).active .address-title b {
   color: #fff;
+  transition: 0.2s;
 }
 
 .urbanInfo .result-list > li:not(.disabled):hover svg path {

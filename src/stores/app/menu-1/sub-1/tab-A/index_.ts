@@ -5,7 +5,7 @@ import { useBoolean, UseBoolean } from '@/hooks/useBoolean'
 
 interface Menu1Sub1Tab2 {
   showInfo: UseBoolean
-  selectedTabId: Menu1Sub1Tab2TabIdType
+  selectedTabId: Menu1Sub1Tab1TabIdType
 }
 
 const tabList = [
@@ -17,15 +17,15 @@ const tabList = [
   { name: '기술업종별 LQ분석', id: 'Page6', isActive: false, isChild: true },
 ] as const
 
-export type Menu1Sub1Tab2TabIdType = (typeof tabList)[number]['id']
+export type Menu1Sub1Tab1TabIdType = (typeof tabList)[number]['id']
 
-export const useMenu1Sub1Tab2Store = defineStore('menu1-Sub1-Tab2-Store', () => {
+export const useMenu1Sub1Tab1Store = defineStore('menu1-Sub1-Tab1-Store', () => {
   const state = reactive<Menu1Sub1Tab2>({
     showInfo: useBoolean(false),
     selectedTabId: 'Page1',
   })
 
-  function selectTab(tabId: Menu1Sub1Tab2TabIdType) {
+  function selectTab(tabId: Menu1Sub1Tab1TabIdType) {
     state.selectedTabId = tabId
   }
 

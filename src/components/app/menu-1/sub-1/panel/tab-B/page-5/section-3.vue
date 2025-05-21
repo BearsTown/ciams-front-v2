@@ -17,7 +17,7 @@
               <div style="display: flex; height: 100%">
                 <div style="flex: 1; display: flex; margin-top: 5px">
                   <div style="flex: 1; display: flex; flex-direction: column">
-                    <el-text>사업체수</el-text>
+                    <el-text tag="b">사업체수</el-text>
                     <div style="display: flex; flex-direction: column; height: 100%">
                       <template v-for="data in test1('corpCnt')" :key="data">
                         <div style="flex: 1">
@@ -27,7 +27,7 @@
                     </div>
                   </div>
                   <div style="flex: 1; display: flex; flex-direction: column">
-                    <el-text>종사자수</el-text>
+                    <el-text tag="b">종사자수</el-text>
                     <div style="display: flex; flex-direction: column; height: 100%">
                       <template v-for="data in test1('empCnt')" :key="data">
                         <div style="flex: 1">

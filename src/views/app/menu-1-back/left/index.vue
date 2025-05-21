@@ -55,7 +55,7 @@
 <script setup lang="ts">
   import { computed, onActivated, onMounted, ref } from 'vue'
 
-  import TabA from '@/components/app/menu-1/sub-1/left/Tab-A.vue'
+  import TabA from '@/components/app/menu-1/sub-1/left/Tab-A_.vue'
   import TabB from 'src/components/app/menu-1/sub-1/left/tab-B'
   import TabC from '@/components/app/menu-1/sub-1/left/Tab-CC.vue'
   import { getConfigList } from '@/api/app/config'

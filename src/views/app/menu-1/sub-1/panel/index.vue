@@ -15,7 +15,7 @@
 
   import CommonUtil from '@/utils/commonUtil'
 
-  import TabAComp from '@/components/app/menu-1/sub-1/panel/tab-A'
+  import TabAComp from '@/views/app/menu-1/sub-1/panel/tab-A'
   import TabBComp from '@/components/app/menu-1/sub-1/panel/tab-B'
   import TabCComp from '@/components/app/menu-1/sub-1/panel/tab-C'
 

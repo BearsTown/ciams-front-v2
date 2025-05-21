@@ -35,9 +35,7 @@
               <div>
                 <div class="header-title" style="">지역별 종사자 밀도</div>
                 <div class="" style="display: flex">
-                  <div style="flex: 1">
-                    <Table1 :data="density" />
-                  </div>
+                  <Table1 :data="density" />
                 </div>
               </div>
 

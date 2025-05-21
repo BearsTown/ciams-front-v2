@@ -19,6 +19,9 @@
   font-weight: 600;
   letter-spacing: -0.02em;
   color: #757575;
+
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12);
+  background-color: var(--ugis-color-white);
 }
 
 .customTab.max {
@@ -31,11 +34,12 @@
 
 .customTab-item:not(.disabled):hover {
   cursor: pointer;
-  color: #7AAAD1;
+  color: #7aaad1;
+  transition: 0.1s;
 }
 
 .customTab-item:not(.disabled).active {
-  background: #7AAAD1;
+  background: #7aaad1;
   color: #fff;
 }
 

@@ -37,17 +37,13 @@
               <div>
                 <div class="header-title" style="">지역별 종사자 밀도</div>
                 <div class="" style="display: flex">
-                  <div style="flex: 1">
-                    <Table1 :data="density" />
-                  </div>
+                  <Table1 :data="density" />
                 </div>
               </div>
 
               <div style="display: flex; flex-direction: column; flex: 1; margin-top: 8px">
                 <div class="header-title" style="">산업별 현황</div>
-                <div style="flex: 1">
-                  <Table2 group="종사자수(인)" :data="industry" :columns="columns" />
-                </div>
+                <Table2 group="종사자수(인)" :data="industry" :columns="columns" />
               </div>
             </div>
           </div>
