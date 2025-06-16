@@ -19,6 +19,10 @@ declare module 'vue-router' {
       center: {
         visible: boolean
       }
+      bottom?: {
+        visible: boolean
+        collapse: boolean
+      }
       panel?: {
         visible: boolean
       }

@@ -1,137 +1,170 @@
 <template>
   <div class="urbanInfo active" style="display: flex; flex-direction: column">
-    <div class="container">
-      <div class="title">유형화 종합 분석</div>
-
-      <div class="title">
-        {{ overview ? `${overview.zoneName} (${commonUtil.comma(overview.zoneArea.toFixed(3))}㎡)` : '-' }}
-        {{ overview ? `${overview.useDist}` : '' }}
-      </div>
-
-      <table class="customTable analysis">
-        <colgroup>
-          <col style="width: 20%" />
-          <col style="width: 20%" />
-          <col style="width: 40%" />
-          <col style="width: 20%" />
-        </colgroup>
-        <thead>
-          <tr>
-            <th scope="col" style="text-align: center">산업기반 분석</th>
-            <th scope="col" style="text-align: center">지역여건 분석</th>
-            <th scope="col" style="text-align: center">구분</th>
-            <th scope="col" style="text-align: center">유형</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr :class="{ active: tjdwkd1 }">
-            <td style="text-align: center; vertical-align: middle">성장</td>
-            <td style="text-align: center; vertical-align: middle">양호</td>
-            <td style="text-align: center; vertical-align: middle">산업성장/여건양호 지역</td>
-            <td style="text-align: center; vertical-align: middle">관리형</td>
-          </tr>
-          <tr :class="{ active: tjdwkd2 }">
-            <td style="text-align: center; vertical-align: middle">유지</td>
-            <td style="text-align: center; vertical-align: middle">양호</td>
-            <td style="text-align: center; vertical-align: middle">산업유지/여건양호 지역</td>
-            <td style="text-align: center; vertical-align: middle">관리형</td>
-          </tr>
-          <tr :class="{ active: tjdwkd3 }">
-            <td style="text-align: center; vertical-align: middle">쇠퇴</td>
-            <td style="text-align: center; vertical-align: middle">양호</td>
-            <td style="text-align: center; vertical-align: middle">산업쇠퇴/여건양호 지역</td>
-            <td style="text-align: center; vertical-align: middle">관리형</td>
-          </tr>
-          <tr :class="{ active: tjdwkd4 }">
-            <td style="text-align: center; vertical-align: middle">성장</td>
-            <td style="text-align: center; vertical-align: middle">불량</td>
-            <td style="text-align: center; vertical-align: middle">산업성장/여건불량 지역</td>
-            <td style="text-align: center; vertical-align: middle">정비형</td>
-          </tr>
-          <tr :class="{ active: tjdwkd5 }">
-            <td style="text-align: center; vertical-align: middle">유지</td>
-            <td style="text-align: center; vertical-align: middle">불량</td>
-            <td style="text-align: center; vertical-align: middle">산업유지/여건불량 지역</td>
-            <td style="text-align: center; vertical-align: middle">정비형</td>
-          </tr>
-          <tr :class="{ active: tjdwkd6 }">
-            <td style="text-align: center; vertical-align: middle">쇠퇴</td>
-            <td style="text-align: center; vertical-align: middle">불량</td>
-            <td style="text-align: center; vertical-align: middle">산업성장/여건불량 지역</td>
-            <td style="text-align: center; vertical-align: middle">정비형</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="container customScroll" style="flex: 1; overflow-y: auto; margin-top: 5px">
-      <Item
-        title="선도·신흥산업 비율"
-        :value1="overview ? `${overview.sssRate}%` : ''"
-        :value2="overview ? `${overview.sssRe}` : ''"
-      />
-
-      <Item
-        title="산업밀집도"
-        :value1="overview ? `${overview.density}%` : ''"
-        :value2="overview ? `${overview.densityRe}` : ''"
-      />
-
-      <Item
-        title="사업체수 증감"
-        :value1="overview ? `${overview.variation}` : ''"
-        :value2="overview ? `${overview.variaRe}` : ''"
-      />
-
-      <Item
-        title="산업시설 노후도"
-        :value1="overview ? `${overview.deterio}%` : ''"
-        :value2="overview ? `${overview.deterioRe}` : ''"
-      />
-
-      <Item
-        title="도로율"
-        :value1="overview ? `${overview.roadRate}%` : ''"
-        :value2="overview ? `${overview.roadRe}` : ''"
-      />
-    </div>
-
-    <div class="container" style="margin-top: 5px">
-      <div class="title" style="display: flex; align-items: center">
-        <span style="flex: 1">분석 결과</span>
-        <button
-          type="button"
-          class="btn-green"
-          :class="{ 'is-disabled': !overview }"
-          :disabled="!overview"
-          @click="dialog = true"
+    <div style="display: flex; flex-direction: column; height: 100%">
+      <div class="container" style="height: 54px; margin-bottom: 8px">
+        <div
+          class="row"
+          style="
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
         >
-          분석 진단표
-        </button>
+          <div
+            class="title"
+            style="align-items: center; display: flex; font-weight: 700; padding-bottom: 0"
+          >
+            <SvgIcon name="loc" style="color: #7aaad1; margin-right: 3px" />
+            {{ overview ? `${overview.zoneName}` : '' }}
+          </div>
+          <div>
+            <div
+              v-if="overview"
+              class="tag"
+              :style="{ 'background-color': tagColor(overview?.dvsType) }"
+            >
+              {{ overview?.dvsType }}
+            </div>
+          </div>
+        </div>
       </div>
 
-      <table class="customTable">
-        <colgroup>
-          <col style="width: 50%" />
-          <col style="width: 50%" />
-        </colgroup>
-        <thead>
-          <tr>
-            <th scope="col" style="text-align: center">유형구분원칙</th>
-            <th scope="col" style="text-align: center">관리유형설정</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="text-align: center; vertical-align: middle">
-              {{ overview ? `${overview.dvsType}` : '' }}
-            </td>
-            <td style="text-align: center; vertical-align: middle">
-              {{ overview ? `${overview.mngType}` : '' }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="container" style="display: flex; flex-direction: column; margin-bottom: 8px">
+        <table class="customTable analysis">
+          <colgroup>
+            <col style="" />
+            <col style="" />
+            <col style="" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col" style="text-align: center">산업기반분석</th>
+              <th scope="col" style="text-align: center">지역여건분석</th>
+              <th scope="col" style="text-align: center">관리유형원칙</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align: center; vertical-align: middle">
+                {{ overview ? overview?.itaResult : '-' }}
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                {{ overview?.locResult }}
+              </td>
+              <td style="text-align: center; vertical-align: middle">{{ overview?.dvsType }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div
+        class="container"
+        style="
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          height: 100%;
+          overflow-y: hidden;
+          padding: 8px;
+        "
+      >
+        <div class="" style="flex: 1; height: 100%; overflow-y: hidden">
+          <el-tabs
+            v-model="activeName"
+            type=""
+            stretch="stretch"
+            class=""
+            style="overflow-y: hidden; height: 100%"
+          >
+            <el-tab-pane
+              label="산업기반분석"
+              name="Tab-A"
+              style="height: 100%"
+              class="customScroll"
+            >
+              <PieChartItem
+                style="margin-top: 0"
+                title="선도·신흥산업 비율"
+                :items="[
+                  {
+                    label: '지수',
+                    value: overview?.sssRate,
+                    unit: '%',
+                  },
+                  {
+                    label: '구분',
+                    value: overview?.sssRe,
+                    unit: '',
+                  },
+                ]"
+                :data="{ value: overview?.sssRate, names: ['선도·신흥산업', '기타'] }"
+              />
+
+              <Item
+                title="산업밀집도"
+                :value1="overview ? `${overview.density} 개/㎡` : ''"
+                :value2="overview ? `${overview.densityRe}` : ''"
+              />
+
+              <Item
+                title="사업체수 증감"
+                :value1="overview ? `${overview.variation}` : ''"
+                :value2="overview ? `${overview.variaRe}` : ''"
+              />
+            </el-tab-pane>
+            <el-tab-pane label="지역여건분석" name="Tab-B" style="height: 100%">
+              <PieChartItem
+                style="margin-top: 0"
+                title="산업시설 노후도"
+                :items="[
+                  {
+                    label: '대상지 산업시설',
+                    value: overview?.csB,
+                    unit: '동',
+                  },
+                  {
+                    label: '20년 이상 산업시설',
+                    value: overview?.csB20,
+                    unit: '동',
+                  },
+                  {
+                    label: '노후도',
+                    value: overview?.deterio,
+                    unit: '%',
+                  },
+                ]"
+                :data="{ value: overview?.deterio, names: ['20년 이상', '20년 미만'] }"
+              />
+
+              <PieChartItem
+                style="margin-top: 5px"
+                title="도로율"
+                :items="[
+                  {
+                    // label: '대상지 도로 면적',
+                    label: '대상지 면적',
+                    value: overview?.zoneArea,
+                    unit: '㎡',
+                  },
+                  {
+                    label: '폭 8m 이상 도로 면적',
+                    value: overview?.roadA,
+                    unit: '㎡',
+                  },
+                  {
+                    label: '도로율',
+                    value: overview?.roadRate,
+                    unit: '%',
+                  },
+                ]"
+                :data="{ value: overview?.roadRate, names: ['도로', '비도로'] }"
+              />
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+      </div>
     </div>
 
     <el-dialog
@@ -154,13 +187,15 @@
 
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
   import AnalysisTable from '@/views/app/menu-2/sub-3/right/AnalysisTable.vue'
-
-  import commonUtil from '@/utils/commonUtil'
-  import { useMenu2Sub3Store } from '@/stores/app/menu-2/sub-3'
+  import { useMenu2Sub3Store } from 'src/stores/app/menu-2/sub-3'
   import Item from '@/components/app/menu-2/Item.vue'
+  import SvgIcon from '@/components/common/SvgIcon.vue'
+  import PieChartItem from '@/components/app/menu-2/PieChartItem.vue'
 
   const menu2Sub3Store = useMenu2Sub3Store()
   const { overview } = storeToRefs(menu2Sub3Store)
+
+  const activeName = ref<string>('Tab-A')
 
   const dialog = ref<boolean>(false)
 
@@ -187,6 +222,28 @@
 
   function dialogChangeListener(state: boolean) {
     dialog.value = state
+  }
+
+  function tagColor(itaResult: string) {
+    switch (itaResult) {
+      case '산업정비형':
+        return '#FFAA00'
+      case '산업관리형':
+        return '#8BD100'
+      case '산업혁신형':
+        return '#00C5FF'
+      default:
+        return '#ffffff'
+    }
+  }
+
+  function getRowClass(dvsType: string) {
+    return {
+      active: overview.value?.dvsType === dvsType,
+      'row-type-1': dvsType === '산업정비형' && overview.value?.dvsType === '산업정비형',
+      'row-type-2': dvsType === '산업관리형' && overview.value?.dvsType === '산업관리형',
+      'row-type-3': dvsType === '산업혁신형' && overview.value?.dvsType === '산업혁신형',
+    }
   }
 
   onBeforeMount(() => {})
@@ -217,7 +274,7 @@
     height: 28px;
     padding: 0 16px;
     border-radius: 4px;
-    background: #7AAAD1;
+    background: #7aaad1;
     color: #fff;
     text-align: center;
     font-size: 14px;
@@ -228,6 +285,25 @@
       opacity: 0.8;
       transition: opacity 0.3s;
     }
+  }
+
+  .customScroll {
+    display: flex;
+    overflow-y: auto;
+    flex-direction: column;
+  }
+
+  .tag {
+    width: 105px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.12);
   }
 </style>
 

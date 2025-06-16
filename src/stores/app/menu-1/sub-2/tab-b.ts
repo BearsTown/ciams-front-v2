@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 import { useBoolean, UseBoolean } from '@/hooks/useBoolean'
 import { Attribute, Item } from '@/utils/data.types'
-import { getDataConfig, getDataGroups } from '@/api/app/menu-1/sub-2/tab-c'
+import { getDataConfig, getDataGroups } from '@/api/app/menu-1'
 import commonUtil from '@/utils/commonUtil'
 import CommonUtil from '@/utils/commonUtil'
 import { MapLayer } from '@/js/layer'
@@ -20,6 +20,8 @@ import Feature from 'ol/Feature'
 import { urlWithParams } from '@uitgis/ol-ugis-test/util'
 import { Stroke, Style } from 'ol/style.js'
 import { Fill } from 'ol/style'
+import UitUWMSLayer from '@/stores/map/uwmsLayer'
+import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
 
 interface Category {
   id: number
@@ -38,7 +40,9 @@ interface YearDetail {
   layerVisible: boolean
   title: string
   layer: MapLayer | null
+  features: Feature[]
   year?: string
+  style: string
   layerName?: string
   tableData: Item[]
   chartData: {}
@@ -115,8 +119,9 @@ export const useMenu1_2_2Store = defineStore('useMenu1-2-2Store', () => {
       },
       style: new Style({
         stroke: new Stroke({
-          color: '#4D7D99',
-          width: 3,
+          // color: '#4D7D99',
+          color: '#FF0000',
+          width: 4,
         }),
         zIndex: 100,
       }),
@@ -214,38 +219,68 @@ export const useMenu1_2_2Store = defineStore('useMenu1-2-2Store', () => {
 
     const selectDetail = getSelectDetail()
 
-    if (selectDetail && state.activeYear && state.activeDistId) {
+    // if (selectDetail && state.activeYear && state.activeDistId) {
+    if (selectDetail && state.activeYear) {
       if (commonUtil.isEmpty(selectDetail?.layer)) {
         const cYears = findSelect()!.years
         const index = cYears.findIndex((detail) => detail.id === state.activeYear?.id)
 
-        const vectorLayer = new UitWFSLayer({
-          layerType: 'vector',
-          source: new VectorSource(),
-          visible: true,
-          zIndex: 2222 + index,
-          properties: {
-            visibleIgnore: true,
+        // const vectorLayer = new UitWFSLayer({
+        //   layerType: 'vector',
+        //   source: new VectorSource(),
+        //   visible: true,
+        //   zIndex: 2222 + index,
+        //   properties: {
+        //     visibleIgnore: true,
+        //   },
+        //   style: dynamicStyle,
+        // })
+        //
+        // selectDetail!.layer = markRaw<MapLayer>(
+        //   new MapLayer({
+        //     layer: vectorLayer,
+        //     userVisible: true,
+        //   }),
+        // )
+        //
+        // mapWrap.value?.getUitMap().addWFSLayer(vectorLayer)
+
+        const uWmsLayer = new UitUWMSLayer({
+          baseUrl: mapStudioUrl,
+          sourceParams: {
+            KEY: 'system',
+            LAYERS: [state.activeYear!.layerName!],
+            STYLES: `system:${state.activeYear!.style!}`,
           },
-          style: dynamicStyle,
+          crossOrigin: 'Anonymous',
+          properties: {
+            id: 'ciams_analysis_in',
+            type: 'wms',
+          },
+          layerType: 'wms',
+          isSingleTile: false,
+          opacity: 0.8,
+          zIndex: 2222 + index,
         })
 
         selectDetail!.layer = markRaw<MapLayer>(
           new MapLayer({
-            layer: vectorLayer,
+            layer: uWmsLayer,
             userVisible: true,
           }),
         )
 
-        mapWrap.value?.getUitMap().addWFSLayer(vectorLayer)
+        mapWrap.value?.getUitMap().addWMSLayer(uWmsLayer as UitWMSLayer)
       }
 
       await loadIndustryFeatures()
 
       const fLayer = selectDetail?.layer?.getLayer() as UitWFSLayer
-      if (fLayer) {
+      // if (fLayer) {
+      if (state.activeDistId && fLayer) {
         selectDetail.tableData = dataUtil.processData({
-          features: fLayer.getSource().getFeatures(),
+          // features: fLayer.getSource().getFeatures(),
+          features: selectDetail?.features,
           columns: columns.value,
           rows: state.attributes,
           groupName: state.activeCategory?.groupColumn,
@@ -321,12 +356,16 @@ export const useMenu1_2_2Store = defineStore('useMenu1-2-2Store', () => {
     text = text.replace(/\n/gi, '\\r\n')
     const features = new GeoJSON().readFeatures(text) as Feature[]
 
-    const fLayer = getSelectDetail()?.layer?.getLayer() as UitWFSLayer
-    if (fLayer) {
-      fLayer.clear()
-      fLayer.addFeatures(features)
+    // const fLayer = getSelectDetail()?.layer?.getLayer() as UitWFSLayer
+    // if (fLayer) {
+    //   fLayer.clear()
+    //   fLayer.addFeatures(features)
+    //
+    //   // getSelectDetail()!.features = markRaw(features)
+    // }
 
-      // getSelectDetail()!.features = markRaw(features)
+    if (features) {
+      getSelectDetail()!.features = markRaw(features)
     }
   }
 
@@ -351,8 +390,12 @@ export const useMenu1_2_2Store = defineStore('useMenu1-2-2Store', () => {
   }
 
   async function updateYear(year) {
+    layerVisible.value = false
+
     state.activeYear = findSelect()!.years?.find((detail) => detail.id === year)
     await callChangeYear()
+
+    layerVisible.value = true
   }
 
   const years = computed(() => {
@@ -376,7 +419,7 @@ export const useMenu1_2_2Store = defineStore('useMenu1-2-2Store', () => {
 
     return new Style({
       stroke: new Stroke({
-        color: 'black',
+        color: '#808080',
       }),
       fill: new Fill({
         color: commonUtil.hex2rgb(feature.get('color'), 0.8),

@@ -11,7 +11,6 @@
   import { useBoolean } from '@/hooks/useBoolean'
   import { useGlobalStore } from '@/stores/app'
   import { Plan } from '@/api/app/menu-1/model'
-  import { useMenu2store } from '@/stores/app/menu-2'
   import { useMenu2Sub1Store } from '@/stores/app/menu-2/sub-1'
   import { MapLayer } from '@/js/layer'
   import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
@@ -27,7 +26,6 @@
   import { useMapStore } from '@/stores/map/map'
   import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
 
-  const menu2store = useMenu2store()
   const menu2Sub1Store = useMenu2Sub1Store()
   const { overview } = storeToRefs(menu2Sub1Store)
 
@@ -35,7 +33,6 @@
   const { layoutSelected } = storeToRefs(globalStore)
   const { status: isActive, toggle } = useBoolean(false)
 
-  // const mapType = MapType.MAP_2
   const mapType: MapType = 'Map-2'
   const mapLayerGroupType: MapLayerGroupType = 'Menu_2_Sub_1'
   const mapWrap = ref<MapWrapper>()
@@ -48,11 +45,11 @@
     baseUrl: mapStudioUrl,
     sourceParams: {
       KEY: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
-      LAYERS: ['CIAMS_ZONE_2'],
+      LAYERS: ['CIAMS_ZONE'],
     },
     crossOrigin: 'Anonymous',
     properties: {
-      id: 'ciams_analysis_2',
+      id: 'ciams_analysis_24',
       type: 'wms',
     },
     layerType: 'wms',
@@ -60,6 +57,23 @@
     opacity: 0.8,
     zIndex: 1111,
   })
+
+  // const uitWMSLayer2 = new UitWMSLayer({
+  //   baseUrl: mapStudioUrl,
+  //   sourceParams: {
+  //     KEY: 'FAE89AE2-23FE-D36C-5DE1-BC6515BC24B9',
+  //     LAYERS: ['CIAMS_INDUSTRY_2021'],
+  //   },
+  //   crossOrigin: 'Anonymous',
+  //   properties: {
+  //     id: 'ciams_industry_1',
+  //     type: 'wms',
+  //   },
+  //   layerType: 'wms',
+  //   isSingleTile: false,
+  //   opacity: 0.8,
+  //   zIndex: 1111,
+  // })
 
   const uitVectorLayer2 = new UitWFSLayer({
     baseUrl: '',
@@ -69,7 +83,8 @@
     zIndex: 2222,
     style: new Style({
       stroke: new Stroke({
-        color: '#4D7D99',
+        // color: '#4D7D99',
+        color: '#FF0000',
         width: 4,
       }),
       zIndex: 100,
@@ -83,6 +98,12 @@
       userVisible: true,
       useLayerSetting: true,
     }),
+    // new MapLayer({
+    //   layer: uitWMSLayer2,
+    //   title: '산업기반분석',
+    //   userVisible: true,
+    //   useLayerSetting: true,
+    // }),
     new MapLayer({
       layer: uitVectorLayer2,
       userVisible: true,
@@ -117,6 +138,8 @@
 
   async function zoneSegItemSelect(item: Plan.Search.Row) {
     layoutSelected.value?.right?.collapse?.on()
+    layoutSelected.value?.bottom?.collapse?.on()
+
     mapStore.locationInfoVisible = false
 
     mapStore.controlManager?.closeAll()
@@ -130,7 +153,7 @@
       key: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
       featureRequestProps: {
         // layers: 'CIAMS_P1_PLAN',
-        layers: 'CIAMS_ZONE_2',
+        layers: 'CIAMS_ZONE',
         filter: likeFilter('zone_no', item.zoneNo),
         srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
       },
@@ -142,17 +165,39 @@
     uitVectorLayer2.clear()
     uitVectorLayer2.addFeatures(features)
 
+    // mapWrap.value
+    //   ?.getUitMap()
+    //   .getView()
+    //   .fit(uitVectorLayer2.getSource().getExtent(), {
+    //     padding: [200, 100, 200, 100],
+    //   })
+
+    const map = mapWrap.value!.getUitMap().getMap()!
+
+    // 좌우 패널의 픽셀 크기
+    const leftPanelWidth = layoutSelected.value?.left?.collapse?.status ? 355 : 0 // 왼쪽 패널의 픽셀 크기
+    const rightPanelWidth = layoutSelected.value?.right?.collapse?.status ? 585 : 0 // 오른쪽 패널의 픽셀 크기
+    const bottomPanelWidth = layoutSelected.value?.bottom?.collapse?.status ? 350 : 0 // 하단 패널의 픽셀 크기
+
+    // 뷰포트 크기 가져오기
+    const viewportSize = map.getTargetElement().getBoundingClientRect()
+    const mapWidth = viewportSize.width
+    const mapHeight = viewportSize.height
+
     mapWrap.value
       ?.getUitMap()
       .getView()
       .fit(uitVectorLayer2.getSource().getExtent(), {
-        padding: [200, 100, 200, 100],
+        size: [mapWidth - leftPanelWidth - rightPanelWidth, mapHeight - bottomPanelWidth],
+        padding: [50, rightPanelWidth, bottomPanelWidth, leftPanelWidth],
       })
+
+    await menu2Sub1Store.callSelectZone(item.zoneNo)
   }
 
   function clear() {
-    overview.value = null
     uitVectorLayer2.clear()
+    menu2Sub1Store.clear()
   }
 
   watch(overview, async (value) => {
@@ -188,7 +233,7 @@
   }
 
   .zoningSetting .customTab-item:not(.disabled).active {
-    background: #7AAAD1;
+    background: #7aaad1;
     color: #fff;
   }
 </style>

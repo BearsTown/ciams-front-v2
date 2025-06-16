@@ -12,7 +12,7 @@
   import { useGlobalStore } from '@/stores/app'
   import { Plan } from '@/api/app/menu-1/model'
   import { useMenu2store } from '@/stores/app/menu-2'
-  import { useMenu2Sub3Store } from '@/stores/app/menu-2/sub-3'
+  import { useMenu2Sub3Store } from 'src/stores/app/menu-2/sub-3'
   import { MapLayer } from '@/js/layer'
   import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
   import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
@@ -48,11 +48,11 @@
     baseUrl: mapStudioUrl,
     sourceParams: {
       KEY: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
-      LAYERS: ['CIAMS_ZONE'],
+      LAYERS: ['CIAMS_ZONE_2'],
     },
     crossOrigin: 'Anonymous',
     properties: {
-      id: 'ciams_analysis',
+      id: 'ciams_analysis_3',
       type: 'wms',
     },
     layerType: 'wms',
@@ -69,7 +69,8 @@
     zIndex: 2222,
     style: new Style({
       stroke: new Stroke({
-        color: '#4D7D99',
+        // color: '#4D7D99',
+        color: '#FF0000',
         width: 4,
       }),
       zIndex: 100,
@@ -147,6 +148,7 @@
     // 좌우 패널의 픽셀 크기
     const leftPanelWidth = layoutSelected.value?.left?.collapse?.status ? 355 : 0 // 왼쪽 패널의 픽셀 크기
     const rightPanelWidth = layoutSelected.value?.right?.collapse?.status ? 585 : 0 // 오른쪽 패널의 픽셀 크기
+    const bottomPanelWidth = layoutSelected.value?.bottom?.collapse?.status ? 350 : 0 // 하단 패널의 픽셀 크기
 
     // 뷰포트 크기 가져오기
     const viewportSize = map.getTargetElement().getBoundingClientRect()
@@ -158,7 +160,7 @@
       .getView()
       .fit(uitVectorLayer2.getSource().getExtent(), {
         // padding: [200, 100, 200, 100],
-        size: [mapWidth - leftPanelWidth - rightPanelWidth, mapHeight],
+        size: [mapWidth - leftPanelWidth - rightPanelWidth, mapHeight - bottomPanelWidth],
         padding: [150, rightPanelWidth, 150, leftPanelWidth],
       })
   }

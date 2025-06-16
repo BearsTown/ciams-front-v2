@@ -73,6 +73,36 @@
       </div>
     </div>
 
+    <!-- //////////////////// 하단 drawer -->
+    <div
+      v-show="layoutSelected?.bottom?.visible?.status"
+      class="map-bottomDrawer"
+      :class="{
+        active: layoutSelected?.bottom?.collapse?.status,
+        'left-on': layoutSelected?.left?.collapse?.status,
+        'right-on': layoutSelected?.right?.collapse?.status,
+      }"
+    >
+      <!-- 하단 drawer: 토글 버튼 -->
+      <button
+        type="button"
+        class="btn-drawerToggle"
+        @click="layoutSelected?.bottom?.collapse?.toggle"
+        :class="{ active: layoutSelected?.bottom?.collapse?.status }"
+      >
+        <SvgIcon name="drawer" size="12" />
+      </button>
+
+      <!-- 하단 drawer: 내용 -->
+      <div class="bottomDrawer-content" style="">
+        <router-view name="bottom" v-slot="{ Component }">
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
+      </div>
+    </div>
+
     <div
       class="panel"
       v-show="layoutSelected?.panel?.visible?.status"
@@ -146,6 +176,23 @@
     }
   }
 
+  .map-bottomDrawer {
+    border: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+
+    > button {
+      box-shadow: 4px -2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    //.btn-drawerToggle {
+    //  left: 50%;
+    //}
+
+    .bottomDrawer-content > div {
+      display: block;
+    }
+  }
+
   .panel {
     right: 0;
     z-index: 20;
@@ -156,6 +203,20 @@
   }
 
   .panel.active {
+    transition: 0.3s;
+    width: calc(100% - 355px);
+  }
+
+  .bottom {
+    right: 0;
+    z-index: 20;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transition: 0.3s;
+  }
+
+  .bottom.active {
     transition: 0.3s;
     width: calc(100% - 355px);
   }

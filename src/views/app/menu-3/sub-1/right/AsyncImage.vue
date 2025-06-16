@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onBeforeMount, ref } from 'vue'
+  import { onBeforeMount, onMounted, ref } from 'vue'
   import { getImage as getImageAxios } from '@/api/app/menu-3/sub-1'
 
   const props = withDefaults(
@@ -22,16 +22,19 @@
 
   const imageSrc = ref<string | null>(null)
 
-  async function getImage(id: number) {
+  async function fetchImage(id: number) {
     const response = await getImageAxios(id)
     const imageBlob = new Blob([response.data], { type: response.headers['content-type'] })
-    return computed(() => URL.createObjectURL(imageBlob))
+    // return computed(() => URL.createObjectURL(imageBlob))
+    imageSrc.value = URL.createObjectURL(imageBlob)
   }
 
-  onBeforeMount(async () => {
-    const computedRef = await getImage(props.id)
-    imageSrc.value = computedRef.value
-  })
+  onMounted(() => fetchImage(props.id))
+
+  // onBeforeMount(async () => {
+  //   const computedRef = await fetchImage(props.id)
+  //   imageSrc.value = computedRef.value
+  // })
 </script>
 
 <style scoped>

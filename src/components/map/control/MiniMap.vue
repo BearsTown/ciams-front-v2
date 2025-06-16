@@ -11,13 +11,16 @@
     </button>
 
     <div class="dropdown miniMap" style="padding: 10px">
-      <div class="map-container"></div>
+      <div class="minimap-container">
+        <div :id="baseId" class="overview-baseMap"></div>
+        <div :id="mapId" class="overview-map"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { onBeforeMount, reactive, ref } from 'vue'
+  import { computed, onBeforeMount, reactive, ref, watch } from 'vue'
 
   import { ToggleButton } from '@/js/map/control/ToggleButton'
   import { MapType } from '@/enums/mapEnum'
@@ -26,6 +29,7 @@
   import { useMapStore } from '@/stores/map/map'
   import UitMap from '@uitgis/ol-ugis-test/uitMap'
   import UitBaseMap from '@uitgis/ol-ugis-test/baseMap/uitBaseMap'
+  import UitMiniMap from '@uitgis/ol-ugis-test/map/uitMiniMap'
 
   const props = withDefaults(
     defineProps<{
@@ -33,6 +37,9 @@
     }>(),
     {},
   )
+
+  const baseId = computed(() => `mini-base-map-${props.mapType}`)
+  const mapId = computed(() => `mini-ol-map-${props.mapType}`)
 
   const toggle = new ToggleButton({
     id: 'mini-map',
@@ -65,7 +72,46 @@
     })
   })
 
+  let uitMiniMap
+
+  watch(button, (value) => {
+    if (value.isActive && uitMiniMap === undefined) {
+      uitMiniMap = new UitMiniMap({
+        baseMapOpt: {
+          target: baseId.value,
+        },
+        mapOpt: {
+          target: mapId.value,
+        },
+        referenceBaseMap: uitBaseMap,
+        view: uitMap!.getView(),
+        referenceMap: uitMap,
+      })
+    }
+  })
+
   defineExpose({})
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+  .minimap-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .overview-baseMap {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+  }
+  .overview-map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
+  }
+</style>

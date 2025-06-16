@@ -42,6 +42,7 @@ export type MapLayerGroupType =
   | 'Menu_2_Sub_1'
   | 'Menu_2_Sub_2'
   | 'Menu_2_Sub_3'
+  | 'Menu_2_Sub_4'
   | 'Menu_3_Sub_1'
   | 'Menu_3_Sub_2'
 
@@ -110,6 +111,7 @@ export const CommonLayerTypes: CommonLayerConfig = {
     Menu_2_Sub_1: 'COMMON_LAYER_GROUP_2',
     Menu_2_Sub_2: 'COMMON_LAYER_GROUP_2',
     Menu_2_Sub_3: 'COMMON_LAYER_GROUP_2',
+    Menu_2_Sub_4: 'COMMON_LAYER_GROUP_2',
   },
   'Map-3': {
     Menu_3_Sub_1: 'COMMON_LAYER_GROUP_3',
@@ -161,6 +163,7 @@ export const ViewLayerTypes: ViewLayerConfig = {
     Menu_2_Sub_1: 'VIEW_LAYER_GROUP_4',
     Menu_2_Sub_2: 'VIEW_LAYER_GROUP_5',
     Menu_2_Sub_3: 'VIEW_LAYER_GROUP_6',
+    Menu_2_Sub_4: 'VIEW_LAYER_GROUP_9',
   },
   'Map-3': {
     Menu_3_Sub_1: 'VIEW_LAYER_GROUP_7',

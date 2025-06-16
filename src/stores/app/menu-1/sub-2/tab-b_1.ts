@@ -1,14 +1,11 @@
-import { computed, markRaw, reactive, ref, shallowRef } from 'vue'
+import { computed, markRaw, reactive, ref } from 'vue'
 import { defineStore } from 'pinia'
 
 import { useBoolean, UseBoolean } from '@/hooks/useBoolean'
 import { Attribute, Item } from '@/utils/data.types'
-import {
-  test_getAttributes,
-  test_getMenu1_2_3,
-  test_getMenu1_2_3Data,
-} from '@/api/app/menu-1/sub-2/tab-c'
+import { getDataConfig, getDataGroups } from '@/api/app/menu-1'
 import commonUtil from '@/utils/commonUtil'
+import CommonUtil from '@/utils/commonUtil'
 import { MapLayer } from '@/js/layer'
 import { dataUtil } from '@/utils'
 import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
@@ -21,23 +18,34 @@ import { intersects, like as likeFilter } from 'ol/format/filter'
 import { GeoJSON, WFS } from 'ol/format'
 import Feature from 'ol/Feature'
 import { urlWithParams } from '@uitgis/ol-ugis-test/util'
+import { Stroke, Style } from 'ol/style.js'
+import { Fill } from 'ol/style'
+import UitUWMSLayer from '@/stores/map/uwmsLayer'
+import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
 
 interface Category {
-  id: string
-  title: string
+  id: number
+  name: string
   years: YearDetail[]
   priority: number
   active: UseBoolean
+
+  groupColumn: string
+  useNoneColumn: boolean
+  chartAxis: string
 }
 
 interface YearDetail {
   id: string
-  title: string
   layerVisible: boolean
+  title: string
   layer: MapLayer | null
-  features: []
+  features: Feature[]
+  year?: string
+  style: string
+  layerName?: string
   tableData: Item[]
-  chartData: []
+  chartData: {}
 }
 
 interface State {
@@ -45,63 +53,59 @@ interface State {
   attributes: Attribute[]
 
   mapWrap?: MapWrapper
-  activeCategoryId?: string
-  activeYear?: string
+
+  activeCategory?: Category
+  activeYear?: YearDetail
   activeDistId?: string
   activeDistFeature?: Feature
 }
 
-const mapType: MapType = 'Map-1-2-3'
+const mapType: MapType = 'Map-1-2-2'
 const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
-export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
-  const state2 = {
-    categories: shallowRef<Category[]>([]),
-    attributes: reactive<Attribute[]>([]),
-  }
-
+export const useMenu1_2_2Store = defineStore('useMenu1-2-2Store', () => {
   const state: State = reactive({
     categories: ref([]),
     attributes: ref([]),
   })
 
-  // let rawCategories: Category[] = []
-  // const rawCategories = shallowRef<Category[]>([])
-
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
 
+  const columns = ref<any>([])
   let distVectorLayer: UitWFSLayer = null
 
   async function fetchAttributes() {
-    const rawAttributes: Attribute[] = await test_getAttributes()
-    state.attributes = rawAttributes
+    const activeCategory = state.activeCategory
+    if (CommonUtil.isEmpty(activeCategory)) return false
 
-    // state.categories.value = rawCategories.map((category) => ({
-    //   ...category,
-    //   active: useBoolean(false),
-    //   years: category.years.map((year) => ({
-    //     year: year.id,
-    //     title: `${year}년`,
-    //   })),
-    // }))
+    // const data = await test_getAttributes(activeCategory!.id)
+
+    const { data } = await getDataConfig(activeCategory!.id)
+
+    state.attributes = data.attributes as Attribute[]
+
+    activeCategory!.years = data.years.map((year) => ({
+      ...year,
+      id: year.year,
+      title: `${year.year}년`,
+    }))
+
+    columns.value = data.columns
+    // columns.value = await test_getMenu1_2_3Data(state.activeCategory!.id)
   }
 
-  async function fetchCategories() {
-    const rawCategories = await test_getMenu1_2_3()
+  async function fetchCategories(id: number) {
+    // const rawCategories = await test_getMenu1_2_3(id)
+    const { data: rawCategories } = await getDataGroups(id)
 
     state.categories = rawCategories.map((category) => ({
       ...category,
       active: useBoolean(false),
-      years: category.years.map((year) => ({
-        id: year,
-        year: year,
-        title: `${year}년`,
-      })),
     }))
   }
 
-  async function init() {
+  async function init(id: number) {
     mapWrap.value = await mapStore.getMapInstance()
 
     distVectorLayer = new UitWFSLayer({
@@ -113,13 +117,14 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
       properties: {
         visibleIgnore: true,
       },
-      // style: new Style({
-      //   stroke: new Stroke({
-      //     color: '#4D7D99',
-      //     width: 3,
-      //   }),
-      //   zIndex: 100,
-      // }),
+      style: new Style({
+        stroke: new Stroke({
+          // color: '#4D7D99',
+          color: '#FF0000',
+          width: 4,
+        }),
+        zIndex: 100,
+      }),
     })
 
     const targetLayer = new MapLayer({
@@ -129,14 +134,13 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
 
     mapWrap.value?.getUitMap().addWFSLayer(targetLayer.getLayer() as UitWFSLayer)
 
-    await fetchAttributes()
-    await fetchCategories()
+    await fetchCategories(id)
   }
 
   function getSelectDetail() {
     const select = findSelect()
     if (select) {
-      return select.years.find((detail) => detail.id === state.activeYear)
+      return select.years?.find((detail) => detail.id === state.activeYear?.id)
     }
   }
 
@@ -148,36 +152,39 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
     }
   }
 
-  async function setActiveCategory(categoryId: string) {
+  async function setActiveCategory(categoryId: number) {
     if (commonUtil.isEmpty(state.categories)) return false
+
+    state.attributes = []
 
     const categoryExists = state.categories.some((category) => category.id === categoryId)
     if (!categoryExists) {
       console.warn(`Item with id ${categoryId} not found`)
-      state.activeCategoryId = ''
       return
     }
 
-    if (state.activeCategoryId === categoryId) {
-      state.activeCategoryId = ''
+    if (state.activeCategory?.id === categoryId) {
+      state.activeCategory = undefined
       resetYearData()
       return
     }
 
-    state.activeCategoryId = categoryId
     state.categories.forEach((category) => {
       if (category.id === categoryId) {
         category.active.on()
+        state.activeCategory = category
       } else {
         category.active.off()
-        resetYearData()
       }
     })
 
+    await fetchAttributes()
+
     console.log('최근년도로 설정 및 년도 변경 이벤트 트리거')
     const cYears = findSelect()!.years
-    state.activeYear = cYears[cYears.length - 1]?.id
+    state.activeYear = cYears[cYears.length - 1]
 
+    resetYearData()
     await callChangeYear()
   }
 
@@ -189,79 +196,102 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
     state.activeDistFeature = fe
   }
 
-  async function callSelectDist() {
+  async function callSelectDist(distNo: string) {
+    await loadDistFeatures(distNo)
+
+    console.log(`선택 사업체현황 분류 :: ${findSelect()?.name}`)
+    console.log(`선택 년도 :: ${state.activeYear}`)
+    console.log(`선택 대상지 :: ${state.activeDistId}`)
     console.log('사업체분류(전체) feature 삭제')
+    console.log(`데이터 API 호출`)
 
     resetYearData()
 
-    console.log(`선택 사업체현황 분류 :: ${findSelect()?.title}`)
-    console.log(`선택 년도 :: ${state.activeYear}`)
-    console.log(`선택 대상지 :: ${state.activeDistId}`)
-
-    console.log(`데이터 API 호출`)
-
-    await loadIndustryFeatures()
-
-    // 사업체분류(전체) 레이어 있으면 feature 삭제
-    // state.categories.forEach((category) => {
-    //   category.years.forEach((year) => {
-    //     console.log(year)
-    //   })
-    // })
+    await callChangeYear()
   }
 
   async function callChangeYear() {
     console.log(`년도 변경 이벤트`)
-    console.log(`선택 사업체현황 분류 :: ${findSelect()?.title}`)
+    console.log(`선택 사업체현황 분류 :: ${findSelect()?.name}`)
     console.log(`선택 년도 :: ${state.activeYear}`)
     console.log(`선택 대상지 :: ${state.activeDistId}`)
-
     console.log(`데이터 API 호출`)
-
-    console.log(getSelectDetail()!.tableData)
 
     const selectDetail = getSelectDetail()
 
-    if (state.activeYear && state.activeDistId) {
-      const data = await test_getMenu1_2_3Data()
-
-      selectDetail!.tableData = markRaw(
-        dataUtil.calculateRatios(data, state.attributes, { round: 1 }),
-      )
-
+    if (selectDetail && state.activeYear && state.activeDistId) {
       if (commonUtil.isEmpty(selectDetail?.layer)) {
         const cYears = findSelect()!.years
-        const index = cYears.findIndex((detail) => detail.id === state.activeYear)
+        const index = cYears.findIndex((detail) => detail.id === state.activeYear?.id)
 
-        const vectorLayer = new UitWFSLayer({
-          layerType: 'vector',
-          source: new VectorSource(),
-          visible: true,
-          zIndex: 2222 + index,
-          properties: {
-            visibleIgnore: true,
+        // const vectorLayer = new UitWFSLayer({
+        //   layerType: 'vector',
+        //   source: new VectorSource(),
+        //   visible: true,
+        //   zIndex: 2222 + index,
+        //   properties: {
+        //     visibleIgnore: true,
+        //   },
+        //   style: dynamicStyle,
+        // })
+        //
+        // selectDetail!.layer = markRaw<MapLayer>(
+        //   new MapLayer({
+        //     layer: vectorLayer,
+        //     userVisible: true,
+        //   }),
+        // )
+        //
+        // mapWrap.value?.getUitMap().addWFSLayer(vectorLayer)
+
+        const uWmsLayer = new UitUWMSLayer({
+          baseUrl: mapStudioUrl,
+          sourceParams: {
+            KEY: 'system',
+            LAYERS: [state.activeYear!.layerName!],
+            STYLES: `system:${state.activeYear!.style!}`,
           },
-          // style: new Style({
-          //   stroke: new Stroke({
-          //     color: '#4D7D99',
-          //     width: 3,
-          //   }),
-          //   zIndex: 100,
-          // }),
+          crossOrigin: 'Anonymous',
+          properties: {
+            id: 'ciams_analysis_in',
+            type: 'wms',
+          },
+          layerType: 'wms',
+          isSingleTile: false,
+          opacity: 0.8,
+          zIndex: 2222 + index,
         })
 
         selectDetail!.layer = markRaw<MapLayer>(
           new MapLayer({
-            layer: vectorLayer,
+            layer: uWmsLayer,
             userVisible: true,
           }),
         )
 
-        mapWrap.value?.getUitMap().addWFSLayer(vectorLayer)
+        mapWrap.value?.getUitMap().addWMSLayer(uWmsLayer as UitWMSLayer)
+      }
+
+      await loadIndustryFeatures()
+
+      const fLayer = selectDetail?.layer?.getLayer() as UitWFSLayer
+      if (fLayer) {
+        selectDetail.tableData = dataUtil.processData({
+          // features: fLayer.getSource().getFeatures(),
+          features: selectDetail?.features,
+          columns: columns.value,
+          rows: state.attributes,
+          groupName: state.activeCategory?.groupColumn,
+          useNoneColumn: state.activeCategory?.useNoneColumn,
+        })
+
+        selectDetail.chartData = dataUtil.processChartData({
+          axis: state.activeCategory?.chartAxis,
+          attributes: state.attributes,
+          tableData: selectDetail.tableData,
+        })
       }
     }
-
-    await loadIndustryFeatures()
   }
 
   async function loadDistFeatures(distNo: string) {
@@ -292,8 +322,6 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
       setSelectDist(features[0].getProperties()['DIST_NO'])
       setSelectDistFeature(features[0])
     }
-
-    await callSelectDist()
   }
 
   async function loadIndustryFeatures() {
@@ -311,7 +339,7 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
             featureNS: 'http://www.opengis.net/wfs',
             featurePrefix: 'feature',
             outputFormat: 'application/json',
-            featureTypes: [`CIAMS_INDUSTRY_${state.activeYear}`],
+            featureTypes: [state.activeYear!.layerName!],
             filter: intersects(
               'SHAPE',
               state.activeDistFeature!.getGeometry()!,
@@ -322,27 +350,46 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
       },
     )
 
-    let text2 = await points.text()
-    text2 = text2.replace(/\n/gi, '\\r\n')
-    const features2 = new GeoJSON().readFeatures(text2) as Feature[]
+    let text = await points.text()
+    text = text.replace(/\n/gi, '\\r\n')
+    const features = new GeoJSON().readFeatures(text) as Feature[]
 
-    const fLayer = getSelectDetail()?.layer?.getLayer() as UitWFSLayer
-    fLayer.clear()
-    fLayer.addFeatures(features2)
+    // const fLayer = getSelectDetail()?.layer?.getLayer() as UitWFSLayer
+    // if (fLayer) {
+    //   fLayer.clear()
+    //   fLayer.addFeatures(features)
+    //
+    //   // getSelectDetail()!.features = markRaw(features)
+    // }
+
+    if (features) {
+      getSelectDetail()!.features = markRaw(features)
+    }
   }
 
   // 년도별 상세 데이터 초기화
   function resetYearData() {
     console.log('년도별 상세 데이터 초기화')
     state.categories.forEach((category) => {
-      category.years.forEach((detail) => {
-        detail.features = []
+      category.years?.forEach((detail) => {
+        // detail.features = []
         detail.tableData = []
-        detail.chartData = []
+        detail.chartData = {}
         detail.layerVisible = true
-        // detail.layer = null
+
+        if (detail.layer) {
+          mapWrap.value?.getUitMap().removeLayer(detail.layer.getLayer().getLayerKey())
+          detail.layer = null
+        }
       })
     })
+
+    // console.log(mapWrap.value?.getUitMap().getMap()?.getLayers().getArray())
+  }
+
+  async function updateYear(year) {
+    state.activeYear = findSelect()!.years?.find((detail) => detail.id === year)
+    await callChangeYear()
   }
 
   const years = computed(() => {
@@ -360,28 +407,32 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
     },
   })
 
+  // 스타일 함수 정의
+  const dynamicStyle = function (feature) {
+    if (commonUtil.isEmpty(columns.value)) return false
+
+    return new Style({
+      stroke: new Stroke({
+        color: '#808080',
+      }),
+      fill: new Fill({
+        color: commonUtil.hex2rgb(feature.get('color'), 0.8),
+      }),
+    })
+  }
+
   return {
-    // ...toRefs(state),
-
     state,
-
     init,
-
     years,
-
     mapWrap: computed(() => mapWrap),
-
     distVectorLayer: computed(() => distVectorLayer),
-
     findSelect,
     getSelectDetail,
     layerVisible,
     setActiveCategory,
-    // setSelectDist,
-
     callSelectDist,
     callChangeYear,
-
-    loadDistFeatures,
+    updateYear,
   }
 })

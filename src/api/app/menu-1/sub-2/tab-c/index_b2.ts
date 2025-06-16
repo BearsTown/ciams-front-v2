@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from 'axios'
 
 import { ResultData } from '@/api/app/model'
 import { ciamsAxiosInstance as http } from '@/api/app'
-import { CiamsMenu2Sub1DetailsDto } from '@/api/app/menu-2/sub-1/model'
+import { Menu2ZoneDetailsDto } from '@/api/app/menu-2/model'
 
 const prefix = '/api/v1/menu-2/sub-1'
 
@@ -10,7 +10,7 @@ export function getMenu1_2_3(params: object) {
   const config: AxiosRequestConfig = {
     params,
   }
-  return http.get<ResultData<CiamsMenu2Sub1DetailsDto.Overview.Find.Result>>(
+  return http.get<ResultData<Menu2ZoneDetailsDto.Overview.Find.Result>>(
     `${prefix}/todo`,
     config,
   )

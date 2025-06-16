@@ -251,6 +251,7 @@
 
   .locationInfo {
     top: 0;
+    z-index: 10;
     position: absolute;
     background: #f4f4f4;
     font-family: 'Pretendard', sans-serif;

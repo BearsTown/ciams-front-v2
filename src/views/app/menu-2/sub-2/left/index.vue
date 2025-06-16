@@ -66,6 +66,23 @@
     zIndex: 1111,
   })
 
+  const uitWMSLayer3 = new UitWMSLayer({
+    baseUrl: mapStudioUrl,
+    sourceParams: {
+      KEY: '20FD169A-9C6F-186D-FFDA-1D6F912F9B43',
+      LAYERS: ['CIAMS_ROAD_8M', 'DIST_BUILDING'],
+    },
+    crossOrigin: 'Anonymous',
+    properties: {
+      id: 'ciams_analysis_s2_2',
+      type: 'wms',
+    },
+    layerType: 'wms',
+    isSingleTile: false,
+    opacity: 0.8,
+    zIndex: 1111,
+  })
+
   const uitVectorLayer2 = new UitWFSLayer({
     baseUrl: '',
     layerType: 'vector',
@@ -74,7 +91,8 @@
     zIndex: 2222,
     style: new Style({
       stroke: new Stroke({
-        color: '#4D7D99',
+        // color: '#4D7D99',
+        color: 'red',
         width: 4,
       }),
       zIndex: 100,
@@ -85,6 +103,12 @@
     new MapLayer({
       layer: uitWMSLayer1,
       title: '대상지',
+      userVisible: true,
+      useLayerSetting: true,
+    }),
+    new MapLayer({
+      layer: uitWMSLayer3,
+      title: '산업시설 노후도',
       userVisible: true,
       useLayerSetting: true,
     }),
@@ -118,6 +142,14 @@
     const tocViewLayerGroups = mapLayers[0] as MapLayer
 
     mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
+
+    const tocViewLayerGroups2 = mapLayers[1] as MapLayer
+
+    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups2)
+
+    // const tocViewLayerGroups3 = mapLayers[2] as MapLayer
+    //
+    // mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups3)
   }
 
   async function zoneSegItemSelect(item: Plan.Search.Row) {
@@ -189,7 +221,7 @@
   }
 
   .zoningSetting .customTab-item:not(.disabled).active {
-    background: #7AAAD1;
+    background: #7aaad1;
     color: #fff;
   }
 </style>

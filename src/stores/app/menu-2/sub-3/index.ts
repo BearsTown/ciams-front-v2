@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import { CiamsMenu2Sub1DetailsDto } from '@/api/app/menu-2/sub-1/model'
-import { getMenu2Sub1OverView } from '@/api/app/menu-2/sub-1'
+import { Menu2ZoneDetailsDto } from '@/api/app/menu-2/model'
+import { getMenu2ZoneOverView } from '@/api/app/menu-2'
 
 export const useMenu2Sub3Store = defineStore('menu2Sub3Store', () => {
-  const overview = ref<CiamsMenu2Sub1DetailsDto.Overview.Find.Result | null>()
+  const overview = ref<Menu2ZoneDetailsDto.Overview.Find.Result | null>()
 
-  async function setOverview(params: CiamsMenu2Sub1DetailsDto.Overview.Find.Params) {
-    const { data } = await getMenu2Sub1OverView(params)
+  async function setOverview(params: Menu2ZoneDetailsDto.Overview.Find.Params) {
+    const { data } = await getMenu2ZoneOverView(params)
     overview.value = data
   }
 

@@ -102,7 +102,7 @@
 
 /* active */
 .mapController .btn-control:not(:disabled).active {
-  background-color: #7AAAD1;
+  background-color: #7aaad1;
   transition: 0.3s;
 }
 
@@ -125,7 +125,7 @@
 /* ==================== group */
 .mapController .btn-wrap.button .btn-control.group:not(:disabled).open {
   transition: 0.3s;
-  background-color: #7AAAD1;
+  background-color: #7aaad1;
 }
 
 .mapController .btn-wrap.button .btn-control.group:not(:disabled).open svg {
@@ -368,15 +368,15 @@
 }
 
 .mapController .dropdown.bgMap .style-item:not(.disabled):hover .img-wrap {
-  border-color: #7AAAD1;
+  border-color: #7aaad1;
 }
 
 .mapController .dropdown.bgMap .style-item:not(.disabled):hover .style-text {
-  color: #7AAAD1;
+  color: #7aaad1;
 }
 
 .mapController .dropdown.bgMap .style-item:not(.disabled).active {
-  background: #7AAAD1;
+  background: #7aaad1;
 }
 
 .mapController .dropdown.bgMap .style-item:not(.disabled).active .img-wrap {
@@ -520,7 +520,7 @@
 }
 
 .mapController .dropdown.leaf .btn-tool:not(:disabled):hover {
-  background: #7AAAD1;
+  background: #7aaad1;
 }
 
 .mapController .dropdown.leaf .btn-tool:not(:disabled):hover svg path {
@@ -542,7 +542,8 @@
   background: #fff;
   border: 1px solid #e6edf6;
   transform: translateY(-100%);
-  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.12);
+  z-index: 1;
 }
 
 /* ==================== map slider */
@@ -565,7 +566,7 @@
 }
 
 .mapController .btn-wrap.slider .btn-control:not(:disabled):hover svg path {
-  fill: #7AAAD1;
+  fill: #7aaad1;
 }
 
 .mapController .btn-wrap.slider .btn-control.plus {
@@ -646,7 +647,7 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: -0.02em;
-  color: #7AAAD1;
+  color: #7aaad1;
 }
 
 .mapController .btn-wrap.slider .slider-text:before {
@@ -679,5 +680,5 @@
   left: calc(50% - 12.5px);
   border-radius: 2px;
   background: #fff;
-  border: 1px solid #7AAAD1;
+  border: 1px solid #7aaad1;
 }

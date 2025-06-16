@@ -67,6 +67,10 @@ export default {
     }
   },
 
+  isInvalidNumber: function (value) {
+    return value == null || typeof value !== 'number' || Number.isNaN(value)
+  },
+
   isEmpty: function (param) {
     // return param != null && param != undefined && Object.keys(param).length === 0
     return param == null || Object.keys(param).length === 0

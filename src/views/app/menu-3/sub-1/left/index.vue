@@ -124,7 +124,8 @@
     zIndex: 2222,
     style: new Style({
       stroke: new Stroke({
-        color: '#4D7D99',
+        // color: '#4D7D99',
+        color: '#FF0000',
         width: 4,
       }),
       zIndex: 100,

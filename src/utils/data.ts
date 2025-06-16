@@ -228,3 +228,17 @@ export function axisMinMax(data: number[]) {
     axisMax: Math.ceil(maxValue / unit) * unit,
   }
 }
+
+export function formatPercentage(value: number, decimals = 1) {
+  if (value < 0 || value > 100) {
+    throw new Error('Value must be between 0 and 100')
+  }
+
+  const formattedBase = Number(value.toFixed(decimals))
+  const formattedEtc = Number((100 - value).toFixed(decimals))
+
+  return {
+    base: formattedBase,
+    etc: formattedEtc,
+  }
+}

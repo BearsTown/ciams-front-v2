@@ -16,6 +16,7 @@ export type LayoutState = {
   left?: LayoutPart
   right?: LayoutPart
   center: LayoutPart
+  bottom: LayoutPart
   panel?: LayoutPart
   locationInfo?: UseBoolean
 }
@@ -70,6 +71,12 @@ export const useGlobalStore = defineStore('globalStore', () => {
         ? {
             visible: useBoolean(layout.right.visible),
             collapse: useBoolean(layout.right.collapse),
+          }
+        : undefined,
+      bottom: layout?.bottom
+        ? {
+            visible: useBoolean(layout.bottom.visible),
+            collapse: useBoolean(layout.bottom.collapse),
           }
         : undefined,
       panel: layout?.panel

@@ -1,52 +1,114 @@
 <template>
-  <div class="urbanInfo active">
-    <div class="container">
-      <div class="title">지역여건 분석</div>
-
-      <div class="title">
-        {{ overview ? `${overview.zoneName} (${commonUtil.comma(overview.zoneArea.toFixed(3))}㎡)` : '-' }}
-        {{ overview ? `${overview.useDist}` : '' }}
+  <div class="urbanInfo active" style="display: flex; flex-direction: column">
+    <div style="display: flex; flex-direction: column; height: 100%">
+      <div class="container" style="height: 54px; margin-bottom: 8px">
+        <div
+          class="row"
+          style="
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <div
+            class="title"
+            style="align-items: center; display: flex; font-weight: 700; padding-bottom: 0"
+          >
+            <SvgIcon name="loc" style="color: #7aaad1; margin-right: 3px" />
+            {{ overview ? `${overview.zoneName}` : '' }}
+          </div>
+          <div>
+            <div
+              v-if="overview"
+              class="tag"
+              :style="{ 'background-color': tagColor(overview?.locResult) }"
+            >
+              {{ overview?.locResult }}
+            </div>
+          </div>
+        </div>
       </div>
 
-      <table class="customTable analysis">
-        <colgroup>
-          <col style="width: 30%" />
-          <col style="width: 35%" />
-          <col style="width: 35%" />
-        </colgroup>
-        <thead>
-          <tr>
-            <th scope="col" style="text-align: center">구분</th>
-            <th scope="col" style="text-align: center">산업시설 노후도</th>
-            <th scope="col" style="text-align: center">도로율</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr :class="{ active: didgh }">
-            <td style="text-align: center; vertical-align: middle">양호</td>
-            <td style="text-align: center; vertical-align: middle">50% 미만</td>
-            <td style="text-align: center; vertical-align: middle">10% 이상</td>
-          </tr>
-          <tr :class="{ active: qnffid }">
-            <td style="text-align: center; vertical-align: middle">불량</td>
-            <td style="text-align: center; vertical-align: middle">50% 이상</td>
-            <td style="text-align: center; vertical-align: middle">10% 미만</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="container customScroll" style="flex: 1">
+        <table class="customTable analysis">
+          <colgroup>
+            <col style="" />
+            <col style="" />
+            <col style="" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col" style="text-align: center">구분</th>
+              <th scope="col" style="text-align: center">산업시설 노후도</th>
+              <th scope="col" style="text-align: center">도로율</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr :class="getRowClass('양호')">
+              <td style="text-align: center; vertical-align: middle">양호</td>
+              <td style="text-align: center; vertical-align: middle">50% 미만</td>
+              <td style="text-align: center; vertical-align: middle">10% 이상</td>
+            </tr>
+            <tr :class="getRowClass('불량')">
+              <td style="text-align: center; vertical-align: middle">불량</td>
+              <td style="text-align: center; vertical-align: middle">50% 이상</td>
+              <td style="text-align: center; vertical-align: middle">10% 미만</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <el-divider border-style="dashed" style="margin: 10px 0" />
+
+        <PieChartItem
+          style="margin-top: 0"
+          title="산업시설 노후도"
+          :items="[
+            {
+              label: '대상지 산업시설',
+              value: overview?.csB,
+              unit: '동',
+            },
+            {
+              label: '20년 이상 산업시설',
+              value: overview?.csB20,
+              unit: '동',
+            },
+            {
+              label: '노후도',
+              value: overview?.deterio,
+              unit: '%',
+            },
+          ]"
+          :data="{ value: overview?.deterio, names: ['20년 이상', '20년 미만'] }"
+        />
+
+        <PieChartItem
+          style="margin-top: 5px"
+          title="도로율"
+          :items="[
+            {
+              // label: '대상지 도로 면적',
+              label: '대상지 면적',
+              value: overview?.zoneArea,
+              unit: '㎡',
+            },
+            {
+              label: '폭 8m 이상 도로 면적',
+              value: overview?.roadA,
+              unit: '㎡',
+            },
+            {
+              label: '도로율',
+              value: overview?.roadRate,
+              unit: '%',
+            },
+          ]"
+          :data="{ value: overview?.roadRate, names: ['도로', '비도로'] }"
+        />
+      </div>
     </div>
-
-    <Item
-      title="산업시설 노후도"
-      :value1="overview ? `${overview.deterio}%` : ''"
-      :value2="overview ? `${overview.deterioRe}` : ''"
-    />
-
-    <Item
-      title="도로율"
-      :value1="overview ? `${overview.roadRate}%` : ''"
-      :value2="overview ? `${overview.roadRe}` : ''"
-    />
   </div>
 </template>
 
@@ -59,12 +121,33 @@
   import commonUtil from '@/utils/commonUtil'
   import { useMenu2Sub2Store } from '@/stores/app/menu-2/sub-2'
   import Item from '@/components/app/menu-2/Item.vue'
+  import SvgIcon from '@/components/common/SvgIcon.vue'
+  import PieChartItem from '@/components/app/menu-2/PieChartItem.vue'
 
   const menu2Sub2Store = useMenu2Sub2Store()
   const { overview } = storeToRefs(menu2Sub2Store)
 
   const didgh = computed(() => overview?.value?.locResult === '양호')
   const qnffid = computed(() => overview?.value?.locResult === '불량')
+
+  function tagColor(itaResult: string) {
+    switch (itaResult) {
+      case '양호':
+        return '#90cd2a'
+      case '불량':
+        return '#ca5619'
+      default:
+        return '#ffffff'
+    }
+  }
+
+  function getRowClass(locResult: string) {
+    return {
+      active: overview.value?.locResult === locResult,
+      'row-type-1': locResult === '양호' && overview.value?.locResult === '양호',
+      'row-type-2': locResult === '불량' && overview.value?.locResult === '불량',
+    }
+  }
 
   onBeforeMount(() => {})
 
@@ -83,9 +166,35 @@
     tbody {
       tr.active {
         td {
-          background: #f5c49c;
+          color: white;
         }
       }
+
+      tr.row-type-1 {
+        background-color: #90cd2a;
+      }
+      tr.row-type-2 {
+        background-color: #ca5619;
+      }
     }
+  }
+
+  .customScroll {
+    display: flex;
+    overflow-y: auto;
+    flex-direction: column;
+  }
+
+  .tag {
+    width: 105px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.12);
   }
 </style>

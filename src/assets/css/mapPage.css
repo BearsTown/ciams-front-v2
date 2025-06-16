@@ -1137,3 +1137,70 @@
 .map-rightDrawer .rightDrawer-content > div.active {
   display: block;
 }
+
+
+
+/* ==================== bottom drawer */
+.map-bottomDrawer {
+  width: 100%;
+  /*height: 40%;*/
+  height: 350px;
+  position: absolute;
+  bottom: 0;
+  background: #f4f4f4;
+  border-right: 1px solid #757575;
+  z-index: 21;
+  transform: translateY(100%);
+  transition: 0.3s;
+}
+
+.map-bottomDrawer.active {
+  transform: translateY(0);
+}
+
+.map-bottomDrawer.left-on {
+  margin-left: 355px;
+  width: calc(100% - 355px);
+}
+
+.map-bottomDrawer.right-on {
+  margin-right: 585px;
+  width: calc(100% - 585px);
+}
+
+.map-bottomDrawer.left-on.right-on {
+  margin-left: 355px;
+  margin-right: 585px;
+  width: calc(100% - 355px - 585px);
+}
+
+.map-bottomDrawer .btn-drawerToggle {
+  top: -26px;
+  width: 62px;
+  height: 26px;
+  left: calc(50%);
+  transform: translateX(-50%);
+  border-radius: 4px 4px 0 0;
+}
+
+.map-bottomDrawer .btn-drawerToggle svg {
+  transform: rotate(90deg);
+}
+
+.map-bottomDrawer .btn-drawerToggle.active svg {
+  transform: rotate(-90deg);
+}
+
+/* bottomDrawer-content */
+.map-bottomDrawer .bottomDrawer-content {
+  width: 100%;
+  height: 100%;
+}
+
+.map-bottomDrawer .bottomDrawer-content > div {
+  display: none;
+}
+
+.map-bottomDrawer .bottomDrawer-content > div.active {
+  display: block;
+}
