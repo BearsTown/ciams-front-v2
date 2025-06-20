@@ -21,7 +21,8 @@
         :key="column.name"
         :prop="column.name"
         :label="column.label"
-        align="center"
+        align="right"
+        header-align="center"
       >
         <template #default="{ row }">
           {{

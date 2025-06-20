@@ -2,6 +2,21 @@
   <PagePane :title="title">
     <template #center>
       <div class="container">
+        <div class="top customScroll">
+          <div class="text-wrap">
+            <div style="display: flex; margin-bottom: 5px">
+              <div class="header-title" style="margin: 0">
+                {{ type }}
+              </div>
+              <el-text size="default">: {{ desc[type] }}</el-text>
+            </div>
+
+            <template v-for="(memo, idx) in memos" :key="memo">
+              - {{ memo }}
+              <br v-if="idx < memos.length - 1" />
+            </template>
+          </div>
+        </div>
         <div class="center">
           <div class="left">
             <div
@@ -13,7 +28,13 @@
                 box-shadow: none;
               "
             >
-              <div class="border-box-square" style="flex: 1; overflow-y: hidden">
+              <div
+                class="border-box-square"
+                style="display: flex; flex-direction: column; flex: 1; overflow-y: hidden"
+              >
+                <div style="margin: 8px 0; font-size: 15px; font-weight: bold">
+                  {{ type }} 밀도분석
+                </div>
                 <el-image
                   style="width: 100%; height: 100%"
                   :src="imgSrcC"
@@ -28,7 +49,7 @@
                 class="border-box-square"
                 style="height: 300px; display: flex; flex-direction: column"
               >
-                <div style="margin: 8px 0">대표{{ type }}</div>
+                <div style="margin: 8px 0; font-size: 15px; font-weight: bold">대표{{ type }}</div>
                 <el-table
                   :data="repData"
                   size="small"
@@ -138,14 +159,6 @@
             </div>
           </div>
         </div>
-        <div class="bottom customScroll">
-          <div class="text-wrap">
-            <template v-for="(memo, idx) in memos" :key="memo">
-              - {{ memo }}
-              <br v-if="idx < memos.length - 1" />
-            </template>
-          </div>
-        </div>
       </div>
     </template>
   </PagePane>
@@ -179,6 +192,16 @@
     }>(),
     {},
   )
+
+  const desc = {
+    선도산업:
+      '전국 대비 지역의 지역특화도가 높고, 종사자수가 증가하고 있으며, 전국대비 해당 지역의 경쟁력이 높은 산업',
+    신흥산업:
+      '전국 대비 지역의 지역특화도는 낮으나, 종사자수가 증가하고 있으며, 전국 대비 해당 지역의 경쟁력이 높은 산업',
+    쇠퇴산업:
+      '전국 대비 지역의 지역특화도가 낮고, 종사자수가 감소하고 있으며, 전국 대비 해당 지역의 경쟁력이 낮은 산업',
+    초기반산업: '전국 대비 지역의 현재 특화업종을 식별하는 입지계수가 2.0 이상인 산업',
+  }
 
   const title = computed(() => ['산업기반분석(ITA)', `${props.type} 현황`])
 
@@ -309,6 +332,17 @@
 
       .right-bottom {
       }
+    }
+
+    .top {
+      height: 80px;
+      margin-bottom: 8px;
+      min-height: 100px;
+      max-height: 200px;
+
+      padding: 10px;
+      background: #fff;
+      border-radius: 8px;
     }
 
     .bottom {

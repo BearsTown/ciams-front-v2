@@ -1,5 +1,11 @@
 <template>
-  <v-chart class="chart" :option="option" autoresize />
+  <div style="width: 100%; height: 100%; display: flex; flex-direction: column">
+    <div style="display: flex; justify-content: end">
+      <el-button type="primary" size="small" @click="toggleLegend(true)">전체 켜기</el-button>
+      <el-button type="primary" size="small" @click="toggleLegend(false)">전체 끄기</el-button>
+    </div>
+    <v-chart ref="chartComponent" class="chart" :option="option" autoresize />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -22,7 +28,28 @@
     {},
   )
 
+  const chartComponent = ref()
   const option = ref({})
+
+  function toggleLegend(show: boolean) {
+    // const selected = {}
+    // legendNames.forEach((name) => {
+    //   selected[name] = show
+    // })
+
+    if (show) {
+      chartComponent.value?.dispatchAction({
+        type: 'legendAllSelect',
+      })
+    } else {
+      chartComponent.value?.dispatchAction({
+        type: 'legendAllSelect',
+      })
+      chartComponent.value?.dispatchAction({
+        type: 'legendInverseSelect',
+      })
+    }
+  }
 
   watch(
     () => props.dataInfo,
@@ -35,6 +62,8 @@
       const data = newDataInfo.data || []
       const legend = newDataInfo.chart.legend
       const categories = newDataInfo.chart.categories
+
+      const totalTextLength = legend.reduce((sum, item) => sum + item.length, 0)
 
       if (newDataInfo?.statusData?.pivot) {
         columns.value = newDataInfo?.pivotColumns?.filter((col) => col.useAxis)
@@ -137,6 +166,7 @@
               name: name,
               type: col.seriesType,
               data: data,
+              symbolSize: 7,
             }
           })
       } else {
@@ -158,10 +188,38 @@
 
       // ECharts configuration
       option.value = {
+        color: [
+          '#5470c6',
+          '#91cc75',
+          '#fac858',
+          '#ee6666',
+          '#73c0de',
+          '#3ba272',
+          '#fc8452',
+          '#9a60b4',
+          '#ea7ccc',
+          '#b4b4b4',
+          '#2a9d8f',
+          '#e76f51',
+          '#f4a261',
+          '#7209b7',
+          '#f72585',
+          '#06d6a0',
+          '#ffba08',
+          '#4d908e',
+          '#ef476f',
+          '#118ab2',
+          '#ffd166',
+          '#6b7280',
+          '#ff006e',
+          '#83c5be',
+          '#606c38',
+        ],
         tooltip: {
           trigger: 'item',
           axisPointer: {
             type: 'shadow',
+            snap: true,
           },
         },
         dataZoom: [
@@ -170,10 +228,11 @@
           },
         ],
         grid: {
-          top: '10%',
+          top: '5%',
           // left: '5%',
           // right: '5%',
-          bottom: '15%',
+          // bottom: '15%',
+          bottom: legend.length > 15 && totalTextLength > 150 ? '25%' : '15%',
           containLabel: false,
         },
         legend: {

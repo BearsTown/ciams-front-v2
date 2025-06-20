@@ -4,7 +4,7 @@
       <div class="left">
         <MapWrapperView v-if="mapConfig" :map-type="mapType" :map-config="mapConfig">
           <template #control>
-            <Controls :map-type="mapType" />
+            <Controls :map-type="mapType" :use-land="false" />
           </template>
         </MapWrapperView>
       </div>
@@ -283,6 +283,7 @@
       flex-direction: row;
       overflow-y: hidden;
       height: 100%;
+      gap: 8px;
 
       .left {
         width: 50%;
@@ -299,7 +300,7 @@
 
         //padding: 10px;
         //background: #fff;
-        margin-left: 8px;
+        //margin-left: 8px;
         //border-radius: 8px;
       }
 

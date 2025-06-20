@@ -5,9 +5,11 @@
         <el-tab-pane :label="item.codeName" :name="item.code" style="height: 100%">
           <keep-alive>
             <LQSub
+              ref="lqSubRefs"
               v-if="activeName === item.code"
               :lq-parent-code="item.code"
               :desc="item.codeDesc"
+              :lq-map-type="lqMapType"
               @update-data="updateData"
             />
           </keep-alive>
@@ -26,13 +28,15 @@
   import { getCodeList } from '@/api/app/common'
   import LQSub from '@/components/app/menu-1/sub-1/panel/tab-B/page-6/LQSub.vue'
   import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
+  import { styleUtil } from '@/utils'
   import CommonUtil from '@/utils/commonUtil'
-  import { Fill, Stroke, Style } from 'ol/style'
+  import { Fill, Stroke, Style, Text } from 'ol/style'
 
   const props = withDefaults(
     defineProps<{
       lqParentCode: string
       layer: UitWFSLayer
+      lqMapType: string
     }>(),
     {},
   )
@@ -43,6 +47,7 @@
 
   const codes = ref()
   const activeName = ref()
+  const lqSubRefs = ref<LQSub[]>([])
 
   function updateData(data) {
     if (CommonUtil.isEmpty(data)) {
@@ -58,21 +63,33 @@
           zIndex: 100,
         }),
       )
+
+      updateLegend(null)
     } else {
       props.layer.getLayer().setStyle(function (feature) {
         const sggCd = feature.get('SGG_CD')
         const target = data.data.find((item) => item.sggCd === sggCd)
+        let labelGeometry
+
+        let geometry = feature.getGeometry()
+        if (geometry.getType() === 'MultiPolygon') {
+          const polygons = geometry.getPolygons()
+          geometry = getMaxPoly(polygons)
+          labelGeometry = geometry.getInteriorPoint()
+        } else if (geometry.getType() === 'Polygon') {
+          labelGeometry = geometry.getInteriorPoint()
+        }
 
         let color = CommonUtil.hex2rgb('#F4FFF4', 0.8)
         if (!CommonUtil.isEmpty(target)) {
-          const fcolor = getColorForValue(
+          const fcolor = styleUtil.getColorForValue(
             target[data.type],
             data.styleInfo.breaks,
             data.styleInfo.legend,
           )
           color = CommonUtil.hex2rgb(fcolor, 0.8)
         }
-        return new Style({
+        const cStyle = new Style({
           stroke: new Stroke({
             color: '#FFFFFF',
             width: 1,
@@ -82,26 +99,60 @@
           }),
           zIndex: 100,
         })
+
+        const labelStyle = new Style({
+          geometry: labelGeometry,
+          text: new Text({
+            font: '12px Calibri,sans-serif',
+            overflow: true,
+            fill: new Fill({
+              color: '#000',
+            }),
+            stroke: new Stroke({
+              color: '#fff',
+              width: 3,
+            }),
+            text: feature.get('SGG_NM'),
+          }),
+          zIndex: 101,
+        })
+
+        return [labelStyle, cStyle]
       })
+
+      updateLegend(data.styleInfo)
     }
   }
 
-  function getColorForValue(value, breaks, colors) {
-    // 최소값 이하
-    if (value <= breaks[1]) {
-      return colors[0].color
-    }
-
-    // 중간 값들
-    for (let i = 2; i < breaks.length - 1; i++) {
-      if (value <= breaks[i]) {
-        return colors[i - 1].color
+  function getMaxPoly(polygons) {
+    let maxPoly = polygons[0]
+    let maxArea = polygons[0].getArea()
+    for (let i = 1; i < polygons.length; i++) {
+      const area = polygons[i].getArea()
+      if (area > maxArea) {
+        maxArea = area
+        maxPoly = polygons[i]
       }
     }
-
-    // 최대값 초과
-    return colors[colors.length - 1].color
+    return maxPoly
   }
+
+  // function getColorForValue(value, breaks, colors) {
+  //   // 최소값 이하
+  //   if (value <= breaks[1]) {
+  //     return colors[0].color
+  //   }
+  //
+  //   // 중간 값들
+  //   for (let i = 2; i < breaks.length - 1; i++) {
+  //     if (value <= breaks[i]) {
+  //       return colors[i - 1].color
+  //     }
+  //   }
+  //
+  //   // 최대값 초과
+  //   return colors[colors.length - 1].color
+  // }
 
   // function getColorForCorpLq(corpLq, breaks, legend) {
   //   // Iterate through breaks to find the correct range
@@ -118,6 +169,24 @@
   //   return legend[0].color // Fallback to first color if no match
   // }
 
+  function updateMapType() {
+    lqSubRefs.value?.forEach((value) => {
+      value.updateData()
+    })
+  }
+
+  function updateLegend(styleInfo) {
+    if (CommonUtil.isEmpty(styleInfo)) {
+      emits('update-legend', {})
+    } else {
+      emits('update-legend', styleInfo)
+    }
+  }
+
+  const emits = defineEmits<{
+    (e: 'update-legend', type: object): void
+  }>()
+
   onMounted(async () => {
     const { data: rawData } = await getCodeList(props.lqParentCode)
 
@@ -129,6 +198,11 @@
   onBeforeMount(() => {})
 
   onActivated(() => {})
+
+  defineExpose({
+    updateMapType,
+    updateLegend,
+  })
 </script>
 
 <style lang="scss"></style>

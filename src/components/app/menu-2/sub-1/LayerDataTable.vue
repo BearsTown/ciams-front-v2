@@ -37,6 +37,7 @@
         max-height="210"
         border
         :summary-method="getSummaries"
+        :cell-style="getCellStyle"
       >
         <el-table-column label="범례" align="center" width="50" class-name="legend">
           <template #default="{ row: { color } }">
@@ -175,6 +176,14 @@
     } catch (error) {
       console.error(`Error accessing ${path}:`, error)
       return undefined
+    }
+  }
+
+  const getCellStyle = ({ row, column }) => {
+    if (column.label === '범례') {
+      return {
+        'place-items': 'center',
+      }
     }
   }
 

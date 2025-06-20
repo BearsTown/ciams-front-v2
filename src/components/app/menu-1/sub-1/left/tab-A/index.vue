@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-  import { DefineComponent, nextTick, onActivated, onMounted, ref } from 'vue'
+  import { nextTick, onActivated, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import { useBoolean } from '@/hooks/useBoolean'
@@ -41,12 +41,8 @@
 
   import { Style } from 'ol/style'
   import MenuCollapse from '@/components/common/collapse/MenuCollapse.vue'
-  import Page3Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-3.vue'
-  import Page4Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-4.vue'
-  import Page5Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-5.vue'
-  import Page6Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-6.vue'
   import ActiveButton from '@/components/common/ActiveButton.vue'
-  import { test_getMenu1_1_1Data } from '@/api/app/menu-1/sub-1/tab-a'
+  import { getStatusTree } from '@/api/app/menu-1/sub-1/tab-a'
 
   const menu1Sub1Tab1Store = useMenu1Sub1Tab1Store()
 
@@ -57,31 +53,15 @@
 
   const { status: isActive, toggle } = useBoolean(false)
 
-  // const statusList = ref([
-  //   { name: '토지', id: 'Page1', isActive: false, isChild: true },
-  //   { name: '인구', id: 'Page2', isActive: false, isChild: true },
-  //   { name: '경제', id: 'Page3', isActive: false, isChild: true },
-  //   { name: '산업', id: 'Page4', isActive: false, isChild: true },
-  // ])
-
   const statusList = ref<any[]>([])
 
   const selectedMenu = ref<object | null>(null)
-  // const selectedStatusGroup = ref<object | null>(null)
 
   const params = ref({
     title: '',
     menu: '',
   })
 
-  const components: Record<string, DefineComponent> = {
-    // Page1: TabAComp,
-    // Page2: TabBComp,
-    Page3: Page3Comp,
-    Page4: Page4Comp,
-    Page5: Page5Comp,
-    Page6: Page6Comp,
-  }
   const childRefs = ref<MenuCollapse[]>([])
   const activeBtnChildRefs = ref<ActiveButton[]>([])
 
@@ -99,14 +79,13 @@
 
   function handleStatusGroupChange(isActive: boolean, item: object) {
     if (!isActive) return
-    // selectedItem.value = item
 
     console.log(`item ${item}; ${isActive}`)
     menu1Sub1Tab1Store.setStatusGroup(selectedMenu.value!, item)
   }
 
   async function load() {
-    const { data } = await test_getMenu1_1_1Data()
+    const { data } = await getStatusTree()
     statusList.value = data
 
     await nextTick()
@@ -114,8 +93,6 @@
     childRefs.value[0]?.setOpen(true)
     selectedItem.value = statusList.value[0]?.children?.[0]
   }
-
-  // const selected = ref()
 
   onMounted(async () => {
     await load()

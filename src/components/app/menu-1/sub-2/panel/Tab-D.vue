@@ -272,6 +272,7 @@
       flex-direction: row;
       overflow-y: hidden;
       height: 100%;
+      gap: 8px;
 
       .left {
         width: 50%;
@@ -288,7 +289,7 @@
 
         //padding: 10px;
         //background: #fff;
-        margin-left: 8px;
+        //margin-left: 8px;
         //border-radius: 8px;
       }
 

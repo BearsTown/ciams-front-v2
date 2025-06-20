@@ -85,8 +85,8 @@
   const { status: isActive, toggle } = useBoolean(false)
 
   // const mapType = MapType.MAP_3
-  const mapType: MapType = 'Map-3'
-  const mapLayerGroupType: MapLayerGroupType = 'Menu_3_Sub_1'
+  const mapType: MapType = 'Map-3-1-1'
+  const mapLayerGroupType: MapLayerGroupType = 'Menu-3-1-1'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]

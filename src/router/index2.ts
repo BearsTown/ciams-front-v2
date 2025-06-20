@@ -246,7 +246,7 @@ const routes: RouteRecordRaw[] = [
             },
             components: {
               left: () => import('@/views/app/menu-3/sub-1/left'),
-              center: () => import('@/views/app/menu-3/center'),
+              center: () => import('src/views/app/menu-3/sub-1/center'),
               right: () => import('@/views/app/menu-3/sub-1/right'),
               locationInfo: () => import('@/views/app/menu-3/locInfo'),
             },

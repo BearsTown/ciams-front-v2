@@ -71,9 +71,25 @@ export default {
     return value == null || typeof value !== 'number' || Number.isNaN(value)
   },
 
-  isEmpty: function (param) {
+  isEmpty: function (value) {
     // return param != null && param != undefined && Object.keys(param).length === 0
-    return param == null || Object.keys(param).length === 0
+    // return param == null || Object.keys(param).length === 0
+
+    if (value == null) return true
+
+    if (typeof value === 'string' || Array.isArray(value)) {
+      return value.length === 0
+    }
+
+    if (value instanceof Map || value instanceof Set) {
+      return value.size === 0
+    }
+
+    if (typeof value === 'object') {
+      return Object.keys(value).length === 0
+    }
+
+    return false
   },
 
   loading: function (message?) {

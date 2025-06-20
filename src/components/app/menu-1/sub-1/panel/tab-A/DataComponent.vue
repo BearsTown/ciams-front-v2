@@ -1,14 +1,5 @@
 <template>
   <div style="height: 100%; display: flex; flex-direction: column">
-    <div style="display: flex; justify-content: space-between; margin-bottom: 5px">
-      <div class="header-title" style="">{{ title }}</div>
-
-      <el-radio-group v-model="currentView" size="small">
-        <el-radio-button label="차트" value="chart" />
-        <el-radio-button label="표" value="table" />
-      </el-radio-group>
-    </div>
-
     <div
       style="
         display: flex;
@@ -45,7 +36,7 @@
   const props = withDefaults(
     defineProps<{
       dataId: number
-      title: string
+      title?: string
       view: 'chart' | 'table'
     }>(),
     {},

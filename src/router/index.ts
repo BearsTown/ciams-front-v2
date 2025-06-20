@@ -26,6 +26,7 @@ export const RouteName = {
   'Menu-2-Sub-4': 'Menu-2-Sub-4',
   'Menu-3-Sub-1': 'Menu-3-Sub-1',
   'Menu-3-Sub-2': 'Menu-3-Sub-2',
+  'Menu-3-Sub-3': 'Menu-3-Sub-3',
   'Menu-4': 'userArchive',
 } as const
 
@@ -258,7 +259,7 @@ const routes: RouteRecordRaw[] = [
         name: 'Menu-3',
         redirect: '/menu-3/sub-1',
         meta: {
-          mapType: 'Map-3',
+          mapType: 'Map-3-1-1',
           title: '도시공업지역<br/>기본계획',
           icon: menu3Icon,
         },
@@ -268,6 +269,7 @@ const routes: RouteRecordRaw[] = [
             name: 'Menu-3-Sub-1',
             meta: {
               title: '기본구상',
+              mapType: 'Map-3-1-1',
               layout: {
                 left: {
                   visible: true,
@@ -287,7 +289,7 @@ const routes: RouteRecordRaw[] = [
             },
             components: {
               left: () => import('@/views/app/menu-3/sub-1/left'),
-              center: () => import('@/views/app/menu-3/center'),
+              center: () => import('@/views/app/menu-3/sub-1/center'),
               right: () => import('@/views/app/menu-3/sub-1/right'),
               locationInfo: () => import('@/views/app/menu-3/locInfo'),
             },
@@ -297,6 +299,7 @@ const routes: RouteRecordRaw[] = [
             name: 'Menu-3-Sub-2',
             meta: {
               title: '부문별<br/>계획',
+              mapType: 'Map-3-3-1',
               layout: {
                 left: {
                   visible: true,
@@ -316,8 +319,36 @@ const routes: RouteRecordRaw[] = [
             },
             components: {
               left: () => import('@/views/app/menu-3/sub-2/left'),
-              center: () => import('@/views/app/menu-3/center'),
               panel: () => import('@/views/app/menu-3/sub-2/panel'),
+            },
+          },
+          {
+            path: 'sub-3',
+            name: 'Menu-3-Sub-3',
+            meta: {
+              title: '정비구역<br/>계획',
+              layout: {
+                left: {
+                  visible: true,
+                  collapse: true,
+                },
+                right: {
+                  visible: true,
+                  collapse: true,
+                },
+                center: {
+                  visible: true,
+                },
+                panel: {
+                  visible: false,
+                },
+              },
+            },
+            components: {
+              left: () => import('@/views/app/menu-3/sub-3/left'),
+              center: () => import('@/views/app/menu-3/sub-3/center'),
+              right: () => import('@/views/app/menu-3/sub-3/right'),
+              locationInfo: () => import('@/views/app/menu-3/sub-3/locInfo'),
             },
           },
         ],

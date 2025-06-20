@@ -30,6 +30,11 @@ export function jenks(data, n_classes) {
   if (data.length < n_classes + 1) {
     let valPerSlice = data
     const tmpValperSlice = []
+
+    let min = Math.min(...data)
+    let max = Math.max(...data)
+    let gap = (max - min) / n_classes
+
     for (let i = 0; i < n_classes + 1; i++) {
       if (data.length == 1) {
         let max = data[0]
@@ -40,11 +45,11 @@ export function jenks(data, n_classes) {
           tmpValperSlice.push(max + max * i)
         }
       } else {
-        if (i == 0) {
-          let min = Math.min.apply(null, data)
-          let max = Math.max.apply(null, data)
-          let gap = (max - min) / n_classes
-        }
+        // if (i == 0) {
+        // let min = Math.min.apply(null, data)
+        // let max = Math.max.apply(null, data)
+        // let gap = (max - min) / n_classes
+        // }
 
         if (min < 0) {
           if (gap < 0) {
@@ -248,16 +253,16 @@ function createLegendInfo(breaks, colors) {
 export function getColorForValue(value, breaks, colors) {
   // 최소값 이하
   if (value <= breaks[1]) {
-    return colors[0]
+    return colors[0].color
   }
 
   // 중간 값들
   for (let i = 2; i < breaks.length - 1; i++) {
     if (value <= breaks[i]) {
-      return colors[i - 1]
+      return colors[i - 1].color
     }
   }
 
   // 최대값 초과
-  return colors[colors.length - 1]
+  return colors[colors.length - 1].color
 }

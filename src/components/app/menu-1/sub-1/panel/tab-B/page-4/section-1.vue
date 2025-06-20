@@ -2,6 +2,14 @@
   <PagePane :title="['산업별 분석', '산업별 사업체수']">
     <template #center>
       <div class="container">
+        <div class="top customScroll">
+          <div class="text-wrap">
+            - 공업지역 내 산업단지의 종사자밀도는 11.36인/ha 반면, 도시공업지역은 18.87인/ha로 1.5배
+            많은 종사자가 근무하고 있어 도시공업지역을 활성화시킬 수 있는 방안 필요 <br />
+            - 김천시는 도매 및 소매업수가 가장 많고, 공업지역과 도시공업지역에서는 제조업수가 가장
+            많으며, 제조업의 종사자수가 전체 지역에서 가장 많은 비중을 차지함
+          </div>
+        </div>
         <div class="center">
           <div class="left">
             <div
@@ -32,26 +40,27 @@
                 box-shadow: none;
               "
             >
-              <div>
-                <div class="header-title" style="">지역별 종사자 밀도</div>
-                <div class="" style="display: flex">
-                  <Table1 :data="density" />
+              <div style="display: flex; flex-direction: column">
+                <div class="header-title" style="">지역별 사업체 밀도</div>
+                <div class="" style="display: flex; height: 100%">
+                  <Table1 :data="density" type="corp" style="width: 65%" />
+                  <v-chart class="chart" :option="densityOption" autoresize style="width: 35%" />
                 </div>
               </div>
 
-              <div style="display: flex; flex-direction: column; flex: 1; margin-top: 8px">
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  flex: 1;
+                  margin-top: 8px;
+                  overflow-y: hidden;
+                "
+              >
                 <div class="header-title" style="">산업별 현황</div>
-                <Table2 group="사업체수(개소)" :data="industry" :columns="columns" />
+                <Table2 group="사업체수(개)" :data="industry" :columns="columns" />
               </div>
             </div>
-          </div>
-        </div>
-        <div class="bottom customScroll">
-          <div class="text-wrap">
-            - 공업지역 내 산업단지의 종사자밀도는 11.36인/ha 반면, 도시공업지역은 18.87인/ha로 1.5배
-            많은 종사자가 근무하고 있어 도시공업지역을 활성화시킬 수 있는 방안 필요 <br />
-            - 김천시는 도매 및 소매업수가 가장 많고, 공업지역과 도시공업지역에서는 제조업수가 가장
-            많으며, 제조업의 종사자수가 전체 지역에서 가장 많은 비중을 차지함
           </div>
         </div>
       </div>
@@ -64,7 +73,6 @@
 
   import { useGlobalStore } from '@/stores/app'
   import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
-  import { API_INFO_CIAMS } from '@/config/config'
   import PagePane from '@/components/common/PagePane.vue'
   import VChart from 'vue-echarts'
   import Table1 from '@/components/app/menu-1/sub-1/panel/tab-B/page-4/table-1.vue'
@@ -78,13 +86,11 @@
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
   const cmmConfigStore = useCmmConfigStore()
 
-  const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
-  const imgSrc = prefixPath + '45252c84-6272-49dc-a246-62c8f581158c'
-
   const option = ref({})
 
   const density = ref([])
   const industry = ref([])
+  const densityOption = ref({})
   const chartData = ref({})
 
   const columns = computed(() => {
@@ -107,6 +113,37 @@
   onMounted(async () => {
     density.value = await test_getMenu1_2_4Data(1)
     industry.value = await test_getMenu1_1_2_4(1)
+
+    densityOption.value = {
+      tooltip: {
+        trigger: 'item',
+      },
+      // legend: {
+      //   bottom: true,
+      // },
+      series: [
+        {
+          type: 'pie',
+          radius: '80%',
+          avoidLabelOverlap: false,
+          data: density.value.map(({ name, corpDensity }) => ({ value: corpDensity, name })),
+          label: {
+            show: true,
+            position: 'inside',
+            formatter: '{c}',
+            color: '#fff',
+            fontSize: 14,
+          },
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+        },
+      ],
+    }
 
     chartData.value = {
       legend: {
@@ -140,7 +177,7 @@
             if (value === undefined || value === null) {
               value = 0
             }
-            return CommonUtil.comma(value as number) + ' 개소'
+            return CommonUtil.comma(value as number) + ' 개'
           },
         },
       })),
@@ -225,8 +262,10 @@
       flex: 1;
       display: flex;
       flex-direction: row;
-      overflow-y: hidden;
+      //overflow-y: hidden;
+      overflow: hidden;
       height: 100%;
+      gap: 8px;
 
       .left {
         width: 50%;
@@ -241,7 +280,7 @@
         background: #fff;
         display: flex;
         flex-direction: column;
-        margin-left: 8px;
+        //margin-left: 8px;
         border-radius: 8px;
       }
 
@@ -250,6 +289,17 @@
 
       .right-bottom {
       }
+    }
+
+    .top {
+      height: 80px;
+      margin-bottom: 8px;
+      min-height: 100px;
+      max-height: 200px;
+
+      padding: 10px;
+      background: #fff;
+      border-radius: 8px;
     }
 
     .bottom {

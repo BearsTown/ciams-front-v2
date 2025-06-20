@@ -82,7 +82,7 @@
 
 <style scoped lang="scss">
   .mapController .dropdown.bgMap .form {
-    max-height: 760px;
-    min-height: 760px;
+    //max-height: 760px;
+    //min-height: 760px;
   }
 </style>

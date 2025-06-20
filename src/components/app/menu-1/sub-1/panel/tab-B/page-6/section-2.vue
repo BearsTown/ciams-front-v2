@@ -2,40 +2,7 @@
   <PagePane :title="['기술업종별 LQ분석', '기술집약정도']">
     <template #center>
       <div class="container">
-        <div class="center">
-          <div class="left">
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-                border: none;
-                box-shadow: none;
-              "
-            >
-              <MapWrapperView v-if="mapConfig" :map-type="mapType" :map-config="mapConfig">
-                <template #control>
-                  <Controls :map-type="mapType" />
-                </template>
-              </MapWrapperView>
-            </div>
-          </div>
-
-          <div class="right">
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-                border: none;
-                box-shadow: none;
-              "
-            >
-              <LQPane :lq-parent-code="lqParentCode" :layer="uitVectorLayer" style="flex: 1" />
-            </div>
-          </div>
-        </div>
-        <div class="bottom customScroll">
+        <div class="top customScroll">
           <div class="text-wrap">
             <div style="display: flex; margin-bottom: 5px">
               <div class="header-title" style="margin: 0">
@@ -69,6 +36,66 @@
             </div>
           </div>
         </div>
+        <div class="center">
+          <div class="left">
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                border: none;
+                box-shadow: none;
+                position: relative;
+              "
+            >
+              <div
+                style="
+                  position: absolute;
+                  top: 10px;
+                  z-index: 10;
+                  left: calc(50%);
+                  transform: translateX(-50%);
+                "
+              >
+                <el-radio-group v-model="lqMapType" size="default" @change="handleRadioChange">
+                  <el-radio-button label="사업체" value="corpLq" />
+                  <el-radio-button label="종사자" value="workerLq" />
+                </el-radio-group>
+              </div>
+
+              <div style="position: absolute; bottom: 10px; z-index: 10; left: 10px">
+                <Legend :list="legendList" />
+              </div>
+
+              <MapWrapperView v-if="mapConfig" :map-type="mapType" :map-config="mapConfig">
+                <template #control>
+                  <Controls :map-type="mapType" :use-land="false" />
+                </template>
+              </MapWrapperView>
+            </div>
+          </div>
+
+          <div class="right">
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                border: none;
+                box-shadow: none;
+              "
+            >
+              <LQPane
+                ref="lqPaneRef"
+                :lq-parent-code="lqParentCode"
+                :layer="uitVectorLayer"
+                :lq-map-type="lqMapType"
+                @update-legend="updateLegend"
+                style="flex: 1"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </template>
   </PagePane>
@@ -99,6 +126,7 @@
   import Feature from 'ol/Feature'
   import VectorSource from 'ol/source/Vector'
   import { Style } from 'ol/style'
+  import Legend from '@/components/app/menu-1/sub-1/panel/tab-B/page-6/Legend.vue'
 
   const globalStore = useGlobalStore()
   const menu1Sub1Tab2Page6Store = useMenu1Sub1Tab2Page6Store()
@@ -120,6 +148,11 @@
 
   const corpLqs = ref([])
   const workerLqs = ref([])
+
+  const lqMapType = ref('corpLq')
+  const lqPaneRef = ref<LQPane>()
+
+  const legendList = ref([])
 
   const sggTxt = computed(() => `${cmmConfigStore.cmmConfigState['SGG_NAME']?.confValue}는 `)
   const corpLqsText = computed(() => corpLqs.value.join(', '))
@@ -179,6 +212,7 @@
     properties: {
       visibleIgnore: true,
     },
+    declutter: true,
   })
 
   async function init() {
@@ -283,6 +317,14 @@
     mapWrap.value?.getUitMap().getView().fit(uitVectorLayer.getSource().getExtent())
   }
 
+  function handleRadioChange() {
+    lqPaneRef.value?.updateMapType()
+  }
+
+  function updateLegend(styleInfo) {
+    legendList.value = styleInfo.legend ? styleInfo.legend : []
+  }
+
   onMounted(async () => {
     const { data: code } = await getCode(lqParentCode.value)
     const { data: tech } = await getHighTech({
@@ -349,6 +391,17 @@
 
       .right-bottom {
       }
+    }
+
+    .top {
+      height: 80px;
+      margin-bottom: 8px;
+      min-height: 100px;
+      max-height: 200px;
+
+      padding: 10px;
+      background: #fff;
+      border-radius: 8px;
     }
 
     .bottom {

@@ -6,8 +6,10 @@
 }
 
 .zoningSetting-top {
-  min-height: 82px;
-  padding: 17px 12px;
+  /*min-height: 82px;*/
+  /*padding: 17px 12px;*/
+  min-height: 0;
+  padding: 10px;
 }
 
 /* 고시 */
@@ -116,7 +118,7 @@
 }
 
 .zoningSetting .customCard {
-  padding: 16px 12px;
+  /*padding: 16px 12px;*/
 }
 
 .zoningSetting .customCard:not(:first-child) {
@@ -237,13 +239,13 @@
 
 .zoningSetting .set-item:not(.disabled):hover {
   cursor: pointer;
-  border-color: #7AAAD1;
-  color: #7AAAD1;
+  border-color: #7aaad1;
+  color: #7aaad1;
 }
 
 .zoningSetting .set-item:not(.disabled).active {
-  background: #7AAAD1;
-  border-color: #7AAAD1;
+  background: #7aaad1;
+  border-color: #7aaad1;
   color: #fff;
 }
 

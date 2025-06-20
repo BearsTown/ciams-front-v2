@@ -1,5 +1,11 @@
 <template>
   <div class="" style="display: flex; flex-direction: column; height: 100%">
+    <div style="flex: 1; overflow-y: hidden">
+      <ZoneList :page-size="50" @item-select="zoneItemSelect" @clear="clear" />
+    </div>
+
+    <el-divider border-style="dashed" style="margin: 10px 0" />
+
     <div class="customScroll" style="flex: 1; overflow-y: auto">
       <template v-for="(category, idx) in state.categories" :key="category.id">
         <InsideCollapse
@@ -21,10 +27,6 @@
         </InsideCollapse>
       </template>
     </div>
-
-    <div style="flex: 1; overflow-y: hidden">
-      <ZoneList :page-size="50" @item-select="zoneItemSelect" @clear="clear" />
-    </div>
   </div>
 </template>
 
@@ -43,8 +45,6 @@
   import { useGlobalStore } from '@/stores/app'
   import { MapWrapper } from '@/js/mapWrapper'
   import { useMapStore } from '@/stores/map/map'
-  import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
-  import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
   import ZoneList from '@/components/common/DistList/DistList.vue'
   import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
   import { Style } from 'ol/style'

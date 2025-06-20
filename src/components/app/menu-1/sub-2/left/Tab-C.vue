@@ -1,5 +1,11 @@
 <template>
   <div class="" style="display: flex; flex-direction: column; height: 100%">
+    <div style="flex: 1; overflow-y: hidden">
+      <ZoneList :page-size="50" @item-select="zoneItemSelect" @clear="clear" />
+    </div>
+
+    <el-divider border-style="dashed" style="margin: 10px 0" />
+
     <div class="customScroll" style="flex: 1; overflow-y: auto">
       <template v-for="category in state.categories" :key="category.id">
         <InsideCollapse
@@ -20,10 +26,6 @@
           </template>
         </InsideCollapse>
       </template>
-    </div>
-
-    <div style="flex: 1; overflow-y: hidden">
-      <ZoneList :page-size="50" @item-select="zoneItemSelect" @clear="clear" />
     </div>
   </div>
 </template>

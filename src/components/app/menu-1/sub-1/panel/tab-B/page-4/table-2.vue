@@ -20,7 +20,8 @@
         :key="column.prop"
         :prop="column.prop"
         :label="column.label"
-        align="center"
+        align="right"
+        header-align="center"
       >
         <template #default="{ row }">
           {{

@@ -70,7 +70,7 @@
   import { onActivated, onBeforeMount, onMounted } from 'vue'
 
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
   import { API_INFO_CIAMS } from '@/config/config'
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
   import PagePane from '@/components/common/PagePane.vue'

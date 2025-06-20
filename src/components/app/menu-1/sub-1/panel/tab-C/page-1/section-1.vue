@@ -2,6 +2,16 @@
   <PagePane :title="['산업기반분석(ITA)']">
     <template #center>
       <div class="container">
+        <div class="top customScroll">
+          <div class="text-wrap">
+            - 지역 내 경제적 파급효과가 큰 선도산업 중 특히 LQ분석 지수가 높은 초기반산업은 화학섬유
+            제조업, 철도장비 제조업, 전구 및 조명장치 제조업, 합성고무 및 플라스틱 물질 제조업으로
+            나타났으며 <br />
+            - 앞으로 김천시 지역경제의 중추적 역할을 할 것으로 예상되는 신흥산업에는 특수 목적용
+            기계 제조업, 자동차 차체 및 트레일러 제조업, 구조용 금속제품, 탱크 및 증기발생기 제조업
+            등으로 나타남
+          </div>
+        </div>
         <div class="center">
           <div class="left">
             <div
@@ -15,7 +25,7 @@
             >
               <div class="border-box-square" style="">
                 <div style="margin: 8px 0">
-                  산업기반분석(ITA) 분석
+                  <span style="font-weight: bold">산업기반분석(ITA) 분석</span>
                   <span style="font-size: 12px; color: #616161">※지침 제8조 적용</span>
                 </div>
                 <span style="font-size: 12px; color: #616161"
@@ -50,7 +60,7 @@
 
                 <!--                <el-divider border-style="dashed" style="margin: 10px 0" />-->
 
-                <div style="font-size: 12px; color: #616161; margin-top: 15px">
+                <div style="font-size: 12px; color: #616161; margin-top: 15px; font-weight: bold">
                   &lt;ITA분석결과에 따른 산업분류&gt;
                 </div>
                 <table style="margin: 8px 0" class="customTable">
@@ -127,7 +137,7 @@
 
               <div class="border-box-square" style="">
                 <div style="margin: 8px 0">
-                  입지계수(LQ) 분석
+                  <span style="font-weight: bold">입지계수(LQ) 분석</span>
                   <span style="font-size: 12px; color: #616161">※지침 제8조 적용</span>
                 </div>
                 <span style="font-size: 12px; color: #616161"
@@ -195,16 +205,6 @@
                 <el-table-column label="LQ분석" prop="lqRec" align="center" width="100px" />
               </el-table>
             </div>
-          </div>
-        </div>
-        <div class="bottom customScroll">
-          <div class="text-wrap">
-            - 지역 내 경제적 파급효과가 큰 선도산업 중 특히 LQ분석 지수가 높은 초기반산업은 화학섬유
-            제조업, 철도장비 제조업, 전구 및 조명장치 제조업, 합성고무 및 플라스틱 물질 제조업으로
-            나타났으며 <br />
-            - 앞으로 김천시 지역경제의 중추적 역할을 할 것으로 예상되는 신흥산업에는 특수 목적용
-            기계 제조업, 자동차 차체 및 트레일러 제조업, 구조용 금속제품, 탱크 및 증기발생기 제조업
-            등으로 나타남
           </div>
         </div>
       </div>
@@ -333,6 +333,17 @@
 
       .right-bottom {
       }
+    }
+
+    .top {
+      height: 80px;
+      margin-bottom: 8px;
+      min-height: 100px;
+      max-height: 200px;
+
+      padding: 10px;
+      background: #fff;
+      border-radius: 8px;
     }
 
     .bottom {

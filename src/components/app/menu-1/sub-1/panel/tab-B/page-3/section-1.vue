@@ -2,11 +2,19 @@
   <PagePane :title="['사업체 밀도변화', '전체 사업체 밀도분석']">
     <template #center>
       <div class="container">
-        <div class="center">
+        <div class="top customScroll">
+          <div class="text-wrap">
+            - 최근 10년간(2011~2021년) 김천시의 전체 사업체는 도시지역을 중심으로 밀집되어 있던
+            과거와 달리, <br />
+            - 2016년 김천혁신도시가 들어온 이후로는 율곡동을 중심으로 확장되고 있는 것으로 나타남
+          </div>
+        </div>
+        <div class="center" style="position: relative">
           <div class="left customScroll">
-            <div class="container">
-
-            </div>
+            <Density title="전체 사업체 밀도분석" type="ALL" />
+          </div>
+          <div style="position: absolute; bottom: 10px; left: 10px; width: 80px">
+            <el-image :src="imgSrc" fit="cover" />
           </div>
         </div>
       </div>
@@ -22,13 +30,14 @@
   import { API_INFO_CIAMS } from '@/config/config'
   import PagePane from '@/components/common/PagePane.vue'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import Density from '@/components/app/menu-1/sub-1/panel/tab-B/page-3/Density.vue'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
 
   const cmmConfigStore = useCmmConfigStore()
   const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
-  const imgSrc = prefixPath + '527a91f3-3cd8-4187-aaeb-3e25c980b137'
+  const imgSrc = prefixPath + '590a2252-87bf-41e0-bfae-787cf5dbfa53'
 
   const title = computed(
     () => `${cmmConfigStore.cmmConfigState['SGG_NAME'].confValue} 산업여건변화`,
@@ -52,8 +61,9 @@
 
     .center {
       flex: 1;
-      height: 0px;
+      height: 0;
       display: flex;
+      overflow: hidden;
       flex-direction: row;
 
       .left {
@@ -75,6 +85,16 @@
       }
     }
 
+    .top {
+      height: 80px;
+      margin-bottom: 8px;
+      min-height: 100px;
+      max-height: 150px;
+
+      padding: 10px;
+      background: #fff;
+      border-radius: 8px;
+    }
     .bottom {
       height: 80px;
       margin-top: 8px;

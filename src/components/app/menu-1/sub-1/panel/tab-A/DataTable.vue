@@ -12,11 +12,24 @@
       scrollbar-always-on
       border
     >
+      <el-table-column
+        :label="tableColumns[0]?.label"
+        align="center"
+        :prop="`${tableColumns[0]?.name}`"
+      />
       <template v-for="(col, index) in tableColumns" :key="index">
-        <el-table-column :label="col.label" align="center" :prop="`${col.name}`">
-          <!--        <template #header>-->
-          <!--          {{ getColumnLabel(col) }}-->
-          <!--        </template>-->
+        <el-table-column
+          v-if="index > 0"
+          :label="col.label"
+          align="right"
+          header-align="center"
+          :prop="`${col.name}`"
+        >
+          <template #header>
+            <span style="text-align: center; display: inline-block"
+              >{{ getColumnLabel(col) }}
+            </span>
+          </template>
           <template #default="{ row }">
             {{ formatValue(row, col) }}
           </template>
@@ -66,12 +79,13 @@
   })
 
   const getColumnLabel = (column) => {
-    return column.unit ? `${column.label} (${column.unit})` : column.label
+    return column.label
+    // return column.unit ? `${column.label} (${column.unit})` : column.label
   }
 
   function formatValue(row, column) {
     const value = row[column.name]
-    if (value === 0) return '-'
+    if (CommonUtil.isEmpty(value)) return '-'
     if (['INTEGER', 'DOUBLE'].includes(column.dataType)) {
       return CommonUtil.comma(value)
     }

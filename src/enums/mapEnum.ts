@@ -36,6 +36,8 @@ export type MapLayerGroupType =
   | 'Menu-1-2-2'
   | 'Menu-1-2-3'
   | 'Menu-1-2-4'
+  | 'Menu-3-1-1'
+  | 'Menu-3-3-1'
   | 'Menu_1_Tab_A'
   | 'Menu_1_Tab_B'
   | 'Menu_1_Tab_C'
@@ -57,6 +59,8 @@ export type CommonLayerGroup =
   | 'COMMON_LAYER_GROUP_1-2-4'
   | 'COMMON_LAYER_GROUP_2'
   | 'COMMON_LAYER_GROUP_3'
+  | 'COMMON_LAYER_GROUP_3-1-1'
+  | 'COMMON_LAYER_GROUP_3-3-1'
 
 export type ViewLayerGroup = `VIEW_LAYER_GROUP_${string}`
 // export type ViewLayerGroup =
@@ -88,10 +92,9 @@ export const CommonLayerTypes: CommonLayerConfig = {
   },
   'Map-1-1-2': {
     'Menu-1-1-2': 'COMMON_LAYER_GROUP_1-1-2',
-    'Menu-1-1-3': 'COMMON_LAYER_GROUP_1-1-3',
   },
   'Map-1-1-3': {
-    'Menu-1-1-2': 'COMMON_LAYER_GROUP_1-1-3',
+    'Menu-1-1-3': 'COMMON_LAYER_GROUP_1-1-3',
   },
   'Map-1-2-1': {
     'Menu-1-2-1': 'COMMON_LAYER_GROUP_1-2-1',
@@ -113,10 +116,16 @@ export const CommonLayerTypes: CommonLayerConfig = {
     Menu_2_Sub_3: 'COMMON_LAYER_GROUP_2',
     Menu_2_Sub_4: 'COMMON_LAYER_GROUP_2',
   },
-  'Map-3': {
-    Menu_3_Sub_1: 'COMMON_LAYER_GROUP_3',
-    Menu_3_Sub_2: 'COMMON_LAYER_GROUP_3',
+  'Map-3-1-1': {
+    'Menu-3-1-1': 'COMMON_LAYER_GROUP_3-1-1',
   },
+  'Map-3-3-1': {
+    'Menu-3-3-1': 'COMMON_LAYER_GROUP_3-3-1',
+  },
+  // 'Map-3': {
+  //   Menu_3_Sub_1: 'COMMON_LAYER_GROUP_3',
+  //   Menu_3_Sub_2: 'COMMON_LAYER_GROUP_3',
+  // },
   // 'Map-Sub-1-1': {
   //   Menu_1_Tab_A: 'COMMON_LAYER_GROUP_1',
   //   Menu_1_Tab_B: 'COMMON_LAYER_GROUP_1',
@@ -159,16 +168,22 @@ export const ViewLayerTypes: ViewLayerConfig = {
   'Map-1-2-4': {
     'Menu-1-2-4': 'VIEW_LAYER_GROUP_1-2-4',
   },
+  'Map-3-1-1': {
+    'Menu-3-1-1': 'VIEW_LAYER_GROUP_3-1-1',
+  },
+  'Map-3-3-1': {
+    'Menu-3-3-1': 'VIEW_LAYER_GROUP_3-3-1',
+  },
   'Map-2': {
     Menu_2_Sub_1: 'VIEW_LAYER_GROUP_4',
     Menu_2_Sub_2: 'VIEW_LAYER_GROUP_5',
     Menu_2_Sub_3: 'VIEW_LAYER_GROUP_6',
     Menu_2_Sub_4: 'VIEW_LAYER_GROUP_9',
   },
-  'Map-3': {
-    Menu_3_Sub_1: 'VIEW_LAYER_GROUP_7',
-    Menu_3_Sub_2: 'VIEW_LAYER_GROUP_8',
-  },
+  // 'Map-3': {
+  //   Menu_3_Sub_1: 'VIEW_LAYER_GROUP_7',
+  //   Menu_3_Sub_2: 'VIEW_LAYER_GROUP_8',
+  // },
   // 'Map-Sub-1-1': {
   //   Menu_1_Tab_A: 'VIEW_LAYER_GROUP_1',
   //   Menu_1_Tab_B: 'VIEW_LAYER_GROUP_2',

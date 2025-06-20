@@ -2,6 +2,13 @@
   <PagePane :title="['제조업별 분석', '제조업별 종사자수']">
     <template #center>
       <div class="container">
+        <div class="top customScroll">
+          <div class="text-wrap">
+            - 도시공업지역 전기장비제조업, 자동차 및 트레일러 제조업 순으로 종사자수가 많음 <br />
+            - 지난 10년간 화학물질 및 화학제품 제조업의 증가가 가장 많으며, 자동차 및 트레일러
+            제조업은 지난 10년간 사업체수와 종사자수 모두 가장 많이 감소하였음
+          </div>
+        </div>
         <div class="center">
           <div class="left">
             <div
@@ -35,7 +42,7 @@
               <div>
                 <div class="header-title" style="">지역별 종사자 밀도</div>
                 <div class="" style="display: flex">
-                  <Table1 :data="density" />
+                  <Table1 :data="density" type="emp" />
                 </div>
               </div>
 
@@ -51,13 +58,6 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="bottom customScroll">
-          <div class="text-wrap">
-            - 도시공업지역 전기장비제조업, 자동차 및 트레일러 제조업 순으로 종사자수가 많음 <br />
-            - 지난 10년간 화학물질 및 화학제품 제조업의 증가가 가장 많으며, 자동차 및 트레일러
-            제조업은 지난 10년간 사업체수와 종사자수 모두 가장 많이 감소하였음
           </div>
         </div>
       </div>
@@ -295,6 +295,17 @@
 
       .right-bottom {
       }
+    }
+
+    .top {
+      height: 80px;
+      margin-bottom: 8px;
+      min-height: 100px;
+      max-height: 200px;
+
+      padding: 10px;
+      background: #fff;
+      border-radius: 8px;
     }
 
     .bottom {

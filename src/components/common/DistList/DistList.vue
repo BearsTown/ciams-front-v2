@@ -180,6 +180,10 @@
     flex-direction: column;
   }
 
+  .urbanInfo .container.info {
+    margin-top: 0;
+  }
+
   .urbanInfo .search .btn-group {
     flex: 1;
   }

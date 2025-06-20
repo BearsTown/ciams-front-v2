@@ -25,7 +25,7 @@
   const cmmConfigStore = useCmmConfigStore()
 
   const components: Record<Menu1Sub2TabIdType, DefineComponent> = {
-    TabA: TabAComp,
+    // TabA: TabAComp,
     TabB: TabBComp,
     TabC: TabCComp,
     TabD: TabDComp,

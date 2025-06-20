@@ -7,6 +7,10 @@
           <el-divider direction="vertical" v-if="index < title.length - 1" />
         </template>
       </div>
+
+      <div style="" v-if="$slots.sub">
+        <slot name="sub"></slot>
+      </div>
     </div>
 
     <div class="center customScroll">
@@ -79,7 +83,8 @@
       margin-bottom: 5px;
       display: flex;
       align-items: center;
-      justify-content: left;
+      //justify-content: left;
+      justify-content: space-between;
 
       .title {
         color: #282828;

@@ -1,13 +1,20 @@
 <template>
   <PagePane :title="title">
+    <template #sub>
+      <el-select v-model="selected" size="large" style="width: 250px" @change="handleSelectChange">
+        <el-option
+          v-for="group in groups"
+          :key="group.dataId"
+          :label="group.title"
+          :value="group.dataId"
+        />
+      </el-select>
+    </template>
+
     <template #center>
       <div class="container">
-        <div class="center" style="overflow: hidden">
-          <div
-            class="left"
-            v-if="groups?.[0]"
-            :style="groups.length === 1 ? { width: '100%' } : ''"
-          >
+        <div class="center">
+          <div class="left" v-if="selected">
             <div
               style="
                 display: flex;
@@ -17,16 +24,11 @@
                 box-shadow: none;
               "
             >
-              <DataComp
-                :title="groups[0]?.title"
-                :view="groups[0]?.view"
-                :data-id="groups[0]?.dataId"
-                @update:view="(newView) => groups[0]!.view = newView"
-              />
+              <DataComp view="chart" :data-id="selected" />
             </div>
           </div>
 
-          <div class="right" v-if="1 < groups.length">
+          <div class="right" v-if="selected">
             <div
               style="
                 display: flex;
@@ -36,12 +38,7 @@
                 box-shadow: none;
               "
             >
-              <DataComp
-                :title="groups[1]?.title"
-                :view="groups[1]?.view"
-                :data-id="groups[1]?.dataId"
-                @update:view="(newView) => groups[1]!.view = newView"
-              />
+              <DataComp view="table" :data-id="selected" />
             </div>
           </div>
         </div>
@@ -66,7 +63,7 @@
   import { onActivated, onBeforeMount, onMounted, ref, watch } from 'vue'
 
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
   import PagePane from '@/components/common/PagePane.vue'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   import CommonUtil from '@/utils/commonUtil'
@@ -77,6 +74,8 @@
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
 
   const cmmConfigStore = useCmmConfigStore()
+
+  const selected = ref()
 
   async function loadConfig() {
     try {
@@ -102,7 +101,11 @@
   async function loadGroup(statusId: number) {
     const { data } = await getStatusGroups(statusId)
     groups.value = data
+
+    selected.value = groups.value[0].dataId
   }
+
+  function handleSelectChange(select: number) {}
 
   watch(
     () => props.statusId,
@@ -140,7 +143,8 @@
       flex: 1;
       display: flex;
       flex-direction: row;
-      overflow-y: hidden;
+      //overflow-y: hidden;
+      overflow: hidden;
       height: 100%;
       gap: 8px;
 

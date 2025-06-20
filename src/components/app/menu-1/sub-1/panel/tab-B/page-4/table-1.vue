@@ -9,38 +9,46 @@
     scrollbar-always-on
   >
     <el-table-column label="구분" prop="name" align="center" />
-    <el-table-column label="면적(㎢)" prop="area" align="center">
+    <el-table-column label="면적(㎢)" prop="area" align="right" header-align="center">
       <template #default="{ row }">
-        {{ row?.area === 0 || row?.area === undefined ? '-' : CommonUtil.comma(row?.area) }}
+        {{ formatValue(row?.area) }}
       </template>
     </el-table-column>
-    <el-table-column label="사업체수(개소)" prop="corpCnt" align="center">
+    <el-table-column
+      v-if="type === 'corp'"
+      label="사업체수(개)"
+      prop="corpCnt"
+      align="right"
+      header-align="center"
+    >
       <template #default="{ row }">
-        {{
-          row?.corpCnt === 0 || row?.corpCnt === undefined ? '-' : CommonUtil.comma(row?.corpCnt)
-        }}
+        {{ formatValue(row?.corpCnt) }}
       </template>
     </el-table-column>
-    <el-table-column label="종사자수(인)" prop="empCnt" align="center">
+    <el-table-column
+      v-if="type === 'emp'"
+      label="종사자수(인)"
+      prop="empCnt"
+      align="right"
+      header-align="center"
+    >
       <template #default="{ row }">
-        {{ row?.empCnt === 0 || row?.empCnt === undefined ? '-' : CommonUtil.comma(row?.empCnt) }}
+        {{ formatValue(row?.empCnt) }}
       </template>
     </el-table-column>
-    <el-table-column label="종사자밀도(인/ha)" prop="density" align="center">
+    <el-table-column :label="density.label" prop="density" align="right" header-align="center">
       <template #default="{ row }">
-        {{
-          row?.density === 0 || row?.density === undefined ? '-' : CommonUtil.comma(row?.density)
-        }}
+        {{ formatValue(row?.[density.column]) }}
       </template>
     </el-table-column>
   </el-table>
 </template>
 
 <script setup lang="ts">
-  import { onActivated, onBeforeMount, onMounted } from 'vue'
+  import { computed, onActivated, onBeforeMount, onMounted } from 'vue'
 
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
   import CommonUtil from '@/utils/commonUtil'
 
   const globalStore = useGlobalStore()
@@ -49,9 +57,29 @@
   const props = withDefaults(
     defineProps<{
       data: []
+      type: 'corp' | 'emp'
     }>(),
     {},
   )
+
+  const density = computed(() => {
+    if (props.type === 'corp') {
+      return {
+        label: '사업체밀도(개/ha)',
+        column: 'corpDensity',
+      }
+    } else {
+      return {
+        label: '종사자밀도(인/ha)',
+        column: 'empDensity',
+      }
+    }
+  })
+
+  function formatValue(value) {
+    if (CommonUtil.isEmpty(value)) return '-'
+    return CommonUtil.comma(value)
+  }
 
   onMounted(async () => {})
 

@@ -67,8 +67,11 @@
   const props = withDefaults(
     defineProps<{
       mapType: MapType
+      useLand?: boolean
     }>(),
-    {},
+    {
+      useLand: true,
+    },
   )
 
   const mapStore = useMapStore(props.mapType)
@@ -89,7 +92,7 @@
     }
   }
 
-  const controls = ref<ControlButton[]>()
+  const controls = ref<ControlButton[]>([])
   const $mapSetting = ref<InstanceType<typeof MapSetting>>()
   const $miniMap = ref<InstanceType<typeof MiniMap>>()
 
@@ -221,8 +224,8 @@
 
     mapStore.interactionManager?.addInteraction('location-info', locationInfo)
 
-    controls.value = [
-      {
+    if (props.useLand) {
+      controls.value?.push({
         button: new ToggleButton({
           id: 'location-info',
           title: '필지정보',
@@ -237,7 +240,10 @@
             },
           },
         ],
-      },
+      })
+    }
+
+    controls.value = controls.value.concat([
       // {
       //   button: new GroupButton({
       //     id: 'group-measure',
@@ -391,22 +397,14 @@
       //     },
       //   ],
       // },
-    ]
+    ])
 
-    mapStore.controlManager?.addControl(controls.value[0].button.id, {
-      button: controls.value[0].button,
-      closeIgnores: controls.value[0].closeIgnores,
+    controls.value?.forEach((control) => {
+      mapStore.controlManager?.addControl(control.button.id, {
+        button: control.button as AbstractControlButton,
+        closeIgnores: control.closeIgnores,
+      })
     })
-
-    mapStore.controlManager?.addControl(controls.value[1].button.id, {
-      button: controls.value[1].button,
-      closeIgnores: controls.value[1].closeIgnores,
-    })
-
-    // mapStore.controlManager?.addControl(controls.value[3].button.id, {
-    //   button: controls.value[3].button,
-    //   closeIgnores: controls.value[3].closeIgnores,
-    // })
   })
 </script>
 

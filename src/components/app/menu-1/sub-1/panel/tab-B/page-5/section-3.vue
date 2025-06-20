@@ -2,6 +2,14 @@
   <PagePane :title="['제조업별 분석', '제조업의 유형별 현황']">
     <template #center>
       <div class="container">
+        <div class="top customScroll">
+          <div class="text-wrap">
+            - 김천시는 가공조립형과 생활관련형 제조업수가 447개로 가장 많았으나, 김천시 종사자의
+            84%에 해당하는 인력이 가공조립형, 기초소재형에 종사하고 있음 <br />
+            - 공업지역에서 일하는 기초소재형 종사자는 김천시 기초소재형 종사자의 63%에 해당하며,
+            도시공업지에서 일하는 기초소재형 종사자는 37%에 해당함
+          </div>
+        </div>
         <div class="center">
           <div class="left">
             <div
@@ -68,14 +76,6 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="bottom customScroll">
-          <div class="text-wrap">
-            - 김천시는 가공조립형과 생활관련형 제조업수가 447개로 가장 많았으나, 김천시 종사자의
-            84%에 해당하는 인력이 가공조립형, 기초소재형에 종사하고 있음 <br />
-            - 공업지역에서 일하는 기초소재형 종사자는 김천시 기초소재형 종사자의 63%에 해당하며,
-            도시공업지에서 일하는 기초소재형 종사자는 37%에 해당함
           </div>
         </div>
       </div>
@@ -358,6 +358,17 @@
 
       .right-bottom {
       }
+    }
+
+    .top {
+      height: 80px;
+      margin-bottom: 8px;
+      min-height: 100px;
+      max-height: 200px;
+
+      padding: 10px;
+      background: #fff;
+      border-radius: 8px;
     }
 
     .bottom {

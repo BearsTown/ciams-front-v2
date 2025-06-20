@@ -1,31 +1,22 @@
 <template>
-  <div class="detail">
-    <div class="header-title">{{ title }}</div>
-
-    <div class="top">
-      <el-tabs tab-position="top" v-model="activeYear" @tab-change="tabChangeListener">
-        <el-tab-pane v-for="year in years" :label="`${year}년`" :name="year" :key="year"
-          ><el-image
-            :src="getImageUrl(year)"
-            fit="scale-down"
-            :preview-src-list="[getImageUrl(year)]"
-            :preview-teleported="true"
-            :zoom-rate="1.2"
-        /></el-tab-pane>
-      </el-tabs>
-    </div>
-
-    <el-divider border-style="dashed" style="margin: 10px 0" />
-
-    <div class="bottom customScroll">
-      <div class="text-wrap">
-        <template v-for="(note, idx) in notes" :key="note">
-          - {{ note }}
-          <br v-if="idx < notes.length - 1" />
-        </template>
-      </div>
-    </div>
-  </div>
+  <el-space
+    wrap
+    style="display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; height: 100%"
+  >
+    <el-card v-for="year in years" :key="year">
+      <template #header>
+        <el-text tag="b">{{ year }}년</el-text>
+      </template>
+      <el-image
+        :src="getImageUrl(year)"
+        fit="scale-down"
+        :preview-src-list="[getImageUrl(year)]"
+        :preview-teleported="true"
+        :zoom-rate="1.2"
+        style="height: 100%; overflow: hidden"
+      />
+    </el-card>
+  </el-space>
 </template>
 
 <script setup lang="ts">

@@ -10,6 +10,7 @@
           ref="childRefs"
           :title="item.codeName"
           :is-active="activeName === item.code"
+          :is-disabled="item.useYn === 'N'"
           @change:active="(isActive: boolean) => handleCustomEvent(isActive, item.code, index)"
           style="font-size: 12px; text-align: center"
         />
@@ -42,26 +43,24 @@
 
     <div style="display: flex; flex-direction: column">
       <div style="margin-bottom: 3px">
-        <el-tag type="info">사업체</el-tag>
-        <el-text v-if="0 < corpLqs.length" style="margin-left: 5px">
+        <el-tag size="small" type="info">사업체</el-tag>
+        <el-text style="margin-left: 5px">
           {{ techTxt }}
           <span style="color: blue">
             {{ corpLqsText }}
           </span>
-          {{ endTxt }}
+          {{ corpLqsText ? endTxt : '' }}
         </el-text>
-        <el-text else> - </el-text>
       </div>
       <div>
-        <el-tag type="info">종사자</el-tag>
-        <el-text v-if="0 < workerLqs.length" style="margin-left: 5px">
+        <el-tag size="small" type="info">종사자</el-tag>
+        <el-text style="margin-left: 5px">
           {{ techTxt }}
           <span style="color: blue">
             {{ workerLqsText }}
           </span>
-          {{ endTxt }}
+          {{ workerLqsText ? endTxt : '' }}
         </el-text>
-        <el-text else> - </el-text>
       </div>
     </div>
   </div>
@@ -85,6 +84,7 @@
     defineProps<{
       lqParentCode: string
       desc: string
+      lqMapType: string
     }>(),
     {},
   )
@@ -256,18 +256,28 @@
 
   onMounted(async () => {
     const { data } = await getCodeList(props.lqParentCode)
+    const { data: techData } = await getHighTech({
+      parentTechCd: props.lqParentCode,
+    })
+
+    const updatedData = data.map((item) => ({
+      ...item,
+      useYn:
+        techData && techData.techs && techData.techs.length > 0
+          ? techData.techs.some((tech) => tech.techCd === item.code)
+            ? 'Y'
+            : 'N'
+          : 'N',
+    }))
+
     items.value = [
       {
         code: props.lqParentCode,
         codeName: '전체',
       },
-    ].concat(data)
+    ].concat(updatedData)
 
     activeName.value = items.value[0].code
-
-    const { data: techData } = await getHighTech({
-      parentTechCd: props.lqParentCode,
-    })
 
     if (CommonUtil.isEmpty(techData)) {
       techTxt.value = `-`
@@ -306,27 +316,28 @@
     option.value.series[0].data = tableData.value.map((item, index) => ({
       name: item.sggNm,
       value: [item.corpLq, item.workerLq],
-      itemStyle: { color: colors[index] },
+      itemStyle: { color: sggName.value === item.sggNm ? 'red' : colors[index] },
     }))
 
     updateData()
   }
+  const sggName = computed(() => `${cmmConfigStore.cmmConfigState['SGG_NAME']?.confValue}`)
 
-  const type = ref('corpLq')
+  // const lqMapType = ref('corpLq')
 
   function updateData() {
     const levels = 7
     const startColor = '#cccccc'
     const baseColor = '#004574'
 
-    const datas = tableData.value.map((item, index) => item[type.value])
+    const datas = tableData.value.map((item, index) => item[props.lqMapType])
     if (CommonUtil.isEmpty(datas)) {
-      emits('update-data', null)
+      emits('update-data', {})
     } else {
       const result = styleUtil.createLegend(datas, levels, startColor, baseColor)
 
       emits('update-data', {
-        type: type.value,
+        type: props.lqMapType,
         data: tableData.value,
         styleInfo: result,
       })
@@ -340,9 +351,12 @@
   onBeforeMount(() => {})
 
   onActivated(() => {
-    console.log(`active`)
+    updateData()
+    // if (!CommonUtil.isEmpty(tableData.value)) updateData()
+  })
 
-    if (!CommonUtil.isEmpty(tableData.value)) updateData()
+  defineExpose({
+    updateData,
   })
 </script>
 

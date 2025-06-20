@@ -10,21 +10,24 @@ export async function test_getMenu1_2_5Data(type: number): Promise<any[]> {
             area: 1005.43,
             corpCnt: 1278,
             empCnt: 13986,
-            density: 0.14,
+            corpDensity: 0.01,
+            empDensity: 0.14,
           },
           {
             name: '공업지역',
             area: 6.43,
             corpCnt: 202,
             empCnt: 8045,
-            density: 12.51,
+            corpDensity: 0.31,
+            empDensity: 12.51,
           },
           {
             name: '도시공업지역',
             area: 2.64,
             corpCnt: 69,
             empCnt: 4555,
-            density: 17.26,
+            corpDensity: 0.26,
+            empDensity: 17.26,
           },
         ])
       } else if (type === 2) {
