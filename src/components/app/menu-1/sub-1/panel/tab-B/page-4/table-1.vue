@@ -11,7 +11,7 @@
     <el-table-column label="구분" prop="name" align="center" />
     <el-table-column label="면적(㎢)" prop="area" align="right" header-align="center">
       <template #default="{ row }">
-        {{ formatValue(row?.area) }}
+        {{ formatValue(row?.area.toFixed(2)) }}
       </template>
     </el-table-column>
     <el-table-column

@@ -11,7 +11,7 @@ import {
 import { Geometry, LineString, Point, Polygon } from 'ol/geom.js'
 import { getArea, getLength } from 'ol/sphere.js'
 import { GeometryFunction } from 'ol/style/Style'
-import { DrawType, MeasureType } from '@/types/map'
+import { MeasureType } from '@/types/map'
 import { Feature } from 'ol'
 
 const dashMeasure = new Style({
@@ -591,6 +591,118 @@ const locationInfoStyle = (feature: Feature) => {
   })
 }
 
+const commonMeasureStyles = {
+  lineLabelStyle: new Style({
+    text: new Text({
+      font: '12px Pretendard, sans-serif',
+      fill: new Fill({
+        color: '#ffffff',
+      }),
+      backgroundFill: new Fill({
+        color: 'rgba(0, 0, 0, 0.50)',
+      }),
+      padding: [1, 1, 1, 1],
+      textBaseline: 'bottom',
+      offsetY: -12,
+    }),
+    image: new RegularShape({
+      radius: 6,
+      points: 3,
+      angle: Math.PI,
+      displacement: [0, 8],
+      fill: new Fill({
+        color: 'rgba(0, 0, 0, 0.50)',
+      }),
+    }),
+    zIndex: 1000,
+  }),
+  measureLabelStyle: new Style({
+    text: new Text({
+      font: '12px Pretendard, sans-serif',
+      fill: new Fill({
+        color: '#ffffff',
+      }),
+      backgroundFill: new Fill({
+        color: '#7aaad1',
+      }),
+      padding: [6, 11, 6, 11],
+      textBaseline: 'bottom',
+      offsetY: -16,
+      offsetX: 0,
+    }),
+    zIndex: 1000,
+  }),
+}
+
+const measureLineStyle = {
+  geometryStyle: new Style({
+    image: new Circle({
+      radius: 3,
+      stroke: new Stroke({
+        color: 'rgb(255, 0, 94)',
+        width: 2,
+      }),
+      fill: new Fill({
+        color: 'white',
+      }),
+    }),
+    stroke: new Stroke({
+      color: 'rgb(255, 0, 94)',
+      width: 3,
+    }),
+    zIndex: 1000,
+  }),
+  lineBreakPointStyle: new Style({
+    image: new CircleStyle({
+      radius: 4,
+      stroke: new Stroke({
+        color: 'rgb(255, 0, 94)',
+        width: 2,
+      }),
+      fill: new Fill({
+        color: '#ffffff',
+      }),
+    }),
+    zIndex: 1000,
+  }),
+  ...commonMeasureStyles,
+}
+
+// measureAreaStyle with unique geometryStyle
+const measureAreaStyle = {
+  geometryStyle: new Style({
+    image: new Circle({
+      radius: 3,
+      stroke: new Stroke({
+        color: 'rgb(0, 88, 255)',
+        width: 2,
+      }),
+      fill: new Fill({
+        color: 'white',
+      }),
+    }),
+    stroke: new Stroke({
+      color: 'rgb(0, 88, 255)',
+      width: 3,
+    }),
+    zIndex: 1000,
+  }),
+  lineBreakPointStyle: new Style({
+    image: new CircleStyle({
+      radius: 4,
+      stroke: new Stroke({
+        color: 'rgb(0, 88, 255)',
+        width: 2,
+      }),
+      fill: new Fill({
+        color: '#ffffff',
+      }),
+    }),
+    zIndex: 1000,
+  }),
+  ...commonMeasureStyles,
+}
+
 export {
   lineStyle,
   pointStyle,
@@ -605,4 +717,6 @@ export {
   customVectorChangeColorStyle,
   measureStyleFunction,
   locationInfoStyle,
+  measureLineStyle,
+  measureAreaStyle,
 }

@@ -73,6 +73,10 @@
       }
     },
   )
+
+  defineExpose({
+    selectAreaItem,
+  })
 </script>
 
 <style scoped lang="scss">

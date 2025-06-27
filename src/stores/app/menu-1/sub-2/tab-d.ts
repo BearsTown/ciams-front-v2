@@ -63,7 +63,7 @@ interface State {
 const mapType: MapType = 'Map-1-2-4'
 const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
-export const useMenu1_2_4Store = defineStore('useMenu1-2-4Store', () => {
+export const useMenu1_2_4Store = defineStore('menu1-2-4Store', () => {
   const state: State = reactive({
     categories: ref([]),
     attributes: ref([]),
@@ -258,7 +258,7 @@ export const useMenu1_2_4Store = defineStore('useMenu1-2-4Store', () => {
             type: 'wms',
           },
           layerType: 'wms',
-          isSingleTile: false,
+          isSingleTile: true,
           opacity: 0.8,
           zIndex: 2222 + index,
         })
@@ -297,15 +297,21 @@ export const useMenu1_2_4Store = defineStore('useMenu1-2-4Store', () => {
   }
 
   async function loadDistFeatures(distNo: string) {
+    const featureRequestProps: any = {
+      layers: 'CIAMS_DIST',
+      srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
+    }
+
+    if (!commonUtil.isEmpty(distNo)) {
+      featureRequestProps.filter = likeFilter('dist_no', distNo)
+    }
+
     const res = await fetchFeatures({
       url: mapStudioUrl,
       key: '585C994F-2629-20C9-3EB8-619B3547E42F',
-      featureRequestProps: {
-        layers: 'CIAMS_DIST',
-        filter: likeFilter('dist_no', distNo),
-        srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
-      },
+      featureRequestProps,
     })
+
     let text = await res.text()
     text = text.replace(/\n/gi, '\\r\n')
     const features = new GeoJSON().readFeatures(text) as Feature[]
@@ -320,14 +326,33 @@ export const useMenu1_2_4Store = defineStore('useMenu1-2-4Store', () => {
         padding: [200, 100, 200, 100],
       })
 
-    if (!commonUtil.isEmpty(features)) {
+    if (!commonUtil.isEmpty(features) && !commonUtil.isEmpty(distNo)) {
       setSelectDist(features[0].getProperties()['DIST_NO'])
       setSelectDistFeature(features[0])
+    } else {
+      setSelectDist('ALL')
+      setSelectDistFeature(undefined)
     }
   }
 
   async function loadIndustryFeatures() {
-    if (commonUtil.isEmpty(state.activeDistFeature)) return false
+    const projectionCode = mapWrap.value?.getUitMap().getView().getProjection().getCode()
+
+    const filterCondition = !commonUtil.isEmpty(state.activeDistFeature)
+      ? intersects('SHAPE', state.activeDistFeature!.getGeometry()!, projectionCode)
+      : undefined
+
+    const wfsOptions: any = {
+      srsName: projectionCode,
+      featureNS: 'http://www.opengis.net/wfs',
+      featurePrefix: 'feature',
+      outputFormat: 'application/json',
+      featureTypes: [state.activeYear!.layerName!],
+    }
+
+    if (filterCondition) {
+      wfsOptions.filter = filterCondition
+    }
 
     const points = await fetch(
       urlWithParams(mapStudioUrl + '/uwfs', {
@@ -335,20 +360,7 @@ export const useMenu1_2_4Store = defineStore('useMenu1-2-4Store', () => {
       }),
       {
         method: 'POST',
-        body: new XMLSerializer().serializeToString(
-          new WFS().writeGetFeature({
-            srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
-            featureNS: 'http://www.opengis.net/wfs',
-            featurePrefix: 'feature',
-            outputFormat: 'application/json',
-            featureTypes: [state.activeYear!.layerName!],
-            filter: intersects(
-              'SHAPE',
-              state.activeDistFeature!.getGeometry()!,
-              mapWrap.value?.getUitMap().getView().getProjection().getCode(),
-            ),
-          }),
-        ),
+        body: new XMLSerializer().serializeToString(new WFS().writeGetFeature(wfsOptions)),
       },
     )
 
@@ -357,20 +369,16 @@ export const useMenu1_2_4Store = defineStore('useMenu1-2-4Store', () => {
     const features = new GeoJSON().readFeatures(text) as Feature[]
 
     // const fLayer = getSelectDetail()?.layer?.getLayer() as UitWFSLayer
-    if (features) {
-      // fLayer.clear()
-      // fLayer.addFeatures(features)
-
-      getSelectDetail()!.features = markRaw(features)
-    }
-
-    // const fLayer = getSelectDetail()?.layer?.getLayer() as UitWFSLayer
     // if (fLayer) {
     //   fLayer.clear()
     //   fLayer.addFeatures(features)
     //
-    //   getSelectDetail()!.features = markRaw(features)
+    //   // getSelectDetail()!.features = markRaw(features)
     // }
+
+    if (features) {
+      getSelectDetail()!.features = markRaw(features)
+    }
   }
 
   // 년도별 상세 데이터 초기화

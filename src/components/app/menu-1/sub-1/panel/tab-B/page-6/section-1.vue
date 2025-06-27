@@ -1,5 +1,9 @@
 <template>
   <PagePane :title="['기술업종별 LQ분석', '기술혁신정도']">
+    <template #sub>
+      <Source :list="sources" />
+    </template>
+
     <template #center>
       <div class="container">
         <div class="top customScroll">
@@ -127,6 +131,9 @@
   import VectorSource from 'ol/source/Vector'
   import { Style } from 'ol/style'
   import Legend from '@/components/app/menu-1/sub-1/panel/tab-B/page-6/Legend.vue'
+  import Source from '@/components/common/Source.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const globalStore = useGlobalStore()
   const menu1Sub1Tab2Page6Store = useMenu1Sub1Tab2Page6Store()
@@ -153,6 +160,7 @@
   const lqPaneRef = ref<LQPane>()
 
   const legendList = ref([])
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
   const sggTxt = computed(() => `${cmmConfigStore.cmmConfigState['SGG_NAME']?.confValue}는 `)
   const corpLqsText = computed(() => corpLqs.value.join(', '))
@@ -326,6 +334,13 @@
   }
 
   onMounted(async () => {
+    const { data: sourceData } = await getSources({
+      category: '산업현황분석',
+      targetId: lqParentCode.value,
+    })
+
+    sources.value = sourceData[0]?.sources
+
     const { data: code } = await getCode(lqParentCode.value)
     const { data: tech } = await getHighTech({
       parentTechCd: lqParentCode.value,

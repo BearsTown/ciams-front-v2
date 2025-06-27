@@ -5,7 +5,6 @@ import { useGlobalStore } from '@/stores/app/index.js'
 import { useAuthStore } from '@/stores/auth.js'
 import tokenUtil from '@/utils/tokenUtil'
 import commonUtil from '@/utils/commonUtil'
-import { MapType } from '@/enums/mapEnum'
 import { storeToRefs } from 'pinia'
 
 import menu1Icon from '@/assets/svg/menu/menu-1.svg'
@@ -333,22 +332,23 @@ const routes: RouteRecordRaw[] = [
                   collapse: true,
                 },
                 right: {
-                  visible: true,
-                  collapse: true,
+                  visible: false,
+                  collapse: false,
                 },
                 center: {
-                  visible: true,
+                  visible: false,
                 },
                 panel: {
-                  visible: false,
+                  visible: true,
                 },
               },
             },
             components: {
               left: () => import('@/views/app/menu-3/sub-3/left'),
-              center: () => import('@/views/app/menu-3/sub-3/center'),
-              right: () => import('@/views/app/menu-3/sub-3/right'),
-              locationInfo: () => import('@/views/app/menu-3/sub-3/locInfo'),
+              panel: () => import('@/views/app/menu-3/sub-3/panel'),
+              // center: () => import('@/views/app/menu-3/sub-3/center'),
+              // right: () => import('@/views/app/menu-3/sub-3/right'),
+              // locationInfo: () => import('@/views/app/menu-3/sub-3/locInfo'),
             },
           },
         ],

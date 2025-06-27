@@ -257,6 +257,7 @@ export type MapControlType =
   | 'full-extent'
   | 'mini-map'
   | 'map-roadview'
+  | 'measure-refresh'
 
 export type BaseMap = 'vWorld' | 'kakao'
 

@@ -65,7 +65,7 @@
               :prop="`${item.name}.ratio`"
             >
               <template #default="{ row: { data } }">
-                {{ data?.[item.name].ratio === 0 ? '-' : data?.[item.name].ratio }}
+                {{ data?.[item.name].ratio === 0 ? '-' : data?.[item.name].ratio.toFixed(1) }}
               </template>
             </el-table-column>
           </el-table-column>

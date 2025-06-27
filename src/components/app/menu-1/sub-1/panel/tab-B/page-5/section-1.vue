@@ -1,5 +1,9 @@
 <template>
   <PagePane :title="['제조업별 분석', '제조업별 사업체수']">
+    <template #sub>
+      <Source :list="sources" />
+    </template>
+
     <template #center>
       <div class="container">
         <div class="top customScroll">
@@ -39,23 +43,32 @@
                 box-shadow: none;
               "
             >
-              <div>
+              <div style="display: flex; flex-direction: column">
                 <div class="header-title" style="">지역별 사업체 밀도</div>
-                <div class="" style="display: flex">
-                  <Table1 :data="density" type="corp" />
+                <div class="" style="display: flex; height: 100%">
+                  <Table1 :data="density" type="corp" style="width: 65%" />
+                  <v-chart class="chart" :option="densityOption" autoresize style="width: 35%" />
                 </div>
               </div>
 
-              <div style="display: flex; flex-direction: column; height: 100%; overflow-y: hidden">
-                <div style="margin-top: 8px; overflow-y: hidden; flex: 1">
+              <div style="display: flex; flex-direction: column; flex: 1; overflow-y: hidden">
+                <div
+                  style="
+                    margin-top: 8px;
+                    overflow-y: hidden;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                  "
+                >
                   <div class="header-title" style="">제조업별 현황</div>
                   <Table2 :data="industry" :columns="columns" group="사업체수(개소)" />
                 </div>
+              </div>
 
-                <div style="display: flex; flex-direction: column; flex: 1; margin-top: 8px">
-                  <div class="header-title" style="">도시공업지역 제조업 10년간 사업체수 증감</div>
-                  <v-chart class="chart" :option="chartData1" autoresize />
-                </div>
+              <div style="display: flex; flex-direction: column; flex: 1; margin-top: 8px">
+                <div class="header-title" style="">도시공업지역 제조업 10년간 사업체수 증감</div>
+                <v-chart class="chart" :option="chartData1" autoresize />
               </div>
             </div>
           </div>
@@ -82,6 +95,9 @@
   } from '@/api/app/menu-1/sub-1/tab-b/page-5'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   import CommonUtil from '@/utils/commonUtil'
+  import Source from '@/components/common/Source.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
@@ -94,9 +110,11 @@
 
   const density = ref([])
   const industry = ref([])
+  const densityOption = ref({})
   const increase = ref([])
   const chartData = ref({})
   const chartData1 = ref({})
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
   const columns = computed(() => {
     return [
@@ -116,9 +134,47 @@
   })
 
   onMounted(async () => {
+    const { data: sourceData } = await getSources({
+      category: '산업현황분석',
+      targetId: 'B004',
+    })
+
+    sources.value = sourceData[0]?.sources
+
     density.value = await test_getMenu1_2_5Data(1)
     industry.value = await test_getMenu1_1_2_5(1)
     increase.value = await test_getMenu1_1_2_5Increase(1)
+
+    densityOption.value = {
+      tooltip: {
+        trigger: 'item',
+      },
+      // legend: {
+      //   bottom: true,
+      // },
+      series: [
+        {
+          type: 'pie',
+          radius: '80%',
+          avoidLabelOverlap: false,
+          data: density.value.map(({ name, corpDensity }) => ({ value: corpDensity, name })),
+          label: {
+            show: true,
+            position: 'inside',
+            formatter: '{c}',
+            color: '#fff',
+            fontSize: 14,
+          },
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+        },
+      ],
+    }
 
     chartData.value = {
       legend: {

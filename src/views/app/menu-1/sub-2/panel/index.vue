@@ -53,7 +53,8 @@
 <style scoped lang="scss">
   .panel {
     height: 100%;
-    padding: 15px 12px;
+    //padding: 15px 12px;
+    padding: 10px;
     background-color: #f4f4f4;
   }
 </style>

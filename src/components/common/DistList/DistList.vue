@@ -115,28 +115,37 @@
     responseData(data)
   }
 
-  function clear() {
+  async function clear() {
     keyword.value = ''
 
-    runSearch()
+    await runSearch()
     emits('clear')
   }
 
-  function keyEnter() {
-    runSearch()
-  }
+  // function keyEnter() {
+  //   await runSearch()
+  // }
 
-  function runSearch() {
+  async function runSearch() {
     const params = {
       keyword: keyword.value,
     }
 
     setParams(params)
-    search(1, pageInfo.currentPageSize)
+    await search(1, pageInfo.currentPageSize)
   }
 
   function responseData(data: GisCiamsDistDTO.Search.Result) {
-    distItems.value = data.list
+    distItems.value = [
+      {
+        rn: 0,
+        distArea: data.list.reduce((acc, item) => acc + item.distArea, 0),
+        distNo: '',
+        distName: '대상지 총괄',
+      },
+      ...data.list,
+    ]
+
     pageObj.setPageData(data.page)
   }
 
@@ -149,23 +158,25 @@
   }
 
   onMounted(async () => {
-    runSearch()
+    await runSearch()
+
+    distPageListRef?.value.selectAreaItem(0)
 
     //메인화면 성장관리구역 링크 실행
     // if (isMainLink.value == true) {
     //   mittBus.emit('ciamsPlan-area-item-select', planArea.value)
 
     //지도 로딩 완료 전 호출시 제대로 호출이 안됨
-    setTimeout(() => {
-      const baseLayer = 'CIAMS_PLANID_PLAN'
-      // mapUtil.selectHighLight(
-      //   planArea.value.planId,
-      //   'PLAN',
-      //   baseLayer.replace('PLANID', planArea.value.planId.toUpperCase()),
-      //   equalTo('AREA_NAME', planArea.value.name),
-      // )
-      // planAreaStore.setIsMainLink(false)
-    }, 500)
+    // setTimeout(() => {
+    // const baseLayer = 'CIAMS_PLANID_PLAN'
+    // mapUtil.selectHighLight(
+    //   planArea.value.planId,
+    //   'PLAN',
+    //   baseLayer.replace('PLANID', planArea.value.planId.toUpperCase()),
+    //   equalTo('AREA_NAME', planArea.value.name),
+    // )
+    // planAreaStore.setIsMainLink(false)
+    // }, 500)`
     // }
   })
 

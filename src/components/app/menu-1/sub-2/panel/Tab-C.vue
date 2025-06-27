@@ -1,25 +1,34 @@
 <template>
-  <div class="container">
-    <div class="center">
-      <div class="left">
-        <MapWrapperView v-if="mapConfig" :map-type="mapType" :map-config="mapConfig">
-          <template #control>
-            <Controls :map-type="mapType" :use-land="false" />
-          </template>
-        </MapWrapperView>
+  <PagePane :title="['도시공업지역 현황', '사업체현황']">
+    <template #sub>
+      <Source :list="sources" />
+    </template>
+
+    <template #center>
+      <div class="container">
+        <div class="top customScroll">
+          <div class="text-wrap">{{ text }}</div>
+        </div>
+
+        <div class="center">
+          <div class="left">
+            <MapWrapperView v-if="mapConfig" :map-type="mapType" :map-config="mapConfig">
+              <template #control>
+                <Controls :map-type="mapType" :use-land="false" />
+              </template>
+            </MapWrapperView>
+          </div>
+          <div class="right">
+            <TabCDetail />
+          </div>
+        </div>
       </div>
-      <div class="right">
-        <TabCDetail />
-      </div>
-    </div>
-    <div class="bottom customScroll">
-      <div class="text-wrap">{{ text }}</div>
-    </div>
-  </div>
+    </template>
+  </PagePane>
 </template>
 
 <script setup lang="ts">
-  import { computed, onActivated, onBeforeMount, onMounted, reactive, ref } from 'vue'
+  import { computed, onActivated, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
 
   import { useGlobalStore } from '@/stores/app'
   import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
@@ -44,21 +53,24 @@
   import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
   import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
   import TabCDetail from '@/components/app/menu-1/sub-2/panel/Tab-C-Detail.vue'
+  import Source from '@/components/common/Source.vue'
+  import PagePane from '@/components/common/PagePane.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const globalStore = useGlobalStore()
+  const cmmConfigStore = useCmmConfigStore()
   const menu1sub2store = useMenu1Sub2store()
   const menu1_2_3Store = useMenu1_2_3Store()
-  const cmmConfigStore = useCmmConfigStore()
 
   const mapConfig = ref<MapWrapperConfig>()
-  const test = ref(false)
-  // const mapType = MapType.MAP_1
   const mapType: MapType = 'Map-1-2-3'
   const mapLayerGroupType: MapLayerGroupType = 'Menu-1-2-3'
   const commonLayerType: CommonLayerGroup = 'COMMON_LAYER_GROUP_1-2-3'
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
   const mapStore = useMapStore(mapType)
   const mapWrap = ref<MapWrapper>()
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
   const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
@@ -255,13 +267,24 @@
     return ''
   })
 
-  function makeChart() {
-    test.value = true
-  }
+  watch(
+    () => state.activeCategory?.id,
+    async (id) => {
+      if (CommonUtil.isEmpty(id)) {
+        sources.value = []
+      } else {
+        const { data: sourceData } = await getSources({
+          category: '도시공업지역현황',
+          targetId: id,
+        })
 
-  onMounted(async () => {
-    makeChart()
-  })
+        sources.value = sourceData[0]?.sources
+      }
+    },
+    { immediate: true },
+  )
+
+  onMounted(async () => {})
 
   onBeforeMount(() => {
     init()
@@ -335,6 +358,17 @@
         background: #fff;
         border-radius: 8px;
       }
+    }
+
+    .top {
+      height: 80px;
+      margin-bottom: 8px;
+      min-height: 100px;
+      max-height: 200px;
+
+      padding: 10px;
+      background: #fff;
+      border-radius: 8px;
     }
 
     .bottom {

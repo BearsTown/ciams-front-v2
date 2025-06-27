@@ -20,7 +20,6 @@ import Feature from 'ol/Feature'
 import { urlWithParams } from '@uitgis/ol-ugis-test/util'
 import { Circle, Stroke, Style } from 'ol/style.js'
 import { Fill } from 'ol/style'
-import { Heatmap as HeatmapLayer } from 'ol/layer'
 import UitUWMSLayer from '@/stores/map/uwmsLayer'
 import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
 
@@ -64,7 +63,7 @@ interface State {
 const mapType: MapType = 'Map-1-2-3'
 const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
-export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
+export const useMenu1_2_3Store = defineStore('menu1-2-3Store', () => {
   const state: State = reactive({
     categories: ref([]),
     attributes: ref([]),
@@ -193,7 +192,7 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
     state.activeDistId = id
   }
 
-  function setSelectDistFeature(fe: Feature) {
+  function setSelectDistFeature(fe: Feature | undefined) {
     state.activeDistFeature = fe
   }
 
@@ -259,7 +258,7 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
             type: 'wms',
           },
           layerType: 'wms',
-          isSingleTile: false,
+          isSingleTile: true,
           opacity: 0.8,
           zIndex: 2222 + index,
         })
@@ -298,15 +297,21 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
   }
 
   async function loadDistFeatures(distNo: string) {
+    const featureRequestProps: any = {
+      layers: 'CIAMS_DIST',
+      srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
+    }
+
+    if (!commonUtil.isEmpty(distNo)) {
+      featureRequestProps.filter = likeFilter('dist_no', distNo)
+    }
+
     const res = await fetchFeatures({
       url: mapStudioUrl,
       key: '585C994F-2629-20C9-3EB8-619B3547E42F',
-      featureRequestProps: {
-        layers: 'CIAMS_DIST',
-        filter: likeFilter('dist_no', distNo),
-        srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
-      },
+      featureRequestProps,
     })
+
     let text = await res.text()
     text = text.replace(/\n/gi, '\\r\n')
     const features = new GeoJSON().readFeatures(text) as Feature[]
@@ -321,14 +326,33 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
         padding: [200, 100, 200, 100],
       })
 
-    if (!commonUtil.isEmpty(features)) {
+    if (!commonUtil.isEmpty(features) && !commonUtil.isEmpty(distNo)) {
       setSelectDist(features[0].getProperties()['DIST_NO'])
       setSelectDistFeature(features[0])
+    } else {
+      setSelectDist('ALL')
+      setSelectDistFeature(undefined)
     }
   }
 
   async function loadIndustryFeatures() {
-    if (commonUtil.isEmpty(state.activeDistFeature)) return false
+    const projectionCode = mapWrap.value?.getUitMap().getView().getProjection().getCode()
+
+    const filterCondition = !commonUtil.isEmpty(state.activeDistFeature)
+      ? intersects('SHAPE', state.activeDistFeature!.getGeometry()!, projectionCode)
+      : undefined
+
+    const wfsOptions: any = {
+      srsName: projectionCode,
+      featureNS: 'http://www.opengis.net/wfs',
+      featurePrefix: 'feature',
+      outputFormat: 'application/json',
+      featureTypes: [state.activeYear!.layerName!],
+    }
+
+    if (filterCondition) {
+      wfsOptions.filter = filterCondition
+    }
 
     const points = await fetch(
       urlWithParams(mapStudioUrl + '/uwfs', {
@@ -336,20 +360,7 @@ export const useMenu1_2_3Store = defineStore('useMenu1-2-3Store', () => {
       }),
       {
         method: 'POST',
-        body: new XMLSerializer().serializeToString(
-          new WFS().writeGetFeature({
-            srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
-            featureNS: 'http://www.opengis.net/wfs',
-            featurePrefix: 'feature',
-            outputFormat: 'application/json',
-            featureTypes: [state.activeYear!.layerName!],
-            filter: intersects(
-              'SHAPE',
-              state.activeDistFeature!.getGeometry()!,
-              mapWrap.value?.getUitMap().getView().getProjection().getCode(),
-            ),
-          }),
-        ),
+        body: new XMLSerializer().serializeToString(new WFS().writeGetFeature(wfsOptions)),
       },
     )
 

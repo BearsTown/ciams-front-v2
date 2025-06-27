@@ -1,6 +1,8 @@
 <template>
   <PagePane :title="title">
     <template #sub>
+      <Source :list="sources" />
+
       <el-select v-model="selected" size="large" style="width: 250px" @change="handleSelectChange">
         <el-option
           v-for="group in groups"
@@ -67,8 +69,10 @@
   import PagePane from '@/components/common/PagePane.vue'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   import CommonUtil from '@/utils/commonUtil'
-  import { getStatusGroups } from '@/api/app/menu-1/sub-1/tab-a'
+  import { getStatusInfo } from '@/api/app/menu-1/sub-1/tab-a'
   import DataComp from '@/components/app/menu-1/sub-1/panel/tab-A/DataComponent.vue'
+  import Source from '@/components/common/Source.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
@@ -97,10 +101,12 @@
   )
 
   const groups = ref<any[]>([])
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
   async function loadGroup(statusId: number) {
-    const { data } = await getStatusGroups(statusId)
-    groups.value = data
+    const { data } = await getStatusInfo(statusId)
+    groups.value = data.groups
+    sources.value = data.sources[0]?.sources
 
     selected.value = groups.value[0].dataId
   }

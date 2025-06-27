@@ -1,5 +1,9 @@
 <template>
   <PagePane :title="title">
+    <template #sub>
+      <Source :list="sources" />
+    </template>
+
     <template #center>
       <div class="container">
         <div class="top customScroll">
@@ -175,11 +179,16 @@
   import { useMenu1Sub1Tab3Page1Store } from '@/stores/app/menu-1/sub-1/tab-C/page-1'
   import { API_INFO_CIAMS } from '@/config/config'
   import CommonUtil from '@/utils/commonUtil'
+  import Source from '@/components/common/Source.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
 
   const menu1Sub1Tab3Page1Store = useMenu1Sub1Tab3Page1Store()
+
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
   const repData = ref<IndustryStatus.IndustryRep[]>([])
   const statusData = ref<IndustryStatus.IndustryStatusData[]>([])
@@ -274,6 +283,13 @@
   // }
 
   onMounted(async () => {
+    const { data: sourceData } = await getSources({
+      category: '산업특성분석',
+      targetId: props.type,
+    })
+
+    sources.value = sourceData[0]?.sources
+
     const { data: rawStatusData } = await getIndustryStatus({
       type: props.type,
     })

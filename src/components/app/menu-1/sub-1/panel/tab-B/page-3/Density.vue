@@ -23,24 +23,17 @@
   import { computed, onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
   import { useGlobalStore } from '@/stores/app'
-  // import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  // import { useMenu1_2_3Store } from '@/stores/app/menu-1/sub-2/tab-c'
-  import { getDensityInfos } from '@/api/app/menu-1/sub-1/tab-b/page-3'
   import { API_INFO_CIAMS } from '@/config/config'
   import { Density } from '@/api/app/menu-1/sub-1/tab-b/model'
 
   const globalStore = useGlobalStore()
   const cmmConfigStore = useCmmConfigStore()
-  // const menu1sub2store = useMenu1Sub2store()
-  // const menu1_2_3Store = useMenu1_2_3Store()
-
-  // const state = menu1_2_3Store.state
 
   const props = withDefaults(
     defineProps<{
       title: string
-      type: 'ALL' | 'TYPE1'
+      infos: Density[]
     }>(),
     {
       title: '',
@@ -48,12 +41,9 @@
   )
 
   const activeYear = ref()
-  const infos = ref<Density[]>([])
-  // const years = ref([])
-  const years = computed(() => infos?.value.map((info) => info.year))
-  const notes = ref<string[]>([])
+  const years = computed(() => props.infos?.map((info) => info.year))
   const yearImage = computed(() => {
-    return infos?.value.reduce((acc, info) => {
+    return props.infos?.reduce((acc, info) => {
       acc[info.year] = info.image
       return acc
     }, {})
@@ -65,19 +55,8 @@
     return imageId ? `${prefixPath}${imageId}` : ''
   }
 
-  function tabChangeListener() {}
-
   onMounted(async () => {
-    // const rawData = await test_getMenu1_1_3Data(props.type)
-
-    const { data: rawData } = await getDensityInfos(props.type)
-
-    infos.value = rawData.infos
-
-    notes.value = rawData.notes
     activeYear.value = years.value[years.value.length - 1]
-
-    // tabChangeListener(activeYear.value)
   })
 
   onBeforeMount(() => {})

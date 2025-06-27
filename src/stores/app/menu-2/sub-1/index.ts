@@ -374,6 +374,7 @@ export const useMenu2Sub1Store = defineStore('menu2Sub1Store', () => {
 
   function clear() {
     overview.value = null
+    state.activeZoneId = undefined
     const selectDetail = getSelectDetail()
     if (selectDetail) selectDetail.tableData = []
   }

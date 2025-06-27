@@ -8,7 +8,7 @@
         </template>
       </div>
 
-      <div style="" v-if="$slots.sub">
+      <div style="display: flex" v-if="$slots.sub">
         <slot name="sub"></slot>
       </div>
     </div>

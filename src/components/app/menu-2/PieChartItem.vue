@@ -22,6 +22,8 @@
             </template>
           </tbody>
         </table>
+
+        <Source :list="sources" style="font-size: 11px; margin-top: 5px" />
       </div>
     </div>
 
@@ -37,11 +39,13 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref } from 'vue'
+  import { computed } from 'vue'
   import VChart from 'vue-echarts'
 
   import { dataUtil } from '@/utils'
   import CommonUtil from '@/utils/commonUtil'
+  import Source from '@/components/common/Source.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
 
   const props = withDefaults(
     defineProps<{
@@ -55,9 +59,11 @@
         value: string | number
         unit: string
       }[]
+      sources?: SourceGroupDTO.SourceDTO[]
     }>(),
     {
       title: '',
+      sources: () => [],
     },
   )
 

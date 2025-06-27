@@ -103,18 +103,21 @@
                   },
                 ]"
                 :data="{ value: overview?.sssRate, names: ['선도·신흥산업', '기타'] }"
+                :sources="source1"
               />
 
               <Item
                 title="산업밀집도"
                 :value1="overview ? `${overview.density} 개/㎡` : ''"
                 :value2="overview ? `${overview.densityRe}` : ''"
+                :sources="source2"
               />
 
               <Item
                 title="사업체수 증감"
                 :value1="overview ? `${overview.variation}` : ''"
                 :value2="overview ? `${overview.variaRe}` : ''"
+                :sources="source3"
               />
 
               <div class="container" style="margin-top: 5px">
@@ -150,6 +153,7 @@
                 </table>
               </div>
             </el-tab-pane>
+
             <el-tab-pane label="지역여건분석" name="Tab-B" style="height: 100%">
               <PieChartItem
                 style="margin-top: 0"
@@ -172,6 +176,7 @@
                   },
                 ]"
                 :data="{ value: overview?.deterio, names: ['20년 이상', '20년 미만'] }"
+                :sources="source4"
               />
 
               <PieChartItem
@@ -196,6 +201,7 @@
                   },
                 ]"
                 :data="{ value: overview?.roadRate, names: ['도로', '비도로'] }"
+                :sources="source5"
               />
             </el-tab-pane>
             <el-tab-pane label="현황도" name="Tab-C" style="height: 100%" class="customScroll">
@@ -257,7 +263,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onBeforeMount, onMounted, ref, watch } from 'vue'
+  import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
@@ -269,6 +275,8 @@
   import { Info } from '@/api/app/menu-2/sub-4/model'
   import { getMenu2Sub4Info } from '@/api/app/menu-2/sub-4'
   import AsyncImage from '@/views/app/menu-2/sub-4/right/AsyncImage.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const menu2Sub4Store = useMenu2Sub4Store()
   const { overview } = storeToRefs(menu2Sub4Store)
@@ -278,6 +286,8 @@
   const info = ref<Info | null>(null)
 
   const activeName = ref<string>('Tab-A')
+
+  const sourceData = ref<SourceGroupDTO.Find.Result[]>([])
 
   watch(
     () => overview.value,
@@ -310,9 +320,24 @@
     }
   }
 
+  const filterByTargetId = (targetId: string) =>
+    computed(() => sourceData.value.find((item) => item.targetId === targetId)?.sources)
+
+  const source1 = filterByTargetId('E001')
+  const source2 = filterByTargetId('E002')
+  const source3 = filterByTargetId('E003')
+  const source4 = filterByTargetId('E004')
+  const source5 = filterByTargetId('E005')
+
   onBeforeMount(() => {})
 
-  onMounted(async () => {})
+  onMounted(async () => {
+    const { data } = await getSources({
+      category: '유형화분석',
+    })
+
+    sourceData.value = data
+  })
 
   defineExpose({})
 </script>

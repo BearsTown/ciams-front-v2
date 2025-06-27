@@ -14,7 +14,6 @@
   import { MapWrapper } from '@/js/mapWrapper'
 
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu1Sub1store } from '@/stores/app/menu-1/sub-1'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
@@ -26,7 +25,6 @@
   import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
 
   const globalStore = useGlobalStore()
-  const menu1sub1store = useMenu1Sub1store()
   const cmmConfigStore = useCmmConfigStore()
 
   const mapConfig = ref<MapWrapperConfig>()

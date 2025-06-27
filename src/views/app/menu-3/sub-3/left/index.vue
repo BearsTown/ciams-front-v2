@@ -28,9 +28,11 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, defineComponent, DefineComponent, onActivated, onMounted, ref } from 'vue'
+  import { computed, DefineComponent, onActivated, onMounted, ref } from 'vue'
 
-  import TabAComp from '@/components/app/menu-1/sub-1/left/tab-A'
+  import TabAComp from '@/components/app/menu-3/sub-3/left/tab-A'
+  import TabBComp from '@/components/app/menu-3/sub-3/left/tab-B'
+
   import { useBoolean } from '@/hooks/useBoolean'
   import { useGlobalStore } from '@/stores/app'
   import { Menu3Sub3TabIdType, useMenu3Sub3store } from '@/stores/app/menu-3/sub-3'
@@ -47,19 +49,9 @@
   const cmmConfigStore = useCmmConfigStore()
   const menu3sub3store = useMenu3Sub3store()
 
-  const TabA = defineComponent({
-    name: 'TabA',
-    template: `<el-text>산업혁신구역계획</el-text>`,
-  })
-
-  const TabB = defineComponent({
-    name: 'TabB',
-    template: `<el-text>산업정비구역계획</el-text>`,
-  })
-
   const components: Record<Menu3Sub3TabIdType, DefineComponent> = {
-    TabA: TabA,
-    TabB: TabB,
+    TabA: TabAComp,
+    TabB: TabBComp,
   }
   const currentTabComponent = computed(() => components[menu3sub3store.selectedTabId] || TabAComp)
 
@@ -114,7 +106,7 @@
     .customTab-item {
       flex: 1;
       padding: 0 !important;
-      margin-left: 5px !important;
+      //margin-left: 5px !important;
       background-color: white;
     }
 

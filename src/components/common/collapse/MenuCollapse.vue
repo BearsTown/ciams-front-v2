@@ -1,6 +1,10 @@
 <template>
   <div :style="!isOpen ? { 'overflow-y': 'visible' } : ''">
-    <div :class="['popButton', { 'is-active': isOpen }]" @click="onOpen">
+    <div
+      :class="['popButton', { 'is-active': isOpen }]"
+      :style="[{ 'text-align': align }]"
+      @click="onOpen"
+    >
       <div>
         <div v-if="type !== ''" style="width: 30px"></div>
 
@@ -18,7 +22,7 @@
             v-model="isActive"
             @click.prevent.stop
             @change="handleSwitchChange"
-            style="--el-switch-on-color: #4D7D99; --el-switch-off-color: var(--ugis-color-gray)"
+            style="--el-switch-on-color: #4d7d99; --el-switch-off-color: var(--ugis-color-gray)"
           />
         </div>
       </div>
@@ -47,6 +51,7 @@
     defineProps<{
       type: string
       title: string
+      align?: 'left' | 'center'
       isOpen?: boolean
       isActive?: boolean
       isChild?: boolean
@@ -55,6 +60,7 @@
     {
       type: '', // ['', 'info', 'switch'],
       title: '',
+      align: 'center',
       isOpen: true,
       isActive: true,
       isChild: true,
@@ -119,8 +125,8 @@
     color: #616161;
     border-radius: 8px;
     background: #fff;
-    text-align: center;
-    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.12);
+    //text-align: center;
+    box-shadow: 2px 2px 3px 2px rgba(0, 0, 0, 0.12);
     transition: 0.2s;
 
     &:hover {

@@ -22,16 +22,14 @@
 </template>
 
 <script setup lang="ts">
-  import { onActivated, onBeforeMount, onMounted, computed } from 'vue'
+  import { computed, onActivated, onBeforeMount, onMounted } from 'vue'
 
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
   import { API_INFO_CIAMS } from '@/config/config'
   import PagePane from '@/components/common/PagePane.vue'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   const globalStore = useGlobalStore()
-  const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   const cmmConfigStore = useCmmConfigStore()
   const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'

@@ -1,5 +1,9 @@
 <template>
   <PagePane :title="title">
+    <template #sub>
+      <Source :list="sources" />
+    </template>
+
     <template #center>
       <div class="container">
         <div class="center">
@@ -22,11 +26,16 @@
   import { getItaResultDatas } from '@/api/app/menu-1/sub-1/tab-c'
   import { ItaResultData } from '@/api/app/menu-1/sub-1/tab-c/model'
   import ITAResultTable from '@/components/app/menu-1/sub-1/panel/tab-C/ITAResultTable.vue'
+  import Source from '@/components/common/Source.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const globalStore = useGlobalStore()
   const menu1Sub1Tab3Page2Store = useMenu1Sub1Tab3Page2Store()
 
   const cmmConfigStore = useCmmConfigStore()
+
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
   const selectedTab = computed(() => menu1Sub1Tab3Page2Store.selectedTab)
 
@@ -47,6 +56,13 @@
     async (currentTab) => {
       if (currentTab?.type === 'etcSGG') {
         try {
+          const { data: sourceData } = await getSources({
+            category: '산업특성분석',
+            targetId: currentTab?.id,
+          })
+
+          sources.value = sourceData[0]?.sources
+
           const { data: rawData } = await getItaResultDatas(currentTab?.id)
           console.log(data)
           data.value = rawData

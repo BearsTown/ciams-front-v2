@@ -30,7 +30,6 @@
 
   import { useBoolean } from '@/hooks/useBoolean'
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu3store } from '@/stores/app/menu-3'
   import { Menu1Sub1Tab2TabIdType, useMenu1Sub1Tab2Store } from 'src/stores/app/menu-1/sub-1/tab-B'
 
   import { Style } from 'ol/style'
@@ -40,7 +39,6 @@
   import Page5Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-5.vue'
   import Page6Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-6.vue'
 
-  const menu3store = useMenu3store()
   const menu3Sub2Store = useMenu1Sub1Tab2Store()
 
   const globalStore = useGlobalStore()
@@ -55,7 +53,7 @@
     Page5: Page5Comp,
     Page6: Page6Comp,
   }
-  const currentTabComponent = computed(() => components[menu3Sub2Store.selectedTabId] || Page3Comp)
+  // const currentTabComponent = computed(() => components[menu3Sub2Store.selectedTabId] || Page3Comp)
 
   const tabRef = computed(() => (type: Menu1Sub1Tab2TabIdType) => components[type])
 
@@ -125,7 +123,7 @@
   }
 
   .menuButton {
-    overflow-y: hidden;
+    //overflow-y: hidden;
 
     &:not(:first-child) {
       //margin-top: 8px;

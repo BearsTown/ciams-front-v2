@@ -188,8 +188,12 @@ export function getStatusTree() {
   return http.get<ResultData<any[]>>(`${prefix}/tree`)
 }
 
-export function getStatusGroups(statusId: number) {
-  return http.get<ResultData<any[]>>(`${prefix}/group/${statusId}`)
+// export function getStatusGroups(statusId: number) {
+//   return http.get<ResultData<any[]>>(`${prefix}/group/${statusId}`)
+// }
+
+export function getStatusInfo(statusId: number) {
+  return http.get<ResultData<any>>(`${prefix}/group/${statusId}`)
 }
 
 export function getDataInfo(dataId: number) {

@@ -3,29 +3,32 @@ import { defineStore } from 'pinia'
 
 import { useBoolean, UseBoolean } from '@/hooks/useBoolean'
 
-interface Menu1Sub1Tab2 {
+interface Menu3Sub3TabB {
   showInfo: UseBoolean
-  selectedTabId: Menu1Sub1Tab2TabIdType
+  selectedTabId: Menu3Sub3TabBTabIdType
 }
 
 const tabList = [
-  { name: '공업지역기본계획 산업의 범위', id: 'Page1', isActive: false, isChild: false },
-  { name: '산업여건변화', id: 'Page2', isActive: false, isChild: false },
-  { name: '사업체 밀도변화', id: 'Page3', isActive: false, isChild: true },
-  { name: '산업별 분석', id: 'Page4', isActive: false, isChild: true },
-  { name: '제조업별 분석', id: 'Page5', isActive: false, isChild: true },
-  { name: '기술업종별 LQ분석', id: 'Page6', isActive: false, isChild: true },
+  { name: '계획의 개요', id: 'Page1', isActive: false, isChild: false },
+  { name: '토지이용계획', id: 'Page2', isActive: false, isChild: false },
+  { name: '유치업종계획', id: 'Page3', isActive: false, isChild: false },
+  { name: '건축물에 관한 계획', id: 'Page4', isActive: false, isChild: false },
+  { name: '지원기반시설에 관한 계획', id: 'Page5', isActive: false, isChild: false },
+  { name: '교통처리계획', id: 'Page6', isActive: false, isChild: false },
+  { name: '환경관리계획', id: 'Page7', isActive: false, isChild: false },
+  { name: '재원조달계획', id: 'Page8', isActive: false, isChild: false },
+  { name: '기타계획', id: 'Page9', isActive: false, isChild: false },
 ] as const
 
-export type Menu1Sub1Tab2TabIdType = (typeof tabList)[number]['id']
+export type Menu3Sub3TabBTabIdType = (typeof tabList)[number]['id']
 
-export const useMenu1Sub1Tab2Store = defineStore('menu1-Sub1-Tab2-Store', () => {
-  const state = reactive<Menu1Sub1Tab2>({
+export const useMenu3Sub3TabBStore = defineStore('menu3-Sub3-TabB-Store', () => {
+  const state = reactive<Menu3Sub3TabB>({
     showInfo: useBoolean(false),
     selectedTabId: 'Page1',
   })
 
-  function selectTab(tabId: Menu1Sub1Tab2TabIdType) {
+  function selectTab(tabId: Menu3Sub3TabBTabIdType) {
     state.selectedTabId = tabId
   }
 

@@ -2,7 +2,7 @@
   <div class="container" style="margin-top: 5px">
     <div class="title" style="display: flex; align-items: center">
       <span style="flex: 1">{{ title }}</span>
-      <!--      <el-switch size="small" />-->
+      <Source :list="sources" style="font-size: 11px; padding: 0" />
     </div>
 
     <table class="customTable">
@@ -25,20 +25,21 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, onMounted } from 'vue'
-
-  import { type UseBoolean, useBoolean } from '@/hooks/useBoolean'
+  import Source from '@/components/common/Source.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
 
   const props = withDefaults(
     defineProps<{
       title?: string
       value1: string
       value2: string
+      sources?: SourceGroupDTO.SourceDTO[]
     }>(),
     {
       title: '',
       value1: '',
       value2: '',
+      sources: () => [],
     },
   )
 </script>

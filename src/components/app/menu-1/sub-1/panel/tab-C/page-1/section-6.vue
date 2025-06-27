@@ -1,5 +1,9 @@
 <template>
   <PagePane :title="['산업기반분석(ITA)', '산업기반분석 결과']">
+    <template #sub>
+      <Source :list="sources" />
+    </template>
+
     <template #center>
       <div class="container">
         <div class="center">
@@ -22,11 +26,15 @@
   import { ItaResultData } from '@/api/app/menu-1/sub-1/tab-c/model'
   import ITAResultTable from '@/components/app/menu-1/sub-1/panel/tab-C/ITAResultTable.vue'
   import CommonUtil from '@/utils/commonUtil'
+  import Source from '@/components/common/Source.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const globalStore = useGlobalStore()
   const cmmConfigStore = useCmmConfigStore()
 
   const data = ref<ItaResultData[]>([])
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
   async function loadConfig() {
     try {
@@ -42,8 +50,15 @@
 
     const sidoCd = cmmConfigStore.cmmConfigState['SIDO_CODE']?.confValue
     const sggCd = cmmConfigStore.cmmConfigState['SGG_CODE']?.confValue
-    const { data: rawData } = await getItaResultDatas(`${sidoCd}${sggCd}`)
 
+    const { data: sourceData } = await getSources({
+      category: '산업특성분석',
+      targetId: `${sidoCd}${sggCd}`,
+    })
+
+    sources.value = sourceData[0]?.sources
+
+    const { data: rawData } = await getItaResultDatas(`${sidoCd}${sggCd}`)
     data.value = rawData
   })
 

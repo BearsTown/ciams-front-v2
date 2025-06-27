@@ -1,17 +1,22 @@
 <template>
   <PagePane :title="['사업체 밀도변화', '제조업 및 관련서비스업 밀도분석']">
+    <template #sub>
+      <Source :list="sources" />
+    </template>
+
     <template #center>
       <div class="container">
         <div class="top customScroll">
           <div class="text-wrap">
-            - 최근 10년간(2011~2021년) 김천시의 제조업 및 관련서비스업은 도시지역에 밀집되어 있는
-            모습이었으나, <br />
-            - 점차 산업단지의 확장과 함께 산업단지를 중심으로 밀집되어 형성 된 것으로 나타남
+            <template v-for="(note, idx) in notes" :key="note">
+              - {{ note }}
+              <br v-if="idx < notes.length - 1" />
+            </template>
           </div>
         </div>
         <div class="center" style="position: relative">
           <div class="left customScroll">
-            <Density title="제조업 및 관련서비스업 밀도분석" type="TYPE1" />
+            <Density title="제조업 및 관련서비스업 밀도분석" :infos="infos" />
           </div>
           <div style="position: absolute; bottom: 10px; left: 10px; width: 80px">
             <el-image :src="imgSrc" fit="cover" />
@@ -23,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onActivated, onBeforeMount, onMounted } from 'vue'
+  import { onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
   import { useGlobalStore } from '@/stores/app'
   import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
@@ -31,6 +36,10 @@
   import PagePane from '@/components/common/PagePane.vue'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   import Density from '@/components/app/menu-1/sub-1/panel/tab-B/page-3/Density.vue'
+  import { getDensityInfos } from '@/api/app/menu-1/sub-1/tab-b/page-3'
+  import Source from '@/components/common/Source.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
@@ -39,9 +48,23 @@
   const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
   const imgSrc = prefixPath + '590a2252-87bf-41e0-bfae-787cf5dbfa53'
 
-  const title = computed(
-    () => `${cmmConfigStore.cmmConfigState['SGG_NAME'].confValue} 산업여건변화`,
-  )
+  const infos = ref<Density[]>([])
+  const notes = ref<string[]>([])
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
+
+  onMounted(async () => {
+    const { data: rawData } = await getDensityInfos('TYPE1')
+
+    infos.value = rawData.infos
+    notes.value = rawData.notes
+
+    const { data: sourceData } = await getSources({
+      category: '산업현황분석',
+      targetId: 'B001',
+    })
+
+    sources.value = sourceData[0]?.sources
+  })
 
   onMounted(async () => {})
 

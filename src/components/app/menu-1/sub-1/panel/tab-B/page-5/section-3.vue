@@ -1,5 +1,9 @@
 <template>
   <PagePane :title="['제조업별 분석', '제조업의 유형별 현황']">
+    <template #sub>
+      <Source :list="sources" />
+    </template>
+
     <template #center>
       <div class="container">
         <div class="top customScroll">
@@ -61,7 +65,7 @@
             >
               <div style="display: flex; flex-direction: column">
                 <div style="">
-                  <div class="header-title">제조업별 현황</div>
+                  <div class="header-title">제조업 유형별 현황</div>
                   <Table :data="industry" :columns="columns" style="margin-bottom: 5px" />
                   <span style="font-size: 13px; color: #616161"
                     >※제조업 유형분류(통계청 제조업 산업형태별 분류기준 적용)</span
@@ -95,6 +99,9 @@
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   import VChart from 'vue-echarts'
   import CommonUtil from '@/utils/commonUtil'
+  import Source from '@/components/common/Source.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
@@ -110,6 +117,7 @@
   const increase = ref([])
   const chartData = ref({})
   const chartData1 = ref({})
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
   const categories = [
     {
@@ -174,6 +182,13 @@
   })
 
   onMounted(async () => {
+    const { data: sourceData } = await getSources({
+      category: '산업현황분석',
+      targetId: 'B006',
+    })
+
+    sources.value = sourceData[0]?.sources
+
     industry.value = await test_getMenu1_1_2_5Type()
 
     chartData.value = {

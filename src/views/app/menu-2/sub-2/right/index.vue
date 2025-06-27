@@ -82,6 +82,7 @@
             },
           ]"
           :data="{ value: overview?.deterio, names: ['20년 이상', '20년 미만'] }"
+          :sources="source4"
         />
 
         <PieChartItem
@@ -106,6 +107,7 @@
             },
           ]"
           :data="{ value: overview?.roadRate, names: ['도로', '비도로'] }"
+          :sources="source5"
         />
       </div>
     </div>
@@ -113,20 +115,20 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onBeforeMount, onMounted } from 'vue'
+  import { computed, onBeforeMount, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
-
-  import commonUtil from '@/utils/commonUtil'
   import { useMenu2Sub2Store } from '@/stores/app/menu-2/sub-2'
-  import Item from '@/components/app/menu-2/Item.vue'
   import SvgIcon from '@/components/common/SvgIcon.vue'
   import PieChartItem from '@/components/app/menu-2/PieChartItem.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const menu2Sub2Store = useMenu2Sub2Store()
   const { overview } = storeToRefs(menu2Sub2Store)
 
+  const sourceData = ref<SourceGroupDTO.Find.Result[]>([])
   const didgh = computed(() => overview?.value?.locResult === '양호')
   const qnffid = computed(() => overview?.value?.locResult === '불량')
 
@@ -149,9 +151,21 @@
     }
   }
 
+  const filterByTargetId = (targetId: string) =>
+    computed(() => sourceData.value.find((item) => item.targetId === targetId)?.sources)
+
+  const source4 = filterByTargetId('E004')
+  const source5 = filterByTargetId('E005')
+
   onBeforeMount(() => {})
 
-  onMounted(async () => {})
+  onMounted(async () => {
+    const { data } = await getSources({
+      category: '유형화분석',
+    })
+
+    sourceData.value = data
+  })
 
   defineExpose({})
 </script>

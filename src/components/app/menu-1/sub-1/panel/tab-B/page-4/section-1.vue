@@ -1,5 +1,9 @@
 <template>
   <PagePane :title="['산업별 분석', '산업별 사업체수']">
+    <template #sub>
+      <Source :list="sources" />
+    </template>
+
     <template #center>
       <div class="container">
         <div class="top customScroll">
@@ -81,6 +85,9 @@
   import { test_getMenu1_1_2_4 } from '@/api/app/menu-1/sub-1/tab-b'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   import CommonUtil from '@/utils/commonUtil'
+  import Source from '@/components/common/Source.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
@@ -92,6 +99,7 @@
   const industry = ref([])
   const densityOption = ref({})
   const chartData = ref({})
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
   const columns = computed(() => {
     return [
@@ -111,6 +119,13 @@
   })
 
   onMounted(async () => {
+    const { data: sourceData } = await getSources({
+      category: '산업현황분석',
+      targetId: 'B002',
+    })
+
+    sources.value = sourceData[0]?.sources
+
     density.value = await test_getMenu1_2_4Data(1)
     industry.value = await test_getMenu1_1_2_4(1)
 

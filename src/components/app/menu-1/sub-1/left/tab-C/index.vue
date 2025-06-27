@@ -119,7 +119,7 @@
   }
 
   .menuButton {
-    overflow-y: hidden;
+    //overflow-y: hidden;
 
     &:not(:first-child) {
       //margin-top: 8px;

@@ -31,7 +31,7 @@
       </li>
     </ul>
 
-    <div class="zoningSetting-content border-container">
+    <div class="border-container container customScroll">
       <keep-alive>
         <component :is="currentTabComponent" />
       </keep-alive>
@@ -233,7 +233,7 @@
     .customTab-item {
       flex: 1;
       padding: 0 !important;
-      margin-left: 5px !important;
+      //margin-left: 5px !important;
       background-color: white;
     }
 

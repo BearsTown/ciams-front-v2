@@ -71,7 +71,7 @@
 
         <el-divider border-style="dashed" style="margin: 10px 0" />
 
-        <LayerDataTable></LayerDataTable>
+        <LayerDataTable />
 
         <el-divider border-style="dashed" style="margin: 10px 0" />
 
@@ -91,18 +91,21 @@
             },
           ]"
           :data="{ value: overview?.sssRate, names: ['선도·신흥산업', '기타'] }"
+          :sources="source1"
         />
 
         <Item
           title="산업밀집도"
           :value1="overview ? `${overview.density} 개/㎡` : ''"
           :value2="overview ? `${overview.densityRe}` : ''"
+          :sources="source2"
         />
 
         <Item
           title="사업체수 증감"
           :value1="overview ? `${overview.variation}` : ''"
           :value2="overview ? `${overview.variaRe}` : ''"
+          :sources="source3"
         />
       </div>
     </div>
@@ -110,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onBeforeMount, onMounted } from 'vue'
+  import { computed, onBeforeMount, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import Item from '@/components/app/menu-2/Item.vue'
@@ -120,9 +123,13 @@
   import SvgIcon from '@/components/common/SvgIcon.vue'
   import PieChartItem from '@/components/app/menu-2/PieChartItem.vue'
   import LayerDataTable from '@/components/app/menu-2/sub-1/LayerDataTable.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const menu2Sub1Store = useMenu2Sub1Store()
   const { overview } = storeToRefs(menu2Sub1Store)
+
+  const sourceData = ref<SourceGroupDTO.Find.Result[]>([])
 
   function tagColor(itaResult: string) {
     switch (itaResult) {
@@ -146,9 +153,22 @@
     }
   }
 
-  onBeforeMount(() => {})
+  const filterByTargetId = (targetId: string) =>
+    computed(() => sourceData.value.find((item) => item.targetId === targetId)?.sources)
 
-  onMounted(async () => {})
+  const source1 = filterByTargetId('E001')
+  const source2 = filterByTargetId('E002')
+  const source3 = filterByTargetId('E003')
+
+  onBeforeMount(async () => {})
+
+  onMounted(async () => {
+    const { data } = await getSources({
+      category: '유형화분석',
+    })
+
+    sourceData.value = data
+  })
 
   defineExpose({})
 </script>

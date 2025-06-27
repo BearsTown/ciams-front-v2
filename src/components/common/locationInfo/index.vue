@@ -134,12 +134,12 @@
       content: Land,
       visible: ref(true),
     },
-    {
-      key: 'TOPOGRAPHY',
-      title: '지형정보',
-      content: Topography,
-      visible: ref(false),
-    },
+    // {
+    //   key: 'TOPOGRAPHY',
+    //   title: '지형정보',
+    //   content: Topography,
+    //   visible: ref(false),
+    // },
   ])
 
   function exclusionVisibleChange(data) {

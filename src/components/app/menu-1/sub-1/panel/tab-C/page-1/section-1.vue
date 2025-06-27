@@ -1,5 +1,9 @@
 <template>
   <PagePane :title="['산업기반분석(ITA)']">
+    <template #sub>
+      <Source :list="sources" />
+    </template>
+
     <template #center>
       <div class="container">
         <div class="top customScroll">
@@ -223,6 +227,9 @@
   import { getItaDatas } from '@/api/app/menu-1/sub-1/tab-c'
   import { ItaData } from '@/api/app/menu-1/sub-1/tab-c/model'
   import CommonUtil from '@/utils/commonUtil'
+  import Source from '@/components/common/Source.vue'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getSources } from '@/api/app/source'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
@@ -230,6 +237,7 @@
   const cmmConfigStore = useCmmConfigStore()
 
   const records = ref<ItaData[]>()
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
   async function loadConfig() {
     try {
@@ -282,6 +290,13 @@
 
   onMounted(async () => {
     await loadConfig()
+
+    const { data: sourceData } = await getSources({
+      category: '산업특성분석',
+      targetId: '산업기반분석',
+    })
+
+    sources.value = sourceData[0]?.sources
 
     const sidoCd = cmmConfigStore.cmmConfigState['SIDO_CODE']?.confValue
     const sggCd = cmmConfigStore.cmmConfigState['SGG_CODE']?.confValue
