@@ -23,7 +23,7 @@
       <span class="text">자료실</span>
     </div>
     <div class="sidebar-menu">
-      <div class="title" style="height: 10px;"></div>
+      <div class="title" style="height: 10px"></div>
       <ul class="menu-list">
         <li
           v-for="item in menuList"
@@ -74,7 +74,7 @@
   const store = useArchiveStore()
   const route = useRoute()
   const router = useRouter()
-  const { archvItem, searchItem } = storeToRefs(store)
+  const { archiveItem, searchItem } = storeToRefs(store)
   const menuList = ref<any[]>([])
   const currentMenu = ref('')
   const dataDownLoadVisible = ref(false)
@@ -94,15 +94,14 @@
     const list = await store.getCategoryList()
     if (list.length > 0) {
       menuList.value = list
-      archvItem.value.title = list[0].name
+      archiveItem.value.title = list[0].name
       searchItem.value.categoryId = list[0].categoryId
       currentMenu.value = list[0].categoryId
     }
   }
 
   async function getDownloadVis() {
-    getConfig('ARCHIVE_DATA_DOWNLOAD')
-      .then((res) => (dataDownLoadVisible.value = res.data.used))
+    getConfig('ARCHIVE_DATA_DOWNLOAD').then((res) => (dataDownLoadVisible.value = res.data.used))
   }
 
   function clickMenu(item) {
@@ -114,13 +113,16 @@
       return
     }
     currentMenu.value = item.categoryId
-    archvItem.value.list = []
+    archiveItem.value.list = []
     switch (item.categoryId) {
       case '1':
       case '2':
         searchItem.value.title = ''
         searchItem.value.pageNo = 1
         searchItem.value.categoryId = item.categoryId
+
+        archiveItem.value.title = item.name
+
         router.push({ name: 'archiveMain', path: '', params: {} })
         break
       case '90':

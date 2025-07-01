@@ -93,8 +93,6 @@
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
   const cmmConfigStore = useCmmConfigStore()
 
-  const option = ref({})
-
   const density = ref([])
   const industry = ref([])
   const densityOption = ref({})
@@ -145,9 +143,15 @@
           label: {
             show: true,
             position: 'inside',
-            formatter: '{c}',
+            formatter: '{d}%',
             color: '#fff',
-            fontSize: 14,
+            fontSize: 12,
+          },
+          tooltip: {
+            formatter: function (params) {
+              return `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.color};"></span>
+        ${params.name}: ${params.value} (${params.percent}%)`
+            },
           },
           emphasis: {
             itemStyle: {
@@ -161,8 +165,14 @@
     }
 
     chartData.value = {
+      grid: {
+        top: '5%',
+        left: '5%',
+        right: '5%',
+        containLabel: true,
+      },
       legend: {
-        bottom: true,
+        bottom: 10,
       },
       tooltip: {
         trigger: 'axis',
@@ -196,66 +206,6 @@
           },
         },
       })),
-    }
-
-    const y_year = [
-      136000, 135100, 135020, 135050, 140500, 142500, 142900, 141010, 141050, 140700, 140600,
-    ]
-
-    const minVal = Math.round(Math.min(...y_year) / 1000) * 1000
-    const maxVal = Math.ceil(Math.max(...y_year) / 1000) * 1000
-
-    const step = Math.ceil((maxVal - minVal) / 6 / 1000) * 1000
-
-    option.value = {
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          crossStyle: {
-            color: '#999',
-          },
-        },
-      },
-      xAxis: {
-        type: 'category',
-        data: [
-          '2011년',
-          '2012년',
-          '2013년',
-          '2014년',
-          '2015년',
-          '2016년',
-          '2017년',
-          '2018년',
-          '2019년',
-          '2020년',
-          '2021년',
-        ],
-      },
-      yAxis: [
-        {
-          type: 'value',
-          name: '사업체수',
-          min: minVal,
-          max: maxVal,
-          interval: step,
-          position: 'left',
-        },
-      ],
-      series: [
-        {
-          name: '년도',
-          type: 'bar',
-          yAxisIndex: 0,
-          data: y_year,
-          tooltip: {
-            // valueFormatter: function (value) {
-            //   return (value as number) + ' 명'
-            // },
-          },
-        },
-      ],
     }
   })
 

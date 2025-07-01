@@ -104,12 +104,12 @@
   const detailArchvieData = ref({})
 
   onMounted(async () => {
-    await getDetailArchv()
+    await getDetailArchive()
   })
 
-  async function getDetailArchv() {
+  async function getDetailArchive() {
     detailArchvieData.value = {}
-    const data = await store.getDetailArchv(route.params.archiveId)
+    const data = await store.getDetailArchive(route.params.archiveId)
     if (Object.keys(data).length > 0) {
       detailArchvieData.value = data
     }

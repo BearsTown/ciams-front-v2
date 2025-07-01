@@ -100,7 +100,7 @@
         label: {
           show: true,
           position: 'inside',
-          formatter: '{b}\n{c} %',
+          formatter: '{b}\n{c}%',
           color: '#fff',
           textBorderColor: '#000',
           textBorderWidth: 2,

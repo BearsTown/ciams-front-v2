@@ -8,7 +8,7 @@
     <input
       class="search-input"
       type="text"
-      placeholder="지번/도로명/계획구역 검색어를 입력해주세요."
+      placeholder="지번/도로명 검색어를 입력해주세요."
       v-model="keyword"
       maxlength="50"
       @keydown.enter="
@@ -110,26 +110,23 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, onBeforeMount, onMounted, Ref, ref } from 'vue'
+  import { onBeforeMount, onMounted, ref } from 'vue'
   import { AxiosResponse } from 'axios'
   import { vWorldAxiosInstance } from '@/api/vWorld'
   import { PointXY, VworldAddressSearchParam } from '@/types/map'
   import { useGlobalStore } from '@/stores/app'
+  import { useMapStore } from '@/stores/map/map'
   import { storeToRefs } from 'pinia'
   import { useAuthStore } from '@/stores/auth'
   import commonUtil from '@/utils/commonUtil'
   import CommonUtil from '@/utils/commonUtil'
-  import { getPlanArea } from '@/api/app/plan'
-  import { equalTo } from 'ol/format/filter'
   // import { useMapConfig } from '@/stores/map/mapConfig'
-  import mittBus from '@/utils/mittBus'
   // import { usePlanAreaStore } from '@/stores/app/operation/planArea'
   import { useRouter } from 'vue-router'
 
   import tokenUtil from '@/utils/tokenUtil'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   // import { useConfigStore } from '@/stores/config/config'
-  import { useKrasConfig } from '@/stores/config/krasConfig'
   import { MenuType } from '@/router'
 
   const router = useRouter()
@@ -180,11 +177,11 @@
         label: '도로명',
         checked: false,
       },
-      {
-        id: 'ciams',
-        label: '계획구역',
-        checked: false,
-      },
+      // {
+      //   id: 'ciams',
+      //   label: '계획구역',
+      //   checked: false,
+      // },
     ],
   })
   const pagination = ref<{
@@ -262,7 +259,11 @@
     show.value = !show.value
   }
 
-  const routePushWithCoord = (coord: { point: PointXY }) => {
+  const routePushWithCoord = (params: {
+    id: string
+    point: PointXY
+    address: { data: string }
+  }) => {
     if (!tokenUtil.getAccessToken()) {
       commonUtil.errorMessage('사용자 로그인이 필요합니다.')
       return false
@@ -273,7 +274,12 @@
     let operationCheck = isMenuCheck('Menu-2')
     if (zoneEstablishCheck || operationCheck) {
       // searchMapStore.setCurrentMapCoord(coord)
-      router.push({ name: zoneEstablishCheck ? 'Menu-1' : 'Menu-2' })
+      // router.push({ name: zoneEstablishCheck ? 'Menu-1' : 'Menu-2' })
+
+      const mapStoure = useMapStore('Map-2')
+      mapStoure.setLocParams(params)
+      // router.push({ name: 'Menu-2-Sub-4', query: { coord }, })
+      router.push({ name: 'Menu-2-Sub-4' })
     } else {
       commonUtil.errorMessage('메뉴 접근 권한이 필요합니다.')
       return false
@@ -351,29 +357,29 @@
       if (_searchType && type !== _searchType) return
       loading.value = true
       if (type === 'ciams') {
-        getPlanArea({
-          size: searchedData.value[type].pagination.pageSize,
-          planAreaName: keyword.value,
-        }).then((res) => {
-          searchedData.value[type].pagination = {
-            ...searchedData.value[type].pagination,
-            total: +res.data.page.totalCount,
-            currentPage: res.data.page.pageNo ? +res.data.page.pageNo : 1,
-          }
-          searchedData.value[type].total = +searchedData.value[type].pagination.total
-          show.value = true
-          searchedData.value[type].items = res.data.list.map((data) => {
-            return {
-              id: data.planAreaId,
-              address: {
-                ...data,
-                data: data.planAreaName,
-              },
-            }
-          })
-          loading.value = false
-        })
-        return
+        // getPlanArea({
+        //   size: searchedData.value[type].pagination.pageSize,
+        //   planAreaName: keyword.value,
+        // }).then((res) => {
+        //   searchedData.value[type].pagination = {
+        //     ...searchedData.value[type].pagination,
+        //     total: +res.data.page.totalCount,
+        //     currentPage: res.data.page.pageNo ? +res.data.page.pageNo : 1,
+        //   }
+        //   searchedData.value[type].total = +searchedData.value[type].pagination.total
+        //   show.value = true
+        //   searchedData.value[type].items = res.data.list.map((data) => {
+        //     return {
+        //       id: data.planAreaId,
+        //       address: {
+        //         ...data,
+        //         data: data.planAreaName,
+        //       },
+        //     }
+        //   })
+        //   loading.value = false
+        // })
+        // return
       }
 
       vWorldAxiosInstance
@@ -385,7 +391,12 @@
             if (res.data.response.status === 'OK') {
               const response = res.data.response
               const { current, size } = response.page
+
               searchedData.value[type].total = +response.record.total
+              searchedData.value[type].total =
+                searchedData.value[type].total > 5000 ? '5000+' : searchedData.value[type].total
+
+              // searchedData.value[type].total = +response.record.total
               if (searchType.value !== type) return
 
               searchedData.value[type].items = response.result.items.map(
@@ -401,11 +412,19 @@
                   point: item.point,
                 }),
               )
+              // searchedData.value[type].pagination = {
+              //   total: parseInt(response.record.total),
+              //   currentPage: parseInt(current),
+              //   pageSize: parseInt(size),
+              // }
+
               searchedData.value[type].pagination = {
-                total: parseInt(response.record.total),
+                total:
+                  parseInt(response.record.total) > 5000 ? 5000 : parseInt(response.record.total),
                 currentPage: parseInt(current),
                 pageSize: parseInt(size),
               }
+
               show.value = true
             } else if (res.data.response.status === 'NOT_FOUND') {
               searchedData.value[type].items = []
@@ -432,34 +451,34 @@
     if (keyword.value === '') return
     loading.value = true
 
-    for (const type of searchTypeList.value.items) {
-      if (type.checked === true && type.id === 'ciams') {
-        getPlanArea({
-          size: searchedData.value[type.id].pagination.pageSize,
-          planAreaName: keyword.value,
-          pageNo: searchedData.value[type.id].pagination.currentPage,
-        }).then((res) => {
-          exclusionVisible(true) //페이징 처리시 화면이 닫힘 (영역 외 클릭 시 닫힘 제거하게 되면 해당 부분 제거)
-          searchedData.value[type.id].pagination = {
-            ...searchedData.value[type.id].pagination,
-            total: +res.data.page.totalCount,
-            currentPage: res.data.page.pageNo ? +res.data.page.pageNo : 1,
-          }
-          searchedData.value[type.id].total = +searchedData.value[type.id].pagination.total
-          searchedData.value[type.id].items = res.data.list.map((data) => {
-            return {
-              id: data.planAreaId,
-              address: {
-                ...data,
-                data: data.planAreaName,
-              },
-            }
-          })
-          loading.value = false
-        })
-        return
-      }
-    }
+    // for (const type of searchTypeList.value.items) {
+    //   if (type.checked === true && type.id === 'ciams') {
+    //     getPlanArea({
+    //       size: searchedData.value[type.id].pagination.pageSize,
+    //       planAreaName: keyword.value,
+    //       pageNo: searchedData.value[type.id].pagination.currentPage,
+    //     }).then((res) => {
+    //       exclusionVisible(true) //페이징 처리시 화면이 닫힘 (영역 외 클릭 시 닫힘 제거하게 되면 해당 부분 제거)
+    //       searchedData.value[type.id].pagination = {
+    //         ...searchedData.value[type.id].pagination,
+    //         total: +res.data.page.totalCount,
+    //         currentPage: res.data.page.pageNo ? +res.data.page.pageNo : 1,
+    //       }
+    //       searchedData.value[type.id].total = +searchedData.value[type.id].pagination.total
+    //       searchedData.value[type.id].items = res.data.list.map((data) => {
+    //         return {
+    //           id: data.planAreaId,
+    //           address: {
+    //             ...data,
+    //             data: data.planAreaName,
+    //           },
+    //         }
+    //       })
+    //       loading.value = false
+    //     })
+    //     return
+    //   }
+    // }
 
     vWorldAxiosInstance
       .get('/req/search', {
@@ -469,7 +488,13 @@
         if (res.status === 200) {
           if (res.data.response.status === 'OK') {
             const response = res.data.response
-            searchedData.value[searchType.value].total = +response.record.total
+            // searchedData.value[searchType.value].total = +response.record.total
+
+            searchedData.value[searchType.value].pagination = {
+              ...searchedData.value[searchType.value].pagination,
+              total: +res.data.page.totalCount,
+              currentPage: res.data.page.pageNo ? +res.data.page.pageNo : 1,
+            }
 
             searchedData.value[searchType.value].items = response.result.items.map(
               (item: { id: string; address: any; point: PointXY }) => ({
@@ -485,8 +510,14 @@
               }),
             )
             const { current, size } = response.page
+            // searchedData.value[searchType.value].pagination = {
+            //   total: parseInt(response.record.total),
+            //   currentPage: parseInt(current),
+            //   pageSize: parseInt(size),
+            // }
             searchedData.value[searchType.value].pagination = {
-              total: parseInt(response.record.total),
+              total:
+                parseInt(response.record.total) > 5000 ? 5000 : parseInt(response.record.total),
               currentPage: parseInt(current),
               pageSize: parseInt(size),
             }
@@ -552,4 +583,4 @@
 </script>
 
 <style scoped lang="scss"></style>
-@/stores/config/cmmConfig
+

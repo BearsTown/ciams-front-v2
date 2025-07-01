@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="l-header">
-      <span class="header-title">{{ archvItem.title }}</span>
+      <span class="header-title">{{ archiveItem.title }}</span>
       <div class="right">
         <div class="search">
           <input
@@ -40,7 +40,7 @@
             type="button"
             label="card"
             class="btn-list"
-            :class="{ active: archvItem.viewType === 'card' }"
+            :class="{ active: archiveItem.viewType === 'card' }"
             @click="clickType('card')"
           >
             <svg
@@ -75,7 +75,7 @@
             label="list"
             class="btn-list"
             @click="clickType('list')"
-            :class="{ active: archvItem.viewType === 'list' }"
+            :class="{ active: archiveItem.viewType === 'list' }"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -96,13 +96,13 @@
     <div class="content-wrap customScroll scrollY">
       <div class="content">
         <ArchiveCard
-          v-if="archvItem.viewType === 'card'"
-          :list="archvItem.list"
+          v-if="archiveItem.viewType === 'card'"
+          :list="archiveItem.list"
           @click-card="selectItem"
         />
         <ArchiveList
-          v-if="archvItem.viewType === 'list'"
-          :list="archvItem.list"
+          v-if="archiveItem.viewType === 'list'"
+          :list="archiveItem.list"
           :page="searchItem.pageNo"
           @click-row="selectItem"
         />
@@ -110,12 +110,12 @@
     </div>
 
     <div class="l-footer">
-      <span class="num">{{ `총 ${archvItem.total}건` }}</span>
+      <span class="num">{{ `총 ${archiveItem.total}건` }}</span>
       <div class="customPagination">
         <el-pagination
           @current-change="getPageList"
           layout="prev, pager, next"
-          :total="archvItem.total"
+          :total="archiveItem.total"
           :page-size="searchItem.size"
           :current-page="searchItem.pageNo"
         />
@@ -137,7 +137,7 @@
 
   const store = useArchiveStore()
   const router = useRouter()
-  const { archvItem, searchItem } = storeToRefs(store)
+  const { archiveItem, searchItem } = storeToRefs(store)
   const searchInput = ref<string>('')
 
   watch(
@@ -150,14 +150,14 @@
     },
   )
   onMounted(async () => {
-    if (archvItem.value.list.length < 1 && searchItem.value.categoryId !== '') {
+    if (archiveItem.value.list.length < 1 && searchItem.value.categoryId !== '') {
       await getArchiveList()
     }
   })
 
   async function getArchiveList() {
     const copyParam = cloneDeep(searchItem.value)
-    await store.getArchvList(copyParam)
+    await store.getArchiveList(copyParam)
   }
 
   async function getSearchList() {
@@ -167,14 +167,14 @@
     searchItem.value.title = searchInput.value
     const copyParam = cloneDeep(searchItem.value)
     copyParam.pageNo = 1
-    await store.getArchvList(copyParam)
+    await store.getArchiveList(copyParam)
   }
 
   async function clickType(type: string) {
-    if (archvItem.value.viewType === type) {
+    if (archiveItem.value.viewType === type) {
       return
     }
-    archvItem.value.viewType = type
+    archiveItem.value.viewType = type
     // 페이지 초기화 관련 고민
     switch (type) {
       case 'card':
@@ -186,14 +186,14 @@
     }
     const copyParam = cloneDeep(searchItem.value)
     copyParam.isPage = false
-    await store.getArchvList(copyParam)
+    await store.getArchiveList(copyParam)
   }
 
   async function getPageList(page: number) {
     searchItem.value.pageNo = page
     const copyParam = cloneDeep(searchItem.value)
     copyParam.isPage = false
-    await store.getArchvList(copyParam)
+    await store.getArchiveList(copyParam)
   }
 
   async function selectItem(data: Archive.ArchiveData) {

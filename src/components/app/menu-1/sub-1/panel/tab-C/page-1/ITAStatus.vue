@@ -109,7 +109,13 @@
                   <el-table-column :label="type" prop="insNm" align="center" min-width="230px" />
                 </el-table-column>
 
-                <el-table-column prop="lqValue" align="right" width="130px" sortable>
+                <el-table-column
+                  prop="lqValue"
+                  header-align="right"
+                  align="right"
+                  width="110px"
+                  sortable
+                >
                   <template #header>
                     <span style="text-align: center; display: inline-block"
                       >산업입지계수<br />(LQ)</span
@@ -119,7 +125,13 @@
                     {{ Number.isFinite(lqValue) ? lqValue?.toFixed(1) : '-' }}
                   </template>
                 </el-table-column>
-                <el-table-column prop="grValue" align="right" sortable>
+                <el-table-column
+                  prop="grValue"
+                  header-align="right"
+                  align="right"
+                  width="110px"
+                  sortable
+                >
                   <template #header>
                     <span style="text-align: center; display: inline-block">
                       고용성장률<br />(Growth)
@@ -129,7 +141,13 @@
                     {{ Number.isFinite(grValue) ? CommonUtil.comma(grValue?.toFixed(1)) : '-' }}
                   </template>
                 </el-table-column>
-                <el-table-column prop="rsValue" align="right" sortable>
+                <el-table-column
+                  prop="rsValue"
+                  header-align="right"
+                  align="right"
+                  width="110px"
+                  sortable
+                >
                   <template #header>
                     <span style="text-align: center; display: inline-block"
                       >지역할당효과<br />(RS)
@@ -323,8 +341,10 @@
       flex: 1;
       display: flex;
       flex-direction: row;
-      overflow-y: hidden;
+      //overflow-y: hidden;
+      overflow: hidden;
       height: 100%;
+      gap: 8px;
 
       .left {
         width: 30%;
@@ -339,7 +359,7 @@
         background: #fff;
         display: flex;
         flex-direction: column;
-        margin-left: 8px;
+        //margin-left: 8px;
         border-radius: 8px;
       }
 

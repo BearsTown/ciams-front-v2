@@ -229,16 +229,15 @@
         ],
         grid: {
           top: '5%',
-          // left: '5%',
-          // right: '5%',
-          // bottom: '15%',
-          bottom: legend.length > 15 && totalTextLength > 150 ? '25%' : '15%',
-          containLabel: false,
+          left: '5%',
+          right: '5%',
+          bottom: legend.length > 15 && totalTextLength > 150 ? '30%' : '15%',
+          containLabel: true,
         },
         legend: {
           data: legend,
           // type: 'scroll',
-          bottom: 'bottom',
+          bottom: '10',
         },
         xAxis: {
           type: 'category',

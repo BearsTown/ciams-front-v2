@@ -144,7 +144,7 @@
   }
 
   async function zoneSegItemSelect(item: Plan.Search.Row) {
-    // layoutSelected.value?.right?.collapse?.on()
+    layoutSelected.value?.right?.collapse?.on()
     mapStore.locationInfoVisible = false
 
     mapStore.controlManager?.closeAll()
@@ -186,9 +186,8 @@
       ?.getUitMap()
       .getView()
       .fit(uitVectorLayer2.getSource().getExtent(), {
-        // padding: [200, 100, 200, 100],
         size: [mapWidth - leftPanelWidth - rightPanelWidth, mapHeight - bottomPanelWidth],
-        padding: [150, rightPanelWidth, 150, leftPanelWidth],
+        padding: [50, rightPanelWidth, bottomPanelWidth, leftPanelWidth],
       })
   }
 

@@ -1,13 +1,12 @@
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { findIndex } from 'lodash-es'
 import { defineStore } from 'pinia'
 import JSEncrypt from 'jsencrypt'
 
 import {
-  token,
-  login,
-  getRsaPublicKey,
   checkToken as apiCheckToken,
+  getRsaPublicKey,
+  login,
   refreshToken as apiRefreshToken,
 } from '@/api/auth'
 import router from '@/router'
@@ -53,10 +52,21 @@ export const useAuthStore = defineStore('authStore', () => {
     if (!access_token) {
       logInErrorStatus('notLoggedIn')
     } else {
+      // try {
+      //   const { data } = await apiCheckToken(access_token)
+      //   await logInSuccess(data)
+      // } catch (e) {
+      //   logInErrorStatus('accessTokenExpired')
+      // }
       try {
         const { data } = await apiCheckToken(access_token)
-        await logInSuccess(data)
+        if (!data.active) {
+          logInErrorStatus('accessTokenExpired')
+        } else {
+          await logInSuccess(data)
+        }
       } catch (e) {
+        // console.log('accessTokenExpired')
         logInErrorStatus('accessTokenExpired')
       }
     }

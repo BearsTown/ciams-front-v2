@@ -5,7 +5,7 @@
       active: rightOpenStatus,
     }"
   >
-    <div style="padding-top: 15px; flex: 1">
+    <div style="padding-top: 15px; pointer-events: all">
       <MapSetting :map-type="mapType" />
 
       <component
@@ -17,7 +17,11 @@
       />
     </div>
 
-    <div class="mapController-bottom" :class="{ active: rightOpenStatus }">
+    <div
+      class="mapController-bottom"
+      :class="{ active: rightOpenStatus }"
+      style="pointer-events: all"
+    >
       <ZoomSlider :map-type="mapType" />
       <MiniMap :map-type="mapType" />
     </div>
@@ -49,7 +53,7 @@
   import { always } from 'ol/events/condition'
   import { useMapStore } from '@/stores/map/map'
   import UitDrawInteraction from '@uitgis/ol-ugis-test/interaction/uitDraw'
-  import { locationInfoStyle, measureAreaStyle, measureLineStyle, measureStyle } from '@/js/map/mapStyle'
+  import { locationInfoStyle, measureAreaStyle, measureLineStyle } from '@/js/map/mapStyle'
   import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style'
   import { DrawEvent } from 'ol/interaction/Draw'
   import { Point } from 'ol/geom'
@@ -475,24 +479,7 @@
   @import '@/assets/css/printModal.css';
 </style>
 
-<style scoped lang="scss">
-  .mapController {
-    //z-index: 5;
-    display: flex;
-    flex-flow: column;
-    right: 10px !important;
-
-    &.active {
-      right: 594px !important;
-    }
-
-    .mapController-bottom {
-      padding-top: 0;
-      padding-bottom: 15px;
-      flex-flow: column;
-    }
-  }
-</style>
+<style scoped lang="scss"></style>
 
 <style>
   .ol-custom-dragzoom {

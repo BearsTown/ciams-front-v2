@@ -17,6 +17,8 @@ namespace Token {
   }
 
   export interface Check {
+    active: false
+    sub: string
     user_name: string
     authorities: { authority: string }[]
   }

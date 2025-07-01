@@ -33,8 +33,6 @@
         style="z-index: 0"
         empty-text="데이터가 없습니다."
         scrollbar-always-on
-        height="210"
-        max-height="210"
         border
         :summary-method="getSummaries"
         :cell-style="getCellStyle"

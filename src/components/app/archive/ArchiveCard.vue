@@ -79,7 +79,11 @@
   }
 
   function replaceByDefault(e) {
-    e.target.src = '/assets/image/no-image.png'
+    // e.target.src = '/assets/image/no-image.png'
+    if (!e.target.dataset.errorHandled) {
+      e.target.dataset.errorHandled = 'true'
+      e.target.src = '/assets/image/no-image.png'
+    }
   }
 </script>
 

@@ -25,6 +25,7 @@
               :key="subIndex"
               :width="subColumn.width"
               :align="subColumn.align"
+              :prop="subColumn.prop"
             >
               <template #header>
                 <span style="width: 100%; text-align: center; display: inline-block">
@@ -44,7 +45,7 @@
 
         <el-table-column label="산업기반분석" align="center">
           <template v-for="(column, index) in itaColumns" :key="index">
-            <el-table-column :label="column.label" :align="column.align">
+            <el-table-column :label="column.label" :align="column.align" :prop="column.prop">
               <template #header>
                 <span style="width: 100%; text-align: center; display: inline-block">
                   {{ column.label }}
@@ -60,7 +61,7 @@
             </el-table-column>
           </template>
 
-          <el-table-column label="ITA분석" prop="itaRec" width="" align="center" />
+          <el-table-column label="ITA분석" prop="itaRec" width="90" align="center" />
           <el-table-column label="LQ분석" prop="lqRec" width="" align="center" />
         </el-table-column>
       </el-table>
@@ -69,15 +70,15 @@
 </template>
 
 <script setup lang="ts">
-  import { h, onBeforeMount, onMounted, ref, type VNode, watch } from 'vue'
+  import { computed, h, onBeforeMount, onMounted, ref, type VNode, watch } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import { useMenu2Sub1Store } from '@/stores/app/menu-2/sub-1'
   import CommonUtil from '@/utils/commonUtil'
+  import commonUtil from '@/utils/commonUtil'
   import { getByZoneNoItaResultDatas } from '@/api/app/menu-2/sub-1'
 
   import type { TableColumnCtx } from 'element-plus'
-  import commonUtil from '@/utils/commonUtil'
 
   interface SummaryMethodProps<T = any> {
     columns: TableColumnCtx<T>[]
@@ -93,17 +94,17 @@
     {
       labelKey: 'pastYear',
       children: [
-        { label: '사업체수', prop: 'pastCorpCnt', width: '', align: 'right' },
-        { label: '종사자수', prop: 'pastEmpCnt', width: '', align: 'right' },
-        { label: '평균종사자', prop: 'pastEmpAvg', width: '', align: 'right' },
+        { label: '사업체수', prop: 'pastCorpCnt', width: '', align: 'right', calc: 'SUM' },
+        { label: '종사자수', prop: 'pastEmpCnt', width: '', align: 'right', calc: 'SUM' },
+        { label: '평균종사자', prop: 'pastEmpAvg', width: '', align: 'right', calc: 'AVG' },
       ],
     },
     {
       labelKey: 'baseYear',
       children: [
-        { label: '사업체수', prop: 'baseCorpCnt', width: '', align: 'right' },
-        { label: '종사자수', prop: 'baseEmpCnt', width: '', align: 'right' },
-        { label: '평균종사자', prop: 'baseEmpAvg', width: '', align: 'right' },
+        { label: '사업체수', prop: 'baseCorpCnt', width: '', align: 'right', calc: 'SUM' },
+        { label: '종사자수', prop: 'baseEmpCnt', width: '', align: 'right', calc: 'SUM' },
+        { label: '평균종사자', prop: 'baseEmpAvg', width: '', align: 'right', calc: 'AVG' },
       ],
     },
   ])
@@ -114,34 +115,46 @@
     { label: 'RS', prop: 'rsValue', width: '', align: 'center' },
   ])
 
+  const sumProps = columns.value.flatMap((col) => col.children.map((child) => child.prop))
+  const flatColumns = computed(() => columns.value.flatMap((group) => group.children))
+
   const getSummaries = (param: SummaryMethodProps) => {
     const { columns, data } = param
     const sums: (string | VNode)[] = []
+
     columns.forEach((column, index) => {
       if (index === 0) {
         sums[index] = h('div', { style: {} }, ['총합계'])
         return
       }
 
-      if (commonUtil.isEmpty(column.property)) {
+      if (commonUtil.isEmpty(column.property) || !sumProps.includes(column.property)) {
         return
       }
 
+      const def = flatColumns.value.find((c) => c.prop === column.property)
+
       const values = data.map((item) => {
-        const value = getNestedValue(item.data, column.property)
+        const value = getNestedValue(item, column.property)
         return value !== undefined ? Number(value) : 0 // 기본값 설정
       })
 
       if (!values.every((value) => Number.isNaN(value))) {
-        const total = values.reduce((prev, curr) => {
-          const value = Number(curr)
-          if (!Number.isNaN(value)) {
-            return prev + curr
+        if (def?.calc === 'SUM') {
+          const total = values.reduce((acc, val) => acc + val, 0)
+          sums[index] = total.toLocaleString()
+        } else if (def?.calc === 'AVG') {
+          const v1 = sums[index - 1] as string
+          const v2 = sums[index - 2] as string
+
+          if (!Number.isNaN(v1) && !Number.isNaN(v2)) {
+            sums[index] = Math.round(
+              Number(v1.replace(/,/g, '')) / Number(v2.replace(/,/g, '')),
+            ).toLocaleString()
           } else {
-            return prev
+            sums[index] = ''
           }
-        }, 0)
-        sums[index] = CommonUtil.comma(total.toFixed(0))
+        }
       }
     })
 

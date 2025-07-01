@@ -44,6 +44,7 @@ export const useMapStore = (mapType: MapType) => {
       currentMapGroup: {} as MapLayerGroupType,
       mapInfo: {} as useMapInfo,
       locInfo: {} as ILocInfo,
+      locParams: {} as ILocInfo,
       locationInfoVisible: false,
       searchAddress: {} as IAddress,
       searchAddressFeature: {} as Feature,
@@ -127,6 +128,10 @@ export const useMapStore = (mapType: MapType) => {
       state.locInfo = locInfo
     }
 
+    function setLocParams(locParams: any) {
+      state.locParams = locParams
+    }
+
     return {
       ...toRefs(state),
       initializeMap,
@@ -134,6 +139,7 @@ export const useMapStore = (mapType: MapType) => {
       controlManager,
       interactionManager,
       setLocInfo,
+      setLocParams,
       setAddress,
       setSearchAddressFeature,
     }

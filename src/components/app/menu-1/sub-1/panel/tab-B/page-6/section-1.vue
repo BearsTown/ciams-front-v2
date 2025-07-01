@@ -67,7 +67,7 @@
                 </el-radio-group>
               </div>
 
-              <div style="position: absolute; bottom: 10px; z-index: 10; left: 10px">
+              <div style="position: absolute; bottom: 10px; z-index: 21; left: 10px">
                 <Legend :list="legendList" />
               </div>
 

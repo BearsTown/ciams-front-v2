@@ -12,7 +12,7 @@ export const useArchiveStore = defineStore('useArchiveStore', () => {
       size: 15,
       pageNo: 1,
     },
-    archvItem: {
+    archiveItem: {
       title: '',
       viewType: 'list',
       total: 0,
@@ -26,7 +26,7 @@ export const useArchiveStore = defineStore('useArchiveStore', () => {
       size: number
       pageNo: number
     }
-    archvItem: {
+    archiveItem: {
       title: string
       viewType: string
       total: number
@@ -43,12 +43,12 @@ export const useArchiveStore = defineStore('useArchiveStore', () => {
     }
   }
 
-  async function getArchvList(param: Archive.SearchParam) {
+  async function getArchiveList(param: Archive.SearchParam) {
     try {
       const { data }: any = await archiveService.getArchive(param)
       const find = Object.keys(param).find((key) => key === 'isPage')
       if (find === undefined || (!!find && param[find])) {
-        state.archvItem.total = data.page.totalCount
+        state.archiveItem.total = data.page.totalCount
       }
       if (data.list.length > 0) {
         for (const obj of data.list) {
@@ -65,14 +65,14 @@ export const useArchiveStore = defineStore('useArchiveStore', () => {
             obj.imgFileId = ''
           }
         }
-        state.archvItem.list = data.list
+        state.archiveItem.list = data.list
       } else {
-        state.archvItem.list = []
+        state.archiveItem.list = []
       }
     } catch (e) {}
   }
 
-  async function getDetailArchv(id: string) {
+  async function getDetailArchive(id: string) {
     try {
       const { data }: any = await archiveService.getArchiveDetail(id)
       return data
@@ -87,17 +87,17 @@ export const useArchiveStore = defineStore('useArchiveStore', () => {
     state.searchItem.hidden = null
     state.searchItem.size = 9
     state.searchItem.pageNo = 1
-    state.archvItem.title = ''
-    state.archvItem.viewType = 'card'
-    state.archvItem.total = 0
-    state.archvItem.list = []
+    state.archiveItem.title = ''
+    state.archiveItem.viewType = 'card'
+    state.archiveItem.total = 0
+    state.archiveItem.list = []
   }
 
   return {
     ...toRefs(state),
     getCategoryList,
-    getArchvList,
-    getDetailArchv,
+    getArchiveList,
+    getDetailArchive,
     archiveItemReset,
   }
 })

@@ -48,6 +48,18 @@
     }
   }
 
+  const uitWMSLayer0 = new UitWMSLayer({
+    baseUrl: mapStudioUrl,
+    sourceParams: {
+      KEY: '4E3030CC-D422-1740-0108-DBC8B1BEA424',
+      LAYERS: ['CIAMS_P1_USE'],
+    },
+    layerType: 'wms',
+    isSingleTile: false,
+    opacity: 0.8,
+    zIndex: 10,
+  })
+
   const uitWMSLayer1 = new UitWMSLayer({
     baseUrl: mapStudioUrl,
     sourceParams: {
@@ -118,6 +130,12 @@
         useLegend: true,
         useLayerSetting: true,
       }),
+      new MapLayer({
+        layer: uitWMSLayer0,
+        title: '용도지역',
+        userVisible: false,
+        useLayerSetting: true,
+      }),
     ])
 
     mapLayers.forEach((item) => {
@@ -146,6 +164,11 @@
     }
 
     mapWrap.value?.setTocCommonLayerGroups(commonLayerType, tocLayerGroups)
+
+    mapWrap.value?.setTocCommonLayerGroups(commonLayerType, {
+      title: '용도지역',
+      layers: [mapLayers[2]] as MapLayer[],
+    })
   }
 
   onBeforeMount(() => {

@@ -87,9 +87,9 @@
       </h2>
 
       <!--검색바-->
-      <!--      <SearchBar ref="mapSearchBarRef" :is-main="true" />-->
+      <SearchBar ref="mapSearchBarRef" :is-main="true" />
 
-      <div class="menu">
+      <div class="menu" :style="menus?.length > 0 ? 'height: 160px' : ''">
         <template v-for="item in menus[0].children" :key="item">
           <button
             v-if="isMenuCheck(item.name as MenuType)"

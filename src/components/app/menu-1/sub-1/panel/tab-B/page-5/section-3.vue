@@ -223,7 +223,7 @@
           label: {
             show: true, // Show labels
             position: 'inside',
-            formatter: '{c} %',
+            formatter: '{c}%',
             color: '#fff',
             fontSize: 12, // Optional: Adjust font size
           },
@@ -300,7 +300,7 @@
             label: {
               show: true, // Show labels
               position: 'inside',
-              formatter: '{c} %',
+              formatter: '{c}%',
               color: '#fff',
               fontSize: 12, // Optional: Adjust font size
             },

@@ -5,28 +5,26 @@
   >
     <div class="header-title" style="">산업정비구역 지정기준 및 기본방향</div>
     <div class="" style="display: flex; height: 100%">
-      <div style="flex: 1">
-        <el-tabs v-model="activeName" type="border-card" stretch="stretch" class="">
-          <el-tab-pane label="산업활성화구역" name="first" style="height: 100%">
-            <TabB1 />
-          </el-tab-pane>
-          <el-tab-pane label="산업주거융합구역" name="second" style="height: 100%"
-            ><TabB2
-          /></el-tab-pane>
-          <el-tab-pane label="산업입지촉진구역" name="third" style="height: 100%"
-            ><TabB3
-          /></el-tab-pane>
-          <el-tab-pane label="지역산업육성구역" name="fourth" style="height: 100%"
-            ><TabB4
-          /></el-tab-pane>
-        </el-tabs>
-      </div>
+      <el-tabs v-model="activeName" type="border-card" :stretch="true" style="width: 100%">
+        <el-tab-pane label="산업활성화구역" name="first" style="height: 100%">
+          <TabB1 />
+        </el-tab-pane>
+        <el-tab-pane label="산업주거융합구역" name="second" style="height: 100%"
+          ><TabB2
+        /></el-tab-pane>
+        <el-tab-pane label="산업입지촉진구역" name="third" style="height: 100%"
+          ><TabB3
+        /></el-tab-pane>
+        <el-tab-pane label="지역산업육성구역" name="fourth" style="height: 100%"
+          ><TabB4
+        /></el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, onActivated, onBeforeMount, onMounted } from 'vue'
+  import { onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
   import { useGlobalStore } from '@/stores/app'
   import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'

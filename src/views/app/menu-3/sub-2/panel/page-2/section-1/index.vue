@@ -51,6 +51,7 @@
       flex: 1;
       height: 0;
       display: flex;
+      overflow: hidden;
       flex-direction: row;
 
       .left {

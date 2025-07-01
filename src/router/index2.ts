@@ -371,7 +371,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'archive',
+        path: '',
         name: 'archiveMain',
         components: {
           center: () => import('@/views/app/archive/center'),

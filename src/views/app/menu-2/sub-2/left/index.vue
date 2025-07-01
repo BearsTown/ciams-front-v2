@@ -179,11 +179,24 @@
     uitVectorLayer2.clear()
     uitVectorLayer2.addFeatures(features)
 
+    const map = mapWrap.value!.getUitMap().getMap()!
+
+    // 좌우 패널의 픽셀 크기
+    const leftPanelWidth = layoutSelected.value?.left?.collapse?.status ? 355 : 0 // 왼쪽 패널의 픽셀 크기
+    const rightPanelWidth = layoutSelected.value?.right?.collapse?.status ? 585 : 0 // 오른쪽 패널의 픽셀 크기
+    const bottomPanelWidth = layoutSelected.value?.bottom?.collapse?.status ? 350 : 0 // 하단 패널의 픽셀 크기
+
+    // 뷰포트 크기 가져오기
+    const viewportSize = map.getTargetElement().getBoundingClientRect()
+    const mapWidth = viewportSize.width
+    const mapHeight = viewportSize.height
+
     mapWrap.value
       ?.getUitMap()
       .getView()
       .fit(uitVectorLayer2.getSource().getExtent(), {
-        padding: [200, 100, 200, 100],
+        size: [mapWidth - leftPanelWidth - rightPanelWidth, mapHeight - bottomPanelWidth],
+        padding: [50, rightPanelWidth, bottomPanelWidth, leftPanelWidth],
       })
   }
 

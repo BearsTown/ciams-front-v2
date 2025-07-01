@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onActivated, onMounted, reactive, ref, watch } from 'vue'
+  import { onActivated, onMounted, ref, watch } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import ZoneSegList from '@/components/common/ZoneSegList.vue'
@@ -91,7 +91,7 @@
     }),
   })
 
-  const mapLayers = reactive<MapLayer[]>([
+  const mapLayers: MapLayer[] = [
     new MapLayer({
       layer: uitWMSLayer1,
       title: '대상지',
@@ -108,7 +108,7 @@
       layer: uitVectorLayer2,
       userVisible: true,
     }),
-  ])
+  ]
 
   function load() {
     mapLayers.forEach((item) => {
@@ -131,7 +131,7 @@
 
     mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
 
-    const tocViewLayerGroups = mapLayers[0] as MapLayer
+    const tocViewLayerGroups = mapLayers[1] as MapLayer
 
     mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
   }

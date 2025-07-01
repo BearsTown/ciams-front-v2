@@ -186,10 +186,11 @@ export function processChartData(params) {
   return {
     series,
     grid: {
-      // left: '20%',
-      // right: '4%',
-      bottom: '5%',
-      containLabel: false,
+      top: '10%',
+      left: '5%',
+      right: '10%',
+      bottom: '0%',
+      containLabel: true,
     },
     tooltip: {
       trigger: 'axis',
@@ -200,6 +201,11 @@ export function processChartData(params) {
         },
       },
     },
+    dataZoom: [
+      {
+        type: 'inside',
+      },
+    ],
     xAxis: axis === 'X' ? categories : values,
     yAxis: axis === 'X' ? values : categories,
     // ...(axis === 'X'

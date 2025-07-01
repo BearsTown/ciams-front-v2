@@ -71,42 +71,46 @@
 
         <el-divider border-style="dashed" style="margin: 10px 0" />
 
-        <LayerDataTable />
+        <div style="display: flex; flex-direction: column; flex: 1">
+          <LayerDataTable />
+        </div>
 
         <el-divider border-style="dashed" style="margin: 10px 0" />
 
-        <PieChartItem
-          style="margin-top: 0"
-          title="선도·신흥산업 비율"
-          :items="[
-            {
-              label: '지수',
-              value: overview?.sssRate,
-              unit: '%',
-            },
-            {
-              label: '구분',
-              value: overview?.sssRe,
-              unit: '',
-            },
-          ]"
-          :data="{ value: overview?.sssRate, names: ['선도·신흥산업', '기타'] }"
-          :sources="source1"
-        />
+        <div style="display: flex; flex-direction: column; flex: 1">
+          <PieChartItem
+            style="margin-top: 0"
+            title="선도·신흥산업 비율"
+            :items="[
+              {
+                label: '지수',
+                value: overview?.sssRate,
+                unit: '%',
+              },
+              {
+                label: '구분',
+                value: overview?.sssRe,
+                unit: '',
+              },
+            ]"
+            :data="{ value: overview?.sssRate, names: ['선도·신흥산업', '기타'] }"
+            :sources="source1"
+          />
 
-        <Item
-          title="산업밀집도"
-          :value1="overview ? `${overview.density} 개/㎡` : ''"
-          :value2="overview ? `${overview.densityRe}` : ''"
-          :sources="source2"
-        />
+          <Item
+            title="산업밀집도"
+            :value1="overview ? `${overview.density} 개/㎡` : ''"
+            :value2="overview ? `${overview.densityRe}` : ''"
+            :sources="source2"
+          />
 
-        <Item
-          title="사업체수 증감"
-          :value1="overview ? `${overview.variation}` : ''"
-          :value2="overview ? `${overview.variaRe}` : ''"
-          :sources="source3"
-        />
+          <Item
+            title="사업체수 증감"
+            :value1="overview ? `${overview.variation}` : ''"
+            :value2="overview ? `${overview.variaRe}` : ''"
+            :sources="source3"
+          />
+        </div>
       </div>
     </div>
   </div>

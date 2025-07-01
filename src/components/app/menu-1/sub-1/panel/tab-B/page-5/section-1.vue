@@ -26,9 +26,7 @@
             >
               <span style="font-size: 12px; color: #616161">※제조업을 대상으로 함</span>
               <div style="display: flex; height: 100%">
-                <div style="flex: 1">
-                  <v-chart class="chart" :option="chartData" autoresize />
-                </div>
+                <v-chart class="chart" :option="chartData" autoresize />
               </div>
             </div>
           </div>
@@ -161,9 +159,15 @@
           label: {
             show: true,
             position: 'inside',
-            formatter: '{c}',
+            formatter: '{d}%',
             color: '#fff',
-            fontSize: 14,
+            fontSize: 12,
+          },
+          tooltip: {
+            formatter: function (params) {
+              return `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.color};"></span>
+        ${params.name}: ${params.value} (${params.percent}%)`
+            },
           },
           emphasis: {
             itemStyle: {
@@ -177,8 +181,14 @@
     }
 
     chartData.value = {
+      grid: {
+        top: '5%',
+        left: '5%',
+        right: '5%',
+        containLabel: true,
+      },
       legend: {
-        bottom: true,
+        bottom: 10,
       },
       tooltip: {
         trigger: 'axis',
@@ -228,15 +238,15 @@
     })
 
     chartData1.value = {
-      legend: {
-        bottom: true,
-      },
       grid: {
         top: '15%',
         left: '5%',
         right: '5%',
-        bottom: '25%',
-        containLabel: false,
+        bottom: '10%',
+        containLabel: true,
+      },
+      legend: {
+        bottom: 0,
       },
       tooltip: {
         trigger: 'axis',
@@ -326,8 +336,10 @@
       flex: 1;
       display: flex;
       flex-direction: row;
-      overflow-y: hidden;
+      //overflow-y: hidden;
+      overflow: hidden;
       height: 100%;
+      gap: 8px;
 
       .left {
         width: 50%;
@@ -342,7 +354,7 @@
         background: #fff;
         display: flex;
         flex-direction: column;
-        margin-left: 8px;
+        //margin-left: 8px;
         border-radius: 8px;
       }
 
