@@ -51,7 +51,7 @@
   }
 
   const zoneArea = computed(() => {
-    return `${commonUtil.comma(zoneAnalysisItem.value.zoneArea.toFixed(1))}㎡`
+    return `${commonUtil.comma(zoneAnalysisItem.value.zoneArea.toFixed(0))}㎡`
   })
 
   function cancel() {}

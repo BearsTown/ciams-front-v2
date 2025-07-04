@@ -15,71 +15,63 @@
               <el-text size="default">: {{ desc[type] }}</el-text>
             </div>
 
+            <el-divider border-style="dashed" style="margin: 5px 0" />
+
             <template v-for="(memo, idx) in memos" :key="memo">
-              - {{ memo }}
-              <br v-if="idx < memos.length - 1" />
+              <p>- {{ memo }}</p>
             </template>
           </div>
         </div>
         <div class="center">
           <div class="left">
             <div
-              style="
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-                border: none;
-                box-shadow: none;
-              "
+              class="border-box-square"
+              style="display: flex; flex-direction: column; flex: 1; overflow-y: hidden"
             >
-              <div
-                class="border-box-square"
-                style="display: flex; flex-direction: column; flex: 1; overflow-y: hidden"
-              >
-                <div style="margin: 8px 0; font-size: 15px; font-weight: bold">
-                  {{ type }} 밀도분석
-                </div>
-                <el-image
-                  style="width: 100%; height: 100%"
-                  :src="imgSrcC"
-                  fit="scale-down"
-                  :preview-src-list="[imgSrcC]"
-                  :preview-teleported="true"
-                  :zoom-rate="1.2"
-                />
+              <div style="margin: 8px 0; font-size: 15px; font-weight: bold">
+                {{ type }} 밀도분석
               </div>
+              <el-image
+                style="width: 100%; height: 100%"
+                :src="imgSrcC"
+                fit="scale-down"
+                :preview-src-list="[imgSrcC]"
+                :preview-teleported="true"
+                :zoom-rate="1.2"
+              />
+            </div>
 
-              <div
-                class="border-box-square"
-                style="height: 300px; display: flex; flex-direction: column"
+            <div
+              class="border-box-square"
+              style="height: 300px; display: flex; flex-direction: column"
+            >
+              <div style="margin: 8px 0; font-size: 15px; font-weight: bold">대표{{ type }}</div>
+              <el-table
+                :data="repData"
+                size="small"
+                style="height: 100%; z-index: 0"
+                empty-text="데이터가 없습니다."
+                :show-header="true"
+                scrollbar-always-on
+                border
+                table-layout="auto"
               >
-                <div style="margin: 8px 0; font-size: 15px; font-weight: bold">대표{{ type }}</div>
-                <el-table
-                  :data="repData"
-                  size="small"
-                  style="height: 100%; z-index: 0"
-                  empty-text="데이터가 없습니다."
-                  :show-header="true"
-                  scrollbar-always-on
-                  border
+                <el-table-column label="코드" align="center" width="55px">
+                  <template #default="{ row }"> {{ row?.tcode }}{{ row?.clsCode }}</template>
+                </el-table-column>
+                <el-table-column label="사업체명" prop="corpName" align="center" />
+                <el-table-column label="위치" prop="location" align="center" />
+                <el-table-column
+                  label="종사자수"
+                  prop="workerCnt"
+                  align="right"
+                  header-align="center"
                 >
-                  <el-table-column label="코드" align="center" width="55px">
-                    <template #default="{ row }"> {{ row?.tcode }}{{ row?.clsCode }}</template>
-                  </el-table-column>
-                  <el-table-column label="사업체명" prop="corpName" align="center" />
-                  <el-table-column label="위치" prop="location" align="center" />
-                  <el-table-column prop="workerCnt" align="right" width="90px">
-                    <template #header>
-                      <span style="text-align: center; display: inline-block"
-                        >종사자수</span
-                      ></template
-                    >
-                    <template #default="{ row: { workerCnt } }">
-                      {{ Number.isFinite(workerCnt) ? CommonUtil.comma(workerCnt) : '-' }}
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
+                  <template #default="{ row: { workerCnt } }">
+                    {{ Number.isFinite(workerCnt) ? CommonUtil.comma(workerCnt) : '-' }}
+                  </template>
+                </el-table-column>
+              </el-table>
             </div>
           </div>
 
@@ -102,7 +94,7 @@
                 scrollbar-always-on
                 border
               >
-                <el-table-column label="업종" align="center">
+                <el-table-column label="업종" align="center" fixed>
                   <el-table-column label="코드" align="center" width="55px">
                     <template #default="{ row }"> {{ row?.tcode }}{{ row?.clsCode }}</template>
                   </el-table-column>
@@ -347,20 +339,23 @@
       gap: 8px;
 
       .left {
-        width: 30%;
+        width: 400px;
         padding: 10px;
         background: #fff;
         border-radius: 8px;
+        display: flex;
+        flex-direction: column;
       }
 
       .right {
-        width: 70%;
+        flex: 1;
         padding: 10px;
         background: #fff;
         display: flex;
         flex-direction: column;
         //margin-left: 8px;
         border-radius: 8px;
+        overflow: hidden;
       }
 
       .right-top {
@@ -402,6 +397,10 @@
       font-size: 15px;
       font-weight: 400;
       line-height: 1.5;
+      > p {
+        padding-left: 0.5em;
+        text-indent: -0.6em;
+      }
     }
   }
 

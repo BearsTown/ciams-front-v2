@@ -225,6 +225,8 @@
     locationInfo.setActive(false)
 
     locationInfo.getInteraction()?.on('drawend', async (evt: DrawEvent) => {
+      layoutSelected.value?.left?.visible?.on()
+      layoutSelected.value?.left?.collapse?.off()
       layoutSelected.value?.right?.visible?.on()
       layoutSelected.value?.right?.collapse?.on()
 
@@ -269,9 +271,29 @@
       setTimeout(() => {
         locationInfo.clear()
         locationInfo.getSource()?.addFeature(features[0])
-        olMap!.getView().fit(locationInfo.getSource()!.getExtent(), {
-          padding: [200, 100, 200, 100],
-        })
+        // olMap!.getView().fit(locationInfo.getSource()!.getExtent(), {
+        //   padding: [200, 100, 200, 100],
+        // })
+
+        const map = mapWrap.value!.getUitMap().getMap()!
+
+        // 좌우 패널의 픽셀 크기
+        const leftPanelWidth = layoutSelected.value?.left?.collapse?.status ? 355 : 0 // 왼쪽 패널의 픽셀 크기
+        const rightPanelWidth = layoutSelected.value?.right?.collapse?.status ? 585 : 0 // 오른쪽 패널의 픽셀 크기
+        const bottomPanelWidth = layoutSelected.value?.bottom?.collapse?.status ? 350 : 0 // 하단 패널의 픽셀 크기
+
+        // 뷰포트 크기 가져오기
+        const viewportSize = map.getTargetElement().getBoundingClientRect()
+        const mapWidth = viewportSize.width
+        const mapHeight = viewportSize.height
+
+        mapWrap.value
+          ?.getUitMap()
+          .getView()
+          .fit(locationInfo.getSource()!.getExtent(), {
+            // size: [mapWidth + leftPanelWidth - rightPanelWidth, mapHeight - bottomPanelWidth],
+            padding: [0, rightPanelWidth, bottomPanelWidth, leftPanelWidth],
+          })
       }, 1)
 
       mapStore.setLocInfo({
@@ -459,6 +481,21 @@
       //       key: 'active',
       //       fn: (value) => {
       //         console.log(`로드뷰 ID :: [ ${value.id} ] :: [ ${value.state} ]`)
+      //       },
+      //     },
+      //   ],
+      // },
+      // {
+      //   button: new TriggerButton({
+      //     id: 'print',
+      //     title: '출력',
+      //     iconName: 'print',
+      //   }),
+      //   listeners: [
+      //     {
+      //       key: 'click',
+      //       fn: () => {
+      //         globalStore.printDialog = true
       //       },
       //     },
       //   ],

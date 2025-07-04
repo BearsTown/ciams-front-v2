@@ -1,12 +1,5 @@
 <template>
   <div class="zoningSetting">
-    <div class="zoningSetting-top customCard">
-      <div style="display: flex">
-        <div style="flex: 1; display: flex; align-items: center">정비구역계획</div>
-        <div style=""></div>
-      </div>
-    </div>
-
     <ul class="zoningSetting-tab customTab">
       <li
         v-for="(tab, index) in menu3sub3store.tabList"

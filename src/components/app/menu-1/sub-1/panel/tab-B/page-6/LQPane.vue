@@ -47,6 +47,7 @@
 
   const codes = ref()
   const activeName = ref()
+  const sggCode = ref<string>()
   const lqSubRefs = ref<LQSub[]>([])
 
   function updateData(data) {
@@ -91,8 +92,8 @@
         }
         const cStyle = new Style({
           stroke: new Stroke({
-            color: '#FFFFFF',
-            width: 1,
+            color: sggCd === sggCode.value ? '#FF0000' : '#FFFFFF',
+            width: 2,
           }),
           fill: new Fill({
             color,
@@ -187,7 +188,23 @@
     (e: 'update-legend', type: object): void
   }>()
 
+  async function loadConfig() {
+    try {
+      await cmmConfigStore.loadCmmConfig()
+      await cmmConfigStore.loadMapConfig()
+    } catch (err) {
+      CommonUtil.errorMessage(err)
+    }
+  }
+
   onMounted(async () => {
+    await loadConfig()
+
+    const sidoCd = cmmConfigStore.cmmConfigState['SIDO_CODE']?.confValue
+    const sggCd = cmmConfigStore.cmmConfigState['SGG_CODE']?.confValue
+
+    sggCode.value = `${sidoCd}${sggCd}`
+
     const { data: rawData } = await getCodeList(props.lqParentCode)
 
     codes.value = rawData

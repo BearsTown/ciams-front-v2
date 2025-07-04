@@ -1,6 +1,8 @@
 <template>
   <div style="display: flex; width: 100%; height: 100%; padding: 15px 12px; flex-direction: column">
-    <button class="popButton" @click="showImage(1)">도시공업지역 활성화 목표 및 전략</button>
+    <button class="popButton" @click="showImage(1)">
+      <span style="padding: 5px 0">1. 도시공업지역 활성화 목표 및 전략</span>
+    </button>
     <div
       style="
         display: flex;
@@ -11,7 +13,7 @@
         color: #616161;
         background: #fff;
         margin-top: 8px;
-        box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.12);
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.12);
       "
     >
       <div
@@ -21,10 +23,10 @@
           color: #616161;
           border-radius: 8px;
           background: #fff;
-          text-align: center;
+          text-align: left;
         "
       >
-        도시공업지역 유형별 관리방향
+        <span style="padding: 5px 0">2. 도시공업지역 유형별 관리방향</span>
       </div>
       <div
         style="
@@ -38,7 +40,9 @@
         <ZoneAnalysisList :page-size="4" @item-select="zoneAnalysisItemSelect" @clear="clear" />
       </div>
     </div>
-    <button class="popButton" @click="showImage(2)">도시공업지역 기본구상(안)</button>
+    <button class="popButton" @click="showImage(2)">
+      <span style="padding: 5px 0">3. 도시공업지역 기본구상(안)</span>
+    </button>
 
     <el-image
       ref="imageRef"
@@ -197,11 +201,24 @@
     uitVectorLayer2.clear()
     uitVectorLayer2.addFeatures(features)
 
+    const map = mapWrap.value!.getUitMap().getMap()!
+
+    // 좌우 패널의 픽셀 크기
+    const leftPanelWidth = layoutSelected.value?.left?.collapse?.status ? 355 : 0 // 왼쪽 패널의 픽셀 크기
+    const rightPanelWidth = layoutSelected.value?.right?.collapse?.status ? 585 : 0 // 오른쪽 패널의 픽셀 크기
+    const bottomPanelWidth = layoutSelected.value?.bottom?.collapse?.status ? 350 : 0 // 하단 패널의 픽셀 크기
+
+    // 뷰포트 크기 가져오기
+    const viewportSize = map.getTargetElement().getBoundingClientRect()
+    const mapWidth = viewportSize.width
+    const mapHeight = viewportSize.height
+
     mapWrap.value
       ?.getUitMap()
       .getView()
       .fit(uitVectorLayer2.getSource().getExtent(), {
-        padding: [200, 100, 200, 100],
+        // size: [mapWidth + leftPanelWidth - rightPanelWidth, mapHeight - bottomPanelWidth],
+        padding: [0, rightPanelWidth, bottomPanelWidth, leftPanelWidth],
       })
   }
 
@@ -260,7 +277,7 @@
   }
 
   .zoningSetting .customTab-item:not(.disabled).active {
-    background: #7AAAD1;
+    background: #7aaad1;
     color: #fff;
   }
 </style>
@@ -294,7 +311,7 @@
     color: #616161;
     border-radius: 8px;
     background: #fff;
-    text-align: center;
+    justify-content: left !important;
     box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.12);
     transition: 0.2s;
 

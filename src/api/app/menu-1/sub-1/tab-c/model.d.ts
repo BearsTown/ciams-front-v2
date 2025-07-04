@@ -1,3 +1,23 @@
+import { PageReq, PageRes } from '@/api/app/model'
+
+export namespace ItaResultDTO {
+  namespace Search {
+    export interface Params extends PageReq {
+      keyword?: string
+      sggCd: string
+    }
+
+    export interface Row extends ItaResultData {
+      rn: number
+    }
+
+    export interface Result {
+      page: PageRes
+      list: Row[]
+    }
+  }
+}
+
 export interface ItaData extends ItaResultData {
   sggCd: string
   sggNm: string

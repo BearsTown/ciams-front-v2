@@ -9,8 +9,7 @@
         <div class="top customScroll">
           <div class="text-wrap">
             <template v-for="(note, idx) in notes" :key="note">
-              - {{ note }}
-              <br v-if="idx < notes.length - 1" />
+              <p>- {{ note }}</p>
             </template>
           </div>
         </div>
@@ -103,6 +102,7 @@
         background: #fff;
         margin-left: 8px;
         border-radius: 8px;
+        overflow: hidden;
       }
     }
 
@@ -135,6 +135,10 @@
       font-size: 15px;
       font-weight: 400;
       line-height: 1.5;
+      > p {
+        padding-left: 0.5em;
+        text-indent: -0.6em;
+      }
     }
   }
 

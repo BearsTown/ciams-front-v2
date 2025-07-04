@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { reactive, Ref, toRefs } from 'vue'
+import { reactive, ref, Ref, toRefs } from 'vue'
 import { RouteMeta, RouteRecordName, useRouter } from 'vue-router'
 
 import { RouteNameType } from '@/router'
@@ -32,6 +32,7 @@ export const useGlobalStore = defineStore('globalStore', () => {
   const state = reactive({
     loading: false,
     // currentMapType: MapType.MAP_1,
+    printDialog: false,
     currentMapType: '' as MapType,
     layouts: new Map() as Layouts,
     layoutSelected: {} as Ref<Partial<LayoutState> | undefined>,

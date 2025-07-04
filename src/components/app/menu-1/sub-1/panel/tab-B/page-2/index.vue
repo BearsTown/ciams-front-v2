@@ -1,5 +1,5 @@
 <template>
-  <PagePane :title="[title]">
+  <PagePane :title="title">
     <template #center>
       <div class="container">
         <div class="center">
@@ -35,9 +35,10 @@
   const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
   const imgSrc = prefixPath + '527a91f3-3cd8-4187-aaeb-3e25c980b137'
 
-  const title = computed(
-    () => `${cmmConfigStore.cmmConfigState['SGG_NAME'].confValue} 산업여건변화`,
-  )
+  const title = computed(() => [
+    '산업현황분석',
+    `${cmmConfigStore.cmmConfigState['SGG_NAME'].confValue} 산업여건변화`,
+  ])
 
   onMounted(async () => {})
 
@@ -53,6 +54,7 @@
     width: 100%;
     height: 100%;
     display: flex;
+    justify-content: center;
     flex-direction: column;
 
     .center {

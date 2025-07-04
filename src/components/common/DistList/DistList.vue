@@ -97,6 +97,7 @@
 
   const emits = defineEmits<{
     (e: 'item-select', type: GisCiamsDistDTO.Search.Row): void
+    (e: 'onMounted'): void
     (e: 'clear'): void
   }>()
 
@@ -160,27 +161,15 @@
   onMounted(async () => {
     await runSearch()
 
-    distPageListRef?.value.selectAreaItem(0)
-
-    //메인화면 성장관리구역 링크 실행
-    // if (isMainLink.value == true) {
-    //   mittBus.emit('ciamsPlan-area-item-select', planArea.value)
-
-    //지도 로딩 완료 전 호출시 제대로 호출이 안됨
-    // setTimeout(() => {
-    // const baseLayer = 'CIAMS_PLANID_PLAN'
-    // mapUtil.selectHighLight(
-    //   planArea.value.planId,
-    //   'PLAN',
-    //   baseLayer.replace('PLANID', planArea.value.planId.toUpperCase()),
-    //   equalTo('AREA_NAME', planArea.value.name),
-    // )
-    // planAreaStore.setIsMainLink(false)
-    // }, 500)`
-    // }
+    emits('onMounted')
   })
 
+  function selectIndex() {
+    distPageListRef?.value.selectAreaItem(0)
+  }
+
   defineExpose({
+    selectIndex,
     distItemselect,
   })
 </script>

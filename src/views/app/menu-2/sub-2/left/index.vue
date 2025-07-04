@@ -195,8 +195,8 @@
       ?.getUitMap()
       .getView()
       .fit(uitVectorLayer2.getSource().getExtent(), {
-        size: [mapWidth - leftPanelWidth - rightPanelWidth, mapHeight - bottomPanelWidth],
-        padding: [50, rightPanelWidth, bottomPanelWidth, leftPanelWidth],
+        // size: [mapWidth + leftPanelWidth - rightPanelWidth, mapHeight - bottomPanelWidth],
+        padding: [0, rightPanelWidth, bottomPanelWidth, leftPanelWidth],
       })
   }
 

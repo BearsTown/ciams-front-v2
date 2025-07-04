@@ -319,12 +319,9 @@ export const useMenu1_2_2Store = defineStore('menu1-2-2Store', () => {
     distVectorLayer.clear()
     distVectorLayer.addFeatures(features)
 
-    mapWrap.value
-      ?.getUitMap()
-      .getView()
-      .fit(distVectorLayer.getSource().getExtent(), {
-        padding: [200, 100, 200, 100],
-      })
+    mapWrap.value?.getUitMap().getView().fit(distVectorLayer.getSource().getExtent(), {
+      // padding: [200, 100, 200, 100],
+    })
 
     if (!commonUtil.isEmpty(features) && !commonUtil.isEmpty(distNo)) {
       setSelectDist(features[0].getProperties()['DIST_NO'])

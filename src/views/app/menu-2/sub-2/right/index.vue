@@ -83,6 +83,7 @@
           ]"
           :data="{ value: overview?.deterio, names: ['20년 이상', '20년 미만'] }"
           :sources="source4"
+          :colors="['#ec8c9a', '#f1ffa4']"
         />
 
         <PieChartItem

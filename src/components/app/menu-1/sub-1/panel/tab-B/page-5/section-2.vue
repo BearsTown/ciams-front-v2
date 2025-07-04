@@ -8,9 +8,11 @@
       <div class="container">
         <div class="top customScroll">
           <div class="text-wrap">
-            - 도시공업지역 전기장비제조업, 자동차 및 트레일러 제조업 순으로 종사자수가 많음 <br />
-            - 지난 10년간 화학물질 및 화학제품 제조업의 증가가 가장 많으며, 자동차 및 트레일러
-            제조업은 지난 10년간 사업체수와 종사자수 모두 가장 많이 감소하였음
+            <p>- 도시공업지역 전기장비제조업, 자동차 및 트레일러 제조업 순으로 종사자수가 많음</p>
+            <p>
+              - 지난 10년간 화학물질 및 화학제품 제조업의 증가가 가장 많으며, 자동차 및 트레일러
+              제조업은 지난 10년간 사업체수와 종사자수 모두 가장 많이 감소하였음
+            </p>
           </div>
         </div>
         <div class="center">
@@ -44,8 +46,8 @@
               <div style="display: flex; flex-direction: column">
                 <div class="header-title" style="">지역별 종사자 밀도</div>
                 <div class="" style="display: flex; height: 100%">
-                  <Table1 :data="density" type="emp" style="width: 65%" />
-                  <v-chart class="chart" :option="densityOption" autoresize style="width: 35%" />
+                  <Table1 :data="density" type="emp" style="width: 70%" />
+                  <v-chart class="chart" :option="densityOption" autoresize style="width: 30%" />
                 </div>
               </div>
 
@@ -153,9 +155,14 @@
       series: [
         {
           type: 'pie',
-          radius: '80%',
+          radius: '90%',
           avoidLabelOverlap: false,
           data: density.value.map(({ name, empDensity }) => ({ value: empDensity, name })),
+          itemStyle: {
+            borderWidth: 1,
+            borderRadius: 5,
+            borderColor: '#fff',
+          },
           label: {
             show: true,
             position: 'inside',
@@ -356,6 +363,7 @@
         flex-direction: column;
         //margin-left: 8px;
         border-radius: 8px;
+        overflow: hidden;
       }
 
       .right-top {
@@ -397,6 +405,10 @@
       font-size: 15px;
       font-weight: 400;
       line-height: 1.5;
+      > p {
+        padding-left: 0.5em;
+        text-indent: -0.6em;
+      }
     }
   }
 

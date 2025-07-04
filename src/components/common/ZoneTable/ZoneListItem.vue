@@ -57,7 +57,7 @@
   })
 
   const zoneArea = computed(() => {
-    return `${commonUtil.comma(zoneItem.value.zoneArea.toFixed(1))}㎡`
+    return `${commonUtil.comma(zoneItem.value.zoneArea.toFixed(0))}㎡`
   })
 
   // watch(modal.value, () => {

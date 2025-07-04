@@ -97,24 +97,31 @@
             closeDialog()
           })
           .catch((err) => {
-            loginForm.password = ''
-            console.log(err)
+            loginForm.password = "";
             if (
-              err.response.status === 400 &&
               err.response.data.error_description &&
-              err.response.data.error_description.indexOf('잠겨') > -1
+              err.response.data.error_description.indexOf("locked") > -1
             ) {
-              commonUtil.errorMessage(err.response.data.error_description)
+              commonUtil.errorMessage(
+                "사용자 계정이 잠겼습니다. 관리자에게 문의하십시오."
+              );
             } else if (
-              err.response.status === 400 &&
               err.response.data.error_description &&
-              err.response.data.error_description.indexOf('유효') > -1
+              err.response.data.error_description.indexOf("account approval") > -1
             ) {
-              commonUtil.errorMessage('관리자 승인이 필요한 계정입니다.')
-            } else if (err.response.status === 400) {
-              commonUtil.errorMessage('일치하는 사용자 정보가 없습니다.')
+              commonUtil.errorMessage("관리자 승인이 필요한 계정입니다.");
+            } else if (
+              err.response.data.error_description &&
+              err.response.data.error_description.indexOf("Invalid password") > -1
+            ) {
+              commonUtil.errorMessage("패스워드가 일치하지 않습니다.");
+            } else if (
+              err.response.data.error_description &&
+              err.response.data.error_description.indexOf("LoginIdNotFound") > -1
+            ) {
+              commonUtil.errorMessage("일치하는 사용자 정보가 없습니다.");
             } else {
-              commonUtil.errorMessage('로그인 처리 중 에러가 발생했습니다.')
+              commonUtil.errorMessage("로그인 처리 중 에러가 발생했습니다.");
             }
           })
           .finally(() => {

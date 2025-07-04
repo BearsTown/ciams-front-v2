@@ -105,6 +105,7 @@
         background: #fff;
         margin-left: 8px;
         border-radius: 8px;
+        overflow: hidden;
       }
     }
 

@@ -8,7 +8,7 @@
       <div class="container">
         <div class="center">
           <div class="left customScroll">
-            <ITAResultTable :data="data" />
+            <ITAResult v-if="sggCode" :sgg-cd="sggCode" />
           </div>
         </div>
       </div>
@@ -22,18 +22,16 @@
   import { useGlobalStore } from '@/stores/app'
   import PagePane from '@/components/common/PagePane.vue'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import { getItaResultDatas } from '@/api/app/menu-1/sub-1/tab-c'
-  import { ItaResultData } from '@/api/app/menu-1/sub-1/tab-c/model'
-  import ITAResultTable from '@/components/app/menu-1/sub-1/panel/tab-C/ITAResultTable.vue'
   import CommonUtil from '@/utils/commonUtil'
   import Source from '@/components/common/Source.vue'
   import { SourceGroupDTO } from '@/api/app/source/model'
   import { getSources } from '@/api/app/source'
+  import ITAResult from '@/components/app/menu-1/sub-1/panel/tab-C/ITAResult.vue'
 
   const globalStore = useGlobalStore()
   const cmmConfigStore = useCmmConfigStore()
 
-  const data = ref<ItaResultData[]>([])
+  const sggCode = ref<string>()
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
   async function loadConfig() {
@@ -51,15 +49,14 @@
     const sidoCd = cmmConfigStore.cmmConfigState['SIDO_CODE']?.confValue
     const sggCd = cmmConfigStore.cmmConfigState['SGG_CODE']?.confValue
 
+    sggCode.value = `${sidoCd}${sggCd}`
+
     const { data: sourceData } = await getSources({
       category: '산업특성분석',
-      targetId: `${sidoCd}${sggCd}`,
+      targetId: sggCode.value,
     })
 
     sources.value = sourceData[0]?.sources
-
-    const { data: rawData } = await getItaResultDatas(`${sidoCd}${sggCd}`)
-    data.value = rawData
   })
 
   onBeforeMount(() => {})

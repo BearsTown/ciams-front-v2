@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div style="flex: 1; min-height: 131px">
+    <div style="flex: 1; height: 160px">
       <v-chart
         v-if="!CommonUtil.isInvalidNumber(data.value)"
         class="chart"
@@ -60,6 +60,7 @@
         unit: string
       }[]
       sources?: SourceGroupDTO.SourceDTO[]
+      colors?: string[]
     }>(),
     {
       title: '',
@@ -114,6 +115,7 @@
           },
         },
         data: CommonUtil.isInvalidNumber(props.data.value) ? [] : rData.value,
+        color: props.colors,
       },
     ],
   }))

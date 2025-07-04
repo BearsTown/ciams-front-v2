@@ -488,13 +488,10 @@
         if (res.status === 200) {
           if (res.data.response.status === 'OK') {
             const response = res.data.response
-            // searchedData.value[searchType.value].total = +response.record.total
-
-            searchedData.value[searchType.value].pagination = {
-              ...searchedData.value[searchType.value].pagination,
-              total: +res.data.page.totalCount,
-              currentPage: res.data.page.pageNo ? +res.data.page.pageNo : 1,
-            }
+            searchedData.value[searchType.value].total =
+              searchedData.value[searchType.value].total > 5000
+                ? '5000+'
+                : searchedData.value[searchType.value].total
 
             searchedData.value[searchType.value].items = response.result.items.map(
               (item: { id: string; address: any; point: PointXY }) => ({
@@ -583,4 +580,3 @@
 </script>
 
 <style scoped lang="scss"></style>
-

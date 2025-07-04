@@ -1,7 +1,13 @@
 <template>
   <div class="" style="display: flex; flex-direction: column; height: 100%">
     <div style="flex: 1; overflow-y: hidden">
-      <ZoneList :page-size="50" @item-select="zoneItemSelect" @clear="clear" />
+      <DistList
+        :page-size="50"
+        ref="distListRef"
+        @item-select="zoneItemSelect"
+        @clear="clear"
+        @on-mounted="handleChildMounted"
+      />
     </div>
 
     <el-divider border-style="dashed" style="margin: 10px 0" />
@@ -19,7 +25,7 @@
               <el-switch
                 size="small"
                 v-model="category.active.status"
-                @change="handleSwitchChange($event, idx, category.id)"
+                @change="handleSwitchChange(category.id)"
                 @click.prevent.stop
               />
             </div>
@@ -45,15 +51,16 @@
   import { useGlobalStore } from '@/stores/app'
   import { MapWrapper } from '@/js/mapWrapper'
   import { useMapStore } from '@/stores/map/map'
-  import ZoneList from '@/components/common/DistList/DistList.vue'
+  import DistList from '@/components/common/DistList/DistList.vue'
   import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
   import { Style } from 'ol/style'
+
+  const distListRef = ref<InstanceType<typeof DistList>>()
 
   const globalStore = useGlobalStore()
   const menu1sub2store = useMenu1Sub2store()
   const menu1_2_2Store = useMenu1_2_2Store()
 
-  // const mapType = MapType.MAP_1
   const mapType: MapType = 'Map-1-2-2'
   const mapLayerGroupType: MapLayerGroupType = 'Menu-1-2-2'
   const mapWrap = ref<MapWrapper>()
@@ -172,7 +179,7 @@
     }),
   ])
 
-  async function handleSwitchChange(value: boolean, index: number, categoryId) {
+  async function handleSwitchChange(categoryId) {
     // mapLayers.forEach((_, i) => {
     //   if (mapLayers[i].getLayer().getProperties()?.visibleIgnore) {
     //     return
@@ -215,17 +222,20 @@
     menu1_2_2Store.distVectorLayer.clear()
   }
 
+  async function handleChildMounted() {
+    mapWrap.value = await mapStore.getMapInstance()
+
+    distListRef.value?.selectIndex()
+  }
+
   onMounted(async () => {})
 
   onBeforeMount(async () => {
-    mapWrap.value = await mapStore.getMapInstance()
-    // mapWrap.value = await mapCacheStore.getMapObject(mapType).getMapInstance()
-
     await menu1_2_2Store.init(1)
 
     load()
 
-    await handleSwitchChange(true, 0, menu1_2_2Store.state.categories[0].id)
+    await handleSwitchChange(menu1_2_2Store.state.categories[0].id)
   })
 
   onActivated(() => {

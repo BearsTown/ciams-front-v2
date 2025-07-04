@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { MapLayerGroupType, MapType, MapWrapperConfig } from '@/enums/mapEnum'
-import { markRaw, reactive, toRefs } from 'vue'
+import { reactive, toRefs } from 'vue'
 import { MapWrapper } from '@/js/mapWrapper'
 import { useMapInfo } from '@/hooks/useMapInfo'
 import { ControlManager } from '@/js/map/control/ControlManager'
@@ -56,7 +56,7 @@ export const useMapStore = (mapType: MapType) => {
 
       mapInstance = await new Promise((resolve, reject) => {
         try {
-          const mapWrap = new MapWrapper({
+          const mapWrap = MapWrapper.create({
             mapType,
             config: mapConfig,
           })

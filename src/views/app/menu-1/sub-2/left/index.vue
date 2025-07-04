@@ -1,32 +1,5 @@
 <template>
   <div class="zoningSetting">
-    <div class="zoningSetting-top customCard">
-      <div style="display: flex">
-        <div style="flex: 1; display: flex; align-items: center">도시공업지역 현황</div>
-        <div style="">
-          <button type="button" class="btn-control" @click="showInfoRef = true">
-            <SvgIcon name="view-info" :size="15" />
-          </button>
-
-          <el-dialog
-            v-model="showInfoRef"
-            :append-to-body="true"
-            :fullscreen="true"
-            style="
-              background: rgb(0, 0, 0, 0.5);
-              width: 100%;
-              height: 100%;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            "
-          >
-            <el-image :src="imgSrc" fit="cover" />
-          </el-dialog>
-        </div>
-      </div>
-    </div>
-
     <ul class="zoningSetting-tab customTab">
       <li
         v-for="(tab, index) in menu1sub2store.tabList"
@@ -77,9 +50,6 @@
   const gosiList = ref<any[]>([])
   const planName = ref('')
 
-  const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
-  const imgSrc = prefixPath + '2044e732-c692-4ea0-9a8d-fc3554768949'
-
   // const currentTab = ref('TabA')
   // const tabList = [
   //   { name: '일반현황', id: 'TabA', component: TabA },
@@ -119,8 +89,8 @@
     switch (menu1sub2store.selectedTabId) {
       // 용도지역현황
       // case 'TabA': {
-        // isActiveTimePoint.value = false
-        // layoutSelected.value?.right?.visible.off()
+      // isActiveTimePoint.value = false
+      // layoutSelected.value?.right?.visible.off()
       //   break
       // }
       // 수립대상지역

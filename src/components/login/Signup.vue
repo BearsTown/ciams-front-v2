@@ -77,7 +77,7 @@
   const rules = reactive<FormRules>({
     email: [{ required: true, validator: validateEmail, trigger: 'blur' }],
     id: [{ required: true, validator: validatePass3, trigger: 'blur' }],
-    password: [{ required: true, validator: validatePass, trigger: 'blur' }],
+    password: [{ required: true, trigger: 'blur' }],
     checkPass: [{ required: true, validator: validatePass2, trigger: 'blur' }],
     name: [{ required: true, message: '이름은 필수입니다!', trigger: 'blur' }],
   })

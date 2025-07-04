@@ -234,7 +234,11 @@
     init()
   })
 
-  onActivated(() => {})
+  onActivated(async () => {
+    mapWrap.value = await mapStore.getMapInstance()
+    mapWrap.value?.getUitBaseMap().updateSize()
+    mapWrap.value?.getUitMap()?.refresh()
+  })
 </script>
 
 <style scoped lang="scss">
@@ -264,6 +268,7 @@
         width: 50%;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
 
         //padding: 10px;
         //background: #fff;

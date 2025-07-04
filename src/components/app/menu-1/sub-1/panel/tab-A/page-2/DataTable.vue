@@ -16,6 +16,8 @@
         :label="tableColumns[0]?.label"
         align="center"
         :prop="`${tableColumns[0]?.name}`"
+        :width="calculateColumnWidth()"
+        fixed
       />
       <template v-for="(col, index) in tableColumns" :key="index">
         <el-table-column
@@ -92,6 +94,14 @@
     return value
   }
 
+  const maxDataLength = ref()
+  // 컬럼 너비 계산 함수
+  const calculateColumnWidth = () => {
+    const charWidth = 10
+    const padding = 20 // 패딩 및 여백 추가
+    return maxDataLength.value * charWidth + padding
+  }
+
   watch(
     () => props.dataInfo,
     (newDataInfo) => {
@@ -101,15 +111,21 @@
         pivot.value = true
 
         tableColumns.value = newDataInfo.pivotColumns || []
+
+        maxDataLength.value = Math.max(...dataColumns.value.map((row) => row.label.length))
       } else {
         pivot.value = false
 
         tableColumns.value = newDataInfo.columns || []
+
+        maxDataLength.value = Math.max(
+          ...newDataInfo.data.map((item) => newDataInfo.columns[0].name.length),
+        )
       }
 
       tableData.value = newDataInfo.data || []
     },
-    { immediate: true },
+    { immediate: false },
   )
 
   onMounted(async () => {})
@@ -126,5 +142,9 @@
     font-size: 15px;
     font-weight: 700;
     letter-spacing: -0.02em;
+  }
+
+  :deep(.el-table th.el-table-fixed-column--left) {
+    background-color: var(--el-fill-color-light);
   }
 </style>

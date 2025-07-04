@@ -1,37 +1,18 @@
 <template>
   <div class="zoningSetting">
-    <div class="zoningSetting-top customCard">
-      <div style="display: flex">
-        <div style="flex: 1; display: flex; align-items: center">{{ sggName }} 현황</div>
-        <div style="">
-          <button type="button" class="btn-control" @click="showImage()">
-            <SvgIcon name="view-info" :size="15" />
-          </button>
-
-          <el-image
-            ref="imageRef"
-            :preview-teleported="true"
-            fit="cover"
-            style="width: 0; height: 0"
-            :preview-src-list="srcList"
-          />
-        </div>
-      </div>
-    </div>
-
     <ul class="zoningSetting-tab customTab">
       <li
         v-for="(tab, index) in menu1sub1store.tabList"
         :key="index"
         @click.prevent="handleTabChange(tab.id)"
-        :class="{ active: menu1sub1store.selectedTabId == tab.id }"
+        :class="{ active: menu1sub1store.selectedTabId === tab.id }"
         class="customTab-item"
       >
         {{ tab.name }}
       </li>
     </ul>
 
-    <div class="border-container container customScroll">
+    <div class="border-container container customScroll" style="flex: 1">
       <keep-alive>
         <component :is="currentTabComponent" />
       </keep-alive>
@@ -52,7 +33,6 @@
   // import { useManagementStore } from '@/stores/app/zoneEstablish/management'
   import { MapWrapper } from '@/js/mapWrapper'
   import { storeToRefs } from 'pinia'
-  import { API_INFO_CIAMS } from '@/config/config'
   import type { ImageInstance } from 'element-plus'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
@@ -71,10 +51,7 @@
   const gosiList = ref<any[]>([])
   const planName = ref('')
 
-  const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
-
   const imageRef = ref<ImageInstance>()
-  const srcList = ref<string[]>([prefixPath + '2044e732-c692-4ea0-9a8d-fc3554768949'])
   const sggName = computed(() => `${cmmConfigStore.cmmConfigState['SGG_NAME']?.confValue}`)
 
   // const currentTab = ref('TabA')
@@ -91,10 +68,6 @@
     TabB: TabBComp,
     TabC: TabCComp,
   }
-
-  // const currentTabComponent = computed(() => {
-  //   return menu1store.tabList.find((tab) => tab.id === menu1store.currentTabId)?.component || null
-  // })
 
   const currentTabComponent = computed(() => components[menu1sub1store.selectedTabId] || TabAComp)
 
@@ -140,16 +113,7 @@
     // if (gosi) window.open(gosi.gosiUrl, '_blank')
   }
 
-  function setMapDefault() {
-    // const currentMap = mapUtil.getCurrentMapFromMapStore()
-    // if (!currentMap) return false
-    // const currentView = currentMap.getView()
-    // const cmmConfig = useCmmConfig()
-    // const mapCenter = cmmConfig.state.MAP_INIT_CENTER.confValue ?? 7
-    // const mapZoom = cmmConfig.state.MAP_INIT_ZOOM.confValue ?? '[14250000, 4353402]'
-    // currentView.setCenter(JSON.parse(mapCenter))
-    // currentView.setZoom(+mapZoom)
-  }
+  function setMapDefault() {}
 
   function changePlanId(value: string | number | boolean): void {
     const find = gosiList.value.find((item) => value == item.value)
@@ -217,7 +181,7 @@
   }
 
   .zoningSetting-top {
-    min-height: 0px;
+    min-height: 0;
     padding: 10px;
   }
 

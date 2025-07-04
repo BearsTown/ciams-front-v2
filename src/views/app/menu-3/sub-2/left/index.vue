@@ -5,8 +5,9 @@
         <MenuCollapse
           class="menuButton"
           ref="childRefs"
-          :title="tab.name"
+          :title="`${index + 1}. ${tab.name}`"
           type=""
+          align="left"
           :is-open="menu3Sub2Store.selectedTabId === tab.id"
           @open-change="(isOpen: boolean) => handleCustomEvent(isOpen, tab.id, index)"
         >

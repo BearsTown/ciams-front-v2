@@ -49,11 +49,13 @@
   const globalStore = useGlobalStore()
   const { layoutSelected } = storeToRefs(globalStore)
 
-  const { selectedMenu, selectedItem } = storeToRefs(menu1Sub1Tab1Store)
+  const { selectedItem } = storeToRefs(menu1Sub1Tab1Store)
 
   const { status: isActive, toggle } = useBoolean(false)
 
   const statusList = ref<any[]>([])
+
+  const selectedMenu = ref<object | null>(null)
 
   const params = ref({
     title: '',

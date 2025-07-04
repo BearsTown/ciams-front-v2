@@ -1,7 +1,13 @@
 <template>
   <div class="" style="display: flex; flex-direction: column; height: 100%">
     <div style="flex: 1; overflow-y: hidden">
-      <ZoneList :page-size="50" @item-select="zoneItemSelect" @clear="clear" />
+      <DistList
+        :page-size="50"
+        ref="distListRef"
+        @item-select="zoneItemSelect"
+        @clear="clear"
+        @on-mounted="handleChildMounted"
+      />
     </div>
 
     <el-divider border-style="dashed" style="margin: 10px 0" />
@@ -31,33 +37,33 @@
 </template>
 
 <script setup lang="ts">
-  import { onActivated, onBeforeMount, onMounted } from 'vue'
+  import { onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
   import { InsideCollapse } from '@/components/common/collapse'
 
   import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
   import { useMenu1_2_3Store } from '@/stores/app/menu-1/sub-2/tab-c'
 
-  // import { useManagementStore } from '@/stores/app/zoneEstablish/management'
   import { useMapStore } from '@/stores/map/map'
   import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
   import { useGlobalStore } from '@/stores/app'
-  import ZoneList from '@/components/common/DistList/DistList.vue'
+  import DistList from '@/components/common/DistList/DistList.vue'
   import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
   import { Style } from 'ol/style'
+  import { MapWrapper } from '@/js/mapWrapper'
+
+  const distListRef = ref<InstanceType<typeof DistList>>()
 
   const globalStore = useGlobalStore()
   const menu1sub2store = useMenu1Sub2store()
   const menu1_2_3Store = useMenu1_2_3Store()
 
-  // const mapType = MapType.MAP_1
   const mapType: MapType = 'Map-1-2-3'
   const mapLayerGroupType: MapLayerGroupType = 'Menu-1-2-3'
-  // const mapWrap = ref<MapWrapper>()
+  const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
-  // const { state } = storeToRefs(menu1_2_3Store)
   const state = menu1_2_3Store.state
 
   function load() {}
@@ -69,28 +75,25 @@
 
   async function zoneItemSelect(item: GisCiamsDistDTO.Search.Row) {
     await menu1_2_3Store.callSelectDist(item.distNo)
-    // await menu1_2_3Store.loadDistFeatures(item.distNo)
   }
 
   function clear() {
-    // overview.value = null
     menu1_2_3Store.distVectorLayer.clear()
+  }
+
+  async function handleChildMounted() {
+    mapWrap.value = await mapStore.getMapInstance()
+
+    distListRef.value?.selectIndex()
   }
 
   onMounted(async () => {})
 
   onBeforeMount(async () => {
-    // mapWrap.value = await mapStore.getMapInstance()
-    // mapWrap.value = await mapCacheStore.getMapObject(mapType).getMapInstance()
-
-    console.log(state.categories)
-
     await menu1_2_3Store.init(2)
 
-    console.log(state.categories)
     load()
 
-    // menu1_2_3Store.state.categories[0].active.on()
     await handleSwitchChange(menu1_2_3Store.state.categories[0].id)
   })
 

@@ -24,8 +24,8 @@
         {{ searchAddress ? (searchAddress.address ? searchAddress.address.parcel : '') : '' }}
       </span>
       <div class="search-map-btn">
-        <button v-if="naverUsed" type="button" class="btn-basic" @click="">네이버</button>
-        <button type="button" class="btn-basic" @click="">이음지도</button>
+        <button type="button" class="btn-basic" @click="openApiMapWindow('naver')">네이버</button>
+        <button type="button" class="btn-basic" @click="openApiMapWindow('eum')">이음지도</button>
       </div>
       <button type="button" class="btn-close" @click="close">
         <svg
@@ -71,7 +71,6 @@
   import { computed, markRaw, onMounted, ref, shallowRef, watch } from 'vue'
 
   import Land from '@/components/common/locationInfo/land/Land.vue'
-  import Topography from '@/components/common/locationInfo/land/kras/Topography.vue'
   import DetailsAside from '@/components/common/DetailsAside.vue'
   // import { useGmpssStore } from '@/stores/app'
   // import useKeyLayerStore from '@/stores/map/keyLayer'
@@ -110,7 +109,6 @@
       feature: null,
     },
   ])
-  const naverUsed = computed(() => false)
 
   const searchEitherMap = (type: 'naver' | 'eum', searchValue) => {
     switch (type) {
@@ -192,6 +190,21 @@
 
   function close() {
     mapStore.locationInfoVisible = false
+  }
+
+  const openApiMapWindow = (type: 'naver' | 'eum') => {
+    switch (type) {
+      case 'naver': {
+        window.open('https://map.naver.com/p/search/' + searchAddress.value.address?.parcel)
+        break
+      }
+      case 'eum': {
+        window.open(
+          'https://www.eum.go.kr/web/mp/mpMapDet.jsp?detType=luLand&pnu=' + searchAddress.value.id,
+        )
+        break
+      }
+    }
   }
 
   const visible = computed(() => mapStore.locationInfoVisible)

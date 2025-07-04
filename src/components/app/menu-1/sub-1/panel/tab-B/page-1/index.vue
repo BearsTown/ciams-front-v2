@@ -1,5 +1,5 @@
 <template>
-  <PagePane :title="['공업지역기본계획 산업의 범위']">
+  <PagePane :title="['산업현황분석', '공업지역기본계획 산업의 범위']">
     <template #center>
       <div class="container">
         <div class="center">
@@ -14,10 +14,10 @@
               </span>
               <table class="customTable">
                 <colgroup>
-                  <col style="width: 10%" />
                   <col style="width: 15%" />
+                  <col style="width: 25%" />
                   <col style="width: 5%" />
-                  <col style="width: 70%" />
+                  <col style="width: 55%" />
                 </colgroup>
                 <thead>
                   <tr>

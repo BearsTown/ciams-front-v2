@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onBeforeMount, onMounted, ref } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import { useGlobalStore } from '@/stores/app'
@@ -42,14 +42,12 @@
     if (mapStore.locParams?.point) {
       console.log(mapStore.locParams.point)
 
+      layoutSelected.value?.left?.visible?.on()
+      layoutSelected.value?.left?.collapse?.off()
       layoutSelected.value?.right?.visible?.on()
       layoutSelected.value?.right?.collapse?.on()
 
       mapStore.locationInfoVisible = true
-
-      console.log(mapStore.locParams)
-
-
 
       const filter = intersects(
         'SHAPE',
@@ -80,9 +78,28 @@
 
         locInteraction?.clear()
         locInteraction?.getSource()?.addFeature(features[0])
-        olMap!.getView().fit(locInteraction.getSource()!.getExtent(), {
-          padding: [200, 100, 200, 100],
-        })
+
+        // olMap!.getView().fit(locInteraction.getSource()!.getExtent(), {
+        //   padding: [200, 100, 200, 100],
+        // })
+
+        // 좌우 패널의 픽셀 크기
+        const leftPanelWidth = layoutSelected.value?.left?.collapse?.status ? 355 : 0 // 왼쪽 패널의 픽셀 크기
+        const rightPanelWidth = layoutSelected.value?.right?.collapse?.status ? 585 : 0 // 오른쪽 패널의 픽셀 크기
+        const bottomPanelWidth = layoutSelected.value?.bottom?.collapse?.status ? 350 : 0 // 하단 패널의 픽셀 크기
+
+        // 뷰포트 크기 가져오기
+        const viewportSize = olMap!.getTargetElement().getBoundingClientRect()
+        const mapWidth = viewportSize.width
+        const mapHeight = viewportSize.height
+
+        mapWrap.value
+          ?.getUitMap()
+          .getView()
+          .fit(locInteraction.getSource()!.getExtent(), {
+            // size: [mapWidth + leftPanelWidth - rightPanelWidth, mapHeight - bottomPanelWidth],
+            padding: [0, rightPanelWidth, bottomPanelWidth, leftPanelWidth],
+          })
       }, 1)
 
       mapStore.setLocInfo({

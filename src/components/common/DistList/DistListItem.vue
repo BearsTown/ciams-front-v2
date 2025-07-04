@@ -42,7 +42,7 @@
   const { status: isActive } = useBoolean(props.isActive)
 
   const distArea = computed(() => {
-    return `${commonUtil.comma(distItem.value.distArea.toFixed(1))}㎡`
+    return `${commonUtil.comma(distItem.value.distArea.toFixed(0))}㎡`
   })
 
   const dialogVisible = ref(false)

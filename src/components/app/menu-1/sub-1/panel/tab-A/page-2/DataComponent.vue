@@ -26,8 +26,8 @@
   import { useGlobalStore } from '@/stores/app'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   import CommonUtil from '@/utils/commonUtil'
-  import DataTable from '@/components/app/menu-1/sub-1/panel/tab-A/DataTable.vue'
-  import DataChart from '@/components/app/menu-1/sub-1/panel/tab-A/DataChart.vue'
+  import DataTable from '@/components/app/menu-1/sub-1/panel/tab-A/page-2/DataTable.vue'
+  import DataChart from '@/components/app/menu-1/sub-1/panel/tab-A/page-2/DataChart.vue'
   import { getDataInfo } from '@/api/app/menu-1/sub-1/tab-a'
 
   const globalStore = useGlobalStore()

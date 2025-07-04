@@ -8,10 +8,14 @@
       <div class="container">
         <div class="top customScroll">
           <div class="text-wrap">
-            - 공업지역 내 산업단지의 종사자밀도는 11.36인/ha 반면, 도시공업지역은 18.87인/ha로 1.5배
-            많은 종사자가 근무하고 있어 도시공업지역을 활성화시킬 수 있는 방안 필요 <br />
-            - 김천시는 도매 및 소매업수가 가장 많고, 공업지역과 도시공업지역에서는 제조업수가 가장
-            많으며, 제조업의 종사자수가 전체 지역에서 가장 많은 비중을 차지함
+            <p>
+              - 공업지역 내 산업단지의 종사자밀도는 11.36인/ha 반면, 도시공업지역은 18.87인/ha로
+              1.5배 많은 종사자가 근무하고 있어 도시공업지역을 활성화시킬 수 있는 방안 필요
+            </p>
+            <p>
+              - 김천시는 도매 및 소매업수가 가장 많고, 공업지역과 도시공업지역에서는 제조업수가 가장
+              많으며, 제조업의 종사자수가 전체 지역에서 가장 많은 비중을 차지함
+            </p>
           </div>
         </div>
         <div class="center">
@@ -47,8 +51,8 @@
               <div style="display: flex; flex-direction: column">
                 <div class="header-title" style="">지역별 사업체 밀도</div>
                 <div class="" style="display: flex; height: 100%">
-                  <Table1 :data="density" type="corp" style="width: 65%" />
-                  <v-chart class="chart" :option="densityOption" autoresize style="width: 35%" />
+                  <Table1 :data="density" type="corp" style="width: 70%" />
+                  <v-chart class="chart" :option="densityOption" autoresize style="width: 30%" />
                 </div>
               </div>
 
@@ -137,9 +141,14 @@
       series: [
         {
           type: 'pie',
-          radius: '80%',
+          radius: '90%',
           avoidLabelOverlap: false,
           data: density.value.map(({ name, corpDensity }) => ({ value: corpDensity, name })),
+          itemStyle: {
+            borderWidth: 1,
+            borderRadius: 5,
+            borderColor: '#fff',
+          },
           label: {
             show: true,
             position: 'inside',
@@ -247,6 +256,7 @@
         flex-direction: column;
         //margin-left: 8px;
         border-radius: 8px;
+        overflow: hidden;
       }
 
       .right-top {
@@ -288,6 +298,10 @@
       font-size: 15px;
       font-weight: 400;
       line-height: 1.5;
+      > p {
+        padding-left: 0.5em;
+        text-indent: -0.6em;
+      }
     }
   }
 

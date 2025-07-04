@@ -104,7 +104,6 @@
               maxlength="50"
               class="customInput"
               placeholder="비밀번호를 입력해주세요"
-              @blur="validate('password', true)"
             />
             <!-- <button type="button" class="btn-pw"> -->
             <!-- <img src="../assets/img/ico_pwHide.png" alt="비밀번호숨김" /> -->
@@ -296,12 +295,6 @@
       if (value.length == 0) return '필수 정보입니다'
       else validState[key] = false
     } else if ('password' == key && validState[key]) {
-      if (value.length == 0) return '필수 정보입니다'
-      else if (!regExp_password.test(value))
-        return '비밀번호는 8~20자리 영문 대·소문자, 숫자 및 특수문자를 조합해주세요.'
-      else if (user['checkPass'].trim().length == 0) return '필수 정보입니다'
-      else if (!(user['checkPass'] == user[key])) return '새 패스워드와 일치하지 않습니다.'
-      else validState[key] = false
     } else if ('email' == key && validState[key]) {
       if (value.length == 0) return '필수 정보입니다'
       else if (!regExp_email.test(value)) return '이메일 주소 형식을 확인하십시오.'

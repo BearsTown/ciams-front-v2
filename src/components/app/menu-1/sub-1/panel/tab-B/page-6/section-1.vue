@@ -8,12 +8,17 @@
       <div class="container">
         <div class="top customScroll">
           <div class="text-wrap">
-            <div style="display: flex; margin-bottom: 5px">
-              <div class="header-title" style="margin: 0">
-                {{ lqName }}
+            <div>
+              <div style="display: flex; margin-bottom: 5px">
+                <div class="header-title" style="margin: 0">
+                  {{ lqName }}
+                </div>
+                <el-text size="default">: {{ lqDesc }}</el-text>
               </div>
-              <el-text size="default">: {{ lqDesc }}</el-text>
             </div>
+
+            <el-divider border-style="dashed" style="margin: 5px 0" />
+
             <div style="display: flex; flex-direction: column">
               <div style="margin-bottom: 3px">
                 <el-tag type="info">사업체</el-tag>
@@ -134,10 +139,13 @@
   import Source from '@/components/common/Source.vue'
   import { SourceGroupDTO } from '@/api/app/source/model'
   import { getSources } from '@/api/app/source'
+  import { storeToRefs } from 'pinia'
 
   const globalStore = useGlobalStore()
   const menu1Sub1Tab2Page6Store = useMenu1Sub1Tab2Page6Store()
   const cmmConfigStore = useCmmConfigStore()
+
+  const { currentMapType } = storeToRefs(globalStore)
 
   const mapConfig = ref<MapWrapperConfig>()
 
@@ -361,10 +369,15 @@
     init()
   })
 
-  onActivated(() => {
+  onActivated(async () => {
+    currentMapType.value = mapType
     mapStore.currentMapGroup = 'Menu-1-1-2'
 
     // mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
+
+    mapWrap.value = await mapStore.getMapInstance()
+    mapWrap.value?.getUitBaseMap().updateSize()
+    mapWrap.value?.getUitMap()?.refresh()
   })
 </script>
 
@@ -399,6 +412,7 @@
         flex-direction: column;
         margin-left: 8px;
         border-radius: 8px;
+        overflow: hidden;
       }
 
       .right-top {

@@ -25,7 +25,7 @@ export function useMapWrapper(mapType: MapType): MapObject {
 
     mapInstance = await new Promise((resolve, reject) => {
       try {
-        const mapWrap = new MapWrapper({
+        const mapWrap = MapWrapper.create({
           mapType,
           config: mapConfig,
         })

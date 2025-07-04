@@ -6,6 +6,22 @@
     </div>
 
     <PwdChangeDialog :is-visible="isPwdChangeVisible" @close-dialog="isPwdChangeVisible = false" />
+
+    <el-dialog
+      v-model="globalStore.printDialog"
+      align-center
+      :show-close="false"
+      :append-to-body="true"
+      :destroy-on-close="true"
+      :close-on-click-modal="false"
+      class="dialog-map-print"
+      width="80%"
+      height="100%"
+      top="28vh"
+      :fullscreen="false"
+    >
+      <MapPrint style="width: 100%; height: 600px" :map-type="currentMapType" />
+    </el-dialog>
   </div>
 </template>
 
@@ -27,6 +43,13 @@
   import { getConfig } from '@/api/app/config'
   import CommonUtil from '@/utils/commonUtil'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import MapPrint from '@/components/map/control/MapPrint.vue'
+  import { useMapStore } from '@/stores/map/map'
+
+  // const printDialog = ref<boolean>(false)
+  function dialogChangeListener(state: boolean) {
+    globalStore.printDialog = state
+  }
 
   const route = useRoute()
   const router = useRouter()
@@ -34,6 +57,8 @@
   const authStore = useAuthStore()
   // const mapStore = useMapStore()
   const globalStore = useGlobalStore()
+
+  const { currentMapType } = storeToRefs(globalStore)
 
   const { isAdmin, userInfo, menuInfo } = storeToRefs(authStore)
 
@@ -97,6 +122,27 @@
   @import '@/assets/css/targetEdit.css';
   @import '@/assets/css/planningMonitoring.css';
   @import '@/assets/css/zoningSetting.css';
+
+  .dialog-map-print {
+    //width: 960px;
+
+    .el-dialog__header {
+      display: none !important;
+    }
+
+    .el-dialog__body {
+      padding: 0;
+      height: 80%;
+    }
+
+    :deep .el-dialog__body {
+      height: 80%;
+    }
+  }
+
+  :deep .el-dialog__body {
+    height: 80%;
+  }
 </style>
 
 <style scoped lang="scss"></style>

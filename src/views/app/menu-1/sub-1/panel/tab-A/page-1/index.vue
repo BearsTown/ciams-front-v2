@@ -1,14 +1,19 @@
 <template>
-  <PagePane :title="title">
-    <template #sub>
-      <Source :list="sources" />
-    </template>
-
+  <PagePane :title="['일반현황', '상위 및 관련계획']">
     <template #center>
       <div class="container">
         <div class="center">
           <div class="left customScroll">
-            <ITAResult v-if="sggCode" :sgg-cd="sggCode" />
+            <div class="container">
+              <el-image
+                style="width: 100%"
+                :src="imgSrc"
+                fit="scale-down"
+                :preview-src-list="[imgSrc]"
+                :preview-teleported="true"
+                :zoom-rate="1.2"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -17,59 +22,18 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onActivated, onBeforeMount, onMounted, ref, watch } from 'vue'
+  import { onActivated, onBeforeMount, onMounted } from 'vue'
 
   import { useGlobalStore } from '@/stores/app'
+  import { API_INFO_CIAMS } from '@/config/config'
   import PagePane from '@/components/common/PagePane.vue'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import { useMenu1Sub1Tab3Page2Store } from '@/stores/app/menu-1/sub-1/tab-C/page-2'
-  import Source from '@/components/common/Source.vue'
-  import { SourceGroupDTO } from '@/api/app/source/model'
-  import { getSources } from '@/api/app/source'
-  import ITAResult from '@/components/app/menu-1/sub-1/panel/tab-C/ITAResult.vue'
 
   const globalStore = useGlobalStore()
-  const menu1Sub1Tab3Page2Store = useMenu1Sub1Tab3Page2Store()
 
   const cmmConfigStore = useCmmConfigStore()
-
-  const sggCode = ref<string>()
-  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
-
-  const selectedTab = computed(() => menu1Sub1Tab3Page2Store.selectedTab)
-
-  const title = computed(() => {
-    const arr = ['인접 지자체 산업특성분석']
-
-    if (selectedTab.value?.type === 'etcSGG') {
-      arr[1] = selectedTab.value.name
-    }
-
-    return arr
-  })
-
-  watch(
-    () => menu1Sub1Tab3Page2Store.selectedTab,
-    async (currentTab) => {
-      if (currentTab?.type === 'etcSGG') {
-        try {
-          const { data: sourceData } = await getSources({
-            category: '산업특성분석',
-            targetId: currentTab?.id,
-          })
-
-          sources.value = sourceData[0]?.sources
-
-          sggCode.value = currentTab?.id
-
-          console.log(sggCode.value)
-        } catch (e) {
-          console.error('데이터 가져오기 실패:', e)
-        }
-      }
-    },
-    { immediate: true },
-  )
+  const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
+  const imgSrc = prefixPath + '2044e732-c692-4ea0-9a8d-fc3554768949'
 
   onMounted(async () => {})
 
@@ -86,6 +50,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 
     .center {
       flex: 1;
@@ -109,7 +74,6 @@
         background: #fff;
         margin-left: 8px;
         border-radius: 8px;
-        overflow: hidden;
       }
     }
 

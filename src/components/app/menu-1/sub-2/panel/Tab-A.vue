@@ -14,9 +14,11 @@
     </div>
     <div class="bottom customScroll">
       <div class="text-wrap">
-        - 최근 10년간(2011~2021년) 김천시 전체 인구는(140,239명) 증가(0.29%)하였음 <br />
-        - 그 중 대신동이 24,895명으로 가장 많은 인구비율을 나타냈으며 인구 증가율은 율곡동이
-        41.65%로 가장 높음
+        <p>- 최근 10년간(2011~2021년) 김천시 전체 인구는(140,239명) 증가(0.29%)하였음</p>
+        <p>
+          - 그 중 대신동이 24,895명으로 가장 많은 인구비율을 나타냈으며 인구 증가율은 율곡동이
+          41.65%로 가장 높음
+        </p>
       </div>
     </div>
   </div>
@@ -443,6 +445,7 @@
         background: #fff;
         margin-left: 8px;
         border-radius: 8px;
+        overflow: hidden;
       }
     }
 
@@ -465,6 +468,10 @@
       font-size: 15px;
       font-weight: 400;
       line-height: 1.5;
+      > p {
+        padding-left: 0.5em;
+        text-indent: -0.6em;
+      }
     }
   }
 </style>

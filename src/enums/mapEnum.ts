@@ -258,6 +258,7 @@ export type MapControlType =
   | 'mini-map'
   | 'map-roadview'
   | 'measure-refresh'
+  | 'print'
 
 export type BaseMap = 'vWorld' | 'kakao'
 

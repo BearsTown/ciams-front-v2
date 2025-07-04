@@ -4,8 +4,10 @@ import {
   IndustryArea,
   IndustryStatus,
   ItaData,
-  ItaResultData,
+  ItaResultDTO,
 } from '@/api/app/menu-1/sub-1/tab-c/model'
+import { AxiosRequestConfig } from 'axios'
+import qs from 'qs'
 
 const prefix = '/api/v1/1-1-3'
 
@@ -17,8 +19,14 @@ export function getIndustryAreas() {
   return http.get<ResultData<IndustryArea[]>>(`${prefix}/areas`)
 }
 
-export function getItaResultDatas(sggCd: string) {
-  return http.get<ResultData<ItaResultData[]>>(`${prefix}/ita/result/${sggCd}`)
+export function getItaResultDatas(params: ItaResultDTO.Search.Params) {
+  const config: AxiosRequestConfig = {
+    params,
+    paramsSerializer: (params) => {
+      return qs.stringify(params, { arrayFormat: 'comma' })
+    },
+  }
+  return http.get<ResultData<ItaResultDTO.Search.Result>>(`${prefix}/ita/result`, config)
 }
 
 export function getIndustryStatus(params: IndustryStatus.Find.Params) {

@@ -9,11 +9,11 @@
     scrollbar-always-on
     border
   >
-    <el-table-column label="업종" align="center">
+    <el-table-column label="업종" align="center" fixed>
       <el-table-column label="코드" align="center" width="55px">
         <template #default="{ row }"> {{ row?.tcode }}{{ row?.clsCode }} </template>
       </el-table-column>
-      <el-table-column label="산업내용" prop="insNm" align="center" min-width="230px" />
+      <el-table-column label="산업내용" prop="insNm" align="center" min-width="290px" />
     </el-table-column>
     <el-table-column label="산업입지계수(LQ)" align="center">
       <el-table-column label="분석값" prop="lqValue" align="right" width="80px" sortable>

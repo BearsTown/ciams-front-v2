@@ -30,10 +30,23 @@ export class MapWrapper {
     this.tocViewLayerGroups = {}
     this.tocCommonLayerGroups = {}
 
-    this._init()
+    // this._init()
   }
 
-  private _init(): void {
+  static async create({
+    mapType,
+    config,
+  }: {
+    mapType: MapType
+    config: MapWrapperConfig
+  }): Promise<MapWrapper> {
+    const instance = new MapWrapper({ mapType, config })
+    await instance._init()
+
+    return instance
+  }
+
+  private async _init(): Promise<void> {
     const uitMap = new UitMap({
       target: this.config.olMapId,
       layers: [],
@@ -55,9 +68,9 @@ export class MapWrapper {
       uitMap,
       baseMapKey: this.config.baseMapKey,
     })
-    ;(async () => {
-      await uitBaseMap.firstInit()
-    })()
+    // ;(async () => {
+    await uitBaseMap.firstInit()
+    // })()
 
     this.uitMap = uitMap
     this.uitBaseMap = uitBaseMap
