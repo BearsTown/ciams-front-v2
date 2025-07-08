@@ -18,7 +18,7 @@
   import { onActivated, onBeforeMount, onMounted } from 'vue'
 
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()

@@ -243,9 +243,11 @@
   import { useRouter } from 'vue-router'
   import { FormInstance } from 'element-plus'
 
-  import { useUserStore } from '@/stores/user'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
+
   import { getConfig } from '@/api/app/config'
+
+  import { useUserStore } from '@/stores/user'
 
   interface UserSign {
     id: string
@@ -312,14 +314,14 @@
       store
         .register(user)
         .then(() => {
-          commonUtil.successMessage('가입되었습니다.')
+          CommonUtil.successMessage('가입되었습니다.')
           goHome()
         })
         .catch((err) => {
           if (err.response.status === 409) {
-            commonUtil.errorMessage(err.response.data)
+            CommonUtil.errorMessage(err.response.data)
           } else {
-            commonUtil.errorMessage('회원가입 처리 중 에러가 발생했습니다.')
+            CommonUtil.errorMessage('회원가입 처리 중 에러가 발생했습니다.')
           }
         })
     } else {

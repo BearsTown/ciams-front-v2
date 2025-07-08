@@ -6,9 +6,6 @@
 
 <script setup lang="ts">
   import { computed, DefineComponent, onActivated, onBeforeMount, onMounted } from 'vue'
-  import { Menu3Sub3TabATabIdType, useMenu3Sub3TabAStore } from '@/stores/app/menu-3/sub-3/tab-A'
-
-  import { useGlobalStore } from '@/stores/app'
 
   import Temp from '@/components/app/menu-3/sub-3/panel/tab-A/temp.vue'
   // import Page1Comp from '@/components/app/menu-3/sub-3/panel/tab-A/page-1'
@@ -20,6 +17,8 @@
   // import Page7Comp from '@/components/app/menu-3/sub-3/panel/tab-A/page-7'
   // import Page8Comp from '@/components/app/menu-3/sub-3/panel/tab-A/page-8'
   // import Page9Comp from '@/components/app/menu-3/sub-3/panel/tab-A/page-9'
+  import { useGlobalStore } from '@/stores/app'
+  import { Menu3Sub3TabATabIdType, useMenu3Sub3TabAStore } from '@/stores/app/menu-3/sub-3/tab-A'
 
   const globalStore = useGlobalStore()
   const menu3Sub3TabAStore = useMenu3Sub3TabAStore()

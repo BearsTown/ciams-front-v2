@@ -119,12 +119,14 @@
   import { computed, onBeforeMount, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
-  import { useMenu2Sub2Store } from '@/stores/app/menu-2/sub-2'
   import SvgIcon from '@/components/common/SvgIcon.vue'
+  import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
   import PieChartItem from '@/components/app/menu-2/PieChartItem.vue'
-  import { SourceGroupDTO } from '@/api/app/source/model'
+
   import { getSources } from '@/api/app/source'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+
+  import { useMenu2Sub2Store } from '@/stores/app/menu-2/sub-2'
 
   const menu2Sub2Store = useMenu2Sub2Store()
   const { overview } = storeToRefs(menu2Sub2Store)

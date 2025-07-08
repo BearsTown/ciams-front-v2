@@ -13,14 +13,13 @@
   import TabBComp from '@/views/app/menu-3/sub-2/panel/page-2'
   import TabCComp from '@/views/app/menu-3/sub-2/panel/page-3'
 
-  import CommonUtil from '@/utils/commonUtil'
   import { useGlobalStore } from '@/stores/app'
-  import { Menu3Sub2TabIdType, useMenu3Sub2Store } from '@/stores/app/menu-3/sub-2'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { Menu3Sub2TabIdType, useMenu3Sub2Store } from '@/stores/app/menu-3/sub-2'
 
   const globalStore = useGlobalStore()
-  const menu3sub2store = useMenu3Sub2Store()
   const cmmConfigStore = useCmmConfigStore()
+  const menu3sub2store = useMenu3Sub2Store()
 
   const components: Record<Menu3Sub2TabIdType, DefineComponent> = {
     TabA: TabAComp,
@@ -30,17 +29,7 @@
 
   const currentTabComponent = computed(() => components[menu3sub2store.selectedTabId] || TabAComp)
 
-  async function loadConfig() {
-    try {
-      await cmmConfigStore.loadMapConfig()
-    } catch (err) {
-      CommonUtil.errorMessage(err)
-    }
-  }
-
-  async function init() {
-    await loadConfig()
-  }
+  async function init() {}
 
   onBeforeMount(() => {
     init()

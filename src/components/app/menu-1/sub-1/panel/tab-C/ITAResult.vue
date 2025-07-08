@@ -20,10 +20,13 @@
 
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted, ref, watch } from 'vue'
-  import { ItaResultDTO } from '@/api/app/menu-1/sub-1/tab-c/model'
+
   import ITAResultTable from '@/components/app/menu-1/sub-1/panel/tab-C/ITAResultTable.vue'
-  import { getItaResultDatas } from '@/api/app/menu-1/sub-1/tab-c'
+
   import { pageObject } from '@/js/common'
+
+  import { getItaResultDatas } from '@/api/app/menu-1/sub-1/tab-c'
+  import { ItaResultDTO } from '@/api/app/menu-1/sub-1/tab-c/model'
 
   const keyword = ref('')
   const pageObj = pageObject()

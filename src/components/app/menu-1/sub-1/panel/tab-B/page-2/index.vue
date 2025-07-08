@@ -24,14 +24,16 @@
 <script setup lang="ts">
   import { computed, onActivated, onBeforeMount, onMounted } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { API_INFO_CIAMS } from '@/config/config'
   import PagePane from '@/components/common/PagePane.vue'
+
+  import { API_INFO_CIAMS } from '@/config/config'
+
+  import { useGlobalStore } from '@/stores/app'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   const globalStore = useGlobalStore()
-
   const cmmConfigStore = useCmmConfigStore()
+
   const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
   const imgSrc = prefixPath + '527a91f3-3cd8-4187-aaeb-3e25c980b137'
 

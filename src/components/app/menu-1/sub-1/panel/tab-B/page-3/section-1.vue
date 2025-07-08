@@ -29,19 +29,20 @@
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu1Sub1Tab2Page3Store } from '@/stores/app/menu-1/sub-1/tab-B/page-3'
-  import { API_INFO_CIAMS } from '@/config/config'
   import PagePane from '@/components/common/PagePane.vue'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import Density from '@/components/app/menu-1/sub-1/panel/tab-B/page-3/Density.vue'
-  import { getDensityInfos } from '@/api/app/menu-1/sub-1/tab-b/page-3'
   import Source from '@/components/common/Source.vue'
+  import Density from '@/components/app/menu-1/sub-1/panel/tab-B/page-3/Density.vue'
+
+  import { API_INFO_CIAMS } from '@/config/config'
+
   import { getSources } from '@/api/app/source'
   import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getDensityInfos } from '@/api/app/menu-1/sub-1/tab-b/page-3'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   const globalStore = useGlobalStore()
-  const menu1Sub1Tab2Page3Store = useMenu1Sub1Tab2Page3Store()
 
   const cmmConfigStore = useCmmConfigStore()
   const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'

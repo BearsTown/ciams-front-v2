@@ -27,13 +27,15 @@
 </template>
 
 <script lang="ts" setup>
+  import { computed, nextTick, onBeforeMount, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { computed, nextTick, onBeforeMount, ref } from 'vue'
   import UitMap from '@uitgis/ol-ugis-test/uitMap'
+
   import { MapType } from '@/enums/mapEnum'
   import { MapWrapper } from '@/js/mapWrapper'
+
+  import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
 
   const props = withDefaults(

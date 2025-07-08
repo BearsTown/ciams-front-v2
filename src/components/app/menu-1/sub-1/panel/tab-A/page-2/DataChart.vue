@@ -11,10 +11,12 @@
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted, ref, watch } from 'vue'
 
+  import VChart from 'vue-echarts'
+
+  import CommonUtil from '@/utils/commonUtil'
+
   import { useGlobalStore } from '@/stores/app'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import VChart from 'vue-echarts'
-  import CommonUtil from '@/utils/commonUtil'
 
   const globalStore = useGlobalStore()
   const cmmConfigStore = useCmmConfigStore()

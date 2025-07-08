@@ -15,13 +15,13 @@
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
   import PagePane from '@/components/common/PagePane.vue'
   import TabA from '@/components/app/menu-3/sub-2/panel/page-1/section-2/Tab-A.vue'
 
   import { API_INFO_CIAMS } from '@/config/config'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()

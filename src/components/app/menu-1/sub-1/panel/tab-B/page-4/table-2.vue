@@ -38,11 +38,13 @@
 <script setup lang="ts">
   import { h, onActivated, onBeforeMount, onMounted, type VNode } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import CommonUtil from '@/utils/commonUtil'
   import type { TableColumnCtx } from 'element-plus'
+
+  import CommonUtil from '@/utils/commonUtil'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()

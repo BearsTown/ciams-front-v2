@@ -30,9 +30,8 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, onMounted } from 'vue'
+  import { ref } from 'vue'
 
-  import { type UseBoolean, useBoolean } from '@/hooks/useBoolean'
   import VChart from 'vue-echarts'
 
   const props = withDefaults(

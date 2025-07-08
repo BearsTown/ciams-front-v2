@@ -112,34 +112,37 @@
 
 <script setup lang="ts">
   import { computed, onActivated, onBeforeMount, onMounted, reactive, ref } from 'vue'
+  import { storeToRefs } from 'pinia'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu1Sub1Tab2Page6Store } from '@/stores/app/menu-1/sub-1/tab-B/page-6'
   import PagePane from '@/components/common/PagePane.vue'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import CommonUtil from '@/utils/commonUtil'
   import Controls from '@/components/map/control/Controls.vue'
   import MapWrapperView from '@/components/map/MapWrapper.vue'
-  import { CommonLayerGroup, MapType, MapWrapperConfig } from '@/enums/mapEnum'
-  import { useMapStore } from '@/stores/map/map'
-  import { MapWrapper } from '@/js/mapWrapper'
-  import LQPane from '@/components/app/menu-1/sub-1/panel/tab-B/page-6/LQPane.vue'
-  import { getCode } from '@/api/app/common'
-  import { MapLayer } from '@/js/layer'
-  import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
-  import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
-  import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
-  import { getHighTech } from '@/api/app/menu-1/sub-1/tab-b/page-6'
-  import { urlWithParams } from '@uitgis/ol-ugis-test/util'
-  import { GeoJSON, WFS } from 'ol/format'
-  import Feature from 'ol/Feature'
-  import VectorSource from 'ol/source/Vector'
-  import { Style } from 'ol/style'
-  import Legend from '@/components/app/menu-1/sub-1/panel/tab-B/page-6/Legend.vue'
   import Source from '@/components/common/Source.vue'
-  import { SourceGroupDTO } from '@/api/app/source/model'
+  import LQPane from '@/components/app/menu-1/sub-1/panel/tab-B/page-6/LQPane.vue'
+  import Legend from '@/components/app/menu-1/sub-1/panel/tab-B/page-6/Legend.vue'
+
+  import Feature from 'ol/Feature'
+  import { Style } from 'ol/style'
+  import { GeoJSON, WFS } from 'ol/format'
+  import VectorSource from 'ol/source/Vector'
+
+  import { urlWithParams } from '@uitgis/ol-ugis-test/util'
+  import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
+
+  import { MapLayer } from '@/js/layer'
+  import { MapWrapper } from '@/js/mapWrapper'
+  import { API_INFO_MAPSTUDIO } from '@/config/config'
+  import { CommonLayerGroup, MapType, MapWrapperConfig } from '@/enums/mapEnum'
+
+  import { getCode } from '@/api/app/common'
   import { getSources } from '@/api/app/source'
-  import { storeToRefs } from 'pinia'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getHighTech } from '@/api/app/menu-1/sub-1/tab-b/page-6'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMapStore } from '@/stores/map/map'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { useMenu1Sub1Tab2Page6Store } from '@/stores/app/menu-1/sub-1/tab-B/page-6'
 
   const globalStore = useGlobalStore()
   const menu1Sub1Tab2Page6Store = useMenu1Sub1Tab2Page6Store()
@@ -153,8 +156,6 @@
   const commonLayerType: CommonLayerGroup = 'COMMON_LAYER_GROUP_1-1-3'
   const mapStore = useMapStore(mapType)
   const mapWrap = ref<MapWrapper>()
-
-  const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
   const lqParentCode = ref('TCH0003')
 
@@ -175,50 +176,6 @@
   const workerLqsText = computed(() => workerLqs.value.join(', '))
   const endTxt = computed(() => ` 업종의 지역 집적도가 높음`)
 
-  async function loadConfig() {
-    try {
-      await cmmConfigStore.loadMapConfig()
-    } catch (err) {
-      CommonUtil.errorMessage(err)
-    }
-  }
-
-  const uitWMSLayer1 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
-    sourceParams: {
-      KEY: '5CE56438-29A3-83A2-F5EC-157133C5E823',
-      LAYERS: ['CIAMS_P1_SGG'],
-    },
-    crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_p1_sgg',
-      type: 'wms',
-    },
-    layerType: 'wms',
-    isSingleTile: false,
-    visible: true,
-    opacity: 1,
-    zIndex: 1110,
-  })
-
-  const uitWMSLayer2 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
-    sourceParams: {
-      KEY: '5CE56438-29A3-83A2-F5EC-157133C5E823',
-      LAYERS: ['CIAMS_P1_EMD'],
-    },
-    crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_p1_sgg',
-      type: 'wms',
-    },
-    layerType: 'wms',
-    isSingleTile: false,
-    visible: true,
-    opacity: 1,
-    zIndex: 1110,
-  })
-
   const uitVectorLayer = new UitWFSLayer({
     baseUrl: '',
     layerType: 'vector',
@@ -232,8 +189,6 @@
   })
 
   async function init() {
-    await loadConfig()
-
     mapConfig.value = {
       center: JSON.parse(cmmConfigStore.mapConfigState['MAP_INIT_CENTER'].confValue),
       zoom: Number(cmmConfigStore.mapConfigState['MAP_INIT_ZOOM'].confValue),
@@ -252,21 +207,8 @@
 
     const mapLayers = reactive<MapLayer[]>([
       new MapLayer({
-        layer: uitWMSLayer1,
-        title: '시군구',
-        userVisible: true,
-        useLegend: true,
-        useLayerSetting: true,
-      }),
-      new MapLayer({
-        layer: uitWMSLayer2,
-        title: '읍면동',
-        userVisible: true,
-        useLegend: true,
-        useLayerSetting: true,
-      }),
-      new MapLayer({
         layer: uitVectorLayer,
+        title: '시군구',
         userVisible: true,
       }),
     ])
@@ -293,7 +235,7 @@
 
     const tocLayerGroups = {
       title: '행정구역',
-      layers: [mapLayers[0], mapLayers[1]] as MapLayer[],
+      layers: [mapLayers[0]] as MapLayer[],
     }
 
     mapWrap.value?.setTocCommonLayerGroups(commonLayerType, tocLayerGroups)
@@ -303,7 +245,7 @@
 
   async function loadSidoFeatures() {
     const sidoFeatures = await fetch(
-      urlWithParams(mapStudioUrl + '/uwfs', {
+      urlWithParams(API_INFO_MAPSTUDIO.PREFIX + '/uwfs', {
         KEY: 'system',
       }),
       {

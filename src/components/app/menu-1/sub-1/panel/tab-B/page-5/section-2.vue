@@ -81,23 +81,27 @@
 <script setup lang="ts">
   import { computed, onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
-  import { API_INFO_CIAMS } from '@/config/config'
-  import PagePane from '@/components/common/PagePane.vue'
   import VChart from 'vue-echarts'
+
+  import Source from '@/components/common/Source.vue'
+  import PagePane from '@/components/common/PagePane.vue'
   import Table1 from '@/components/app/menu-1/sub-1/panel/tab-B/page-4/table-1.vue'
   import Table2 from '@/components/app/menu-1/sub-1/panel/tab-B/page-4/table-2.vue'
+
+  import CommonUtil from '@/utils/commonUtil'
+  import { API_INFO_CIAMS } from '@/config/config'
+
   import {
     test_getMenu1_1_2_5,
     test_getMenu1_1_2_5Increase,
     test_getMenu1_2_5Data,
   } from '@/api/app/menu-1/sub-1/tab-b/page-5'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import CommonUtil from '@/utils/commonUtil'
-  import Source from '@/components/common/Source.vue'
-  import { SourceGroupDTO } from '@/api/app/source/model'
   import { getSources } from '@/api/app/source'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()

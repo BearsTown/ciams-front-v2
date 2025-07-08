@@ -22,22 +22,20 @@
 
 <script setup lang="ts">
   import { computed, DefineComponent, onActivated, onMounted, ref } from 'vue'
+  import { storeToRefs } from 'pinia'
 
   import TabAComp from '@/components/app/menu-1/sub-2/left/Tab-A.vue'
   import TabBComp from '@/components/app/menu-1/sub-2/left/Tab-B.vue'
   import TabCComp from '@/components/app/menu-1/sub-2/left/Tab-C.vue'
   import TabDComp from '@/components/app/menu-1/sub-2/left/Tab-D.vue'
-  import { getConfigList } from '@/api/app/config'
+
+  import { MapWrapper } from '@/js/mapWrapper'
   import { useBoolean } from '@/hooks/useBoolean'
+
+  import { getConfigList } from '@/api/app/config'
+
   import { useGlobalStore } from '@/stores/app'
   import { Menu1Sub2TabIdType, useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
-  // import { useManagementStore } from '@/stores/app/zoneEstablish/management'
-  import { MapWrapper } from '@/js/mapWrapper'
-  import { storeToRefs } from 'pinia'
-  import { API_INFO_CIAMS } from '@/config/config'
-
-  // const managementStore = useManagementStore()
-  // const { planId, planConfig, isActiveTimePoint, features } = storeToRefs(managementStore)
 
   const globalStore = useGlobalStore()
   const { layoutSelected } = storeToRefs(globalStore)

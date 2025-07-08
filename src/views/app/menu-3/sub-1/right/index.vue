@@ -120,14 +120,15 @@
 <script setup lang="ts">
   import { computed, onBeforeMount, onMounted } from 'vue'
   import { storeToRefs } from 'pinia'
-  import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
 
-  import { useMenu3Sub1Store } from '@/stores/app/menu-3/sub-1'
   import SvgIcon from '@/components/common/SvgIcon.vue'
   import { InsideCollapse } from '@/components/common/collapse'
+  import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
+  import AsyncImage from '@/views/app/menu-3/sub-1/right/AsyncImage.vue'
 
   import { getImage as getImageAxios } from '@/api/app/menu-3/sub-1'
-  import AsyncImage from '@/views/app/menu-3/sub-1/right/AsyncImage.vue'
+
+  import { useMenu3Sub1Store } from '@/stores/app/menu-3/sub-1'
 
   const menu3Sub1Store = useMenu3Sub1Store()
   const { overview } = storeToRefs(menu3Sub1Store)

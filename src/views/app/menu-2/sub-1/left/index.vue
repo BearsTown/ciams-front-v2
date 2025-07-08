@@ -6,25 +6,28 @@
   import { onActivated, onMounted, ref, watch } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import ZoneSegList from '@/components/common/ZoneSegList.vue'
-
-  import { useBoolean } from '@/hooks/useBoolean'
-  import { useGlobalStore } from '@/stores/app'
-  import { Plan } from '@/api/app/menu-1/model'
-  import { useMenu2Sub1Store } from '@/stores/app/menu-2/sub-1'
-  import { MapLayer } from '@/js/layer'
-  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
-  import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
-  import { UitWFSLayer, UitWMSLayer } from '@uitgis/ol-ugis-test/layer'
-
-  import { Stroke, Style } from 'ol/style'
   import Feature from 'ol/Feature'
   import { GeoJSON } from 'ol/format'
+  import { Stroke, Style } from 'ol/style'
   import VectorSource from 'ol/source/Vector'
   import { like as likeFilter } from 'ol/format/filter'
+
+  import ZoneSegList from '@/components/common/ZoneSegList.vue'
+
+  import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
+  import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
+
+  import { MapLayer } from '@/js/layer'
   import { MapWrapper } from '@/js/mapWrapper'
+  import { useBoolean } from '@/hooks/useBoolean'
+  import { API_INFO_MAPSTUDIO } from '@/config/config'
+  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
+
+  import { Plan } from '@/api/app/menu-1/model'
+
+  import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
-  import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
+  import { useMenu2Sub1Store } from '@/stores/app/menu-2/sub-1'
 
   const menu2Sub1Store = useMenu2Sub1Store()
   const { overview } = storeToRefs(menu2Sub1Store)
@@ -39,10 +42,8 @@
   const mapStore = useMapStore(mapType)
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
-  const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
-
   const uitWMSLayer1 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
       LAYERS: ['CIAMS_ZONE'],
@@ -59,7 +60,7 @@
   })
 
   // const uitWMSLayer2 = new UitWMSLayer({
-  //   baseUrl: mapStudioUrl,
+  //   baseUrl: API_INFO_MAPSTUDIO.PREFIX,
   //   sourceParams: {
   //     KEY: 'FAE89AE2-23FE-D36C-5DE1-BC6515BC24B9',
   //     LAYERS: ['CIAMS_INDUSTRY_2021'],
@@ -131,9 +132,11 @@
 
     mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
 
-    const tocViewLayerGroups = mapLayers[1] as MapLayer
-
+    const tocViewLayerGroups = mapLayers[0] as MapLayer
     mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
+
+    const tocViewLayerGroups2 = mapLayers[1] as MapLayer
+    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups2)
   }
 
   async function zoneSegItemSelect(item: Plan.Search.Row) {
@@ -149,7 +152,7 @@
     })
 
     const res = await fetchFeatures({
-      url: mapStudioUrl,
+      url: API_INFO_MAPSTUDIO.PREFIX,
       key: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
       featureRequestProps: {
         // layers: 'CIAMS_P1_PLAN',

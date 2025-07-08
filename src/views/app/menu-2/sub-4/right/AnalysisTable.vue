@@ -146,9 +146,10 @@
 <script setup lang="ts">
   import { onActivated, onDeactivated, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
+
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
 
-  import { useMenu2Sub4Store } from 'src/stores/app/menu-2/sub-4'
+  import { useMenu2Sub4Store } from '@/stores/app/menu-2/sub-4'
 
   const menu2Sub4Store = useMenu2Sub4Store()
   const { overview } = storeToRefs(menu2Sub4Store)

@@ -22,27 +22,12 @@
   import { useGlobalStore } from '@/stores/app'
   import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
   import PagePane from '@/components/common/PagePane.vue'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import CommonUtil from '@/utils/commonUtil'
   import Density from '@/components/app/menu-1/sub-1/panel/tab-B/page-3/Density.vue'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
 
-  const cmmConfigStore = useCmmConfigStore()
-
-  async function loadConfig() {
-    try {
-      await cmmConfigStore.loadCmmConfig()
-      await cmmConfigStore.loadMapConfig()
-    } catch (err) {
-      CommonUtil.errorMessage(err)
-    }
-  }
-
-  onMounted(async () => {
-    // await loadConfig()
-  })
+  onMounted(async () => {})
 
   onBeforeMount(() => {})
 

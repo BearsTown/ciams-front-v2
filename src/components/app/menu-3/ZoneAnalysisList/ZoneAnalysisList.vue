@@ -68,9 +68,10 @@
 
   import ZoneAnalysisPageList from '@/components/app/menu-3/ZoneAnalysisList/ZoneAnalysisPageList.vue'
 
-  import { getCiamsZoneSegList } from 'src/api/app/gis/zone'
-  import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
   import { pageObject } from '@/js/common'
+
+  import { getCiamsZoneSegList } from '@/api/app/gis/zone'
+  import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
 
   const props = withDefaults(
     defineProps<{

@@ -24,6 +24,7 @@
 
 <script lang="ts" setup>
   import { onBeforeMount, reactive } from 'vue'
+
   import { ToggleButton } from '@/js/map/control/ToggleButton'
 
   const props = withDefaults(

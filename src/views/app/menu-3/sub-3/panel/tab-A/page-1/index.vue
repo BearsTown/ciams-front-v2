@@ -7,24 +7,13 @@
 
   import Page1 from '@/components/app/menu-3/sub-3/panel/tab-A/page-1'
 
-  import CommonUtil from '@/utils/commonUtil'
   import { useGlobalStore } from '@/stores/app'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   const globalStore = useGlobalStore()
   const cmmConfigStore = useCmmConfigStore()
 
-  async function loadConfig() {
-    try {
-      await cmmConfigStore.loadMapConfig()
-    } catch (err) {
-      CommonUtil.errorMessage(err)
-    }
-  }
-
-  async function init() {
-    await loadConfig()
-  }
+  async function init() {}
 
   onBeforeMount(() => {
     init()

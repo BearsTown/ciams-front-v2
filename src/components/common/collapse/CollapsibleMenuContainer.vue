@@ -21,7 +21,8 @@
 
 <script setup lang="ts">
   import { computed, onMounted, PropType, ref } from 'vue'
-  import CollapsibleMenuItem from './CollapsibleMenuItem.vue'
+
+  import CollapsibleMenuItem from '@/components/common/collapse/CollapsibleMenuItem.vue'
 
   export interface TabItem {
     id: string

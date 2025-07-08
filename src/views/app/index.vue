@@ -27,24 +27,22 @@
 
 <script setup lang="ts">
   import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
   import { storeToRefs } from 'pinia'
+  import { useRoute, useRouter } from 'vue-router'
 
   import SideBarMenu from '@/components/app/SideBarMenu.vue'
+  import MapPrint from '@/components/map/control/MapPrint.vue'
   import MainContainer from '@/components/common/MainContainer.vue'
   import PwdChangeDialog from '@/components/login/PwdChangeDialog.vue'
 
   import { RouteName, RouteNameType } from '@/router'
-  import { useGlobalStore } from '@/stores/app'
-  import { useAuthStore } from '@/stores/auth'
+  import { useBoolean } from '@/hooks/useBoolean'
+
+  import { getConfig } from '@/api/app/config'
 
   // import { useMapStore } from '@/stores/map/map'
-  import { useBoolean } from '@/hooks/useBoolean'
-  import { getConfig } from '@/api/app/config'
-  import CommonUtil from '@/utils/commonUtil'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import MapPrint from '@/components/map/control/MapPrint.vue'
-  import { useMapStore } from '@/stores/map/map'
+  import { useGlobalStore } from '@/stores/app'
+  import { useAuthStore } from '@/stores/auth'
 
   // const printDialog = ref<boolean>(false)
   function dialogChangeListener(state: boolean) {
@@ -69,22 +67,9 @@
 
   const routeName = computed(() => route.name)
 
-  const cmmConfigStore = useCmmConfigStore()
-
-  async function loadConfig() {
-    try {
-      await cmmConfigStore.loadCmmConfig()
-      await cmmConfigStore.loadMapConfig()
-    } catch (err) {
-      CommonUtil.errorMessage(err)
-    }
-  }
-
   globalStore.setLayout(RouteName[routeName.value as string])
 
-  onBeforeMount(async () => {
-    await loadConfig()
-  })
+  onBeforeMount(async () => {})
 
   watch(routeName, () => {
     authStore.checkToken()

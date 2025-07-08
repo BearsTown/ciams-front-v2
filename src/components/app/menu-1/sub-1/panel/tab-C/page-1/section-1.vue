@@ -223,17 +223,18 @@
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
+  import Source from '@/components/common/Source.vue'
   import PagePane from '@/components/common/PagePane.vue'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
+
+  import { getSources } from '@/api/app/source'
+  import { SourceGroupDTO } from '@/api/app/source/model'
   import { getItaDatas } from '@/api/app/menu-1/sub-1/tab-c'
   import { ItaData } from '@/api/app/menu-1/sub-1/tab-c/model'
-  import CommonUtil from '@/utils/commonUtil'
-  import Source from '@/components/common/Source.vue'
-  import { SourceGroupDTO } from '@/api/app/source/model'
-  import { getSources } from '@/api/app/source'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
@@ -242,15 +243,6 @@
 
   const records = ref<ItaData[]>()
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
-
-  async function loadConfig() {
-    try {
-      await cmmConfigStore.loadCmmConfig()
-      await cmmConfigStore.loadMapConfig()
-    } catch (err) {
-      CommonUtil.errorMessage(err)
-    }
-  }
 
   const getRowStyle = ({ row }: { row: ItaData }) => {
     let color = ''
@@ -293,8 +285,6 @@
   // }
 
   onMounted(async () => {
-    await loadConfig()
-
     const { data: sourceData } = await getSources({
       category: '산업특성분석',
       targetId: '산업기반분석',

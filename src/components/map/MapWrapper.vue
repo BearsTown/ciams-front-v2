@@ -14,14 +14,17 @@
 
 <script setup lang="ts">
   import 'ol/ol.css'
+
   import { computed, onMounted, ref } from 'vue'
+  import { storeToRefs } from 'pinia'
 
   import UitMap from '@uitgis/ol-ugis-test/uitMap'
+
+  import CommonUtil from '@/utils/commonUtil'
   import { MapType, MapWrapperConfig } from '@/enums/mapEnum'
+
   import { useMapStore } from '@/stores/map/map'
   import { useGlobalStore } from '@/stores/app'
-  import { storeToRefs } from 'pinia'
-  import commonUtil from '@/utils/commonUtil'
 
   const props = withDefaults(
     defineProps<{
@@ -50,7 +53,7 @@
 
   const centerRef = computed(() => {
     const center = mapStore.mapInfo.state?.center || [0, 0]
-    return [commonUtil.toRound3(center[0]) || 0, commonUtil.toRound3(center[1]) || 0]
+    return [CommonUtil.toRound3(center[0]) || 0, CommonUtil.toRound3(center[1]) || 0]
   })
 
   const changeListener = (evt) => {

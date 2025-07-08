@@ -114,25 +114,26 @@
 </template>
 
 <script setup lang="ts">
-  import { ElMessage } from 'element-plus'
+  import { computed, onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue'
   import { storeToRefs } from 'pinia'
-  import { onBeforeMount, onMounted, onUnmounted, reactive, ref, computed } from 'vue'
   import { useRouter } from 'vue-router'
+  import { ElMessage } from 'element-plus'
 
-  import LoginMainDialog from '@/components/login/LoginMainDialog.vue'
-  import PwdChangeDialog from '@/components/login/PwdChangeDialog.vue'
-
-  import { MenuType, RouteName } from '@/router'
-  import { getConfig } from '@/api/app/config'
-  import { API_INFO_CIAMS } from '@/config/config'
-  import { useGlobalStore } from '@/stores/app'
-  import { useAuthStore } from '@/stores/auth'
-  import commonUtil from '@/utils/commonUtil'
-  import tokenUtil from '@/utils/tokenUtil'
-  /** 퍼블 작업*/
   import CustomConfirm from '@/components/CustomConfirm.vue'
   import NotifyDialog from '@/components/login/NotifyDialog.vue'
   import SearchBar from '@/components/login/SearchBar.vue'
+  import LoginMainDialog from '@/components/login/LoginMainDialog.vue'
+  import PwdChangeDialog from '@/components/login/PwdChangeDialog.vue'
+
+  import { MenuType } from '@/router'
+  import tokenUtil from '@/utils/tokenUtil'
+  import CommonUtil from '@/utils/commonUtil'
+  import { API_INFO_CIAMS } from '@/config/config'
+
+  import { getConfig } from '@/api/app/config'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useAuthStore } from '@/stores/auth'
 
   const systemInfo = reactive({
     title_kor: '',
@@ -185,7 +186,7 @@
     await useAuthStore().checkToken()
 
     if (!tokenUtil.getAccessToken()) {
-      commonUtil.errorMessage('사용자 로그인이 필요합니다.')
+      CommonUtil.errorMessage('사용자 로그인이 필요합니다.')
       await router.push('/')
     } else {
       await router.push({

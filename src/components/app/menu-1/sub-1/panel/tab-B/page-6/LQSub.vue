@@ -69,13 +69,16 @@
 <script setup lang="ts">
   import { computed, onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import { getCodeList } from '@/api/app/common'
-  import ActiveButton from '@/components/common/ActiveButton.vue'
   import VChart from 'vue-echarts'
+
+  import ActiveButton from '@/components/common/ActiveButton.vue'
+
+  import { getCodeList } from '@/api/app/common'
   import { getHighTech, getTechLQ } from '@/api/app/menu-1/sub-1/tab-b/page-6'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
 
   import { styleUtil } from '@/utils'
   import CommonUtil from '@/utils/commonUtil'

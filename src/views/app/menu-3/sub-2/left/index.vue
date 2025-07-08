@@ -29,20 +29,19 @@
   import { computed, DefineComponent, onActivated, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import { useBoolean } from '@/hooks/useBoolean'
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu3store } from '@/stores/app/menu-3'
-  import { Menu3Sub2TabIdType, useMenu3Sub2Store } from '@/stores/app/menu-3/sub-2'
-
   import { Style } from 'ol/style'
+
   import MenuCollapse from '@/components/common/collapse/MenuCollapse.vue'
   import TabAComp from '@/components/app/menu-3/sub-2/left/page-1/Tab-A.vue'
   import TabBComp from '@/components/app/menu-3/sub-2/left/page-2/Tab-A.vue'
   import TabCComp from '@/components/app/menu-3/sub-2/left/page-3/Tab-A.vue'
 
-  const menu3store = useMenu3store()
+  import { useBoolean } from '@/hooks/useBoolean'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { Menu3Sub2TabIdType, useMenu3Sub2Store } from '@/stores/app/menu-3/sub-2'
+
   const menu3Sub2Store = useMenu3Sub2Store()
-  // const { tabList } = storeToRefs(menu3Sub2Store)
 
   const globalStore = useGlobalStore()
   const { layoutSelected } = storeToRefs(globalStore)

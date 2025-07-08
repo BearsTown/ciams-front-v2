@@ -1,27 +1,30 @@
 import { computed, markRaw, reactive, ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import { useBoolean, UseBoolean } from '@/hooks/useBoolean'
-import { Attribute, Item } from '@/utils/data.types'
-import { getDataConfig, getDataGroups } from '@/api/app/menu-1'
-import commonUtil from '@/utils/commonUtil'
+import Feature from 'ol/Feature'
+import { GeoJSON, WFS } from 'ol/format'
+import VectorSource from 'ol/source/Vector'
+import { Circle, Fill, Stroke, Style } from 'ol/style'
+import { intersects, like as likeFilter } from 'ol/format/filter'
+
+import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
+import { urlWithParams } from '@uitgis/ol-ugis-test/util'
+import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
+import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
+
+import { dataUtil } from '@/utils'
 import CommonUtil from '@/utils/commonUtil'
 import { MapLayer } from '@/js/layer'
-import { dataUtil } from '@/utils'
-import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
-import VectorSource from 'ol/source/Vector'
 import { MapType } from '@/enums/mapEnum'
 import { MapWrapper } from '@/js/mapWrapper'
-import { useMapStore } from '@/stores/map/map'
-import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
-import { intersects, like as likeFilter } from 'ol/format/filter'
-import { GeoJSON, WFS } from 'ol/format'
-import Feature from 'ol/Feature'
-import { urlWithParams } from '@uitgis/ol-ugis-test/util'
-import { Circle, Stroke, Style } from 'ol/style.js'
-import { Fill } from 'ol/style'
+import { Attribute, Item } from '@/utils/data.types'
+import { API_INFO_MAPSTUDIO } from '@/config/config'
+import { useBoolean, UseBoolean } from '@/hooks/useBoolean'
+
+import { getDataConfig, getDataGroups } from '@/api/app/menu-1'
+
 import UitUWMSLayer from '@/stores/map/uwmsLayer'
-import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
+import { useMapStore } from '@/stores/map/map'
 
 interface Category {
   id: number
@@ -61,7 +64,6 @@ interface State {
 }
 
 const mapType: MapType = 'Map-1-2-3'
-const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
 export const useMenu1_2_3Store = defineStore('menu1-2-3Store', () => {
   const state: State = reactive({
@@ -145,7 +147,7 @@ export const useMenu1_2_3Store = defineStore('menu1-2-3Store', () => {
   }
 
   function findSelect() {
-    if (!commonUtil.isEmpty(state.categories)) {
+    if (!CommonUtil.isEmpty(state.categories)) {
       return state.categories.find((category) => category.active.status)
     } else {
       return undefined
@@ -153,7 +155,7 @@ export const useMenu1_2_3Store = defineStore('menu1-2-3Store', () => {
   }
 
   async function setActiveCategory(categoryId: number) {
-    if (commonUtil.isEmpty(state.categories)) return false
+    if (CommonUtil.isEmpty(state.categories)) return false
 
     state.attributes = []
 
@@ -221,7 +223,7 @@ export const useMenu1_2_3Store = defineStore('menu1-2-3Store', () => {
 
     // if (selectDetail && state.activeYear && state.activeDistId) {
     if (selectDetail && state.activeYear) {
-      if (commonUtil.isEmpty(selectDetail?.layer)) {
+      if (CommonUtil.isEmpty(selectDetail?.layer)) {
         const cYears = findSelect()!.years
         const index = cYears.findIndex((detail) => detail.id === state.activeYear?.id)
 
@@ -246,7 +248,7 @@ export const useMenu1_2_3Store = defineStore('menu1-2-3Store', () => {
         // mapWrap.value?.getUitMap().addWFSLayer(vectorLayer)
 
         const uWmsLayer = new UitUWMSLayer({
-          baseUrl: mapStudioUrl,
+          baseUrl: API_INFO_MAPSTUDIO.PREFIX,
           sourceParams: {
             KEY: 'system',
             LAYERS: [state.activeYear!.layerName!],
@@ -302,12 +304,12 @@ export const useMenu1_2_3Store = defineStore('menu1-2-3Store', () => {
       srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
     }
 
-    if (!commonUtil.isEmpty(distNo)) {
+    if (!CommonUtil.isEmpty(distNo)) {
       featureRequestProps.filter = likeFilter('dist_no', distNo)
     }
 
     const res = await fetchFeatures({
-      url: mapStudioUrl,
+      url: API_INFO_MAPSTUDIO.PREFIX,
       key: '585C994F-2629-20C9-3EB8-619B3547E42F',
       featureRequestProps,
     })
@@ -323,7 +325,7 @@ export const useMenu1_2_3Store = defineStore('menu1-2-3Store', () => {
       // padding: [200, 100, 200, 100],
     })
 
-    if (!commonUtil.isEmpty(features) && !commonUtil.isEmpty(distNo)) {
+    if (!CommonUtil.isEmpty(features) && !CommonUtil.isEmpty(distNo)) {
       setSelectDist(features[0].getProperties()['DIST_NO'])
       setSelectDistFeature(features[0])
     } else {
@@ -335,7 +337,7 @@ export const useMenu1_2_3Store = defineStore('menu1-2-3Store', () => {
   async function loadIndustryFeatures() {
     const projectionCode = mapWrap.value?.getUitMap().getView().getProjection().getCode()
 
-    const filterCondition = !commonUtil.isEmpty(state.activeDistFeature)
+    const filterCondition = !CommonUtil.isEmpty(state.activeDistFeature)
       ? intersects('SHAPE', state.activeDistFeature!.getGeometry()!, projectionCode)
       : undefined
 
@@ -352,7 +354,7 @@ export const useMenu1_2_3Store = defineStore('menu1-2-3Store', () => {
     }
 
     const points = await fetch(
-      urlWithParams(mapStudioUrl + '/uwfs', {
+      urlWithParams(API_INFO_MAPSTUDIO.PREFIX + '/uwfs', {
         KEY: 'system',
       }),
       {
@@ -424,7 +426,7 @@ export const useMenu1_2_3Store = defineStore('menu1-2-3Store', () => {
 
   // 스타일 함수 정의
   const dynamicStyle = function (feature) {
-    if (commonUtil.isEmpty(columns.value)) return false
+    if (CommonUtil.isEmpty(columns.value)) return false
 
     return new Style({
       image: new Circle({

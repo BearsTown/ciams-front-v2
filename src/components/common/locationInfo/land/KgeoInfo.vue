@@ -84,7 +84,7 @@
                   <th style="padding-right: 0px">공시지가(원/m²)</th>
                   <td colspan="3">
                     {{
-                      commonUtil.comma(detailItem.SV0000000136?.indvdlzPblntfPclnd + '') +
+                      CommonUtil.comma(detailItem.SV0000000136?.indvdlzPblntfPclnd + '') +
                         '원 (' +
                         detailItem.SV0000000136?.stdrYearMt +
                         ')' || ''
@@ -117,8 +117,8 @@
                 <template v-for="(item, idx) in detailItem.SV0000000155" :key="idx">
                   <tr>
                     <td>{{ `${item.crtrYear}년 ${item.crtrMm}월` || '' }}</td>
-                    <td>{{ commonUtil.convertDateFormat(item.pblntfYmd) || '' }}</td>
-                    <td>{{ commonUtil.comma(item.indivOalp) || '' }}</td>
+                    <td>{{ CommonUtil.convertDateFormat(item.pblntfYmd) || '' }}</td>
+                    <td>{{ CommonUtil.comma(item.indivOalp) || '' }}</td>
                   </tr>
                 </template>
               </tbody>
@@ -233,20 +233,21 @@
 </template>
 
 <script setup lang="ts">
-  import { storeToRefs } from 'pinia'
   import { onActivated, onDeactivated, ref, watch } from 'vue'
+  import { storeToRefs } from 'pinia'
 
   import { InsideCollapse } from '@/components/common/collapse'
 
+  import Map from '@/js/map/map'
+  import { MapType } from '@/enums/mapEnum'
+  import CommonUtil from '@/utils/commonUtil'
+
   import Kgeo from '@/api/app/land/kgeo/model'
-  // import { useGmpssStore } from '@/stores/app'
+  import { getKgeoServiceData } from '@/api/app/land/kgeo'
+
+  import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
   import { useOpenApiStore } from '@/stores/app/openapi'
-  import Map from '@/js/map/map'
-  import commonUtil from '@/utils/commonUtil'
-  import { getKgeoServiceData } from '@/api/app/land/kgeo'
-  import { useGlobalStore } from '@/stores/app'
-  import { MapType } from '@/enums/mapEnum'
 
   interface KeyValue {
     KEY: string
@@ -286,7 +287,7 @@
 
     if (data.code === 200) {
       SV0000000167.value = data.result as Kgeo.Result.SV0000000167
-      if (!commonUtil.isEmpty(SV0000000167.value)) {
+      if (!CommonUtil.isEmpty(SV0000000167.value)) {
         ladUsePlanLawB.value = getLawStr(SV0000000167.value.base.ladUsePlanLawB)
       }
     } else {
@@ -339,7 +340,7 @@
   })
 
   // watch(detailItem, () => {
-  //   if (!commonUtil.isEmpty(detailItem)) {
+  //   if (!CommonUtil.isEmpty(detailItem)) {
   //     ladUsePlanLawB.value = getLawStr(detailItem.value.SV0000000167?.base.ladUsePlanLawB)
   //   }
   // })

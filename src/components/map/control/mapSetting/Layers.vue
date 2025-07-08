@@ -21,15 +21,19 @@
 </template>
 
 <script lang="ts" setup>
-  import { CommonLayerTypes, MapType, ViewLayerTypes } from '@/enums/mapEnum'
   import { computed, onBeforeMount, ref } from 'vue'
-  import { useGlobalStore } from '@/stores/app'
+
+  import GroupLayer from '@/components/map/control/mapSetting/GroupLayer.vue'
+  import SingleLayer from '@/components/map/control/mapSetting/SingleLayer.vue'
+
   import UitMap from '@uitgis/ol-ugis-test/uitMap'
   import UitBaseMap from '@uitgis/ol-ugis-test/baseMap/uitBaseMap'
+
   import { MapWrapper } from '@/js/mapWrapper'
+  import { CommonLayerTypes, MapType, ViewLayerTypes } from '@/enums/mapEnum'
+
+  import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
-  import SingleLayer from '@/components/map/control/mapSetting/SingleLayer.vue'
-  import GroupLayer from '@/components/map/control/mapSetting/GroupLayer.vue'
 
   const props = withDefaults(
     defineProps<{
@@ -78,7 +82,7 @@
       display: flex;
       flex-wrap: wrap;
       overflow-wrap: break-word;
-      border: 1px solid #7AAAD1;
+      border: 1px solid #7aaad1;
       border-radius: 3px;
       padding: 0px 3px;
       margin-bottom: 10px;
@@ -104,10 +108,10 @@
     input[type='range'] {
       appearance: none;
       background: linear-gradient(to right, #f4f4f4 0%, #747474 100%);
-      accent-color: #7AAAD1;
+      accent-color: #7aaad1;
       margin: 0 3px;
       cursor: pointer;
-      border: #7AAAD1;
+      border: #7aaad1;
       border-style: solid;
       border-width: 1px;
       border-radius: 10px;
@@ -118,7 +122,7 @@
     }
     .btn-tooltip {
       &.active {
-        color: #7AAAD1;
+        color: #7aaad1;
       }
     }
   }

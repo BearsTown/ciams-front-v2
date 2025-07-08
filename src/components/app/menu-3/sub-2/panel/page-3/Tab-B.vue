@@ -19,11 +19,11 @@
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted, shallowRef } from 'vue'
 
+  import VChart from 'vue-echarts'
   import { graphic } from 'echarts/core'
 
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
-  import VChart from 'vue-echarts'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()

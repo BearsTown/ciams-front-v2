@@ -267,17 +267,19 @@
   import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
-  import AnalysisTable from '@/views/app/menu-2/sub-3/right/AnalysisTable.vue'
-  import { useMenu2Sub4Store } from 'src/stores/app/menu-2/sub-4'
   import Item from '@/components/app/menu-2/Item.vue'
   import SvgIcon from '@/components/common/SvgIcon.vue'
+  import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
   import PieChartItem from '@/components/app/menu-2/PieChartItem.vue'
-  import { Info } from '@/api/app/menu-2/sub-4/model'
-  import { getMenu2Sub4Info } from '@/api/app/menu-2/sub-4'
   import AsyncImage from '@/views/app/menu-2/sub-4/right/AsyncImage.vue'
-  import { SourceGroupDTO } from '@/api/app/source/model'
+  import AnalysisTable from '@/views/app/menu-2/sub-3/right/AnalysisTable.vue'
+
   import { getSources } from '@/api/app/source'
+  import { Info } from '@/api/app/menu-2/sub-4/model'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getMenu2Sub4Info } from '@/api/app/menu-2/sub-4'
+
+  import { useMenu2Sub4Store } from '@/stores/app/menu-2/sub-4'
 
   const menu2Sub4Store = useMenu2Sub4Store()
   const { overview } = storeToRefs(menu2Sub4Store)

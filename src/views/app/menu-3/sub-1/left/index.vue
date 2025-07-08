@@ -56,31 +56,32 @@
 <script setup lang="ts">
   import { nextTick, onActivated, onMounted, reactive, ref, watch } from 'vue'
   import { storeToRefs } from 'pinia'
-
-  import { useBoolean } from '@/hooks/useBoolean'
-  import { useGlobalStore } from '@/stores/app'
-  import { PlanZone } from '@/api/app/zone/model'
-  import { useMenu3store } from '@/stores/app/menu-3'
-  import { useMenu3Sub1Store } from '@/stores/app/menu-3/sub-1'
-  import { MapLayer } from '@/js/layer'
-  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
-  import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
-  import { UitWFSLayer, UitWMSLayer } from '@uitgis/ol-ugis-test/layer'
-
   import type { ImageInstance } from 'element-plus'
 
-  import { Stroke, Style } from 'ol/style'
   import Feature from 'ol/Feature'
   import { GeoJSON } from 'ol/format'
+  import { Stroke, Style } from 'ol/style'
   import VectorSource from 'ol/source/Vector'
   import { like as likeFilter } from 'ol/format/filter'
-  import { MapWrapper } from '@/js/mapWrapper'
-  import { useMapStore } from '@/stores/map/map'
-  import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
-  import { API_INFO_CIAMS } from '@/config/config'
+
   import ZoneAnalysisList from '@/components/app/menu-3/ZoneAnalysisList/ZoneAnalysisList.vue'
 
-  const menu3store = useMenu3store()
+  import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
+  import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
+
+  import { MapLayer } from '@/js/layer'
+  import { useBoolean } from '@/hooks/useBoolean'
+  import { API_INFO_CIAMS, API_INFO_MAPSTUDIO } from '@/config/config'
+  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
+
+  import { MapWrapper } from '@/js/mapWrapper'
+
+  import { PlanZone } from '@/api/app/zone/model'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMapStore } from '@/stores/map/map'
+  import { useMenu3Sub1Store } from '@/stores/app/menu-3/sub-1'
+
   const menu3Sub1Store = useMenu3Sub1Store()
   const { overview } = storeToRefs(menu3Sub1Store)
 
@@ -101,10 +102,8 @@
     console.log(value)
   }
 
-  const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
-
   const uitWMSLayer1 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '724A0C98-F8D5-E230-5713-A4B9EFAC4F51',
       LAYERS: ['CIAMS_ZONE'],
@@ -186,7 +185,7 @@
     })
 
     const res = await fetchFeatures({
-      url: mapStudioUrl,
+      url: API_INFO_MAPSTUDIO.PREFIX,
       key: '724A0C98-F8D5-E230-5713-A4B9EFAC4F51',
       featureRequestProps: {
         layers: 'CIAMS_ZONE',

@@ -72,13 +72,13 @@
 <script setup lang="ts">
   import { computed, h, onBeforeMount, onMounted, ref, type VNode, watch } from 'vue'
   import { storeToRefs } from 'pinia'
+  import type { TableColumnCtx } from 'element-plus'
 
-  import { useMenu2Sub1Store } from '@/stores/app/menu-2/sub-1'
   import CommonUtil from '@/utils/commonUtil'
-  import commonUtil from '@/utils/commonUtil'
+
   import { getByZoneNoItaResultDatas } from '@/api/app/menu-2/sub-1'
 
-  import type { TableColumnCtx } from 'element-plus'
+  import { useMenu2Sub1Store } from '@/stores/app/menu-2/sub-1'
 
   interface SummaryMethodProps<T = any> {
     columns: TableColumnCtx<T>[]
@@ -128,7 +128,7 @@
         return
       }
 
-      if (commonUtil.isEmpty(column.property) || !sumProps.includes(column.property)) {
+      if (CommonUtil.isEmpty(column.property) || !sumProps.includes(column.property)) {
         return
       }
 

@@ -67,20 +67,21 @@
 </template>
 
 <script setup lang="ts">
-  import { storeToRefs } from 'pinia'
   import { computed, markRaw, onMounted, ref, shallowRef, watch } from 'vue'
+  import { storeToRefs } from 'pinia'
 
-  import Land from '@/components/common/locationInfo/land/Land.vue'
   import DetailsAside from '@/components/common/DetailsAside.vue'
-  // import { useGmpssStore } from '@/stores/app'
-  // import useKeyLayerStore from '@/stores/map/keyLayer'
-  import { getConfig } from '@/api/app/config'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import CommonUtil from '@/utils/commonUtil'
+  import Land from '@/components/common/locationInfo/land/Land.vue'
+
+  import UitDrawInteraction from '@uitgis/ol-ugis-test/interaction/uitDraw'
+
   import { MapType } from '@/enums/mapEnum'
+  import CommonUtil from '@/utils/commonUtil'
+
+  import { getConfig } from '@/api/app/config'
 
   import { useMapStore } from '@/stores/map/map'
-  import UitDrawInteraction from '@uitgis/ol-ugis-test/interaction/uitDraw'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   const props = withDefaults(
     defineProps<{

@@ -22,10 +22,12 @@
 <script setup lang="ts">
   import { computed, onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
+  import { API_INFO_CIAMS } from '@/config/config'
+
+  import { Density } from '@/api/app/menu-1/sub-1/tab-b/model'
+
   import { useGlobalStore } from '@/stores/app'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import { API_INFO_CIAMS } from '@/config/config'
-  import { Density } from '@/api/app/menu-1/sub-1/tab-b/model'
 
   const globalStore = useGlobalStore()
   const cmmConfigStore = useCmmConfigStore()

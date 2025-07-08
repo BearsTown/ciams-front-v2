@@ -10,11 +10,13 @@
 <script setup lang="ts">
   import { computed, ref, toRefs } from 'vue'
 
-  import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
+  import CommonUtil from '@/utils/commonUtil'
   import { useBoolean } from '@/hooks/useBoolean'
+
+  import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
+
   import { useAuthStore } from '@/stores/auth'
   import { useGlobalStore } from '@/stores/app'
-  import commonUtil from '@/utils/commonUtil'
 
   // import { usePlanAreaStore } from '@/stores/app/operation/planArea'
   // const planAreaStore = usePlanAreaStore()
@@ -42,7 +44,7 @@
   const { status: isActive } = useBoolean(props.isActive)
 
   const distArea = computed(() => {
-    return `${commonUtil.comma(distItem.value.distArea.toFixed(0))}㎡`
+    return `${CommonUtil.comma(distItem.value.distArea.toFixed(0))}㎡`
   })
 
   const dialogVisible = ref(false)

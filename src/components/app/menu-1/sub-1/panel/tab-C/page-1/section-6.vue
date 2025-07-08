@@ -19,14 +19,15 @@
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import PagePane from '@/components/common/PagePane.vue'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import CommonUtil from '@/utils/commonUtil'
   import Source from '@/components/common/Source.vue'
-  import { SourceGroupDTO } from '@/api/app/source/model'
-  import { getSources } from '@/api/app/source'
+  import PagePane from '@/components/common/PagePane.vue'
   import ITAResult from '@/components/app/menu-1/sub-1/panel/tab-C/ITAResult.vue'
+
+  import { getSources } from '@/api/app/source'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   const globalStore = useGlobalStore()
   const cmmConfigStore = useCmmConfigStore()
@@ -34,18 +35,7 @@
   const sggCode = ref<string>()
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
-  async function loadConfig() {
-    try {
-      await cmmConfigStore.loadCmmConfig()
-      await cmmConfigStore.loadMapConfig()
-    } catch (err) {
-      CommonUtil.errorMessage(err)
-    }
-  }
-
   onMounted(async () => {
-    await loadConfig()
-
     const sidoCd = cmmConfigStore.cmmConfigState['SIDO_CODE']?.confValue
     const sggCd = cmmConfigStore.cmmConfigState['SGG_CODE']?.confValue
 

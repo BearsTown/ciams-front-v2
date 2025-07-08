@@ -26,14 +26,15 @@
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
-  import { API_INFO_CIAMS } from '@/config/config'
-
   import TabB1 from '@/components/app/menu-3/sub-2/panel/page-2/section-1/Tab-B-1.vue'
   import TabB2 from '@/components/app/menu-3/sub-2/panel/page-2/section-1/Tab-B-2.vue'
   import TabB3 from '@/components/app/menu-3/sub-2/panel/page-2/section-1/Tab-B-3.vue'
   import TabB4 from '@/components/app/menu-3/sub-2/panel/page-2/section-1/Tab-B-4.vue'
+
+  import { API_INFO_CIAMS } from '@/config/config'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()

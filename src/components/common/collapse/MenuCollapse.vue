@@ -43,9 +43,10 @@
 </template>
 
 <script setup lang="ts">
-  import { useBoolean } from '@/hooks/useBoolean'
   import { watch } from 'vue'
   import { InfoFilled } from '@element-plus/icons-vue'
+
+  import { useBoolean } from '@/hooks/useBoolean'
 
   const props = withDefaults(
     defineProps<{

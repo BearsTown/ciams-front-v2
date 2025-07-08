@@ -1,4 +1,5 @@
 import { markRaw, ref } from 'vue'
+
 import { useMapInfo } from '@/hooks/useMapInfo'
 import { MapWrapper } from '@/js/mapWrapper'
 import { ControlManager } from '@/js/map/control/ControlManager'

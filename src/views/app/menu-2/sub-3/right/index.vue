@@ -194,12 +194,14 @@
 
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
   import AnalysisTable from '@/views/app/menu-2/sub-3/right/AnalysisTable.vue'
-  import { useMenu2Sub3Store } from 'src/stores/app/menu-2/sub-3'
   import Item from '@/components/app/menu-2/Item.vue'
   import SvgIcon from '@/components/common/SvgIcon.vue'
   import PieChartItem from '@/components/app/menu-2/PieChartItem.vue'
-  import { SourceGroupDTO } from '@/api/app/source/model'
+
   import { getSources } from '@/api/app/source'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+
+  import { useMenu2Sub3Store } from '@/stores/app/menu-2/sub-3'
 
   const menu2Sub3Store = useMenu2Sub3Store()
   const { overview } = storeToRefs(menu2Sub3Store)

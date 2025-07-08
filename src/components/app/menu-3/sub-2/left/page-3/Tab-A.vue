@@ -13,12 +13,10 @@
 
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted, ref } from 'vue'
+
   import ActiveButton from '@/components/common/ActiveButton.vue'
 
-  import {
-    Menu3Sub2Page3TabIdType,
-    useMenu3Sub2Page3Store,
-  } from 'src/stores/app/menu-3/sub-2/page-3'
+  import { Menu3Sub2Page3TabIdType, useMenu3Sub2Page3Store } from '@/stores/app/menu-3/sub-2/page-3'
 
   const menu3Sub2Page3Store = useMenu3Sub2Page3Store()
 

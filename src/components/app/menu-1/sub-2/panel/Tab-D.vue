@@ -30,10 +30,14 @@
 <script setup lang="ts">
   import { computed, onActivated, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu1_2_4Store } from '@/stores/app/menu-1/sub-2/tab-d'
+  import Source from '@/components/common/Source.vue'
+  import PagePane from '@/components/common/PagePane.vue'
   import Controls from '@/components/map/control/Controls.vue'
   import MapWrapperView from '@/components/map/MapWrapper.vue'
+  import TabDDetail from '@/components/app/menu-1/sub-2/panel/Tab-D-Detail.vue'
+
+  import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
+
   import {
     CommonLayerGroup,
     MapLayerGroupType,
@@ -41,21 +45,18 @@
     MapWrapperConfig,
     ViewLayerTypes,
   } from '@/enums/mapEnum'
-  import { MapWrapper } from '@/js/mapWrapper'
-
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-
-  import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
-  import { MapLayer } from '@/js/layer'
   import CommonUtil from '@/utils/commonUtil'
-  import { useMapStore } from '@/stores/map/map'
-  import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
-  import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
-  import TabDDetail from '@/components/app/menu-1/sub-2/panel/Tab-D-Detail.vue'
-  import Source from '@/components/common/Source.vue'
-  import PagePane from '@/components/common/PagePane.vue'
-  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { MapLayer } from '@/js/layer'
+  import { MapWrapper } from '@/js/mapWrapper'
+  import { API_INFO_MAPSTUDIO } from '@/config/config'
+
   import { getSources } from '@/api/app/source'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMapStore } from '@/stores/map/map'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { useMenu1_2_4Store } from '@/stores/app/menu-1/sub-2/tab-d'
 
   const globalStore = useGlobalStore()
   const cmmConfigStore = useCmmConfigStore()
@@ -70,18 +71,8 @@
   const mapWrap = ref<MapWrapper>()
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
-  const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
-
-  async function loadConfig() {
-    try {
-      await cmmConfigStore.loadMapConfig()
-    } catch (err) {
-      CommonUtil.errorMessage(err)
-    }
-  }
-
   const uitWMSLayer1 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '5CE56438-29A3-83A2-F5EC-157133C5E823',
       LAYERS: ['CIAMS_P1_SGG'],
@@ -99,7 +90,7 @@
   })
 
   const uitWMSLayer2 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '5CE56438-29A3-83A2-F5EC-157133C5E823',
       LAYERS: ['CIAMS_P1_EMD'],
@@ -117,7 +108,7 @@
   })
 
   const uitWMSLayerT = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '585C994F-2629-20C9-3EB8-619B3547E42F',
       LAYERS: ['CIAMS_DIST'],
@@ -135,7 +126,26 @@
   })
 
   async function init() {
-    await loadConfig()
+    const wmtsCapability = await UitWMTSLayer.getWMTSCapabilities({
+      key: 'CA5DC99D-28CA-3CF2-24B5-F0414D56DC84',
+      layerType: 'wmts',
+      url: API_INFO_MAPSTUDIO.PREFIX,
+    })
+
+    const source = UitWMTSLayer.createWMTSByCapability({
+      layers: [wmtsCapability.Contents.Layer[0].Title],
+      url: API_INFO_MAPSTUDIO.PREFIX,
+      wmtsCapability,
+    })
+
+    const uitWMTSLayer = new UitWMTSLayer({
+      baseUrl: API_INFO_MAPSTUDIO.PREFIX,
+      source,
+      visible: true,
+      zIndex: 0,
+      opacity: 0.8,
+      wmtsCapability,
+    })
 
     mapConfig.value = {
       center: JSON.parse(cmmConfigStore.mapConfigState['MAP_INIT_CENTER'].confValue),
@@ -176,6 +186,12 @@
         userVisible: true,
         useLayerSetting: true,
       }),
+      new MapLayer({
+        layer: uitWMTSLayer,
+        title: '용도지역',
+        userVisible: false,
+        useLayerSetting: true,
+      }),
     ])
 
     mapLayers.forEach((item) => {
@@ -202,11 +218,14 @@
       title: '행정구역',
       layers: [mapLayers[0], mapLayers[1]] as MapLayer[],
     }
-
     mapWrap.value?.setTocCommonLayerGroups(commonLayerType, tocLayerGroups)
 
-    const tocViewLayerGroups = mapLayers[2] as MapLayer
+    mapWrap.value?.setTocCommonLayerGroups(commonLayerType, {
+      title: '용도지역',
+      layers: [mapLayers[3]] as MapLayer[],
+    })
 
+    const tocViewLayerGroups = mapLayers[2] as MapLayer
     mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
   }
 

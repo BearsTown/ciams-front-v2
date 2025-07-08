@@ -59,12 +59,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { BaseMap, BaseMapImg, BaseMapOption, MapType } from '@/enums/mapEnum'
   import { computed, onBeforeMount, ref } from 'vue'
-  import { useGlobalStore } from '@/stores/app'
+
   import UitMap from '@uitgis/ol-ugis-test/uitMap'
   import UitBaseMap from '@uitgis/ol-ugis-test/baseMap/uitBaseMap'
+
   import { MapWrapper } from '@/js/mapWrapper'
+  import { BaseMap, BaseMapImg, BaseMapOption, MapType } from '@/enums/mapEnum'
+
+  import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
 
   const props = withDefaults(

@@ -6,9 +6,7 @@
 
 <script setup lang="ts">
   import { computed, DefineComponent, onActivated, onBeforeMount, onMounted } from 'vue'
-  import { useMenu1Sub1Tab2Store } from '@/stores/app/menu-1/sub-1/tab-B'
 
-  import { useGlobalStore } from '@/stores/app'
   import Page1Comp from '@/components/app/menu-1/sub-1/panel/tab-B/page-1'
   import Page2Comp from '@/components/app/menu-1/sub-1/panel/tab-B/page-2'
   // import Page3Comp from '@/components/app/menu-1/sub-1/panel/tab-B/page-3'
@@ -16,6 +14,9 @@
   import Page4Comp from '@/views/app/menu-1/sub-1/panel/tab-B/page-4'
   import Page5Comp from '@/views/app/menu-1/sub-1/panel/tab-B/page-5'
   import Page6Comp from '@/views/app/menu-1/sub-1/panel/tab-B/page-6'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMenu1Sub1Tab2Store } from '@/stores/app/menu-1/sub-1/tab-B'
 
   const globalStore = useGlobalStore()
   const menu1Sub1Page2Store = useMenu1Sub1Tab2Store()

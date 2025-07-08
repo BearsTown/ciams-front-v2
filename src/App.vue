@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-  import { watch } from 'vue'
+  import { onBeforeMount, watch } from 'vue'
   import { useRouter } from 'vue-router'
   import { storeToRefs } from 'pinia'
   import '@vuepic/vue-datepicker/dist/main.css'
@@ -13,10 +13,16 @@
 
   import { useAuthStore } from '@/stores/auth'
   import { useGlobalStore } from '@/stores/app'
+  import { PROJ } from '@/enums/mapEnum'
+  import proj4 from 'proj4'
+  import { register } from 'ol/proj/proj4'
+  import CommonUtil from '@/utils/commonUtil'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   const router = useRouter()
   const authStore = useAuthStore()
   const globalStore = useGlobalStore()
+  const cmmConfigStore = useCmmConfigStore()
   const { loading } = storeToRefs(globalStore)
   const { logInStatus, path } = storeToRefs(authStore)
 
@@ -28,6 +34,25 @@
     } else if (changeStatus === 'accessTokenExpired') {
       authStore.refreshToken()
     }
+  })
+
+  Object.keys(PROJ).forEach((key) => {
+    proj4.defs(key, PROJ[key])
+  })
+
+  register(proj4)
+
+  async function loadConfig() {
+    try {
+      await cmmConfigStore.loadCmmConfig()
+      await cmmConfigStore.loadMapConfig()
+    } catch (err) {
+      CommonUtil.errorMessage(err)
+    }
+  }
+
+  onBeforeMount(async () => {
+    await loadConfig()
   })
 </script>
 

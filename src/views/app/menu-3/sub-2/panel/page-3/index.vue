@@ -7,21 +7,15 @@
 <script setup lang="ts">
   import { computed, DefineComponent, onBeforeMount } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import {
-    Menu3Sub2Page3TabIdType,
-    useMenu3Sub2Page3Store,
-  } from 'src/stores/app/menu-3/sub-2/page-3'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-
-  import CommonUtil from '@/utils/commonUtil'
-
   import TabAComp from '@/views/app/menu-3/sub-2/panel/page-3/section-1'
   // import TabBComp from '@/views/app/menu-3/sub-2/panel/page-3/section-2'
+  import { Menu3Sub2Page3TabIdType, useMenu3Sub2Page3Store } from '@/stores/app/menu-3/sub-2/page-3'
+  import { useGlobalStore } from '@/stores/app'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   const globalStore = useGlobalStore()
-  const menu3Sub2Page3Store = useMenu3Sub2Page3Store()
   const cmmConfigStore = useCmmConfigStore()
+  const menu3Sub2Page3Store = useMenu3Sub2Page3Store()
 
   const components: Record<Menu3Sub2Page3TabIdType, DefineComponent> = {
     TabA: TabAComp,
@@ -32,17 +26,7 @@
     () => components[menu3Sub2Page3Store.selectedTabId] || TabAComp,
   )
 
-  async function loadConfig() {
-    try {
-      await cmmConfigStore.loadMapConfig()
-    } catch (err) {
-      CommonUtil.errorMessage(err)
-    }
-  }
-
-  async function init() {
-    await loadConfig()
-  }
+  async function init() {}
 
   onBeforeMount(() => {
     init()

@@ -22,17 +22,17 @@
 
 <script setup lang="ts">
   import { computed, DefineComponent, onActivated, onMounted, ref } from 'vue'
+  import { storeToRefs } from 'pinia'
 
   import TabAComp from '@/components/app/menu-3/sub-3/left/tab-A'
   import TabBComp from '@/components/app/menu-3/sub-3/left/tab-B'
 
-  import { useBoolean } from '@/hooks/useBoolean'
-  import { useGlobalStore } from '@/stores/app'
-  import { Menu3Sub3TabIdType, useMenu3Sub3store } from '@/stores/app/menu-3/sub-3'
-
   import { MapWrapper } from '@/js/mapWrapper'
-  import { storeToRefs } from 'pinia'
+  import { useBoolean } from '@/hooks/useBoolean'
+
+  import { useGlobalStore } from '@/stores/app'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { Menu3Sub3TabIdType, useMenu3Sub3store } from '@/stores/app/menu-3/sub-3'
 
   const globalStore = useGlobalStore()
   const { layoutSelected } = storeToRefs(globalStore)

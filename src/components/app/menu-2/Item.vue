@@ -26,6 +26,7 @@
 
 <script setup lang="ts">
   import Source from '@/components/common/Source.vue'
+
   import { SourceGroupDTO } from '@/api/app/source/model'
 
   const props = withDefaults(

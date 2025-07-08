@@ -22,15 +22,19 @@
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import { getCodeList } from '@/api/app/common'
   import LQSub from '@/components/app/menu-1/sub-1/panel/tab-B/page-6/LQSub.vue'
-  import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
+
+  import { Fill, Stroke, Style, Text } from 'ol/style'
+
   import { styleUtil } from '@/utils'
   import CommonUtil from '@/utils/commonUtil'
-  import { Fill, Stroke, Style, Text } from 'ol/style'
+  import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
+
+  import { getCodeList } from '@/api/app/common'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
 
   const props = withDefaults(
     defineProps<{
@@ -188,18 +192,7 @@
     (e: 'update-legend', type: object): void
   }>()
 
-  async function loadConfig() {
-    try {
-      await cmmConfigStore.loadCmmConfig()
-      await cmmConfigStore.loadMapConfig()
-    } catch (err) {
-      CommonUtil.errorMessage(err)
-    }
-  }
-
   onMounted(async () => {
-    await loadConfig()
-
     const sidoCd = cmmConfigStore.cmmConfigState['SIDO_CODE']?.confValue
     const sggCd = cmmConfigStore.cmmConfigState['SGG_CODE']?.confValue
 

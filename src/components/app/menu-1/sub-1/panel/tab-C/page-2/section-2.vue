@@ -19,14 +19,16 @@
 <script setup lang="ts">
   import { computed, onActivated, onBeforeMount, onMounted, ref, watch } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
+  import Source from '@/components/common/Source.vue'
   import PagePane from '@/components/common/PagePane.vue'
+  import ITAResult from '@/components/app/menu-1/sub-1/panel/tab-C/ITAResult.vue'
+
+  import { getSources } from '@/api/app/source'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+
+  import { useGlobalStore } from '@/stores/app'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   import { useMenu1Sub1Tab3Page2Store } from '@/stores/app/menu-1/sub-1/tab-C/page-2'
-  import Source from '@/components/common/Source.vue'
-  import { SourceGroupDTO } from '@/api/app/source/model'
-  import { getSources } from '@/api/app/source'
-  import ITAResult from '@/components/app/menu-1/sub-1/panel/tab-C/ITAResult.vue'
 
   const globalStore = useGlobalStore()
   const menu1Sub1Tab3Page2Store = useMenu1Sub1Tab3Page2Store()

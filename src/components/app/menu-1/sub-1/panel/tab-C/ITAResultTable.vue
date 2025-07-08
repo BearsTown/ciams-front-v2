@@ -71,8 +71,10 @@
 
 <script setup lang="ts">
   import { computed, onActivated, onBeforeMount, onMounted } from 'vue'
-  import { ItaResultData } from '@/api/app/menu-1/sub-1/tab-c/model'
+
   import CommonUtil from '@/utils/commonUtil'
+
+  import { ItaResultData } from '@/api/app/menu-1/sub-1/tab-c/model'
 
   const props = withDefaults(
     defineProps<{

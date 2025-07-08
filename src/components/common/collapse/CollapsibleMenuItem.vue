@@ -18,7 +18,7 @@
             v-model="isActive"
             @click.prevent.stop
             @change="handleSwitchChange"
-            style="--el-switch-on-color: #4D7D99; --el-switch-off-color: var(--ugis-color-gray)"
+            style="--el-switch-on-color: #4d7d99; --el-switch-off-color: var(--ugis-color-gray)"
           />
         </div>
       </div>
@@ -39,9 +39,10 @@
 </template>
 
 <script setup lang="ts">
-  import { useBoolean } from '@/hooks/useBoolean'
   import { watch } from 'vue'
   import { InfoFilled } from '@element-plus/icons-vue'
+
+  import { useBoolean } from '@/hooks/useBoolean'
 
   const props = withDefaults(
     defineProps<{

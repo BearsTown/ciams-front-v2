@@ -89,7 +89,7 @@
             padding: 0 10px;
             font-size: 12px;
             border-radius: 4px;
-            background-color: #7AAAD1;
+            background-color: #7aaad1;
           "
           @click="handleDownLoad(item?.id as string)"
         >
@@ -105,10 +105,11 @@
   import axios from 'axios'
   import { ElCarousel } from 'element-plus'
 
-  import FileDto from '@/api/app/file/model'
-  import CommonUtil from '@/utils/commonUtil'
-  import { deleteFile, downLoadFile, searchFileList } from '@/api/app/file'
   import { API_INFO_CIAMS } from '@/config/config'
+  import CommonUtil from '@/utils/commonUtil'
+
+  import FileDto from '@/api/app/file/model'
+  import { deleteFile, downLoadFile, searchFileList } from '@/api/app/file'
 
   const viewFiles = ref<FileDto.Search.Row[]>()
   const imageFiles = ref<FileDto.Search.Row[]>()

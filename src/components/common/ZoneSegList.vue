@@ -57,16 +57,10 @@
 
   import ZoneSegPageList from '@/components/common/ZoneTable/ZonePageList.vue'
 
-  import { getCiamsZoneSegList } from 'src/api/app/gis/zone'
-  // import { Plan } from '@/api/app/plan/model'
-  // import { PlanZone } from '@/api/app/zone/model'
-  import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
   import { pageObject } from '@/js/common'
 
-  // import { usePlanAreaStore } from '@/stores/app/operation/planArea'
-
-  // const planAreaStore = usePlanAreaStore()
-  // const { isMainLink, planArea, modal } = storeToRefs(planAreaStore)
+  import { getCiamsZoneSegList } from '@/api/app/gis/zone'
+  import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
 
   const props = withDefaults(
     defineProps<{

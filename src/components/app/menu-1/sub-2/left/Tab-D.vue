@@ -40,17 +40,19 @@
   import { onActivated, onBeforeMount, onMounted, ref } from 'vue'
 
   import { InsideCollapse } from '@/components/common/collapse'
+  import DistList from '@/components/common/DistList/DistList.vue'
 
+  import { Style } from 'ol/style'
+
+  import { MapWrapper } from '@/js/mapWrapper'
+  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
+
+  import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMapStore } from '@/stores/map/map'
   import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
   import { useMenu1_2_4Store } from '@/stores/app/menu-1/sub-2/tab-d'
-
-  import { useMapStore } from '@/stores/map/map'
-  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
-  import { useGlobalStore } from '@/stores/app'
-  import DistList from '@/components/common/DistList/DistList.vue'
-  import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
-  import { Style } from 'ol/style'
-  import { MapWrapper } from '@/js/mapWrapper'
 
   const distListRef = ref<InstanceType<typeof DistList>>()
 

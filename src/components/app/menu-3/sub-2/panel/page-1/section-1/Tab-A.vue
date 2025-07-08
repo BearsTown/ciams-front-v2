@@ -101,10 +101,12 @@
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
-  import { API_INFO_CIAMS } from '@/config/config'
   import { InsideCollapse } from '@/components/common/collapse'
+
+  import { API_INFO_CIAMS } from '@/config/config'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()

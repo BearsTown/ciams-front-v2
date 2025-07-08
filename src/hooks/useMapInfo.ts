@@ -1,5 +1,7 @@
 import { reactive } from 'vue'
+
 import { Coordinate } from 'ol/coordinate'
+
 import { BaseMapOption, MapInfo } from '@/enums/mapEnum'
 
 export type useMapInfoState = {

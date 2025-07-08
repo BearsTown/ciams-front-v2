@@ -121,14 +121,15 @@
   import { storeToRefs } from 'pinia'
 
   import Item from '@/components/app/menu-2/Item.vue'
-  import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
-
-  import { useMenu2Sub1Store } from '@/stores/app/menu-2/sub-1'
   import SvgIcon from '@/components/common/SvgIcon.vue'
+  import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
   import PieChartItem from '@/components/app/menu-2/PieChartItem.vue'
   import LayerDataTable from '@/components/app/menu-2/sub-1/LayerDataTable.vue'
+
   import { SourceGroupDTO } from '@/api/app/source/model'
   import { getSources } from '@/api/app/source'
+
+  import { useMenu2Sub1Store } from '@/stores/app/menu-2/sub-1'
 
   const menu2Sub1Store = useMenu2Sub1Store()
   const { overview } = storeToRefs(menu2Sub1Store)

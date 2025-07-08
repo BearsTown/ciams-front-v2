@@ -6,10 +6,10 @@
   import { computed } from 'vue'
   import { storeToRefs } from 'pinia'
 
+  import LocationInfo from '@/components/common/locationInfo'
+
   import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
-
-  import LocationInfo from '@/components/common/locationInfo'
 
   const globalStore = useGlobalStore()
   const { layoutSelected, currentMapType } = storeToRefs(globalStore)

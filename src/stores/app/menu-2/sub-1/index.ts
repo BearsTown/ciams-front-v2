@@ -1,25 +1,29 @@
-import { defineStore } from 'pinia'
 import { computed, markRaw, reactive, ref } from 'vue'
+import { defineStore } from 'pinia'
 
-import { Menu2ZoneDetailsDto } from '@/api/app/menu-2/model'
-import { getMenu2ZoneOverView } from '@/api/app/menu-2'
-import { useBoolean, UseBoolean } from '@/hooks/useBoolean'
-import { MapLayer } from '@/js/layer'
 import Feature from 'ol/Feature'
-import { Attribute, Item } from '@/utils/data.types'
-import { MapWrapper } from '@/js/mapWrapper'
-import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
-import { useMapStore } from '@/stores/map/map'
+import { GeoJSON, WFS } from 'ol/format'
+import { intersects, like as likeFilter } from 'ol/format/filter'
+
+import { urlWithParams } from '@uitgis/ol-ugis-test/util'
+import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
+import { UitWFSLayer, UitWMSLayer } from '@uitgis/ol-ugis-test/layer'
+
 import { dataUtil } from '@/utils'
 import CommonUtil from '@/utils/commonUtil'
+import { MapLayer } from '@/js/layer'
+import { MapWrapper } from '@/js/mapWrapper'
+import { Attribute, Item } from '@/utils/data.types'
+import { API_INFO_MAPSTUDIO } from '@/config/config'
+import { useBoolean, UseBoolean } from '@/hooks/useBoolean'
+import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
+
+import { getMenu2ZoneOverView } from '@/api/app/menu-2'
+import { Menu2ZoneDetailsDto } from '@/api/app/menu-2/model'
 import { getDataConfig, getDataGroups } from '@/api/app/menu-1'
+
+import { useMapStore } from '@/stores/map/map'
 import UitUWMSLayer from '@/stores/map/uwmsLayer'
-import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
-import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
-import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
-import { intersects, like as likeFilter } from 'ol/format/filter'
-import { GeoJSON, WFS } from 'ol/format'
-import { urlWithParams } from '@uitgis/ol-ugis-test/util'
 
 interface Category {
   id: number
@@ -61,7 +65,6 @@ interface State {
 const mapType: MapType = 'Map-2'
 const mapLayerGroupType: MapLayerGroupType = 'Menu_2_Sub_1'
 const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
-const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
 export const useMenu2Sub1Store = defineStore('menu2Sub1Store', () => {
   const overview = ref<Menu2ZoneDetailsDto.Overview.Find.Result | null>()
@@ -201,7 +204,7 @@ export const useMenu2Sub1Store = defineStore('menu2Sub1Store', () => {
         const index = cYears.findIndex((detail) => detail.id === state.activeYear?.id)
 
         const uWmsLayer = new UitUWMSLayer({
-          baseUrl: mapStudioUrl,
+          baseUrl: API_INFO_MAPSTUDIO.PREFIX,
           useCQL_FILTER: true,
           sourceParams: {
             KEY: 'system',
@@ -253,7 +256,7 @@ export const useMenu2Sub1Store = defineStore('menu2Sub1Store', () => {
 
   async function loadZoneFeatures(zoneNo: string) {
     const res = await fetchFeatures({
-      url: mapStudioUrl,
+      url: API_INFO_MAPSTUDIO.PREFIX,
       key: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
       featureRequestProps: {
         layers: 'CIAMS_ZONE',
@@ -285,7 +288,7 @@ export const useMenu2Sub1Store = defineStore('menu2Sub1Store', () => {
     if (CommonUtil.isEmpty(state.activeZoneFeature)) return false
 
     const points = await fetch(
-      urlWithParams(mapStudioUrl + '/uwfs', {
+      urlWithParams(API_INFO_MAPSTUDIO.PREFIX + '/uwfs', {
         KEY: 'system',
       }),
       {

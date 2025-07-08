@@ -80,16 +80,16 @@
   import { InsideCollapse } from '@/components/common/collapse'
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
 
-  import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
+  import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
+
+  import { MapLayer } from '@/js/layer'
+  import { MapWrapper } from '@/js/mapWrapper'
+  import { API_INFO_MAPSTUDIO } from '@/config/config'
+  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
 
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
-  import { MapLayer } from '@/js/layer'
-  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
-  import { MapWrapper } from '@/js/mapWrapper'
   import { useMapStore } from '@/stores/map/map'
-  import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
-  import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
+  import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
 
   const globalStore = useGlobalStore()
   const menu1sub2store = useMenu1Sub2store()
@@ -100,8 +100,6 @@
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
-
-  const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
 
   const tempList: object[] = [
     {
@@ -168,7 +166,7 @@
   ]
 
   const uitWMSLayer1 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '4E3030CC-D422-1740-0108-DBC8B1BEA424',
       LAYERS: ['CIAMS_P1_USE'],
@@ -180,7 +178,7 @@
   })
 
   const uitWMSLayer2 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '8C75FDDA-35F5-493E-328F-8B8C7F8CA0CF',
       LAYERS: ['CIAMS_P1_UQA300'],
@@ -197,7 +195,7 @@
   })
 
   const uitWMSLayer3 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: 'C71716C0-8435-688A-D737-F2A4A4BBF4FD',
       LAYERS: ['CIAMS_P1_UQA300_URBAN'],
@@ -214,7 +212,7 @@
   })
 
   const uitWMSLayer4 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: 'C411380C-E985-DF54-62F7-22890F1D300B',
       LAYERS: ['CIAMS_P1_LIMIT'],

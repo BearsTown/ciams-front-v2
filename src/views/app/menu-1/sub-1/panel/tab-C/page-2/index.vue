@@ -7,14 +7,12 @@
 <script setup lang="ts">
   import { computed, DefineComponent, onBeforeMount } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu1Sub1Tab3Page2Store } from '@/stores/app/menu-1/sub-1/tab-C/page-2'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-
-  import CommonUtil from '@/utils/commonUtil'
-
   import Section1Comp from '@/components/app/menu-1/sub-1/panel/tab-C/page-2/section-1.vue'
   import Section2Comp from '@/components/app/menu-1/sub-1/panel/tab-C/page-2/section-2.vue'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { useMenu1Sub1Tab3Page2Store } from '@/stores/app/menu-1/sub-1/tab-C/page-2'
 
   const globalStore = useGlobalStore()
   const menu1Sub1Tab3Page2Store = useMenu1Sub1Tab3Page2Store()
@@ -36,17 +34,7 @@
     }
   })
 
-  async function loadConfig() {
-    try {
-      await cmmConfigStore.loadMapConfig()
-    } catch (err) {
-      CommonUtil.errorMessage(err)
-    }
-  }
-
-  async function init() {
-    await loadConfig()
-  }
+  async function init() {}
 
   onBeforeMount(() => {
     init()

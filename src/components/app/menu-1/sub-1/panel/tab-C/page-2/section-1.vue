@@ -15,10 +15,11 @@
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu1Sub1Tab3Page2Store } from '@/stores/app/menu-1/sub-1/tab-C/page-2'
   import PagePane from '@/components/common/PagePane.vue'
+
+  import { useGlobalStore } from '@/stores/app'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { useMenu1Sub1Tab3Page2Store } from '@/stores/app/menu-1/sub-1/tab-C/page-2'
 
   const globalStore = useGlobalStore()
   const menu1Sub1Tab3Page2Store = useMenu1Sub1Tab3Page2Store()

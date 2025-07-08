@@ -10,7 +10,8 @@
 </template>
 
 <script setup lang="ts">
-  import { onBeforeMount, onMounted, ref } from 'vue'
+  import { onMounted, ref } from 'vue'
+
   import { getImage as getImageAxios } from '@/api/app/menu-3/sub-1'
 
   const props = withDefaults(

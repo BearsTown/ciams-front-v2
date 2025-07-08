@@ -6,16 +6,15 @@
 </template>
 
 <script setup lang="ts">
-  import MenuContent from '@/views/app/archive/menuContent'
+  import { computed, ref, watch } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
 
+  import MenuContent from '@/views/app/archive/menuContent'
   import ArchiveMain from '@/components/app/archive/ArchiveMain.vue'
   import ArchiveDetail from '@/components/app/archive/Detail.vue'
   import ArchiveGeonuris from '@/components/app/archive/ArchiveGeonuris.vue'
   import ArchiveLayerDL from '@/components/app/archive/ArchiveLayerDownLoad.vue'
 
-  import { computed, watch, ref } from 'vue'
-  import { RouteName, RouteNameType } from '@/router'
-  import { useRoute, useRouter } from 'vue-router'
   import { useAuthStore } from '@/stores/auth'
 
   const route = useRoute()

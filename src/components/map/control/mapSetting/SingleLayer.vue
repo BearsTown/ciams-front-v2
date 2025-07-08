@@ -30,6 +30,7 @@
 
 <script lang="ts" setup>
   import { onBeforeMount } from 'vue'
+
   import { MapLayer } from '@/js/layer'
 
   const props = withDefaults(
@@ -66,7 +67,7 @@
       display: flex;
       flex-wrap: wrap;
       overflow-wrap: break-word;
-      border: 1px solid #7AAAD1;
+      border: 1px solid #7aaad1;
       border-radius: 3px;
       padding: 0px 3px;
       margin-bottom: 10px;
@@ -92,10 +93,10 @@
     input[type='range'] {
       appearance: none;
       background: linear-gradient(to right, #f4f4f4 0%, #747474 100%);
-      accent-color: #7AAAD1;
+      accent-color: #7aaad1;
       margin: 0 3px;
       cursor: pointer;
-      border: #7AAAD1;
+      border: #7aaad1;
       border-style: solid;
       border-width: 1px;
       border-radius: 10px;
@@ -106,7 +107,7 @@
     }
     .btn-tooltip {
       &.active {
-        color: #7AAAD1;
+        color: #7aaad1;
       }
     }
   }

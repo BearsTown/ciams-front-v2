@@ -112,11 +112,13 @@
 <script setup lang="ts">
   import { onActivated, onBeforeMount, onMounted } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu3Sub2Page1Store } from 'src/stores/app/menu-3/sub-2/page-1'
-  import { API_INFO_CIAMS } from '@/config/config'
   import { InsideCollapse } from '@/components/common/collapse'
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
+
+  import { API_INFO_CIAMS } from '@/config/config'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMenu3Sub2Page1Store } from '@/stores/app/menu-3/sub-2/page-1'
 
   const globalStore = useGlobalStore()
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
@@ -189,4 +191,3 @@
     border-left: 1px solid #e0e0e0;
   }
 </style>
-<script setup lang="ts"></script>

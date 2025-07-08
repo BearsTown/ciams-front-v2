@@ -3,8 +3,9 @@
 </template>
 
 <script setup lang="ts">
-  import VChart from 'vue-echarts'
   import { nextTick, onMounted, ref, watch } from 'vue'
+
+  import VChart from 'vue-echarts'
 
   import CommonUtil from '@/utils/commonUtil'
 

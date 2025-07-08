@@ -31,13 +31,15 @@
   import LayersComponent from '@/components/map/control/mapSetting/Layers.vue'
   import BaseMapComponent from '@/components/map/control/mapSetting/BaseMap.vue'
 
-  import { ToggleButton } from '@/js/map/control/ToggleButton'
-  import { MapType } from '@/enums/mapEnum'
-  import { useGlobalStore } from '@/stores/app'
-  import { MapWrapper } from '@/js/mapWrapper'
-  import { useMapStore } from '@/stores/map/map'
-  import UitBaseMap from '@uitgis/ol-ugis-test/baseMap/uitBaseMap'
   import UitMap from '@uitgis/ol-ugis-test/uitMap'
+  import UitBaseMap from '@uitgis/ol-ugis-test/baseMap/uitBaseMap'
+
+  import { MapType } from '@/enums/mapEnum'
+  import { MapWrapper } from '@/js/mapWrapper'
+  import { ToggleButton } from '@/js/map/control/ToggleButton'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMapStore } from '@/stores/map/map'
 
   const props = withDefaults(
     defineProps<{

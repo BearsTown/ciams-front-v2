@@ -8,48 +8,33 @@
 
 <script setup lang="ts">
   import { onBeforeMount, reactive, ref } from 'vue'
+
+  import Controls from '@/components/map/control/Controls.vue'
+  import MapWrapperView from '@/components/map/MapWrapper.vue'
+
+  import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
+
+  import { MapLayer } from '@/js/layer'
+  import { MapWrapper } from '@/js/mapWrapper'
+  import { API_INFO_MAPSTUDIO } from '@/config/config'
   import { CommonLayerGroup, MapType, MapWrapperConfig } from '@/enums/mapEnum'
 
   import { useGlobalStore } from '@/stores/app'
-  import { useMenu2store } from '@/stores/app/menu-2'
-  // import { useMenu3Sub3Store } from '@/stores/app/menu-3/sub-3'
-  import UitWMSLayer from '@uitgis/ol-ugis-test/layer/uitWMSLayer'
-
-  import CommonUtil from '@/utils/commonUtil'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import { MapLayer } from '@/js/layer'
-  import Controls from '@/components/map/control/Controls.vue'
-  import MapWrapperView from '@/components/map/MapWrapper.vue'
   import { useMapStore } from '@/stores/map/map'
-  import { MapWrapper } from '@/js/mapWrapper'
-  import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
-  import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   const globalStore = useGlobalStore()
-  const menu2store = useMenu2store()
-  // const menu3Sub3Store = useMenu3Sub3Store()
   const cmmConfigStore = useCmmConfigStore()
 
   const mapConfig = ref<MapWrapperConfig>()
 
-  // const mapType = MapType.MAP_3
   const mapType: MapType = 'Map-3-3-1'
   const commonLayerType: CommonLayerGroup = 'COMMON_LAYER_GROUP_3-3-1'
   const mapStore = useMapStore(mapType)
   const mapWrap = ref<MapWrapper>()
 
-  const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
-
-  async function loadConfig() {
-    try {
-      await cmmConfigStore.loadMapConfig()
-    } catch (err) {
-      CommonUtil.errorMessage(err)
-    }
-  }
-
   const uitWMSLayer1 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '5CE56438-29A3-83A2-F5EC-157133C5E823',
       LAYERS: ['CIAMS_P1_SGG'],
@@ -67,7 +52,7 @@
   })
 
   const uitWMSLayer2 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '5CE56438-29A3-83A2-F5EC-157133C5E823',
       LAYERS: ['CIAMS_P1_EMD'],
@@ -85,8 +70,6 @@
   })
 
   async function init() {
-    await loadConfig()
-
     mapConfig.value = {
       center: JSON.parse(cmmConfigStore.mapConfigState['MAP_INIT_CENTER'].confValue),
       zoom: Number(cmmConfigStore.mapConfigState['MAP_INIT_ZOOM'].confValue),

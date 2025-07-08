@@ -22,22 +22,21 @@
 
 <script setup lang="ts">
   import { computed, DefineComponent, onActivated, onMounted, ref } from 'vue'
+  import { storeToRefs } from 'pinia'
+  import type { ImageInstance } from 'element-plus'
 
   import TabAComp from '@/components/app/menu-1/sub-1/left/tab-A'
   import TabBComp from '@/components/app/menu-1/sub-1/left/tab-B'
   import TabCComp from '@/components/app/menu-1/sub-1/left/Tab-C'
-  import { getConfigList } from '@/api/app/config'
-  import { useBoolean } from '@/hooks/useBoolean'
-  import { useGlobalStore } from '@/stores/app'
-  import { Menu1Sub1TabIdType, useMenu1Sub1store } from '@/stores/app/menu-1/sub-1'
-  // import { useManagementStore } from '@/stores/app/zoneEstablish/management'
-  import { MapWrapper } from '@/js/mapWrapper'
-  import { storeToRefs } from 'pinia'
-  import type { ImageInstance } from 'element-plus'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
-  // const managementStore = useManagementStore()
-  // const { planId, planConfig, isActiveTimePoint, features } = storeToRefs(managementStore)
+  import { MapWrapper } from '@/js/mapWrapper'
+  import { useBoolean } from '@/hooks/useBoolean'
+
+  import { getConfigList } from '@/api/app/config'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { Menu1Sub1TabIdType, useMenu1Sub1store } from '@/stores/app/menu-1/sub-1'
 
   const globalStore = useGlobalStore()
   const { layoutSelected } = storeToRefs(globalStore)

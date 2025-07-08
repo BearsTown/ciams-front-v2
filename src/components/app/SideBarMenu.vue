@@ -103,11 +103,13 @@
   import { RouteRecordName, useRoute, useRouter } from 'vue-router'
   import { storeToRefs } from 'pinia'
 
-  import { useAuthStore } from '@/stores/auth'
-  import { useBoolean } from '@/hooks/useBoolean'
-  import commonUtil from '@/utils/commonUtil'
-  import { getConfig } from '@/api/app/config'
   import { MenuType } from '@/router'
+  import CommonUtil from '@/utils/commonUtil'
+  import { useBoolean } from '@/hooks/useBoolean'
+
+  import { getConfig } from '@/api/app/config'
+
+  import { useAuthStore } from '@/stores/auth'
 
   const route = useRoute()
   const router = useRouter()
@@ -152,9 +154,9 @@
 
   function handleCommand(cmd) {
     if (cmd == 'logout') {
-      commonUtil
-        .confirm('로그아웃 하시겠습니까?', '로그아웃')
-        .then(() => authStore.logOut('loginOutAction'))
+      CommonUtil.confirm('로그아웃 하시겠습니까?', '로그아웃').then(() =>
+        authStore.logOut('loginOutAction'),
+      )
     } else if (cmd == 'pwdChange') {
       isPwdChangeVisible.value = true
     } else if (cmd == 'info') {

@@ -4,10 +4,12 @@
 
 <script lang="ts" setup>
   import { onMounted, onUnmounted } from 'vue'
-  import { useMapStore } from '@/stores/map/map'
-  import { useGlobalStore } from '@/stores/app'
   import { storeToRefs } from 'pinia'
+
   import { MapType } from '@/enums/mapEnum'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMapStore } from '@/stores/map/map'
 
   const globalStore = useGlobalStore()
   const { currentMapType } = storeToRefs(globalStore)

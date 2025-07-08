@@ -45,7 +45,7 @@
             v-model="isActive"
             @click.prevent.stop
             @change="handleSwitchChange"
-            style="--el-switch-on-color: #4D7D99; --el-switch-off-color: var(--ugis-color-gray)"
+            style="--el-switch-on-color: #4d7d99; --el-switch-off-color: var(--ugis-color-gray)"
           />
         </div>
       </div>
@@ -62,8 +62,9 @@
 </template>
 
 <script setup lang="ts">
-  import { useBoolean } from '@/hooks/useBoolean'
   import { watch } from 'vue'
+
+  import { useBoolean } from '@/hooks/useBoolean'
 
   const props = withDefaults(
     defineProps<{
@@ -133,7 +134,7 @@
 
 <style scoped lang="scss">
   .outside-collapse {
-    background-color: #7AAAD1;
+    background-color: #7aaad1;
     transition: opacity var(--el-transition-duration);
 
     &:deep(.btn-toggle) {

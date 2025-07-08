@@ -6,33 +6,29 @@
   import { onActivated, onMounted, reactive, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import ZoneSegList from '@/components/common/ZoneSegList.vue'
-
-  import { useBoolean } from '@/hooks/useBoolean'
-  import { useGlobalStore } from '@/stores/app'
-  import { Plan } from '@/api/app/menu-1/model'
-  import { useMenu2store } from '@/stores/app/menu-2'
-  import { useMenu2Sub2Store } from '@/stores/app/menu-2/sub-2'
-  import { MapLayer } from '@/js/layer'
-  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
-  import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
-  import { UitWFSLayer, UitWMSLayer } from '@uitgis/ol-ugis-test/layer'
-
-  import { Stroke, Style } from 'ol/style'
   import Feature from 'ol/Feature'
   import { GeoJSON } from 'ol/format'
+  import { Stroke, Style } from 'ol/style'
   import VectorSource from 'ol/source/Vector'
   import { like as likeFilter } from 'ol/format/filter'
+
+  import ZoneSegList from '@/components/common/ZoneSegList.vue'
+
+  import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
+  import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
+
+  import { MapLayer } from '@/js/layer'
   import { MapWrapper } from '@/js/mapWrapper'
+  import { useBoolean } from '@/hooks/useBoolean'
+  import { API_INFO_MAPSTUDIO } from '@/config/config'
+  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
+
+  import { Plan } from '@/api/app/menu-1/model'
+
+  import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
-  import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
+  import { useMenu2Sub2Store } from '@/stores/app/menu-2/sub-2'
 
-  interface Layers {
-    layer?: MapLayer
-    userVisible: boolean
-  }
-
-  const menu2store = useMenu2store()
   const menu2Sub2Store = useMenu2Sub2Store()
   const { overview } = storeToRefs(menu2Sub2Store)
 
@@ -40,17 +36,14 @@
   const { layoutSelected } = storeToRefs(globalStore)
   const { status: isActive, toggle } = useBoolean(false)
 
-  // const mapType = MapType.MAP_2
   const mapType: MapType = 'Map-2'
   const mapLayerGroupType: MapLayerGroupType = 'Menu_2_Sub_2'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
-  const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
-
   const uitWMSLayer1 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
       LAYERS: ['CIAMS_ZONE_1'],
@@ -67,7 +60,7 @@
   })
 
   const uitWMSLayer3 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '20FD169A-9C6F-186D-FFDA-1D6F912F9B43',
       LAYERS: ['CIAMS_ROAD_8M', 'DIST_BUILDING'],
@@ -163,7 +156,7 @@
     })
 
     const res = await fetchFeatures({
-      url: mapStudioUrl,
+      url: API_INFO_MAPSTUDIO.PREFIX,
       key: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
       featureRequestProps: {
         // layers: 'CIAMS_P1_PLAN',

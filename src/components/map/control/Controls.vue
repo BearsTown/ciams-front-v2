@@ -29,38 +29,41 @@
 </template>
 
 <script lang="ts" setup>
+  import { computed, onBeforeMount, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { TriggerButton } from '@/js/map/control/TriggerButton'
-  import { ToggleButton } from '@/js/map/control/ToggleButton'
-  import { GroupButton } from '@/js/map/control/GroupButton'
-  import { AbstractControlButton, ControlButton } from '@/js/map/control/AbstractControlButton'
-
+  import MiniMap from '@/components/map/control/MiniMap.vue'
+  import ZoomSlider from '@/components/map/control/ZoomSlider.vue'
+  import MapSetting from '@/components/map/control/mapSetting/MapSetting.vue'
   import TriggerButtonComponent from '@/components/map/control/TriggerButton.vue'
   import ToggleButtonComponent from '@/components/map/control/ToggleButton.vue'
   import GroupButtonComponent from '@/components/map/control/GroupButton.vue'
-  import { MapInteractionType, MapType } from '@/enums/mapEnum'
-  import ZoomSlider from '@/components/map/control/ZoomSlider.vue'
-  import { computed, onBeforeMount, ref } from 'vue'
-  import { MapWrapper } from '@/js/mapWrapper'
-  import UitMap from '@uitgis/ol-ugis-test/uitMap'
-  import MapSetting from '@/components/map/control/mapSetting/MapSetting.vue'
-  import MiniMap from '@/components/map/control/MiniMap.vue'
 
+  import { Point } from 'ol/geom'
+  import Feature from 'ol/Feature'
+  import { GeoJSON } from 'ol/format'
+  import { always } from 'ol/events/condition'
+  import { intersects } from 'ol/format/filter'
+  import { DrawEvent } from 'ol/interaction/Draw'
+  import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style'
+
+  import UitMap from '@uitgis/ol-ugis-test/uitMap'
   import UitMeasureInteraction from '@uitgis/ol-ugis-test/interaction/uitMeasure'
   import UitDragZoomInteraction from '@uitgis/ol-ugis-test/interaction/uitDragZoom'
-  import { always } from 'ol/events/condition'
-  import { useMapStore } from '@/stores/map/map'
   import UitDrawInteraction from '@uitgis/ol-ugis-test/interaction/uitDraw'
   import { locationInfoStyle, measureAreaStyle, measureLineStyle } from '@/js/map/mapStyle'
-  import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style'
-  import { DrawEvent } from 'ol/interaction/Draw'
-  import { Point } from 'ol/geom'
   import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
-  import { intersects } from 'ol/format/filter'
-  import { GeoJSON } from 'ol/format'
-  import Feature from 'ol/Feature'
+
+  import { API_INFO_MAPSTUDIO } from '@/config/config'
+  import { MapInteractionType, MapType } from '@/enums/mapEnum'
+  import { MapWrapper } from '@/js/mapWrapper'
+  import { GroupButton } from '@/js/map/control/GroupButton'
+  import { ToggleButton } from '@/js/map/control/ToggleButton'
+  import { TriggerButton } from '@/js/map/control/TriggerButton'
+  import { AbstractControlButton, ControlButton } from '@/js/map/control/AbstractControlButton'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMapStore } from '@/stores/map/map'
 
   const globalStore = useGlobalStore()
 
@@ -252,9 +255,8 @@
         olMap!.getView().getProjection().getCode(),
       )
 
-      const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
       const res = await fetchFeatures({
-        url: mapStudioUrl,
+        url: API_INFO_MAPSTUDIO.PREFIX,
         key: 'AF781CA7-729A-BA0C-C965-E6751C9CE3EA',
         featureRequestProps: {
           layers: 'CIAMS_P1_LSMD_CONT_LDREG',

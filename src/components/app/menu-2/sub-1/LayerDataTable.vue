@@ -76,15 +76,14 @@
 <script setup lang="ts">
   import type { VNode } from 'vue'
   import { computed, h, onActivated, onBeforeMount, onMounted, ref, watch } from 'vue'
+  import type { TableColumnCtx } from 'element-plus'
+
+  import CommonUtil from '@/utils/commonUtil'
 
   import { useGlobalStore } from '@/stores/app'
   import { useMenu1Sub2store } from '@/stores/app/menu-1/sub-2'
-
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   import { useMenu2Sub1Store } from '@/stores/app/menu-2/sub-1'
-  import CommonUtil from '@/utils/commonUtil'
-  import commonUtil from '@/utils/commonUtil'
-  import type { TableColumnCtx } from 'element-plus'
 
   interface SummaryMethodProps<T = any> {
     columns: TableColumnCtx<T>[]
@@ -143,7 +142,7 @@
         return
       }
 
-      if (commonUtil.isEmpty(column.property)) {
+      if (CommonUtil.isEmpty(column.property)) {
         return
       }
 

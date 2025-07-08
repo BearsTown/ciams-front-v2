@@ -6,27 +6,30 @@
   import { onActivated, onMounted, reactive, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import ZoneSegList from '@/components/common/ZoneSegList.vue'
-
-  import { useBoolean } from '@/hooks/useBoolean'
-  import { useGlobalStore } from '@/stores/app'
-  import { Plan } from '@/api/app/menu-1/model'
-  import { useMenu2store } from '@/stores/app/menu-2'
-  import { useMenu2Sub4Store } from 'src/stores/app/menu-2/sub-4'
-  import { MapLayer } from '@/js/layer'
-  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
-  import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
-  import { UitWFSLayer, UitWMSLayer } from '@uitgis/ol-ugis-test/layer'
-
-  import { Stroke, Style } from 'ol/style'
   import Feature from 'ol/Feature'
   import { GeoJSON } from 'ol/format'
+  import { Stroke, Style } from 'ol/style'
   import VectorSource from 'ol/source/Vector'
   import { like as likeFilter } from 'ol/format/filter'
+
+  import ZoneSegList from '@/components/common/ZoneSegList.vue'
+
+  import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
+  import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
+
+  import { MapLayer } from '@/js/layer'
   import { MapWrapper } from '@/js/mapWrapper'
-  import { useMapStore } from '@/stores/map/map'
-  import UitWMTSLayer from '@uitgis/ol-ugis-test/layer/uitWMTSLayer'
+  import { useBoolean } from '@/hooks/useBoolean'
+  import { API_INFO_MAPSTUDIO } from '@/config/config'
+  import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
+
+  import { Plan } from '@/api/app/menu-1/model'
+
   import UitUWMSLayer from '@/stores/map/uwmsLayer'
+  import { useGlobalStore } from '@/stores/app'
+  import { useMapStore } from '@/stores/map/map'
+  import { useMenu2store } from '@/stores/app/menu-2'
+  import { useMenu2Sub4Store } from '@/stores/app/menu-2/sub-4'
 
   const menu2store = useMenu2store()
   const menu2Sub4Store = useMenu2Sub4Store()
@@ -36,17 +39,14 @@
   const { layoutSelected } = storeToRefs(globalStore)
   const { status: isActive, toggle } = useBoolean(false)
 
-  // const mapType = MapType.MAP_2
   const mapType: MapType = 'Map-2'
   const mapLayerGroupType: MapLayerGroupType = 'Menu_2_Sub_4'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
-  const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
-
   const uitWMSLayer1 = new UitWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
       LAYERS: ['CIAMS_ZONE_3'],
@@ -63,7 +63,7 @@
   })
 
   const uitWMSLayer2 = new UitUWMSLayer({
-    baseUrl: mapStudioUrl,
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: 'system',
       LAYERS: ['CIAMS_INDUSTRY_2021'],
@@ -154,7 +154,7 @@
     })
 
     const res = await fetchFeatures({
-      url: mapStudioUrl,
+      url: API_INFO_MAPSTUDIO.PREFIX,
       key: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
       featureRequestProps: {
         // layers: 'CIAMS_P1_PLAN',
@@ -225,7 +225,7 @@
   }
 
   .zoningSetting .customTab-item:not(.disabled).active {
-    background: #7AAAD1;
+    background: #7aaad1;
     color: #fff;
   }
 </style>

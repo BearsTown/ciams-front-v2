@@ -73,9 +73,10 @@
 
   import DistPageList from '@/components/common/DistList/DistPageList.vue'
 
-  import { getCiamsDistList } from 'src/api/app/gis/dist'
-  import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
   import { pageObject } from '@/js/common'
+
+  import { getCiamsDistList } from '@/api/app/gis/dist'
+  import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
 
   const props = withDefaults(
     defineProps<{

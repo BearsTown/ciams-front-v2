@@ -6,17 +6,21 @@
   import { computed, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMapStore } from '@/stores/map/map'
+  import { Point } from 'ol/geom'
+  import Feature from 'ol/Feature'
+  import { GeoJSON } from 'ol/format'
+  import { intersects } from 'ol/format/filter'
 
   import LocationInfo from '@/components/common/locationInfo'
-  import { intersects } from 'ol/format/filter'
-  import { Point } from 'ol/geom'
+
   import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
-  import { GeoJSON } from 'ol/format'
-  import Feature from 'ol/Feature'
   import UitDrawInteraction from '@uitgis/ol-ugis-test/interaction/uitDraw'
+
   import { MapWrapper } from '@/js/mapWrapper'
+  import { API_INFO_MAPSTUDIO } from '@/config/config'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useMapStore } from '@/stores/map/map'
 
   const globalStore = useGlobalStore()
   const { layoutSelected, currentMapType } = storeToRefs(globalStore)
@@ -55,9 +59,8 @@
         olMap!.getView().getProjection().getCode(),
       )
 
-      const mapStudioUrl = import.meta.env.VITE_API_MAPSTUDIO_URL
       const res = await fetchFeatures({
-        url: mapStudioUrl,
+        url: API_INFO_MAPSTUDIO.PREFIX,
         key: 'AF781CA7-729A-BA0C-C965-E6751C9CE3EA',
         featureRequestProps: {
           layers: 'CIAMS_P1_LSMD_CONT_LDREG',

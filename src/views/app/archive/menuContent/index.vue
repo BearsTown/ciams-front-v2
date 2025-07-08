@@ -64,12 +64,11 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, onMounted, onUnmounted } from 'vue'
+  import { computed, onMounted, onUnmounted, ref } from 'vue'
   import { useArchiveStore } from '@/stores/app/archive/archive'
   import { storeToRefs } from 'pinia'
   import { getConfig } from '@/api/app/config'
   import { useRoute, useRouter } from 'vue-router'
-  import { cloneDeep } from 'lodash-es'
 
   const store = useArchiveStore()
   const route = useRoute()
@@ -115,8 +114,13 @@
     currentMenu.value = item.categoryId
     archiveItem.value.list = []
     switch (item.categoryId) {
-      case '1':
-      case '2':
+      case '90':
+        router.push({ name: 'archiveGeonuris', path: '' })
+        break
+      case '91':
+        router.push({ name: 'archiveLayerDL', path: '' })
+        break
+      default:
         searchItem.value.title = ''
         searchItem.value.pageNo = 1
         searchItem.value.categoryId = item.categoryId
@@ -124,12 +128,6 @@
         archiveItem.value.title = item.name
 
         router.push({ name: 'archiveMain', path: '', params: {} })
-        break
-      case '90':
-        router.push({ name: 'archiveGeonuris', path: '' })
-        break
-      case '91':
-        router.push({ name: 'archiveLayerDL', path: '' })
         break
     }
   }

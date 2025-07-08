@@ -12,16 +12,13 @@
 <script setup lang="ts">
   import { computed, ref, toRefs } from 'vue'
 
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
+  import { useBoolean } from '@/hooks/useBoolean'
 
   import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
-  import { useBoolean } from '@/hooks/useBoolean'
+
   import { useAuthStore } from '@/stores/auth'
   import { useGlobalStore } from '@/stores/app'
-
-  // import { usePlanAreaStore } from '@/stores/app/operation/planArea'
-  // const planAreaStore = usePlanAreaStore()
-  // const { modal } = storeToRefs(planAreaStore)
 
   const auth = useAuthStore()
 
@@ -57,7 +54,7 @@
   })
 
   const zoneArea = computed(() => {
-    return `${commonUtil.comma(zoneItem.value.zoneArea.toFixed(0))}㎡`
+    return `${CommonUtil.comma(zoneItem.value.zoneArea.toFixed(0))}㎡`
   })
 
   // watch(modal.value, () => {

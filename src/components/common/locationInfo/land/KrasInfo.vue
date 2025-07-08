@@ -114,16 +114,6 @@
                   <th>면적(m²)</th>
                   <td>{{ detailItem.krasLandUsePlanBase.parea || '' }}㎡</td>
                 </tr>
-                <tr>
-                  <th>개별공시지가</th>
-                  <td colspan="3">
-                    {{
-                      detailItem?.jigaList
-                        ? `${commonUtil.comma(detailItem?.jigaList[0].pann_jiga)}`
-                        : ''
-                    }}
-                  </td>
-                </tr>
               </tbody>
             </table>
           </div>
@@ -134,74 +124,78 @@
       </InsideCollapse>
     </div>
     <div class="customCard">
-      <InsideCollapse title="지역지구등 지정여부" :is-open="true">
+      <InsideCollapse title="토지이용계획" :is-open="true">
         <template #content v-if="detailItem && detailItem.krasLandUsePlanBase">
           <div class="table-group">
-            <table class="customTable">
+            <table class="customTable center">
               <colgroup>
-                <col width="22%" />
-                <col width="28%" />
-                <col width="22%" />
-                <col width="28%" />
+                <col width="100%" />
               </colgroup>
               <tbody>
                 <tr>
-                  <th colspan="2">⌜국토의 계획 및 이용에 관한 법률⌟<br />에 따른 지역 지구 등</th>
-                  <td colspan="2">{{ detailItem.krasLandUsePlanBase?.uselaw_a || '' }}</td>
+                  <th>⌜국토의 계획 및 이용에 관한 법률⌟ 에 따른 지역 지구 등</th>
                 </tr>
                 <tr>
-                  <th colspan="2">다른 법령 등에 따른 지역 지구 등</th>
-                  <td colspan="2">{{ detailItem.krasLandUsePlanBase.uselaw_b || '' }}</td>
+                  <td>{{ detailItem.krasLandUsePlanBase?.uselaw_a || '' }}</td>
                 </tr>
                 <tr>
-                  <th colspan="2">⌜토지이용규제기본법 시행령⌟ 제9조 제4항 각 호에 해당되는 사항</th>
-                  <td colspan="2">{{ detailItem.krasLandUsePlanBase?.uselaw_d || '' }}</td>
+                  <th>다른 법령 등에 따른 지역 지구 등</th>
+                </tr>
+                <tr>
+                  <td>{{ detailItem.krasLandUsePlanBase.uselaw_b || '' }}</td>
+                </tr>
+                <tr>
+                  <th>⌜토지이용규제기본법 시행령⌟ 제9조 제4항 각 호에 해당되는 사항</th>
+                </tr>
+                <tr>
+                  <td>{{ detailItem.krasLandUsePlanBase?.uselaw_d || '' }}</td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </template>
-        <template #content v-else>
-          <div class="no-data table">데이터가 존재하지 않습니다.</div>
-        </template>
-      </InsideCollapse>
-      <InsideCollapse title="도면 및 범례" :is-open="true">
-        <template #content v-if="detailItem && detailItem.krasLandUsePlanBase">
-          <div class="table-group">
-            <table class="customTable">
-              <colgroup>
-                <col width="65%" />
-                <col width="35%" />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th scope="col">확인도면</th>
-                  <th scope="col">범례</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="padding: 5px">
-                    <img
-                      v-if="detailItem?.krasLandUsePlanBase.img"
-                      :src="img"
-                      style="width: 100%"
-                    />
-                  </td>
-                  <td style="vertical-align: top">
-                    <div v-for="(data, idx) in detailItem?.krasLandUsePlanLegends" :key="idx">
-                      <span class="box" style="background: none">
-                        <img :src="legendImg(data.img)" />
-                      </span>
-                      <span class="text">
-                        {{ data.text }}
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+
+          <table class="customTable center">
+            <colgroup>
+              <col style="width: 90px; min-width: 90px" />
+              <col style="width: 100px; min-width: 100px" />
+              <col style="width: auto" />
+              <col style="width: auto" />
+            </colgroup>
+            <tbody>
+              <tr>
+                <th colspan="4">확인도면</th>
+              </tr>
+              <tr>
+                <td colspan="4">
+                  <img
+                    style="width: 100%; height: 100%; padding: 0"
+                    v-if="detailItem && detailItem.krasLandUsePlanBase?.img"
+                    :src="drwImage(detailItem?.krasLandUsePlanBase.img)"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th colspan="4">범례</th>
+              </tr>
+              <tr>
+                <td colspan="4">
+                  <div class="legendArea">
+                    <template
+                      v-for="(item, idx) in detailItem?.krasLandUsePlanBase?.legend"
+                      :key="idx"
+                    >
+                      <div class="legend">
+                        <span class="box">
+                          <img v-if="item" :src="drwImage(item.img)" />
+                        </span>
+                        <span class="txt">{{ item.lgdNm }}</span>
+                      </div>
+                    </template>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </template>
         <template #content v-else>
           <div class="no-data table">데이터가 존재하지 않습니다.</div>
@@ -257,6 +251,14 @@
     loaded.value = true
   }
 
+  function drwImage(base64: string) {
+    if (base64) {
+      return `data:image/png;base64,${base64}`
+    } else {
+      return ''
+    }
+  }
+
   onActivated(() => {
     isActive.value = true
 
@@ -281,5 +283,54 @@
 <style scoped lang="scss">
   .border-box-round {
     border: none;
+  }
+
+  .border-box-round {
+    border: none;
+  }
+
+  .customTable tbody th,
+  .customTable tbody td {
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+  }
+
+  .center td,
+  .center th {
+    text-align: center !important;
+    vertical-align: middle !important;
+  }
+
+  .legendArea {
+    display: flex;
+    flex-wrap: wrap;
+
+    .legend {
+      flex: 50%;
+      display: flex;
+      align-items: center;
+
+      .box {
+        display: flex;
+        width: 16px;
+        height: 16px;
+        margin-right: 7px;
+        box-sizing: border-box;
+
+        &.default {
+          border: 1.5px solid #bebe0b;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .txt {
+        font-size: 16px;
+        color: #666;
+      }
+    }
   }
 </style>

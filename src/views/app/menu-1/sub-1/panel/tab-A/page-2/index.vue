@@ -52,14 +52,16 @@
 <script setup lang="ts">
   import { computed, onActivated, onBeforeMount, onMounted, ref, watch } from 'vue'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useMenu1Sub1Tab1Store } from '@/stores/app/menu-1/sub-1/tab-A'
-  import PagePane from '@/components/common/PagePane.vue'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import { getStatusInfo } from '@/api/app/menu-1/sub-1/tab-a'
-  import DataComp from '@/components/app/menu-1/sub-1/panel/tab-A/page-2/DataComponent.vue'
   import Source from '@/components/common/Source.vue'
+  import PagePane from '@/components/common/PagePane.vue'
+  import DataComp from '@/components/app/menu-1/sub-1/panel/tab-A/page-2/DataComponent.vue'
+
   import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getStatusInfo } from '@/api/app/menu-1/sub-1/tab-a'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { useMenu1Sub1Tab1Store } from '@/stores/app/menu-1/sub-1/tab-A'
 
   const globalStore = useGlobalStore()
   const menu1Sub1Tab1Store = useMenu1Sub1Tab1Store()

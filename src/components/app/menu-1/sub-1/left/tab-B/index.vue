@@ -28,16 +28,18 @@
   import { computed, DefineComponent, onActivated, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import { useBoolean } from '@/hooks/useBoolean'
-  import { useGlobalStore } from '@/stores/app'
-  import { Menu1Sub1Tab2TabIdType, useMenu1Sub1Tab2Store } from 'src/stores/app/menu-1/sub-1/tab-B'
-
-  import { Style } from 'ol/style'
   import MenuCollapse from '@/components/common/collapse/MenuCollapse.vue'
   import Page3Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-3.vue'
   import Page4Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-4.vue'
   import Page5Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-5.vue'
   import Page6Comp from '@/components/app/menu-1/sub-1/left/tab-B/Page-6.vue'
+
+  import { Style } from 'ol/style'
+
+  import { useBoolean } from '@/hooks/useBoolean'
+
+  import { useGlobalStore } from '@/stores/app'
+  import { Menu1Sub1Tab2TabIdType, useMenu1Sub1Tab2Store } from '@/stores/app/menu-1/sub-1/tab-B'
 
   const menu3Sub2Store = useMenu1Sub1Tab2Store()
 

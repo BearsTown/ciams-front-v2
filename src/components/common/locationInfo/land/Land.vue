@@ -25,8 +25,9 @@
   import KgeoInfo from '@/components/common/locationInfo/land/KgeoInfo.vue'
   import PublicInfo from '@/components/common/locationInfo/land/PublicInfo.vue'
 
-  import { getConfig } from '@/api/app/config'
   import { MapType } from '@/enums/mapEnum'
+
+  import { getConfig } from '@/api/app/config'
 
   const props = withDefaults(
     defineProps<{

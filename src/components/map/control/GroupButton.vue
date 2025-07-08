@@ -31,8 +31,8 @@
 <script lang="ts" setup>
   import { reactive } from 'vue'
 
-  import { ListenerKey } from '@/js/map/control/IControlButton'
   import { GroupButton } from '@/js/map/control/GroupButton'
+  import { ListenerKey } from '@/js/map/control/IControlButton'
 
   const props = withDefaults(
     defineProps<{

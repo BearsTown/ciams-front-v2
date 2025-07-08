@@ -44,9 +44,10 @@
 <script setup lang="ts">
   import { computed, onActivated, onBeforeMount, onMounted, ref, watch } from 'vue'
 
+  import CommonUtil from '@/utils/commonUtil'
+
   import { useGlobalStore } from '@/stores/app'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import CommonUtil from '@/utils/commonUtil'
 
   const globalStore = useGlobalStore()
   const cmmConfigStore = useCmmConfigStore()

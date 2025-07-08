@@ -121,8 +121,6 @@
   import { computed, onActivated } from 'vue'
   import { storeToRefs } from 'pinia'
 
-  import OpenApi from '@/components/common/locationInfo'
-
   import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
 

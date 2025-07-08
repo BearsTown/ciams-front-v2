@@ -31,6 +31,7 @@
 
 <script setup lang="ts">
   import { onBeforeMount, onMounted } from 'vue'
+
   import SvgIcon from '@/components/common/SvgIcon.vue'
 
   onBeforeMount(() => {})
