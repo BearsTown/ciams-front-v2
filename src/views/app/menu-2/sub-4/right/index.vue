@@ -23,9 +23,9 @@
             <div
               v-if="overview"
               class="tag"
-              :style="{ 'background-color': tagColor(overview?.mngNo) }"
+              :style="{ 'background-color': tagColor(overview.mngCd) }"
             >
-              {{ overview?.mngType }}
+              {{ overview.mngType }}
             </div>
           </div>
         </div>
@@ -50,13 +50,17 @@
           <tbody>
             <tr>
               <td style="text-align: center; vertical-align: middle">
-                {{ overview ? overview?.itaResult : '-' }}
+                {{ overview ? overview.itaResult : '-' }}
               </td>
               <td style="text-align: center; vertical-align: middle">
-                {{ overview?.locResult }}
+                {{ overview ? overview.locResult : '-' }}
               </td>
-              <td style="text-align: center; vertical-align: middle">{{ overview?.dvsType }}</td>
-              <td style="text-align: center; vertical-align: middle">{{ overview?.mngType }}</td>
+              <td style="text-align: center; vertical-align: middle">
+                {{ overview ? overview.dvsType : '-' }}
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                {{ overview ? overview.mngType : '-' }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -265,7 +269,6 @@
 
 <script setup lang="ts">
   import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
-  import { storeToRefs } from 'pinia'
 
   import Item from '@/components/app/menu-2/Item.vue'
   import SvgIcon from '@/components/common/SvgIcon.vue'
@@ -276,51 +279,27 @@
 
   import { getSources } from '@/api/app/source'
   import { Info } from '@/api/app/menu-2/sub-4/model'
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
   import { SourceGroupDTO } from '@/api/app/source/model'
   import { getMenu2Sub4Info } from '@/api/app/menu-2/sub-4'
 
   import { useMenu2Sub4Store } from '@/stores/app/menu-2/sub-4'
 
   const menu2Sub4Store = useMenu2Sub4Store()
-  const { overview } = storeToRefs(menu2Sub4Store)
 
+  const state = menu2Sub4Store.state
   const dialog = ref<boolean>(false)
-
-  const info = ref<Info | null>(null)
-
+  const info = ref<Info>()
   const activeName = ref<string>('Tab-A')
-
   const sourceData = ref<SourceGroupDTO.Find.Result[]>([])
+  const overview = computed<CiamsZoneDTO.Overview.Find.Result | undefined>(() => state.overview)
 
-  watch(
-    () => overview.value,
-    async () => {
-      if (overview.value?.zoneNo) {
-        const { data } = await getMenu2Sub4Info(overview.value?.zoneNo)
-        info.value = data
-      } else {
-        info.value = null
-      }
-    },
-  )
+  function tagColor(itaReCd: string) {
+    return state.tags?.find((tag) => tag.value === itaReCd)?.color
+  }
 
   function dialogChangeListener(state: boolean) {
     dialog.value = state
-  }
-
-  function tagColor(mngNo: string) {
-    switch (mngNo) {
-      case 'TEMP_MNG_001':
-        return '#8BD100'
-      case 'TEMP_MNG_002':
-        return '#FFAA00'
-      case 'TEMP_MNG_003':
-        return '#00C5FF'
-      case 'TEMP_MNG_004':
-        return '#C500FF'
-      default:
-        return '#ffffff'
-    }
   }
 
   const filterByTargetId = (targetId: string) =>
@@ -331,6 +310,18 @@
   const source3 = filterByTargetId('E003')
   const source4 = filterByTargetId('E004')
   const source5 = filterByTargetId('E005')
+
+  watch(
+    () => overview.value,
+    async () => {
+      if (overview.value?.zoneNo) {
+        const { data } = await getMenu2Sub4Info(overview.value?.zoneNo)
+        info.value = data
+      } else {
+        info.value = undefined
+      }
+    },
+  )
 
   onBeforeMount(() => {})
 

@@ -1,12 +1,11 @@
 import { AxiosResponse } from 'axios'
-
-import router from '@/router'
 import tokenUtil from '@/utils/tokenUtil'
 import { AbstractApiAxios } from '@/utils/apiAxios'
 import { useAuthStore } from '@/stores/auth'
 import { ResultData } from '@/api/app/model'
 import { API_INFO_CIAMS } from '@/config/config'
 import { authAxiosInstance, refreshToken } from '@/api/auth'
+import commonUtil from '@/utils/commonUtil'
 
 class CiamsAxios extends AbstractApiAxios<ResultData<any>> {
   constructor() {
@@ -66,7 +65,8 @@ class CiamsAxios extends AbstractApiAxios<ResultData<any>> {
           //   await router.replace('/')
           // }
         } else if (res.status === 403) {
-          await router.replace('/')
+          commonUtil.errorMessage('통신 중 에러가 발생했습니다.')
+          // await router.replace('/')
         }
         return Promise.reject(error)
       },

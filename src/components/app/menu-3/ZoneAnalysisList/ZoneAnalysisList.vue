@@ -70,7 +70,7 @@
 
   import { pageObject } from '@/js/common'
 
-  import { getCiamsZoneSegList } from '@/api/app/gis/zone'
+  import { getCiamsZoneList } from '@/api/app/gis/zone'
   import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
 
   const props = withDefaults(
@@ -116,7 +116,7 @@
       ...currentParams.value,
     } as GisCiamsZoneDTO.Search.Params
 
-    const { data } = await getCiamsZoneSegList(params)
+    const { data } = await getCiamsZoneList(params)
     responseData(data)
   }
 

@@ -23,9 +23,9 @@
             <div
               v-if="overview"
               class="tag"
-              :style="{ 'background-color': tagColor(overview?.locResult) }"
+              :style="{ 'background-color': tagColor(overview.locReCd) }"
             >
-              {{ overview?.locResult }}
+              {{ overview.locResult }}
             </div>
           </div>
         </div>
@@ -46,12 +46,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr :class="getRowClass('양호')">
+            <tr :class="{ active: overview?.locReCd === 'AR0210' }" :style="getRowStyle('AR0210')">
               <td style="text-align: center; vertical-align: middle">양호</td>
               <td style="text-align: center; vertical-align: middle">50% 미만</td>
               <td style="text-align: center; vertical-align: middle">10% 이상</td>
             </tr>
-            <tr :class="getRowClass('불량')">
+            <tr :class="{ active: overview?.locReCd === 'AR0220' }" :style="getRowStyle('AR0220')">
               <td style="text-align: center; vertical-align: middle">불량</td>
               <td style="text-align: center; vertical-align: middle">50% 이상</td>
               <td style="text-align: center; vertical-align: middle">10% 미만</td>
@@ -117,41 +117,29 @@
 
 <script setup lang="ts">
   import { computed, onBeforeMount, onMounted, ref } from 'vue'
-  import { storeToRefs } from 'pinia'
 
   import SvgIcon from '@/components/common/SvgIcon.vue'
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
   import PieChartItem from '@/components/app/menu-2/PieChartItem.vue'
 
   import { getSources } from '@/api/app/source'
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
   import { SourceGroupDTO } from '@/api/app/source/model'
 
   import { useMenu2Sub2Store } from '@/stores/app/menu-2/sub-2'
 
   const menu2Sub2Store = useMenu2Sub2Store()
-  const { overview } = storeToRefs(menu2Sub2Store)
 
+  const state = menu2Sub2Store.state
   const sourceData = ref<SourceGroupDTO.Find.Result[]>([])
-  const didgh = computed(() => overview?.value?.locResult === '양호')
-  const qnffid = computed(() => overview?.value?.locResult === '불량')
+  const overview = computed<CiamsZoneDTO.Overview.Find.Result | undefined>(() => state.overview)
 
-  function tagColor(itaResult: string) {
-    switch (itaResult) {
-      case '양호':
-        return '#90cd2a'
-      case '불량':
-        return '#ca5619'
-      default:
-        return '#ffffff'
-    }
+  function tagColor(itaReCd: string) {
+    return state.tags?.find((tag) => tag.value === itaReCd)?.color
   }
 
-  function getRowClass(locResult: string) {
-    return {
-      active: overview.value?.locResult === locResult,
-      'row-type-1': locResult === '양호' && overview.value?.locResult === '양호',
-      'row-type-2': locResult === '불량' && overview.value?.locResult === '불량',
-    }
+  function getRowStyle(locReCd: string) {
+    return overview?.value?.locReCd === locReCd ? { 'background-color': tagColor(locReCd) } : {}
   }
 
   const filterByTargetId = (targetId: string) =>

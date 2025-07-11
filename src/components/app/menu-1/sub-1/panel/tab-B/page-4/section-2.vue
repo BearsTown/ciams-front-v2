@@ -66,7 +66,7 @@
                 "
               >
                 <div class="header-title" style="">산업별 현황</div>
-                <Table2 group="종사자수(인)" :data="industry" :columns="columns" />
+                <Table2 group="종사자수(명)" :data="industry" :columns="columns" />
               </div>
             </div>
           </div>

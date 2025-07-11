@@ -1,18 +1,28 @@
 import qs from 'qs'
 import { AxiosRequestConfig } from 'axios'
 
-import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
 import { ResultData } from '@/api/app/model'
 import { ciamsAxiosInstance as http } from '@/api/app'
 
+import { CiamsZoneDTO } from '@/api/app/zone/model'
+
 const prefix = '/api/v1/zone'
 
-export function getCiamsZoneList(params: GisCiamsZoneDTO.Search.Params) {
+export { getCiamsZoneList, getCiamsZoneOverView }
+
+function getCiamsZoneList(params: CiamsZoneDTO.Search.Params) {
   const config: AxiosRequestConfig = {
     params,
     paramsSerializer: (params) => {
       return qs.stringify(params, { arrayFormat: 'comma' })
     },
   }
-  return http.get<ResultData<GisCiamsZoneDTO.Search.Result>>(`${prefix}/list`, config)
+  return http.get<ResultData<CiamsZoneDTO.Search.Result>>(`${prefix}/list`, config)
+}
+
+function getCiamsZoneOverView(params: CiamsZoneDTO.Overview.Find.Params) {
+  const config: AxiosRequestConfig = {
+    params,
+  }
+  return http.get<ResultData<CiamsZoneDTO.Overview.Find.Result>>(`${prefix}/overview`, config)
 }

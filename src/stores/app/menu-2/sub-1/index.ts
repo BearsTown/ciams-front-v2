@@ -18,12 +18,14 @@ import { API_INFO_MAPSTUDIO } from '@/config/config'
 import { useBoolean, UseBoolean } from '@/hooks/useBoolean'
 import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
 
-import { getMenu2ZoneOverView } from '@/api/app/menu-2'
-import { Menu2ZoneDetailsDto } from '@/api/app/menu-2/model'
+import { CiamsZoneDTO } from '@/api/app/zone/model'
+import { getCiamsZoneOverView } from '@/api/app/zone'
 import { getDataConfig, getDataGroups } from '@/api/app/menu-1'
 
 import { useMapStore } from '@/stores/map/map'
 import UitUWMSLayer from '@/stores/map/uwmsLayer'
+import { TagCategory } from '@/types/common'
+import { getCodeList } from '@/api/app/common'
 
 interface Category {
   id: number
@@ -51,6 +53,9 @@ interface YearDetail {
 }
 
 interface State {
+  overview?: CiamsZoneDTO.Overview.Find.Result
+  tags: TagCategory[]
+
   categories: Category[]
   attributes: Attribute[]
 
@@ -67,11 +72,10 @@ const mapLayerGroupType: MapLayerGroupType = 'Menu_2_Sub_1'
 const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
 export const useMenu2Sub1Store = defineStore('menu2Sub1Store', () => {
-  const overview = ref<Menu2ZoneDetailsDto.Overview.Find.Result | null>()
-
-  const state: State = reactive({
-    categories: ref([]),
-    attributes: ref([]),
+  const state = reactive<State>({
+    tags: [],
+    categories: [],
+    attributes: [],
   })
 
   const mapWrap = ref<MapWrapper>()
@@ -79,9 +83,19 @@ export const useMenu2Sub1Store = defineStore('menu2Sub1Store', () => {
 
   const columns = ref<any>([])
 
-  async function setOverview(params: Menu2ZoneDetailsDto.Overview.Find.Params) {
-    const { data } = await getMenu2ZoneOverView(params)
-    overview.value = data
+  async function setOverview(params: CiamsZoneDTO.Overview.Find.Params) {
+    const { data } = await getCiamsZoneOverView(params)
+    state.overview = data
+  }
+
+  async function setTagList(code: string) {
+    const { data } = await getCodeList(code)
+
+    state.tags = data.map((item) => ({
+      label: item.codeName,
+      value: item.code,
+      color: item.codeVal,
+    }))
   }
 
   async function fetchAttributes() {
@@ -257,7 +271,7 @@ export const useMenu2Sub1Store = defineStore('menu2Sub1Store', () => {
   async function loadZoneFeatures(zoneNo: string) {
     const res = await fetchFeatures({
       url: API_INFO_MAPSTUDIO.PREFIX,
-      key: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
+      key: 'F91A8E17-FA4F-81B6-D344-0FAFBB68DFF2',
       featureRequestProps: {
         layers: 'CIAMS_ZONE',
         filter: likeFilter('zone_no', zoneNo),
@@ -376,16 +390,17 @@ export const useMenu2Sub1Store = defineStore('menu2Sub1Store', () => {
   })
 
   function clear() {
-    overview.value = null
+    state.overview = undefined
     state.activeZoneId = undefined
     const selectDetail = getSelectDetail()
     if (selectDetail) selectDetail.tableData = []
   }
 
   return {
-    overview,
-    setOverview,
     state,
+
+    setTagList,
+    setOverview,
     init,
     years,
     mapWrap: computed(() => mapWrap),

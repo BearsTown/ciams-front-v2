@@ -1,9 +1,9 @@
 <template>
-  <ZoneSegList :page-size="6" @item-select="zoneSegItemSelect" @clear="clear" />
+  <ZoneList :page-size="6" @item-select="zoneItemSelect" @clear="clear" :category="category" />
 </template>
 
 <script setup lang="ts">
-  import { onActivated, onMounted, reactive, ref } from 'vue'
+  import { computed, onActivated, onMounted, reactive, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import Feature from 'ol/Feature'
@@ -12,7 +12,7 @@
   import VectorSource from 'ol/source/Vector'
   import { like as likeFilter } from 'ol/format/filter'
 
-  import ZoneSegList from '@/components/common/ZoneSegList.vue'
+  import ZoneList from '@/components/common/ZoneTable/ZoneList.vue'
 
   import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
   import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
@@ -23,32 +23,35 @@
   import { API_INFO_MAPSTUDIO } from '@/config/config'
   import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
 
-  import { Plan } from '@/api/app/menu-1/model'
-
   import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
-  import { useMenu2store } from '@/stores/app/menu-2'
   import { useMenu2Sub3Store } from '@/stores/app/menu-2/sub-3'
-
-  const menu2store = useMenu2store()
-  const menu2Sub3Store = useMenu2Sub3Store()
-  const { overview } = storeToRefs(menu2Sub3Store)
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
 
   const globalStore = useGlobalStore()
+  const menu2Sub3Store = useMenu2Sub3Store()
+
+  const state = menu2Sub3Store.state
   const { layoutSelected } = storeToRefs(globalStore)
   const { status: isActive, toggle } = useBoolean(false)
+  const overview = computed<CiamsZoneDTO.Overview.Find.Result | undefined>(() => state.overview)
 
-  // const mapType = MapType.MAP_2
   const mapType: MapType = 'Map-2'
   const mapLayerGroupType: MapLayerGroupType = 'Menu_2_Sub_3'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
+  const category = ref({
+    name: 'dvsCd',
+    title: '유형구분',
+    list: computed(() => state.tags),
+  })
+
   const uitWMSLayer1 = new UitWMSLayer({
     baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
-      KEY: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
+      KEY: 'F91A8E17-FA4F-81B6-D344-0FAFBB68DFF2',
       LAYERS: ['CIAMS_ZONE_2'],
     },
     crossOrigin: 'Anonymous',
@@ -117,7 +120,7 @@
     mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
   }
 
-  async function zoneSegItemSelect(item: Plan.Search.Row) {
+  async function zoneItemSelect(item: Plan.Search.Row) {
     layoutSelected.value?.right?.collapse?.on()
     mapStore.locationInfoVisible = false
 
@@ -129,9 +132,8 @@
 
     const res = await fetchFeatures({
       url: API_INFO_MAPSTUDIO.PREFIX,
-      key: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
+      key: 'F91A8E17-FA4F-81B6-D344-0FAFBB68DFF2',
       featureRequestProps: {
-        // layers: 'CIAMS_P1_PLAN',
         layers: 'CIAMS_ZONE',
         filter: likeFilter('zone_no', item.zoneNo),
         srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
@@ -166,15 +168,14 @@
   }
 
   function clear() {
-    overview.value = null
+    menu2Sub3Store.clear()
     uitVectorLayer2.clear()
   }
 
   onMounted(async () => {
     mapWrap.value = await mapStore.getMapInstance()
 
-    // mapObject = mapCacheStore.getMapObject(mapType)
-    // mapWrap.value = await mapObject.getMapInstance()
+    await menu2Sub3Store.setTagList('AR0300')
 
     load()
   })

@@ -6,7 +6,7 @@ import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
 
 const prefix = '/api/v1/zone'
 
-export function getCiamsZoneSegList(params: GisCiamsZoneDTO.Search.Params) {
+export function getCiamsZoneList(params: GisCiamsZoneDTO.Search.Params) {
   const config: AxiosRequestConfig = {
     params,
     paramsSerializer: (params) => {

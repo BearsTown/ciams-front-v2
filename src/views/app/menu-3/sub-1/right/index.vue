@@ -23,7 +23,7 @@
             <div
               v-if="overview"
               class="tag"
-              :style="{ 'background-color': tagColor(overview.mngType) }"
+              :style="{ 'background-color': tagColor(overview.mngCd) }"
             >
               {{ overview.mngType }}
             </div>
@@ -33,7 +33,7 @@
 
       <div class="container customScroll" style="margin-top: 8px; flex: 1; padding: 5px">
         <div class="">
-          <template v-for="item in overview?.baseDescs" :key="item">
+          <template v-for="item in info?.baseDescs" :key="item">
             <InsideCollapse :title="item?.category" :is-open="true">
               <template #content>
                 <ul class="">
@@ -47,7 +47,7 @@
             </InsideCollapse>
           </template>
 
-          <template v-for="item in overview?.zoneDescs" :key="item">
+          <template v-for="item in info?.zoneDescs" :key="item">
             <InsideCollapse :title="item?.category" :is-open="true">
               <template #content>
                 <ul class="">
@@ -75,7 +75,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <template v-for="industry in overview?.zoneIndustries" :key="industry">
+                  <template v-for="industry in info?.zoneIndustries" :key="industry">
                     <tr v-for="(item, idx) in industry.list" :key="idx">
                       <td
                         v-if="idx === 0"
@@ -92,7 +92,7 @@
             </template>
           </InsideCollapse>
 
-          <template v-for="item in overview?.zoneImages" :key="item">
+          <template v-for="item in info?.zoneImages" :key="item">
             <InsideCollapse :title="item?.category" :is-open="true">
               <template #content>
                 <template v-for="img in item?.list" :key="img">
@@ -118,43 +118,27 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onBeforeMount, onMounted } from 'vue'
-  import { storeToRefs } from 'pinia'
+  import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
 
   import SvgIcon from '@/components/common/SvgIcon.vue'
   import { InsideCollapse } from '@/components/common/collapse'
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
   import AsyncImage from '@/views/app/menu-3/sub-1/right/AsyncImage.vue'
 
-  import { getImage as getImageAxios } from '@/api/app/menu-3/sub-1'
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
+  import { CiamsMenu3Sub1DetailsDto } from '@/api/app/menu-3/sub-1/model'
+  import { getImage as getImageAxios, getMenu3Sub1Info } from '@/api/app/menu-3/sub-1'
 
   import { useMenu3Sub1Store } from '@/stores/app/menu-3/sub-1'
 
   const menu3Sub1Store = useMenu3Sub1Store()
-  const { overview } = storeToRefs(menu3Sub1Store)
 
-  // const tjdwkd = computed(() => overview?.value?.itaResult === '성장')
-  // const dbwl = computed(() => overview?.value?.itaResult === '유지')
-  // const thlxhl = computed(() => overview?.value?.itaResult === '쇠퇴')
+  const state = menu3Sub1Store.state
+  const info = ref<CiamsMenu3Sub1DetailsDto.Info.Find.Result>()
+  const overview = computed<CiamsZoneDTO.Overview.Find.Result | undefined>(() => state.overview)
 
-  /**
-   * - ToDo: DB 관리 변경
-   *
-   * @param mngType
-   */
-  function tagColor(mngType: string) {
-    switch (mngType) {
-      case '산업관리형':
-        return '#6fad47'
-      case '산업정비형':
-        return '#ed7d31'
-      case '산업혁신형':
-        return '#5b9bd5'
-      case '산업혁신·정비형':
-        return '#cc66ff'
-      default:
-        return '#ffffff'
-    }
+  function tagColor(itaReCd: string) {
+    return state.tags?.find((tag) => tag.value === itaReCd)?.color
   }
 
   async function getImage(id: number) {
@@ -165,6 +149,20 @@
       return URL.createObjectURL(imageBlob)
     })
   }
+
+  watch(
+    () => overview.value,
+    async () => {
+      if (overview.value?.zoneNo) {
+        const { data } = await getMenu3Sub1Info({
+          zoneNo: overview.value?.zoneNo,
+        })
+        info.value = data
+      } else {
+        info.value = undefined
+      }
+    },
+  )
 
   onBeforeMount(() => {})
 

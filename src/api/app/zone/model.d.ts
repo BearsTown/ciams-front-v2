@@ -1,59 +1,85 @@
 import { PageReq, PageRes } from '@/api/app/model'
 
-namespace PlanZone {
-  namespace Search {
-    // export interface Detail {
-    //   planId: string
-    //   planAreaId: string
-    // }
+export { CiamsZoneDTO, CiamsZone }
 
-    export interface Params extends PageReq {
-      zoneName?: string
-      mngType?: string
+namespace CiamsZoneDTO {
+  namespace Search {
+    interface Params extends PageReq {
+      keyword?: string
+      itaResult?: string // 산업기반분석
+      locResult?: string // 지역여건분석
+      dvsNo?: string // 관리유형구분
+      mngNo?: string // 관리유형설정
     }
 
-    export interface Row {
+    interface Row {
       rn: number
       zoneNo: string
       zoneName: string
+      useDist: string
+      zoneArea: number
+      dvsType: string
+      dvsCd: string
       mngType: string
+      mngCd: string
+      baseCsC: number
+      itaResult: string
+      itaReCd: string
+      locResult: string
+      locReCd: string
     }
 
-    export interface Result {
+    interface Result {
       page: PageRes
       list: Row[]
     }
   }
 
-  namespace Details {
-    export interface Overview extends GisCiamsPlanZone {
-      temp: string
-    }
-  }
-
   namespace Overview {
     namespace Find {
-      export interface Params {
-        incentiveId: string
+      interface Params {
+        zoneNo: string
       }
 
-      export interface Result extends Incentive {
-        incentiveLocId: string
-        pnu: string
-        loc: string
-        jimok: string
-        areaUseCds: object[]
+      interface Result extends CiamsZone {
+        _: unknown
       }
     }
   }
-
 }
 
-export interface GisCiamsPlanZone {
+interface CiamsZone {
   zoneNo: string
   zoneName: string
+  useDist: string
+  zoneArea: number
+  dvsType: string
+  dvsCd: string
   mngType: string
+  mngCd: string
+  localArea: number
+  localCs: number
+  baseCsC: number
+  density: number
+  densityRe: string
+  pastCsC: number
+  variation: number
+  variaRe: string
+  sssC: number
+  sssRate: number
+  sssRe: string
+  itaResult: string
+  itaReCd: string
+  csB: number
+  csB20: number
+  deterio: number
+  deterioRe: string
+  roadA: number
+  roadRate: number
+  roadRe: string
+  locResult: string
+  locReCd: string
+  division: string
+  baseYear: number
+  pastYear: number
 }
-
-
-export { PlanZone }

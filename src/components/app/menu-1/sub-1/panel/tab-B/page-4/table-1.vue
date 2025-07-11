@@ -27,7 +27,7 @@
     </el-table-column>
     <el-table-column
       v-if="type === 'emp'"
-      label="종사자수(인)"
+      label="종사자수(명)"
       prop="empCnt"
       align="right"
       header-align="center"

@@ -1,31 +1,44 @@
 <template>
-  <ul class="result-list customScroll" ref="scrollbarRef">
+  <ul class="result-list customScroll">
     <template v-if="Object.keys(areaListItems).length">
-      <ZoneListItem
+      <li
         v-for="(item, index) in areaListItems"
         :key="index"
-        :zone-item="item"
-        ref="itemRefs"
-        @click="selectAreaItem(index)"
-        @re-click="selectAreaItem(index)"
-      />
+        @click="selectAreaItem(item)"
+        @re-click="selectAreaItem(item)"
+        :class="{ active: item.zoneNo === selected?.zoneNo }"
+      >
+        <div class="address-title" style="display: flex; justify-content: space-between">
+          <b>{{ item.zoneName }}</b>
+          <ZoneItemTag :tag-category="getTag(item)" />
+        </div>
+        <div class="address-text">면적 : {{ zoneArea(item.zoneArea) }}</div>
+        <div class="address-text">용도지역 : {{ item.useDist }}</div>
+        <div class="address-text">사업체수 : {{ item.baseCsC }}개</div>
+      </li>
     </template>
     <Empty v-else />
   </ul>
 </template>
 
 <script setup lang="ts">
-  import { ref, toRefs, watch } from 'vue'
+  import { computed, onMounted, ref, toRefs, watch } from 'vue'
 
-  import ZoneListItem from '@/components/common/ZoneTable/ZoneListItem.vue'
+  import { TagCategory } from '@/types/common'
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
+  import CommonUtil from '@/utils/commonUtil'
+  import ZoneItemTag from '@/components/common/ZoneTable/ZoneItemTag.vue'
 
-  import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
-
-  type CompAreaListItem = InstanceType<typeof ZoneListItem> | null
+  interface Category {
+    name: string
+    title: string
+    list: TagCategory[]
+  }
 
   const props = withDefaults(
     defineProps<{
-      areaListItems?: GisCiamsZoneDTO.Search.Row[]
+      category: Category
+      areaListItems?: CiamsZoneDTO.Search.Row[]
     }>(),
     {
       areaListItems: () => {
@@ -34,45 +47,41 @@
     },
   )
 
-  const emits = defineEmits<{
-    (e: 'item-select', type: GisCiamsZoneDTO.Search.Row): void
-  }>()
-
-  const selected = ref<CompAreaListItem>()
-  const itemRefs = ref<CompAreaListItem[]>([])
+  const selected = ref<CiamsZoneDTO.Search.Row>()
   const items = toRefs(props).areaListItems
 
-  const scrollbarRef = ref()
+  const zoneArea = computed(() => (area: number) => {
+    return `${CommonUtil.comma(area.toFixed(0))}㎡`
+  })
 
-  // const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
+  function getTag(item: CiamsZoneDTO.Search.Row) {
+    return props.category?.list?.find((tag) => tag.value === item[props.category?.name])
+  }
 
-  function selectAreaItem(idx) {
-    // 한번더 클릭시 액션 발생하도록
-    // if (selected.value === itemRefs.value[idx]) {
-    //   return
-    // }
-
+  function selectAreaItem(item) {
     if (selected.value) {
-      selected.value.setActive(false)
+      selected.value = undefined
     }
 
-    selected.value = itemRefs.value[idx]
-    selected.value!.setActive(true)
+    selected.value = item
 
-    emits('item-select', selected.value!.getSelectedData)
+    emits('item-select', selected.value!)
   }
+
+  const emits = defineEmits<{
+    (e: 'item-select', type: CiamsZoneDTO.Search.Row): void
+  }>()
 
   watch(
     () => items.value,
     () => {
-      // scrollbarRef.value!.setScrollTop(0)
-
       if (selected.value) {
-        selected.value.setActive(false)
-        selected.value = null
+        selected.value = undefined
       }
     },
   )
+
+  onMounted(() => {})
 </script>
 
 <style scoped lang="scss">

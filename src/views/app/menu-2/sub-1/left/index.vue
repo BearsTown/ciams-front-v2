@@ -1,9 +1,9 @@
 <template>
-  <ZoneSegList :page-size="6" @item-select="zoneSegItemSelect" @clear="clear" />
+  <ZoneList :page-size="6" @item-select="zoneItemSelect" @clear="clear" :category="category" />
 </template>
 
 <script setup lang="ts">
-  import { onActivated, onMounted, ref, watch } from 'vue'
+  import { computed, onActivated, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import Feature from 'ol/Feature'
@@ -12,7 +12,7 @@
   import VectorSource from 'ol/source/Vector'
   import { like as likeFilter } from 'ol/format/filter'
 
-  import ZoneSegList from '@/components/common/ZoneSegList.vue'
+  import ZoneList from '@/components/common/ZoneTable/ZoneList.vue'
 
   import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
   import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
@@ -23,16 +23,17 @@
   import { API_INFO_MAPSTUDIO } from '@/config/config'
   import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
 
-  import { Plan } from '@/api/app/menu-1/model'
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
 
   import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
   import { useMenu2Sub1Store } from '@/stores/app/menu-2/sub-1'
 
-  const menu2Sub1Store = useMenu2Sub1Store()
-  const { overview } = storeToRefs(menu2Sub1Store)
-
   const globalStore = useGlobalStore()
+  const menu2Sub1Store = useMenu2Sub1Store()
+
+  const state = menu2Sub1Store.state
+
   const { layoutSelected } = storeToRefs(globalStore)
   const { status: isActive, toggle } = useBoolean(false)
 
@@ -42,10 +43,16 @@
   const mapStore = useMapStore(mapType)
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
+  const category = ref({
+    name: 'itaReCd',
+    title: '산업기반분석',
+    list: computed(() => state.tags),
+  })
+
   const uitWMSLayer1 = new UitWMSLayer({
     baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
-      KEY: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
+      KEY: 'F91A8E17-FA4F-81B6-D344-0FAFBB68DFF2',
       LAYERS: ['CIAMS_ZONE'],
     },
     crossOrigin: 'Anonymous',
@@ -58,23 +65,6 @@
     opacity: 0.8,
     zIndex: 1111,
   })
-
-  // const uitWMSLayer2 = new UitWMSLayer({
-  //   baseUrl: API_INFO_MAPSTUDIO.PREFIX,
-  //   sourceParams: {
-  //     KEY: 'FAE89AE2-23FE-D36C-5DE1-BC6515BC24B9',
-  //     LAYERS: ['CIAMS_INDUSTRY_2021'],
-  //   },
-  //   crossOrigin: 'Anonymous',
-  //   properties: {
-  //     id: 'ciams_industry_1',
-  //     type: 'wms',
-  //   },
-  //   layerType: 'wms',
-  //   isSingleTile: false,
-  //   opacity: 0.8,
-  //   zIndex: 1111,
-  // })
 
   const uitVectorLayer2 = new UitWFSLayer({
     baseUrl: '',
@@ -99,12 +89,6 @@
       userVisible: true,
       useLayerSetting: true,
     }),
-    // new MapLayer({
-    //   layer: uitWMSLayer2,
-    //   title: '산업기반분석',
-    //   userVisible: true,
-    //   useLayerSetting: true,
-    // }),
     new MapLayer({
       layer: uitVectorLayer2,
       userVisible: true,
@@ -139,7 +123,7 @@
     mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups2)
   }
 
-  async function zoneSegItemSelect(item: Plan.Search.Row) {
+  async function zoneItemSelect(item: CiamsZoneDTO.Search.Row) {
     layoutSelected.value?.right?.collapse?.on()
     layoutSelected.value?.bottom?.collapse?.on()
 
@@ -153,7 +137,7 @@
 
     const res = await fetchFeatures({
       url: API_INFO_MAPSTUDIO.PREFIX,
-      key: '1E2DA8DC-0446-15DB-5EF7-6C0CC955E694',
+      key: 'F91A8E17-FA4F-81B6-D344-0FAFBB68DFF2',
       featureRequestProps: {
         // layers: 'CIAMS_P1_PLAN',
         layers: 'CIAMS_ZONE',
@@ -167,13 +151,6 @@
 
     uitVectorLayer2.clear()
     uitVectorLayer2.addFeatures(features)
-
-    // mapWrap.value
-    //   ?.getUitMap()
-    //   .getView()
-    //   .fit(uitVectorLayer2.getSource().getExtent(), {
-    //     padding: [200, 100, 200, 100],
-    //   })
 
     const map = mapWrap.value!.getUitMap().getMap()!
 
@@ -199,19 +176,14 @@
   }
 
   function clear() {
-    uitVectorLayer2.clear()
     menu2Sub1Store.clear()
+    uitVectorLayer2.clear()
   }
-
-  watch(overview, async (value) => {
-    // console.log(value)
-  })
 
   onMounted(async () => {
     mapWrap.value = await mapStore.getMapInstance()
 
-    // mapObject = mapCacheStore.getMapObject(mapType)
-    // mapWrap.value = await mapObject.getMapInstance()
+    await menu2Sub1Store.setTagList('AR0100')
 
     load()
   })

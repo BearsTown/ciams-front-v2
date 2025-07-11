@@ -49,7 +49,7 @@
 
   const cmmConfigStore = useCmmConfigStore()
   const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
-  const imgSrc = prefixPath + '590a2252-87bf-41e0-bfae-787cf5dbfa53'
+  const imgSrc = prefixPath + '1_2.산업특성분석_3p_범례.png'
 
   const infos = ref<Density[]>([])
   const notes = ref<string[]>([])

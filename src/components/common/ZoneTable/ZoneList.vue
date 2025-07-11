@@ -15,6 +15,21 @@
               />
             </div>
           </div>
+          <div v-if="category" class="form-group">
+            <label class="form-label">{{ category?.title }}</label>
+            <el-select
+              v-model="selected"
+              :placeholder="`${category?.title}을 선택하세요`"
+              size="default"
+            >
+              <el-option
+                v-for="item in categoryList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </div>
         </div>
         <div class="bottom">
           <div class="btn-group">
@@ -28,10 +43,11 @@
         <div style="display: flex; flex-direction: column; height: 100%">
           <div class="result-header">검색결과 총 {{ pageInfo.totalCount }}건</div>
           <div class="result-wrap" style="flex: 1; overflow-y: auto">
-            <ZoneSegPageList
-              ref="zoneSegPageListRef"
-              :area-list-items="zoneSegItems"
-              @item-select="zoneSegItemSelect"
+            <ZonePageList
+              ref="zonePageListRef"
+              :category="category"
+              :area-list-items="zoneItems"
+              @item-select="zoneItemSelect"
             />
           </div>
           <div class="result-pagination">
@@ -53,39 +69,52 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
+  import { onMounted, ref, watch } from 'vue'
 
-  import ZoneSegPageList from '@/components/common/ZoneTable/ZonePageList.vue'
+  import ZonePageList from '@/components/common/ZoneTable/ZonePageList.vue'
 
   import { pageObject } from '@/js/common'
 
-  import { getCiamsZoneSegList } from '@/api/app/gis/zone'
-  import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
+  import { TagCategory } from '@/types/common'
+  import { getCiamsZoneList } from '@/api/app/zone'
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
+  import CommonUtil from '@/utils/commonUtil'
+
+  interface Category {
+    name: string
+    title: string
+    list: TagCategory[]
+  }
 
   const props = withDefaults(
     defineProps<{
       pageSize: number
+      category: Category
     }>(),
     {
       pageSize: 4,
     },
   )
 
+  const selected = ref<string>()
+
+  const categoryList = ref<TagCategory[]>([])
+
   const keyword = ref('')
   const pageObj = pageObject()
   const pageInfo = pageObj.pageInfo
   pageInfo.currentPageSize = props!.pageSize
 
-  const currentParams = ref<GisCiamsZoneDTO.Search.Params>()
-  const zoneSegItems = ref<GisCiamsZoneDTO.Search.Row[]>()
-  const zoneSegPageListRef = ref<InstanceType<typeof ZoneSegPageList>>()
+  const currentParams = ref<CiamsZoneDTO.Search.Params>()
+  const zoneItems = ref<CiamsZoneDTO.Search.Row[]>()
+  const zonePageListRef = ref<InstanceType<typeof ZonePageList>>()
 
   const emits = defineEmits<{
-    (e: 'item-select', type: GisCiamsZoneDTO.Search.Row): void
+    (e: 'item-select', type: CiamsZoneDTO.Search.Row): void
     (e: 'clear'): void
   }>()
 
-  function setParams(params: GisCiamsZoneDTO.Search.Params) {
+  function setParams(params: CiamsZoneDTO.Search.Params) {
     currentParams.value = params
   }
 
@@ -94,14 +123,15 @@
       size,
       pageNo,
       ...currentParams.value,
-    } as GisCiamsZoneDTO.Search.Params
+    } as CiamsZoneDTO.Search.Params
 
-    const { data } = await getCiamsZoneSegList(params)
+    const { data } = await getCiamsZoneList(params)
     responseData(data)
   }
 
   function clear() {
     keyword.value = ''
+    selected.value = ''
 
     runSearch()
     emits('clear')
@@ -112,16 +142,22 @@
   }
 
   function runSearch() {
+    // const params = {
+    //   keyword: keyword.value,
+    // }
     const params = {
       keyword: keyword.value,
+      ...(!CommonUtil.isEmpty(selected.value) && {
+        [props.category?.name]: selected.value,
+      }),
     }
 
     setParams(params)
     search(1, pageInfo.currentPageSize)
   }
 
-  function responseData(data: GisCiamsZoneDTO.Search.Result) {
-    zoneSegItems.value = data.list
+  function responseData(data: CiamsZoneDTO.Search.Result) {
+    zoneItems.value = data.list
     pageObj.setPageData(data.page)
   }
 
@@ -129,33 +165,30 @@
     search(pageNo, pageInfo.currentPageSize)
   }
 
-  function zoneSegItemSelect(item: GisCiamsZoneDTO.Search.Row) {
+  function zoneItemSelect(item: CiamsZoneDTO.Search.Row) {
     emits('item-select', item)
   }
 
+  watch(
+    () => props.category?.list,
+    (list) => {
+      categoryList.value = [
+        {
+          label: '전체',
+          value: '',
+          color: '',
+        },
+        ...list,
+      ]
+    },
+  )
+
   onMounted(async () => {
     runSearch()
-
-    //메인화면 성장관리구역 링크 실행
-    // if (isMainLink.value == true) {
-    //   mittBus.emit('ciamsPlan-area-item-select', planArea.value)
-
-    //지도 로딩 완료 전 호출시 제대로 호출이 안됨
-    setTimeout(() => {
-      const baseLayer = 'CIAMS_PLANID_PLAN'
-      // mapUtil.selectHighLight(
-      //   planArea.value.planId,
-      //   'PLAN',
-      //   baseLayer.replace('PLANID', planArea.value.planId.toUpperCase()),
-      //   equalTo('AREA_NAME', planArea.value.name),
-      // )
-      // planAreaStore.setIsMainLink(false)
-    }, 500)
-    // }
   })
 
   defineExpose({
-    zoneSegItemSelect,
+    zoneItemSelect,
   })
 </script>
 

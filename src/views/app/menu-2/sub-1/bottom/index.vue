@@ -71,7 +71,6 @@
 
 <script setup lang="ts">
   import { computed, h, onBeforeMount, onMounted, ref, type VNode, watch } from 'vue'
-  import { storeToRefs } from 'pinia'
   import type { TableColumnCtx } from 'element-plus'
 
   import CommonUtil from '@/utils/commonUtil'
@@ -79,6 +78,7 @@
   import { getByZoneNoItaResultDatas } from '@/api/app/menu-2/sub-1'
 
   import { useMenu2Sub1Store } from '@/stores/app/menu-2/sub-1'
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
 
   interface SummaryMethodProps<T = any> {
     columns: TableColumnCtx<T>[]
@@ -86,9 +86,10 @@
   }
 
   const menu2Sub1Store = useMenu2Sub1Store()
-  const { overview } = storeToRefs(menu2Sub1Store)
 
+  const state = menu2Sub1Store.state
   const tableData = ref<any[]>([])
+  const overview = computed<CiamsZoneDTO.Overview.Find.Result | undefined>(() => state.overview)
 
   const columns = ref([
     {

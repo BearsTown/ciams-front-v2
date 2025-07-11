@@ -238,10 +238,10 @@
       //   key: 'BDREG',
       //   code: 'BUILD_REG_USE',
       // },
-      {
-        key: 'TOPOGRAPHY',
-        code: 'SYSTEM_TOPOGRAPHY',
-      },
+      // {
+      //   key: 'TOPOGRAPHY',
+      //   code: 'SYSTEM_TOPOGRAPHY',
+      // },
     ]
 
     for (let o of tabs) {

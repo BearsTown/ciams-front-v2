@@ -28,16 +28,13 @@
       >
         <span style="padding: 5px 0">2. 도시공업지역 유형별 관리방향</span>
       </div>
-      <div
-        style="
-          flex: 1;
-          background: #fff;
-          padding: 1px 10px 10px 10px;
-          border-radius: 8px;
-          overflow-y: hidden;
-        "
-      >
-        <ZoneAnalysisList :page-size="4" @item-select="zoneAnalysisItemSelect" @clear="clear" />
+      <div style="flex: 1; background: #fff; border-radius: 8px; overflow-y: hidden">
+        <ZoneList
+          :page-size="4"
+          @item-select="zoneItemSelect"
+          @clear="clear"
+          :category="category"
+        />
       </div>
     </div>
     <button class="popButton" @click="showImage(2)">
@@ -54,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-  import { nextTick, onActivated, onMounted, reactive, ref, watch } from 'vue'
+  import { computed, nextTick, onActivated, onMounted, reactive, ref } from 'vue'
   import { storeToRefs } from 'pinia'
   import type { ImageInstance } from 'element-plus'
 
@@ -64,7 +61,7 @@
   import VectorSource from 'ol/source/Vector'
   import { like as likeFilter } from 'ol/format/filter'
 
-  import ZoneAnalysisList from '@/components/app/menu-3/ZoneAnalysisList/ZoneAnalysisList.vue'
+  import ZoneList from '@/components/common/ZoneTable/ZoneList.vue'
 
   import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
   import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
@@ -76,37 +73,42 @@
 
   import { MapWrapper } from '@/js/mapWrapper'
 
-  import { PlanZone } from '@/api/app/zone/model'
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
+  import { CiamsMenu3Sub1DetailsDto } from '@/api/app/menu-3/sub-1/model'
 
   import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
   import { useMenu3Sub1Store } from '@/stores/app/menu-3/sub-1'
 
-  const menu3Sub1Store = useMenu3Sub1Store()
-  const { overview } = storeToRefs(menu3Sub1Store)
-
   const globalStore = useGlobalStore()
+  const menu3Sub1Store = useMenu3Sub1Store()
+
+  const state = menu3Sub1Store.state
   const { layoutSelected } = storeToRefs(globalStore)
   const { status: isActive, toggle } = useBoolean(false)
+  const overview = computed<CiamsZoneDTO.Overview.Find.Result | undefined>(() => state.overview)
 
-  // const mapType = MapType.MAP_3
   const mapType: MapType = 'Map-3-1-1'
   const mapLayerGroupType: MapLayerGroupType = 'Menu-3-1-1'
   const mapWrap = ref<MapWrapper>()
   const mapStore = useMapStore(mapType)
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
-  const r1 = ref(true)
+  const imageRef = ref<ImageInstance>()
+  const srcList = ref<string[]>([])
+  const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
 
-  function test(value: string | number | boolean) {
-    console.log(value)
-  }
+  const category = ref({
+    name: 'mngCd',
+    title: '관리유형',
+    list: computed(() => state.tags),
+  })
 
   const uitWMSLayer1 = new UitWMSLayer({
     baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
-      KEY: '724A0C98-F8D5-E230-5713-A4B9EFAC4F51',
-      LAYERS: ['CIAMS_ZONE'],
+      KEY: 'F91A8E17-FA4F-81B6-D344-0FAFBB68DFF2',
+      LAYERS: ['CIAMS_ZONE_3'],
     },
     crossOrigin: 'Anonymous',
     properties: {
@@ -174,7 +176,7 @@
     mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
   }
 
-  async function zoneAnalysisItemSelect(item: PlanZone.Search.Row) {
+  async function zoneItemSelect(item: CiamsZoneDTO.Search.Row) {
     layoutSelected.value?.right?.collapse?.on()
     mapStore.locationInfoVisible = false
 
@@ -222,14 +224,9 @@
   }
 
   function clear() {
-    overview.value = null
+    menu3Sub1Store.clear()
     uitVectorLayer2.clear()
   }
-
-  const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
-
-  const imageRef = ref<ImageInstance>()
-  const srcList = ref<string[]>([])
 
   function showImage(type) {
     if (type === 1) {
@@ -243,15 +240,10 @@
     })
   }
 
-  watch(overview, async (value) => {
-    // console.log(value)
-  })
-
   onMounted(async () => {
     mapWrap.value = await mapStore.getMapInstance()
 
-    // mapObject = mapCacheStore.getMapObject(mapType)
-    // mapWrap.value = await mapObject.getMapInstance()
+    await menu3Sub1Store.setTagList('AR0400')
 
     load()
   })

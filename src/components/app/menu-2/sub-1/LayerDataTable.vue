@@ -95,6 +95,8 @@
   const menu1sub2store = useMenu1Sub2store()
   const menu2Sub1Store = useMenu2Sub1Store()
 
+  // const state = menu2Sub1Store.state
+
   const state = menu2Sub1Store.state
 
   const year = ref()

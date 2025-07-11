@@ -23,7 +23,7 @@
             <div
               v-if="overview"
               class="tag"
-              :style="{ 'background-color': tagColor(overview?.dvsType) }"
+              :style="{ 'background-color': tagColor(overview.dvsCd) }"
             >
               {{ overview?.dvsType }}
             </div>
@@ -48,12 +48,14 @@
           <tbody>
             <tr>
               <td style="text-align: center; vertical-align: middle">
-                {{ overview ? overview?.itaResult : '-' }}
+                {{ overview ? overview.itaResult : '-' }}
               </td>
               <td style="text-align: center; vertical-align: middle">
-                {{ overview?.locResult }}
+                {{ overview ? overview.locResult : '-' }}
               </td>
-              <td style="text-align: center; vertical-align: middle">{{ overview?.dvsType }}</td>
+              <td style="text-align: center; vertical-align: middle">
+                {{ overview ? overview.dvsType : '-' }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -190,7 +192,6 @@
 
 <script setup lang="ts">
   import { computed, onBeforeMount, onMounted, ref } from 'vue'
-  import { storeToRefs } from 'pinia'
 
   import Table from '@/components/app/menu-1/sub-1/left/Table.vue'
   import AnalysisTable from '@/views/app/menu-2/sub-3/right/AnalysisTable.vue'
@@ -199,64 +200,29 @@
   import PieChartItem from '@/components/app/menu-2/PieChartItem.vue'
 
   import { getSources } from '@/api/app/source'
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
   import { SourceGroupDTO } from '@/api/app/source/model'
 
   import { useMenu2Sub3Store } from '@/stores/app/menu-2/sub-3'
 
   const menu2Sub3Store = useMenu2Sub3Store()
-  const { overview } = storeToRefs(menu2Sub3Store)
 
   const activeName = ref<string>('Tab-A')
 
   const dialog = ref<boolean>(false)
 
+  const state = menu2Sub3Store.state
   const sourceData = ref<SourceGroupDTO.Find.Result[]>([])
-
-  const tjdwkd1 = computed(
-    () => overview?.value?.itaResult === '성장' && overview?.value?.locResult === '양호',
-  )
-  const tjdwkd2 = computed(
-    () => overview?.value?.itaResult === '유지' && overview?.value?.locResult === '양호',
-  )
-  const tjdwkd3 = computed(
-    () => overview?.value?.itaResult === '쇠퇴' && overview?.value?.locResult === '양호',
-  )
-  const tjdwkd4 = computed(
-    () => overview?.value?.itaResult === '성장' && overview?.value?.locResult === '불량',
-  )
-  const tjdwkd5 = computed(
-    () => overview?.value?.itaResult === '유지' && overview?.value?.locResult === '불량',
-  )
-  const tjdwkd6 = computed(
-    () => overview?.value?.itaResult === '쇠퇴' && overview?.value?.locResult === '불량',
-  )
+  const overview = computed<CiamsZoneDTO.Overview.Find.Result | undefined>(() => state.overview)
 
   const result = computed(() => (overview?.value?.locResult === '양호' ? '관리형' : '정비형'))
 
+  function tagColor(dvsCd: string) {
+    return state.tags?.find((tag) => tag.value === dvsCd)?.color
+  }
+
   function dialogChangeListener(state: boolean) {
     dialog.value = state
-  }
-
-  function tagColor(itaResult: string) {
-    switch (itaResult) {
-      case '산업정비형':
-        return '#FFAA00'
-      case '산업관리형':
-        return '#8BD100'
-      case '산업혁신형':
-        return '#00C5FF'
-      default:
-        return '#ffffff'
-    }
-  }
-
-  function getRowClass(dvsType: string) {
-    return {
-      active: overview.value?.dvsType === dvsType,
-      'row-type-1': dvsType === '산업정비형' && overview.value?.dvsType === '산업정비형',
-      'row-type-2': dvsType === '산업관리형' && overview.value?.dvsType === '산업관리형',
-      'row-type-3': dvsType === '산업혁신형' && overview.value?.dvsType === '산업혁신형',
-    }
   }
 
   const filterByTargetId = (targetId: string) =>

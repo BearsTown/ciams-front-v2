@@ -1,26 +1,62 @@
-import type { Attribute, Item, RatioOptions } from '@/utils/data.types'
+import CommonUtil from '@/utils/commonUtil'
 
-export function calculateRatios(
-  dataList: Item[],
-  attributes: Attribute[],
-  options: RatioOptions = {},
-): Item[] {
-  const round = options.round ?? 1
-  const cloned = dataList.map((item) => ({ ...item, ratio: {} }))
+function calculateRatios(data, totals, key, decimalPlaces = 1) {
+  // 입력 검증
+  if (!data || typeof data !== 'object' || !totals || !totals[key]) {
+    return new Map()
+  }
 
-  attributes.forEach((attr) => {
-    if (!attr.useRatio) return
+  const total = totals[key]
 
-    const total = dataList.reduce((sum, item) => sum + (item.data[attr.name] ?? 0), 0)
-
-    cloned.forEach((item) => {
-      const value = item.data[attr.name] ?? 0
-      const ratio = total > 0 ? (value / total) * 100 : 0
-      item.ratio![attr.name] = parseFloat(ratio.toFixed(round))
+  // 총합이 0인 경우 처리
+  const result = new Map()
+  if (total === 0) {
+    Object.keys(data).forEach((category) => {
+      result.set(category, (0).toFixed(decimalPlaces))
     })
+    return result
+  }
+
+  // 비율 계산 (높은 정밀도 유지)
+  const ratios = Object.entries(data).map(([category, values]) => {
+    if (typeof values[key] !== 'number' || isNaN(values[key])) {
+      throw new Error(`'${key}' 값은 숫자여야 합니다.`)
+    }
+    return { category, ratio: (values[key] / total) * 100 }
   })
 
-  return cloned
+  // 소수점 자릿수에 맞춰 반올림
+  const roundedRatios = ratios.map((item) => ({
+    category: item.category,
+    ratio: Number(item.ratio.toFixed(decimalPlaces)),
+  }))
+
+  // 반올림 후 총합 계산
+  let roundedTotal = roundedRatios.reduce((acc, item) => acc + item.ratio, 0)
+
+  // 총합이 100이 되도록 조정
+  if (Math.abs(roundedTotal - 100) > 0.0001) {
+    // 가장 큰 비율의 인덱스 찾기
+    const maxIndex = roundedRatios.reduce(
+      (maxIdx, item, idx) => (item.ratio > roundedRatios[maxIdx].ratio ? idx : maxIdx),
+      0,
+    )
+
+    // 오차 계산 (100 - 현재 총합)
+    const adjustment = 100 - roundedTotal
+
+    // 가장 큰 비율에 오차를 더해 조정
+    roundedRatios[maxIndex].ratio = Number(
+      (roundedRatios[maxIndex].ratio + adjustment).toFixed(decimalPlaces),
+    )
+  }
+
+  // Map 객체에 결과 저장
+  roundedRatios.forEach((item) => {
+    result.set(item.category, item.ratio.toFixed(decimalPlaces))
+  })
+
+  return result
 }
 
 export function processData(params) {
@@ -115,14 +151,23 @@ export function processData(params) {
 
   return columns.map((col) => {
     const data = {}
+    // 각 row에 대해 값 설정
     rows.forEach((row) => {
-      const value = groupedData[col.name][row.name]
-      const total = totals[row.name]
-      const ratio = total > 0 ? (value / total) * 100 : 0
-      data[row.name] = {
-        value,
-        ratio: parseFloat(ratio.toFixed(1)),
+      let value = groupedData[col.name][row.name]
+
+      if (row.dataType === 'INTEGER') {
+        value = Math.trunc(value)
+      } else if (row.dataType === 'DOUBLE') {
+        value = parseFloat(parseFloat(value).toFixed(1))
       }
+
+      data[row.name] = { value, ratio: 0 } // 임시로 0 설정
+    })
+
+    // 각 row.name에 대해 비율 계산
+    rows.forEach((row) => {
+      const ratios = calculateRatios(groupedData, totals, row.name, 1)
+      data[row.name].ratio = parseFloat(ratios.get(col.name) || '0')
     })
 
     const allZero = rows.every((row) => groupedData[col.name][row.name] === 0)
@@ -130,6 +175,7 @@ export function processData(params) {
     return {
       ...col,
       data,
+      dataType: 123,
       visible: useNoneColumn ? true : !allZero,
     }
   })
@@ -164,7 +210,8 @@ export function processChartData(params) {
       data: [] as object[],
       tooltip: {
         valueFormatter: function (value) {
-          return `${value} ${attr.unit}`
+          // return `${value} ${attr.unit}`
+          return CommonUtil.comma(value as number) + ` ${attr.unit}`
         },
       },
     }
@@ -193,7 +240,7 @@ export function processChartData(params) {
       containLabel: true,
     },
     tooltip: {
-      trigger: 'axis',
+      trigger: 'item',
       axisPointer: {
         type: 'shadow',
         crossStyle: {

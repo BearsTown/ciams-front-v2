@@ -91,6 +91,24 @@
       zIndex: 1110,
     })
 
+    const uitWMSLayer3 = new UitWMSLayer({
+      baseUrl: API_INFO_MAPSTUDIO.PREFIX,
+      sourceParams: {
+        KEY: 'AF781CA7-729A-BA0C-C965-E6751C9CE3EA',
+        LAYERS: ['CIAMS_P1_LSMD_CONT_LDREG'],
+      },
+      crossOrigin: 'Anonymous',
+      properties: {
+        id: 'CIAMS_P1_LSMD_CONT_LDREG',
+        type: 'wms',
+      },
+      layerType: 'wms',
+      isSingleTile: false,
+      visible: true,
+      opacity: 1,
+      zIndex: 1110,
+    })
+
     mapConfig.value = {
       center: JSON.parse(cmmConfigStore.mapConfigState['MAP_INIT_CENTER'].confValue),
       zoom: Number(cmmConfigStore.mapConfigState['MAP_INIT_ZOOM'].confValue),
@@ -119,6 +137,13 @@
         layer: uitWMSLayer2,
         title: '읍면동',
         userVisible: true,
+        useLegend: true,
+        useLayerSetting: true,
+      }),
+      new MapLayer({
+        layer: uitWMSLayer3,
+        title: '지적도',
+        userVisible: false,
         useLegend: true,
         useLayerSetting: true,
       }),
@@ -152,14 +177,14 @@
 
     const tocLayerGroups = {
       title: '행정구역',
-      layers: [mapLayers[0], mapLayers[1]] as MapLayer[],
+      layers: [mapLayers[0], mapLayers[1], mapLayers[2]] as MapLayer[],
     }
 
     mapWrap.value?.setTocCommonLayerGroups(commonLayerType, tocLayerGroups)
 
     mapWrap.value?.setTocCommonLayerGroups(commonLayerType, {
       title: '용도지역',
-      layers: [mapLayers[2]] as MapLayer[],
+      layers: [mapLayers[3]] as MapLayer[],
     })
   }
 

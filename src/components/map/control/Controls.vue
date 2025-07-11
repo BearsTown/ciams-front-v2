@@ -128,8 +128,6 @@
 
     const olMap = uitMap.value?.getMap()
 
-    console.log(olMap)
-
     const measureLine = new UitMeasureInteraction({
       measureStyle: measureLineStyle,
       featureStyle: measureLineStyle,

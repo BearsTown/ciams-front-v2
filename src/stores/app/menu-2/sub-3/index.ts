@@ -1,19 +1,44 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { reactive } from 'vue'
 
-import { Menu2ZoneDetailsDto } from '@/api/app/menu-2/model'
-import { getMenu2ZoneOverView } from '@/api/app/menu-2'
+import { TagCategory } from '@/types/common'
+import { CiamsZoneDTO } from '@/api/app/zone/model'
+import { getCiamsZoneOverView } from '@/api/app/zone'
+import { getCodeList } from '@/api/app/common'
+
+interface State {
+  tags: TagCategory[]
+  overview?: CiamsZoneDTO.Overview.Find.Result
+}
 
 export const useMenu2Sub3Store = defineStore('menu2Sub3Store', () => {
-  const overview = ref<Menu2ZoneDetailsDto.Overview.Find.Result | null>()
+  const state = reactive<State>({
+    tags: [],
+  })
 
-  async function setOverview(params: Menu2ZoneDetailsDto.Overview.Find.Params) {
-    const { data } = await getMenu2ZoneOverView(params)
-    overview.value = data
+  async function setOverview(params: CiamsZoneDTO.Overview.Find.Params) {
+    const { data } = await getCiamsZoneOverView(params)
+    state.overview = data
+  }
+
+  async function setTagList(code: string) {
+    const { data } = await getCodeList(code)
+
+    state.tags = data.map((item) => ({
+      label: item.codeName,
+      value: item.code,
+      color: item.codeVal,
+    }))
+  }
+
+  function clear() {
+    state.overview = undefined
   }
 
   return {
-    overview,
+    state,
+    clear,
+    setTagList,
     setOverview,
   }
 })

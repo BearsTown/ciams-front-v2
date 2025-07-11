@@ -6,17 +6,19 @@ import { CiamsMenu3Sub1DetailsDto } from '@/api/app/menu-3/sub-1/model'
 
 const prefix = '/api/v1/menu-3/sub-1'
 
-export function getMenu3Sub1OverView(params: CiamsMenu3Sub1DetailsDto.Overview.Find.Params) {
+export { getImage, getMenu3Sub1Info }
+
+function getMenu3Sub1Info(params: CiamsMenu3Sub1DetailsDto.Info.Find.Params) {
   const config: AxiosRequestConfig = {
     params,
   }
-  return http.get<ResultData<CiamsMenu3Sub1DetailsDto.Overview.Find.Result>>(
-    `${prefix}/overview`,
+  return http.get<ResultData<CiamsMenu3Sub1DetailsDto.Info.Find.Result>>(
+    `${prefix}/info`,
     config,
   )
 }
 
-export function getImage(id: number) {
+function getImage(id: number) {
   const config: AxiosRequestConfig = {
     responseType: 'blob',
   }

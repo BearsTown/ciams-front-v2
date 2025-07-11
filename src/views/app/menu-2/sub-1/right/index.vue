@@ -23,9 +23,9 @@
             <div
               v-if="overview"
               class="tag"
-              :style="{ 'background-color': tagColor(overview?.itaResult) }"
+              :style="{ 'background-color': tagColor(overview.itaReCd) }"
             >
-              {{ overview?.itaResult }}
+              {{ overview.itaResult }}
             </div>
           </div>
         </div>
@@ -48,19 +48,19 @@
             </tr>
           </thead>
           <tbody>
-            <tr :class="getRowClass('성장')">
+            <tr :class="{ active: overview?.itaReCd === 'AR0110' }" :style="getRowStyle('AR0110')">
               <td style="text-align: center; vertical-align: middle">성장</td>
               <td style="text-align: center; vertical-align: middle">30% 이상</td>
               <td style="text-align: center; vertical-align: middle">1 이상</td>
               <td style="text-align: center; vertical-align: middle">증가</td>
             </tr>
-            <tr :class="getRowClass('유지')">
+            <tr :class="{ active: overview?.itaReCd === 'AR0120' }" :style="getRowStyle('AR0120')">
               <td style="text-align: center; vertical-align: middle">유지</td>
               <td style="text-align: center; vertical-align: middle">-</td>
               <td style="text-align: center; vertical-align: middle">1 이상</td>
               <td style="text-align: center; vertical-align: middle">증가</td>
             </tr>
-            <tr :class="getRowClass('쇠퇴')">
+            <tr :class="{ active: overview?.itaReCd === 'AR0130' }" :style="getRowStyle('AR0130')">
               <td style="text-align: center; vertical-align: middle">쇠퇴</td>
               <td style="text-align: center; vertical-align: middle">30% 미만</td>
               <td style="text-align: center; vertical-align: middle">1 미만</td>
@@ -118,7 +118,6 @@
 
 <script setup lang="ts">
   import { computed, onBeforeMount, onMounted, ref } from 'vue'
-  import { storeToRefs } from 'pinia'
 
   import Item from '@/components/app/menu-2/Item.vue'
   import SvgIcon from '@/components/common/SvgIcon.vue'
@@ -126,36 +125,24 @@
   import PieChartItem from '@/components/app/menu-2/PieChartItem.vue'
   import LayerDataTable from '@/components/app/menu-2/sub-1/LayerDataTable.vue'
 
-  import { SourceGroupDTO } from '@/api/app/source/model'
   import { getSources } from '@/api/app/source'
+  import { SourceGroupDTO } from '@/api/app/source/model'
 
   import { useMenu2Sub1Store } from '@/stores/app/menu-2/sub-1'
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
 
   const menu2Sub1Store = useMenu2Sub1Store()
-  const { overview } = storeToRefs(menu2Sub1Store)
 
+  const state = menu2Sub1Store.state
   const sourceData = ref<SourceGroupDTO.Find.Result[]>([])
+  const overview = computed<CiamsZoneDTO.Overview.Find.Result | undefined>(() => state.overview)
 
-  function tagColor(itaResult: string) {
-    switch (itaResult) {
-      case '성장':
-        return '#90cd2a'
-      case '유지':
-        return '#3ec5f4'
-      case '쇠퇴':
-        return '#ca5619'
-      default:
-        return '#ffffff'
-    }
+  function tagColor(itaReCd: string) {
+    return state.tags?.find((tag) => tag.value === itaReCd)?.color
   }
 
-  function getRowClass(itaResult: string) {
-    return {
-      active: overview.value?.itaResult === itaResult,
-      'row-type-1': itaResult === '성장' && overview.value?.itaResult === '성장',
-      'row-type-2': itaResult === '유지' && overview.value?.itaResult === '유지',
-      'row-type-3': itaResult === '쇠퇴' && overview.value?.itaResult === '쇠퇴',
-    }
+  function getRowStyle(itaReCd: string) {
+    return overview.value?.itaReCd === itaReCd ? { 'background-color': tagColor(itaReCd) } : {}
   }
 
   const filterByTargetId = (targetId: string) =>

@@ -1,5 +1,5 @@
 namespace CiamsMenu3Sub1DetailsDto {
-  namespace Overview {
+  namespace Info {
     namespace Find {
       export interface Params {
         zoneNo: string
@@ -15,13 +15,14 @@ namespace CiamsMenu3Sub1DetailsDto {
   }
 }
 
-export interface CiamsPlanZone {
+interface CiamsPlanZone {
   zoneNo: string
   zoneName: string
+  mngCd: string
   mngType: string
 }
 
-export interface CiamsPlanZoneIndustry {
+interface CiamsPlanZoneIndustry {
   id: number
   zoneNo: string
   category: string
@@ -29,7 +30,7 @@ export interface CiamsPlanZoneIndustry {
   industryName: string
 }
 
-export interface CiamsPlanZoneImage {
+interface CiamsPlanZoneImage {
   id: number
   zoneNo: string
   category: string
@@ -38,23 +39,22 @@ export interface CiamsPlanZoneImage {
   name: string
 }
 
-
-export interface BaseDescDTO {
+interface BaseDescDTO {
   category: string
   list: string[]
 }
 
-export interface ZoneDescDTO {
+interface ZoneDescDTO {
   category: string
   list: string[]
 }
 
-export interface ZoneIndustryDTO {
+interface ZoneIndustryDTO {
   category: string
   list: CiamsPlanZoneIndustry[]
 }
 
-export interface ZoneImageDTO {
+interface ZoneImageDTO {
   category: string
   list: CiamsPlanZoneImage[]
 }

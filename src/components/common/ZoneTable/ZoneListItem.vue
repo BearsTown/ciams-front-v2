@@ -1,7 +1,8 @@
 <template>
   <li class="" :class="{ active: isActive }">
-    <div class="address-title">
+    <div class="address-title" style="display: flex; justify-content: space-between">
       <b>{{ zoneItem.zoneName }}</b>
+      <div class="list-item-tag" style="background-color: rgb(144, 205, 42)">산업혁신·정비형</div>
     </div>
     <div class="address-text">면적 : {{ zoneArea }}</div>
     <div class="address-text">용도지역 : {{ zoneItem.useDist }}</div>
@@ -10,24 +11,21 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, toRefs } from 'vue'
+  import { computed, toRefs } from 'vue'
 
   import CommonUtil from '@/utils/commonUtil'
   import { useBoolean } from '@/hooks/useBoolean'
 
-  import { GisCiamsZoneDTO } from '@/api/app/gis/zone/model'
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
 
-  import { useAuthStore } from '@/stores/auth'
   import { useGlobalStore } from '@/stores/app'
-
-  const auth = useAuthStore()
 
   const globalStore = useGlobalStore()
 
   const props = withDefaults(
     defineProps<{
       isActive?: boolean
-      zoneItem: GisCiamsZoneDTO.Search.Row
+      zoneItem: CiamsZoneDTO.Search.Row
     }>(),
     {
       isActive: false,
@@ -41,13 +39,9 @@
   const { zoneItem } = toRefs(props)
   const { status: isActive } = useBoolean(props.isActive)
 
-  const dialogVisible = ref(false)
-
   function setActive(active: boolean) {
     isActive.value = active
   }
-
-  function cancel() {}
 
   const getSelectedData = computed(() => {
     return zoneItem.value
@@ -56,14 +50,6 @@
   const zoneArea = computed(() => {
     return `${CommonUtil.comma(zoneItem.value.zoneArea.toFixed(0))}㎡`
   })
-
-  // watch(modal.value, () => {
-  //   //계획지역 수정 후 액션
-  //   if (modal.value.modifyAction && areaItem.value.rn == modal.value.selectItem.rn) {
-  //     Object.assign(areaItem.value, modal.value.selectItem)
-  //     emits('re-click')
-  //   }
-  // })
 
   defineExpose({
     setActive,
@@ -151,5 +137,17 @@
 
   :deep .el-popper > .el-popover {
     min-width: 50px !important;
+  }
+
+  .list-item-tag {
+    width: 90px;
+    height: 20px;
+    color: white;
+    display: flex;
+    font-size: 11px;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.12);
   }
 </style>

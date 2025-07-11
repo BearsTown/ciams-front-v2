@@ -10,7 +10,6 @@
           ref="childRefs"
           :title="item.codeName"
           :is-active="activeName === item.code"
-          :is-disabled="item.useYn === 'N'"
           @change:active="(isActive: boolean) => handleCustomEvent(isActive, item.code, index)"
           style="font-size: 12px; text-align: center"
         />
@@ -29,6 +28,7 @@
           style="height: 100%; z-index: 0"
           empty-text="데이터가 없습니다."
           scrollbar-always-on
+          :row-style="getRowStyle"
           border
         >
           <el-table-column label="업종명" prop="sggNm" align="center" />
@@ -42,9 +42,9 @@
     <el-divider border-style="dashed" style="margin: 10px 0" />
 
     <div style="display: flex; flex-direction: column">
-      <div style="margin-bottom: 3px">
+      <div style="margin-bottom: 3px; display: flex; flex-direction: row; align-items: center">
         <el-tag size="small" type="info">사업체</el-tag>
-        <el-text style="margin-left: 5px">
+        <el-text style="margin-left: 5px; font-size: 13px">
           {{ techTxt }}
           <span style="color: blue">
             {{ corpLqsText }}
@@ -52,9 +52,9 @@
           {{ corpLqsText ? endTxt : '' }}
         </el-text>
       </div>
-      <div>
+      <div style="display: flex; flex-direction: row; align-items: center">
         <el-tag size="small" type="info">종사자</el-tag>
-        <el-text style="margin-left: 5px">
+        <el-text style="margin-left: 5px; font-size: 13px">
           {{ techTxt }}
           <span style="color: blue">
             {{ workerLqsText }}
@@ -96,6 +96,7 @@
   const menu3Sub2Page1Store = useMenu3Sub2Page1Store()
   const cmmConfigStore = useCmmConfigStore()
 
+  const sggCode = ref<string>()
   const childRefs = ref<ActiveButton[]>([])
 
   const items = ref([] as object[])
@@ -258,6 +259,11 @@
   const tableData = ref([])
 
   onMounted(async () => {
+    const sidoCd = cmmConfigStore.cmmConfigState['SIDO_CODE']?.confValue
+    const sggCd = cmmConfigStore.cmmConfigState['SGG_CODE']?.confValue
+
+    sggCode.value = `${sidoCd}${sggCd}`
+
     const { data } = await getCodeList(props.lqParentCode)
     const { data: techData } = await getHighTech({
       parentTechCd: props.lqParentCode,
@@ -350,6 +356,20 @@
   const emits = defineEmits<{
     (e: 'update-data', type: object): void
   }>()
+
+  const getRowStyle = ({ row }: { row }) => {
+    let color = ''
+
+    switch (row.sggCd) {
+      case sggCode.value:
+        color = '#FF0000'
+        break
+    }
+
+    return {
+      color,
+    }
+  }
 
   onBeforeMount(() => {})
 
