@@ -40,10 +40,6 @@
       LAYERS: ['CIAMS_P1_SGG'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_p1_sgg',
-      type: 'wms',
-    },
     layerType: 'wms',
     isSingleTile: false,
     visible: true,
@@ -58,10 +54,6 @@
       LAYERS: ['CIAMS_P1_EMD'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_p1_sgg',
-      type: 'wms',
-    },
     layerType: 'wms',
     isSingleTile: false,
     visible: true,

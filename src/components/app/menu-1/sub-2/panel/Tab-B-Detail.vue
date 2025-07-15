@@ -45,8 +45,8 @@
           </template>
         </el-table-column>
         <el-table-column label="구분" align="center">
-          <template #default="{ row: { shorts } }">
-            {{ shorts }}
+          <template #default="{ row: { label } }">
+            {{ label }}
           </template>
         </el-table-column>
         <template v-for="(item, index) in state.attributes" :key="index">

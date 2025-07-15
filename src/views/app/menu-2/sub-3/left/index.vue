@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onActivated, onMounted, reactive, ref } from 'vue'
+  import { computed, onActivated, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import Feature from 'ol/Feature'
@@ -23,10 +23,11 @@
   import { API_INFO_MAPSTUDIO } from '@/config/config'
   import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
 
+  import { CiamsZoneDTO } from '@/api/app/zone/model'
+
   import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
   import { useMenu2Sub3Store } from '@/stores/app/menu-2/sub-3'
-  import { CiamsZoneDTO } from '@/api/app/zone/model'
 
   const globalStore = useGlobalStore()
   const menu2Sub3Store = useMenu2Sub3Store()
@@ -55,10 +56,6 @@
       LAYERS: ['CIAMS_ZONE_2'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_analysis_3',
-      type: 'wms',
-    },
     layerType: 'wms',
     isSingleTile: false,
     opacity: 0.8,
@@ -81,7 +78,7 @@
     }),
   })
 
-  const mapLayers = reactive<MapLayer[]>([
+  const mapLayers: MapLayer[] = [
     new MapLayer({
       layer: uitWMSLayer1,
       title: '대상지',
@@ -92,7 +89,7 @@
       layer: uitVectorLayer2,
       userVisible: true,
     }),
-  ])
+  ]
 
   function load() {
     mapLayers.forEach((item) => {
@@ -105,22 +102,23 @@
         } else if (uLayer instanceof UitWMTSLayer) {
           mapWrap.value?.getUitMap().addWMTSLayer(uLayer as UitWMTSLayer)
         }
-
-        mapWrap.value?.addViewLayer({
-          key: layerGroupName!,
-          layers: [item] as MapLayer[],
-        })
       }
+    })
+
+    mapWrap.value?.addViewLayer({
+      key: layerGroupName!,
+      layers: mapLayers,
     })
 
     mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
 
-    const tocViewLayerGroups = mapLayers[0] as MapLayer
-
-    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
+    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, {
+      title: '관리유형구분',
+      layers: [mapLayers[0]],
+    })
   }
 
-  async function zoneItemSelect(item: Plan.Search.Row) {
+  async function zoneItemSelect(item: CiamsZoneDTO.Search.Row) {
     layoutSelected.value?.right?.collapse?.on()
     mapStore.locationInfoVisible = false
 

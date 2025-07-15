@@ -106,7 +106,7 @@
     v-model="dialogVisible"
     :close-on-click-modal="false"
     :destroy-on-close="true"
-    width="30%"
+    width="50%"
     top="28vh"
     title="사용자 추가"
   >
@@ -119,6 +119,7 @@
         height="250px"
         empty-text="데이터가 없습니다."
         scrollbar-always-on
+        style="width: 100%"
       >
         <el-table-column type="selection" width="55" />
 
@@ -127,7 +128,6 @@
           :key="item.value"
           :prop="item.value"
           :label="item.label"
-          :width="item.width"
           align="center"
         />
       </el-table>

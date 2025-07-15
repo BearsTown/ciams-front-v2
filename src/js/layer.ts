@@ -54,6 +54,8 @@ export class MapLayer {
       useLayerSetting: useLayerSetting,
     }
 
+    const emitter = new EventEmitter()
+
     this.visible = new Proxy<{ value: boolean }>(
       { value: this.state.visible },
       {
@@ -67,12 +69,20 @@ export class MapLayer {
           if (prop === 'value') {
             this.state.visible = !!value
             this.layer?.setVisible(this.state.visible)
+
+            emitter.emit('change:visible', {
+              layer: this.layer,
+              visible: this.state.visible,
+            })
+
             return true
           }
           return Reflect.set(target, prop, value)
         },
       },
     )
+
+    this.visible.on = (eventName, callback) => emitter.on(eventName, callback)
 
     this._setVisible()
   }
@@ -109,5 +119,28 @@ export class MapLayer {
 
   private _setVisible(): void {
     this.visible.value = this.viewVisible && this.userVisible
+  }
+}
+
+// 이벤트 리스너를 관리하는 헬퍼 클래스
+class EventEmitter {
+  private listeners: Map<string, any>
+
+  constructor() {
+    this.listeners = new Map()
+  }
+
+  // 이벤트 리스너 등록
+  on(eventName, callback) {
+    if (!this.listeners.has(eventName)) {
+      this.listeners.set(eventName, [])
+    }
+    this.listeners.get(eventName).push(callback)
+  }
+
+  // 이벤트 발생 시 리스너 호출
+  emit(eventName, ...args) {
+    const callbacks = this.listeners.get(eventName) || []
+    callbacks.forEach((callback) => callback(...args))
   }
 }

@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onActivated, onMounted, reactive, ref } from 'vue'
+  import { computed, onActivated, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import Feature from 'ol/Feature'
@@ -57,28 +57,6 @@
       LAYERS: ['CIAMS_ZONE_3'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_analysis',
-      type: 'wms',
-    },
-    layerType: 'wms',
-    isSingleTile: false,
-    opacity: 0.8,
-    zIndex: 1111,
-  })
-
-  const uitWMSLayer2 = new UitUWMSLayer({
-    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
-    sourceParams: {
-      KEY: 'system',
-      LAYERS: ['CIAMS_INDUSTRY_2021'],
-      STYLES: 'system:INDUSTRY_EMP',
-    },
-    crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_analysis_in',
-      type: 'wms',
-    },
     layerType: 'wms',
     isSingleTile: false,
     opacity: 0.8,
@@ -101,24 +79,18 @@
     }),
   })
 
-  const mapLayers = reactive<MapLayer[]>([
+  const mapLayers: MapLayer[] = [
     new MapLayer({
       layer: uitWMSLayer1,
       title: '대상지',
       userVisible: true,
       useLayerSetting: true,
     }),
-    // new MapLayer({
-    //   layer: uitWMSLayer2,
-    //   title: '사업체',
-    //   userVisible: true,
-    //   useLayerSetting: true,
-    // }),
     new MapLayer({
       layer: uitVectorLayer2,
       userVisible: true,
     }),
-  ])
+  ]
 
   function load() {
     mapLayers.forEach((item) => {
@@ -133,19 +105,20 @@
         } else if (uLayer instanceof UitUWMSLayer) {
           mapWrap.value?.getUitMap().addWMSLayer(uLayer as UitWMSLayer)
         }
-
-        mapWrap.value?.addViewLayer({
-          key: layerGroupName!,
-          layers: [item] as MapLayer[],
-        })
       }
+    })
+
+    mapWrap.value?.addViewLayer({
+      key: layerGroupName!,
+      layers: mapLayers,
     })
 
     mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
 
-    const tocViewLayerGroups = mapLayers[0] as MapLayer
-
-    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
+    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, {
+      title: '유형화종합분석',
+      layers: [mapLayers[0]],
+    })
   }
 
   async function zoneItemSelect(item: CiamsZoneDTO.Overview.Find.Result) {
@@ -162,7 +135,6 @@
       url: API_INFO_MAPSTUDIO.PREFIX,
       key: 'F91A8E17-FA4F-81B6-D344-0FAFBB68DFF2',
       featureRequestProps: {
-        // layers: 'CIAMS_P1_PLAN',
         layers: 'CIAMS_ZONE',
         filter: likeFilter('zone_no', item.zoneNo),
         srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),

@@ -56,10 +56,6 @@
       LAYERS: ['CIAMS_ZONE'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_analysis_24',
-      type: 'wms',
-    },
     layerType: 'wms',
     isSingleTile: false,
     opacity: 0.8,
@@ -106,21 +102,20 @@
         } else if (uLayer instanceof UitWMTSLayer) {
           mapWrap.value?.getUitMap().addWMTSLayer(uLayer as UitWMTSLayer)
         }
-
-        mapWrap.value?.addViewLayer({
-          key: layerGroupName!,
-          layers: [item] as MapLayer[],
-        })
       }
+    })
+
+    mapWrap.value?.addViewLayer({
+      key: layerGroupName!,
+      layers: mapLayers,
     })
 
     mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
 
-    const tocViewLayerGroups = mapLayers[0] as MapLayer
-    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
-
-    const tocViewLayerGroups2 = mapLayers[1] as MapLayer
-    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups2)
+    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, {
+      title: '산업기반분석',
+      layers: [mapLayers[0]],
+    })
   }
 
   async function zoneItemSelect(item: CiamsZoneDTO.Search.Row) {
@@ -139,7 +134,6 @@
       url: API_INFO_MAPSTUDIO.PREFIX,
       key: 'F91A8E17-FA4F-81B6-D344-0FAFBB68DFF2',
       featureRequestProps: {
-        // layers: 'CIAMS_P1_PLAN',
         layers: 'CIAMS_ZONE',
         filter: likeFilter('zone_no', item.zoneNo),
         srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),

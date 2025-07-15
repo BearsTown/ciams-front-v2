@@ -111,7 +111,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onActivated, onBeforeMount, onMounted, reactive, ref } from 'vue'
+  import { computed, onActivated, onBeforeMount, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import PagePane from '@/components/common/PagePane.vue'
@@ -142,10 +142,8 @@
   import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import { useMenu1Sub1Tab2Page6Store } from '@/stores/app/menu-1/sub-1/tab-B/page-6'
 
   const globalStore = useGlobalStore()
-  const menu1Sub1Tab2Page6Store = useMenu1Sub1Tab2Page6Store()
   const cmmConfigStore = useCmmConfigStore()
 
   const { currentMapType } = storeToRefs(globalStore)
@@ -176,6 +174,20 @@
   const workerLqsText = computed(() => workerLqs.value.join(', '))
   const endTxt = computed(() => ` 업종의 지역 집적도가 높음`)
 
+  const labelLayer = new UitWMSLayer({
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
+    sourceParams: {
+      KEY: '62398AF4-FA36-D468-4FD7-639E4849DB25',
+      LAYERS: [],
+    },
+    crossOrigin: 'Anonymous',
+    layerType: 'wms',
+    isSingleTile: true,
+    visible: true,
+    opacity: 1,
+    zIndex: 10000,
+  })
+
   const uitVectorLayer = new UitWFSLayer({
     baseUrl: '',
     layerType: 'vector',
@@ -186,6 +198,48 @@
       visibleIgnore: true,
     },
     declutter: true,
+  })
+
+  const uitWMSLayer1 = new UitWMSLayer({
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
+    sourceParams: {
+      KEY: '5CE56438-29A3-83A2-F5EC-157133C5E823',
+      LAYERS: ['CIAMS_P1_SGG'],
+    },
+    crossOrigin: 'Anonymous',
+    layerType: 'wms',
+    isSingleTile: false,
+    visible: true,
+    opacity: 1,
+    zIndex: 1110,
+  })
+
+  const uitWMSLayer2 = new UitWMSLayer({
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
+    sourceParams: {
+      KEY: '5CE56438-29A3-83A2-F5EC-157133C5E823',
+      LAYERS: ['CIAMS_P1_EMD'],
+    },
+    crossOrigin: 'Anonymous',
+    layerType: 'wms',
+    isSingleTile: false,
+    visible: true,
+    opacity: 1,
+    zIndex: 1110,
+  })
+
+  const uitWMSLayer3 = new UitWMSLayer({
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
+    sourceParams: {
+      KEY: 'AF781CA7-729A-BA0C-C965-E6751C9CE3EA',
+      LAYERS: ['CIAMS_P1_LSMD_CONT_LDREG'],
+    },
+    crossOrigin: 'Anonymous',
+    layerType: 'wms',
+    isSingleTile: false,
+    visible: true,
+    opacity: 1,
+    zIndex: 1110,
   })
 
   async function init() {
@@ -205,13 +259,61 @@
 
     const uitMap = mapWrap.value?.getUitMap()
 
-    const mapLayers = reactive<MapLayer[]>([
+    const wmtsCapability = await UitWMTSLayer.getWMTSCapabilities({
+      key: 'AD03CBBB-8FE4-6A8F-BC1A-C11E08291890',
+      layerType: 'wmts',
+      url: API_INFO_MAPSTUDIO.PREFIX,
+    })
+
+    const source = UitWMTSLayer.createWMTSByCapability({
+      layers: [wmtsCapability.Contents.Layer[0].Title],
+      url: API_INFO_MAPSTUDIO.PREFIX,
+      wmtsCapability,
+    })
+
+    const uitWMTSLayer = new UitWMTSLayer({
+      baseUrl: API_INFO_MAPSTUDIO.PREFIX,
+      source,
+      visible: true,
+      zIndex: 0,
+      opacity: 0.8,
+      wmtsCapability,
+    })
+
+    const mapLayers: MapLayer[] = [
       new MapLayer({
-        layer: uitVectorLayer,
+        layer: uitWMSLayer1,
         title: '시군구',
         userVisible: true,
+        useLegend: true,
+        useLayerSetting: true,
       }),
-    ])
+      new MapLayer({
+        layer: uitWMSLayer2,
+        title: '읍면동',
+        userVisible: true,
+        useLegend: true,
+        useLayerSetting: true,
+      }),
+      new MapLayer({
+        layer: uitWMSLayer3,
+        title: '지적도',
+        userVisible: false,
+        useLegend: true,
+        useLayerSetting: true,
+      }),
+      new MapLayer({
+        layer: uitWMTSLayer,
+        title: '용도지역',
+        userVisible: false,
+        useLayerSetting: true,
+      }),
+      new MapLayer({
+        layer: uitVectorLayer,
+        title: 'LQ분석',
+        userVisible: true,
+      }),
+    ]
 
     mapLayers.forEach((item) => {
       if (item) {
@@ -223,22 +325,32 @@
         } else if (uLayer instanceof UitWMTSLayer) {
           uitMap.addWMTSLayer(uLayer as UitWMTSLayer)
         }
-
-        mapWrap.value?.addCommonLayer({
-          key: commonLayerType!,
-          layers: [item] as MapLayer[],
-        })
       }
+    })
+
+    mapWrap.value?.setLabelLayer(labelLayer)
+
+    mapWrap.value?.addCommonLayer({
+      key: commonLayerType!,
+      layers: mapLayers,
     })
 
     mapWrap.value?.setCommonLayersVisible(commonLayerType!, true)
 
-    const tocLayerGroups = {
+    mapWrap.value?.setTocCommonLayerGroups(commonLayerType, {
       title: '행정구역',
-      layers: [mapLayers[0]] as MapLayer[],
-    }
+      layers: [mapLayers[0], mapLayers[1], mapLayers[2]],
+    })
 
-    mapWrap.value?.setTocCommonLayerGroups(commonLayerType, tocLayerGroups)
+    mapWrap.value?.setTocCommonLayerGroups(commonLayerType, {
+      title: '용도지역',
+      layers: [mapLayers[3]],
+    })
+
+    mapWrap.value?.setTocCommonLayerGroups(commonLayerType, {
+      title: 'LQ분석',
+      layers: [mapLayers[4]],
+    })
 
     await loadSidoFeatures()
   }

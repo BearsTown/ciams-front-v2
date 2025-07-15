@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onActivated, onMounted, reactive, ref } from 'vue'
+  import { computed, onActivated, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
 
   import Feature from 'ol/Feature'
@@ -56,10 +56,19 @@
       LAYERS: ['CIAMS_ZONE_1'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_analysis_1',
-      type: 'wms',
+    layerType: 'wms',
+    isSingleTile: false,
+    opacity: 0.8,
+    zIndex: 1111,
+  })
+
+  const uitWMSLayer2 = new UitWMSLayer({
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
+    sourceParams: {
+      KEY: '20FD169A-9C6F-186D-FFDA-1D6F912F9B43',
+      LAYERS: ['CIAMS_ROAD_8M'],
     },
+    crossOrigin: 'Anonymous',
     layerType: 'wms',
     isSingleTile: false,
     opacity: 0.8,
@@ -70,13 +79,9 @@
     baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
       KEY: '20FD169A-9C6F-186D-FFDA-1D6F912F9B43',
-      LAYERS: ['CIAMS_ROAD_8M', 'DIST_BUILDING_INDUST'],
+      LAYERS: ['DIST_BUILDING_INDUST'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_analysis_s2_2',
-      type: 'wms',
-    },
     layerType: 'wms',
     isSingleTile: false,
     opacity: 0.8,
@@ -99,10 +104,16 @@
     }),
   })
 
-  const mapLayers = reactive<MapLayer[]>([
+  const mapLayers: MapLayer[] = [
     new MapLayer({
       layer: uitWMSLayer1,
       title: '대상지',
+      userVisible: true,
+      useLayerSetting: true,
+    }),
+    new MapLayer({
+      layer: uitWMSLayer2,
+      title: '도로(폭8m이상)',
       userVisible: true,
       useLayerSetting: true,
     }),
@@ -116,7 +127,7 @@
       layer: uitVectorLayer2,
       userVisible: true,
     }),
-  ])
+  ]
 
   function load() {
     mapLayers.forEach((item) => {
@@ -129,27 +140,20 @@
         } else if (uLayer instanceof UitWMTSLayer) {
           mapWrap.value?.getUitMap().addWMTSLayer(uLayer as UitWMTSLayer)
         }
-
-        mapWrap.value?.addViewLayer({
-          key: layerGroupName!,
-          layers: [item] as MapLayer[],
-        })
       }
+    })
+
+    mapWrap.value?.addViewLayer({
+      key: layerGroupName!,
+      layers: mapLayers,
     })
 
     mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
 
-    const tocViewLayerGroups = mapLayers[0] as MapLayer
-
-    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
-
-    const tocViewLayerGroups2 = mapLayers[1] as MapLayer
-
-    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups2)
-
-    // const tocViewLayerGroups3 = mapLayers[2] as MapLayer
-    //
-    // mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups3)
+    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, {
+      title: '지역여건분석',
+      layers: [mapLayers[0], mapLayers[1], mapLayers[2]],
+    })
   }
 
   async function zoneItemSelect(item: CiamsZoneDTO.Search.Row) {

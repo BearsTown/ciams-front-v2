@@ -255,10 +255,6 @@ export const useMenu1_2_2Store = defineStore('menu1-2-2Store', () => {
             STYLES: `system:${state.activeYear!.style!}`,
           },
           crossOrigin: 'Anonymous',
-          properties: {
-            id: 'ciams_analysis_in',
-            type: 'wms',
-          },
           layerType: 'wms',
           isSingleTile: false,
           opacity: 0.8,

@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, nextTick, onActivated, onMounted, reactive, ref } from 'vue'
+  import { computed, nextTick, onActivated, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
   import type { ImageInstance } from 'element-plus'
 
@@ -74,7 +74,6 @@
   import { MapWrapper } from '@/js/mapWrapper'
 
   import { CiamsZoneDTO } from '@/api/app/zone/model'
-  import { CiamsMenu3Sub1DetailsDto } from '@/api/app/menu-3/sub-1/model'
 
   import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
@@ -111,10 +110,6 @@
       LAYERS: ['CIAMS_ZONE_3'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_zone',
-      type: 'wms',
-    },
     layerType: 'wms',
     isSingleTile: false,
     opacity: 0.8,
@@ -137,10 +132,10 @@
     }),
   })
 
-  const mapLayers = reactive<MapLayer[]>([
+  const mapLayers: MapLayer[] = [
     new MapLayer({
       layer: uitWMSLayer1,
-      title: '관리유형',
+      title: '대상지',
       userVisible: true,
       useLayerSetting: true,
     }),
@@ -148,7 +143,7 @@
       layer: uitVectorLayer2,
       userVisible: true,
     }),
-  ])
+  ]
 
   function load() {
     mapLayers.forEach((item) => {
@@ -161,19 +156,20 @@
         } else if (uLayer instanceof UitWMTSLayer) {
           mapWrap.value?.getUitMap().addWMTSLayer(uLayer as UitWMTSLayer)
         }
-
-        mapWrap.value?.addViewLayer({
-          key: layerGroupName!,
-          layers: [item] as MapLayer[],
-        })
       }
+    })
+
+    mapWrap.value?.addViewLayer({
+      key: layerGroupName!,
+      layers: mapLayers,
     })
 
     mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
 
-    const tocViewLayerGroups = mapLayers[0] as MapLayer
-
-    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
+    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, {
+      title: '유형화종합분석',
+      layers: [mapLayers[0]],
+    })
   }
 
   async function zoneItemSelect(item: CiamsZoneDTO.Search.Row) {
@@ -188,7 +184,7 @@
 
     const res = await fetchFeatures({
       url: API_INFO_MAPSTUDIO.PREFIX,
-      key: '724A0C98-F8D5-E230-5713-A4B9EFAC4F51',
+      key: 'F91A8E17-FA4F-81B6-D344-0FAFBB68DFF2',
       featureRequestProps: {
         layers: 'CIAMS_ZONE',
         filter: likeFilter('zone_no', item.zoneNo),

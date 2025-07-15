@@ -113,6 +113,6 @@
   }
 
   .form-row span.layer-title {
-    width: 90px;
+    width: 110px;
   }
 </style>

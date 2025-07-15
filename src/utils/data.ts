@@ -175,7 +175,7 @@ export function processData(params) {
     return {
       ...col,
       data,
-      dataType: 123,
+      // dataType: 123,
       visible: useNoneColumn ? true : !allZero,
     }
   })

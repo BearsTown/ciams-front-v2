@@ -10,9 +10,7 @@
         </template>
         <template v-if="tocViewLayers">
           <template v-for="tvLayer in tocViewLayers" :key="tvLayer">
-            <template v-if="tvLayer.state.useLayerSetting">
-              <SingleLayer :map-layer="tvLayer" />
-            </template>
+            <GroupLayer :title="tvLayer.title" :layers="tvLayer.layers" />
           </template>
         </template>
       </div>

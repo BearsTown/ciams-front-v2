@@ -184,10 +184,6 @@
       LAYERS: ['CIAMS_P1_UQA300'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_p1_uqa300',
-      type: 'wms',
-    },
     layerType: 'wms',
     isSingleTile: false,
     opacity: 0.8,
@@ -201,10 +197,6 @@
       LAYERS: ['CIAMS_P1_UQA300_URBAN'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_p1_uqa300_urban',
-      type: 'wms',
-    },
     layerType: 'wms',
     isSingleTile: false,
     opacity: 0.8,
@@ -218,10 +210,6 @@
       LAYERS: ['CIAMS_P1_LIMIT'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_p1_limit',
-      type: 'wms',
-    },
     layerType: 'wms',
     isSingleTile: false,
     opacity: 0.8,

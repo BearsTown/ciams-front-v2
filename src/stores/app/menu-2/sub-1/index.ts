@@ -227,10 +227,6 @@ export const useMenu2Sub1Store = defineStore('menu2Sub1Store', () => {
             // CQL_FILTER: "ZONE_NO = 'TEMP_KEY_001'",
           },
           crossOrigin: 'Anonymous',
-          properties: {
-            id: 'ciams_analysis_in',
-            type: 'wms',
-          },
           layerType: 'wms',
           isSingleTile: true,
           opacity: 0.8,

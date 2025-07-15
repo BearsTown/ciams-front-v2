@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onActivated, onBeforeMount, onMounted, reactive, ref, watch } from 'vue'
+  import { computed, onActivated, onBeforeMount, onMounted, ref, watch } from 'vue'
 
   import Source from '@/components/common/Source.vue'
   import PagePane from '@/components/common/PagePane.vue'
@@ -71,6 +71,20 @@
   const mapWrap = ref<MapWrapper>()
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
 
+  const labelLayer = new UitWMSLayer({
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
+    sourceParams: {
+      KEY: '62398AF4-FA36-D468-4FD7-639E4849DB25',
+      LAYERS: [],
+    },
+    crossOrigin: 'Anonymous',
+    layerType: 'wms',
+    isSingleTile: true,
+    visible: true,
+    opacity: 1,
+    zIndex: 10000,
+  })
+
   const uitWMSLayer1 = new UitWMSLayer({
     baseUrl: API_INFO_MAPSTUDIO.PREFIX,
     sourceParams: {
@@ -78,10 +92,6 @@
       LAYERS: ['CIAMS_P1_SGG'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_p1_sgg',
-      type: 'wms',
-    },
     layerType: 'wms',
     isSingleTile: false,
     visible: true,
@@ -96,10 +106,20 @@
       LAYERS: ['CIAMS_P1_EMD'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      id: 'ciams_p1_sgg',
-      type: 'wms',
+    layerType: 'wms',
+    isSingleTile: false,
+    visible: true,
+    opacity: 1,
+    zIndex: 1110,
+  })
+
+  const uitWMSLayer3 = new UitWMSLayer({
+    baseUrl: API_INFO_MAPSTUDIO.PREFIX,
+    sourceParams: {
+      KEY: 'AF781CA7-729A-BA0C-C965-E6751C9CE3EA',
+      LAYERS: ['CIAMS_P1_LSMD_CONT_LDREG'],
     },
+    crossOrigin: 'Anonymous',
     layerType: 'wms',
     isSingleTile: false,
     visible: true,
@@ -114,11 +134,6 @@
       LAYERS: ['CIAMS_DIST'],
     },
     crossOrigin: 'Anonymous',
-    properties: {
-      // id: 'ciams_p1_plan',
-      id: 'ciams_dist',
-      type: 'wms',
-    },
     layerType: 'wms',
     isSingleTile: false,
     opacity: 0.8,
@@ -127,7 +142,7 @@
 
   async function init() {
     const wmtsCapability = await UitWMTSLayer.getWMTSCapabilities({
-      key: 'CA5DC99D-28CA-3CF2-24B5-F0414D56DC84',
+      key: 'AD03CBBB-8FE4-6A8F-BC1A-C11E08291890',
       layerType: 'wmts',
       url: API_INFO_MAPSTUDIO.PREFIX,
     })
@@ -163,9 +178,7 @@
 
     const uitMap = mapWrap.value?.getUitMap()
 
-    // uitMap.addWMSLayer(uitWMSLayer)
-
-    const mapLayers = reactive<MapLayer[]>([
+    const mapLayers: MapLayer[] = [
       new MapLayer({
         layer: uitWMSLayer1,
         title: '시군구',
@@ -181,9 +194,10 @@
         useLayerSetting: true,
       }),
       new MapLayer({
-        layer: uitWMSLayerT,
-        title: '대상지',
-        userVisible: true,
+        layer: uitWMSLayer3,
+        title: '지적도',
+        userVisible: false,
+        useLegend: true,
         useLayerSetting: true,
       }),
       new MapLayer({
@@ -192,7 +206,13 @@
         userVisible: false,
         useLayerSetting: true,
       }),
-    ])
+      new MapLayer({
+        layer: uitWMSLayerT,
+        title: '대상지',
+        userVisible: true,
+        useLayerSetting: true,
+      }),
+    ]
 
     mapLayers.forEach((item) => {
       if (item) {
@@ -204,32 +224,35 @@
         } else if (uLayer instanceof UitWMTSLayer) {
           uitMap.addWMTSLayer(uLayer as UitWMTSLayer)
         }
-
-        mapWrap.value?.addCommonLayer({
-          key: commonLayerType!,
-          layers: [item] as MapLayer[],
-        })
       }
+    })
+
+    mapWrap.value?.setLabelLayer(labelLayer)
+
+    mapWrap.value?.addCommonLayer({
+      key: commonLayerType!,
+      layers: mapLayers,
     })
 
     mapWrap.value?.setCommonLayersVisible(commonLayerType!, true)
 
-    const tocLayerGroups = {
+    mapWrap.value?.setTocCommonLayerGroups(commonLayerType, {
       title: '행정구역',
-      layers: [mapLayers[0], mapLayers[1]] as MapLayer[],
-    }
-    mapWrap.value?.setTocCommonLayerGroups(commonLayerType, tocLayerGroups)
+      layers: [mapLayers[0], mapLayers[1], mapLayers[2]],
+    })
 
     mapWrap.value?.setTocCommonLayerGroups(commonLayerType, {
       title: '용도지역',
-      layers: [mapLayers[3]] as MapLayer[],
+      layers: [mapLayers[3]],
     })
 
-    const tocViewLayerGroups = mapLayers[2] as MapLayer
-    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, tocViewLayerGroups)
+    mapWrap.value?.setTocViewLayerGroups(layerGroupName!, {
+      title: '대상지',
+      layers: [mapLayers[4]],
+    })
   }
 
-  const summay = {
+  const summary = {
     15: {
       DIST_KEY_001: '선도산업이 58개(50%)로 가장 많음 (대표 선도산업 : 전구 및 조명장치 제조업)',
       DIST_KEY_002:
@@ -257,7 +280,7 @@
     if (!CommonUtil.isEmpty(state.activeCategory) && !CommonUtil.isEmpty(state.activeDistFeature)) {
       return `최근 10년간(2011~2021년) ${state.activeDistFeature!.get('DIST_NAME')}의 ${
         state.activeCategory!.name
-      } 결과 ${summay[state.activeCategory!.id][state.activeDistFeature!.get('DIST_NO')]}`
+      } 결과 ${summary[state.activeCategory!.id][state.activeDistFeature!.get('DIST_NO')]}`
     }
     return ''
   })

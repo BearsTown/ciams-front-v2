@@ -1,21 +1,28 @@
+import View from 'ol/View'
+
 import UitMap from '@uitgis/ol-ugis-test/uitMap'
+import { UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
+import UitBaseMap from '@uitgis/ol-ugis-test/baseMap/uitBaseMap'
+
 import { MapLayer } from '@/js/layer'
 import { CommonLayerGroup, MapType, MapWrapperConfig, ViewLayerGroup } from '@/enums/mapEnum'
-import UitBaseMap from '@uitgis/ol-ugis-test/baseMap/uitBaseMap'
-import View from 'ol/View'
 
 export class MapWrapper {
   private mapType: MapType
   private config: MapWrapperConfig
   private uitMap: UitMap | undefined
   private uitBaseMap: UitBaseMap | undefined
+  private labelLayer: UitWMSLayer
+  private viewLabelNames: string[]
+  private commonLabelNames: string[]
 
   private tocViewLayerGroups: {
-    [key in ViewLayerGroup]?: MapLayer[]
+    // [key in ViewLayerGroup]?: MapLayer[]
+    [key in ViewLayerGroup]?: { title: string; layers: MapLayer[] }[]
   }
 
   private tocCommonLayerGroups: {
-    [key in CommonLayerGroup]?: { title: string; layers: MapLayer[] }[]
+    // [key in CommonLayerGroup]?: { title: string; layers: MapLayer[] }[]
   }
 
   private viewLayers: { [key in ViewLayerGroup]?: MapLayer[] }
@@ -29,6 +36,9 @@ export class MapWrapper {
     this.commonLayers = {}
     this.tocViewLayerGroups = {}
     this.tocCommonLayerGroups = {}
+
+    this.viewLabelNames = []
+    this.commonLabelNames = []
 
     // this._init()
   }
@@ -99,6 +109,40 @@ export class MapWrapper {
       } else {
         this.commonLayers[key].push(...layers)
       }
+
+      layers
+        .filter(
+          (mLayer) =>
+            mLayer.getLayer() instanceof UitWMSLayer || mLayer.getLayer() instanceof UitWMTSLayer,
+        )
+        .forEach((mLayer) => {
+          mLayer.visible.on('change:visible', ({ layer, visible }) => {
+            if (mLayer.getLayer() instanceof UitWMSLayer) {
+              const wmsLayer = layer as UitWMSLayer
+
+              if (visible) {
+                this.commonLabelNames = this.commonLabelNames.concat(wmsLayer.getParamLAYERS())
+              } else {
+                this.commonLabelNames = this.commonLabelNames.filter(
+                  (layerName) => !wmsLayer.getParamLAYERS().includes(layerName),
+                )
+              }
+            } else if (mLayer.getLayer() instanceof UitWMTSLayer) {
+              const wmtsLayer = layer as UitWMTSLayer
+
+              const name = wmtsLayer.getLayer().getSource().getLayer().slice(2)
+              if (visible) {
+                this.commonLabelNames = this.commonLabelNames.concat([name])
+              } else {
+                this.commonLabelNames = this.commonLabelNames.filter(
+                  (layerName) => ![name].includes(layerName),
+                )
+              }
+            }
+
+            this.labelLayer.setLAYERS([...this.commonLabelNames, ...this.viewLabelNames])
+          })
+        })
     }
   }
 
@@ -109,6 +153,27 @@ export class MapWrapper {
       } else {
         this.viewLayers[key]!.push(...layers)
       }
+
+      layers
+        .filter(
+          (mLayer) =>
+            mLayer.getLayer() instanceof UitWMSLayer || mLayer.getLayer() instanceof UitWMTSLayer,
+        )
+        .forEach((mLayer) => {
+          mLayer.visible.on('change:visible', ({ layer, visible }) => {
+            const wmsLayer = layer as UitWMSLayer
+
+            if (visible) {
+              this.viewLabelNames = this.viewLabelNames.concat(wmsLayer.getParamLAYERS())
+            } else {
+              this.viewLabelNames = this.viewLabelNames.filter(
+                (layerName) => !wmsLayer.getParamLAYERS().includes(layerName),
+              )
+            }
+
+            this.labelLayer.setLAYERS([...this.commonLabelNames, ...this.viewLabelNames])
+          })
+        })
     }
   }
 
@@ -132,7 +197,8 @@ export class MapWrapper {
       })
   }
 
-  setTocViewLayerGroups(group: ViewLayerGroup, item: MapLayer) {
+  // setTocViewLayerGroups(group: ViewLayerGroup, item: MapLayer) {
+  setTocViewLayerGroups(group: ViewLayerGroup, item: { title: string; layers: MapLayer[] }) {
     if (!this.tocViewLayerGroups[group]) {
       this.tocViewLayerGroups[group] = []
     }
@@ -158,5 +224,23 @@ export class MapWrapper {
 
   getViewLayers() {
     return this.viewLayers
+  }
+
+  getLabelLayer() {
+    return this.labelLayer
+  }
+
+  setLabelLayer(layer: UitWMSLayer) {
+    if (this.labelLayer) {
+    } else {
+      this.labelLayer = layer
+      this.uitMap?.addWMSLayer(layer)
+    }
+  }
+
+  private addLabel(type: 'view' | 'common', layerName: string) {
+    if (type === 'view') {
+    } else if (type === 'common') {
+    }
   }
 }
