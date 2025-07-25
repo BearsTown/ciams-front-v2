@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import codeService from '@/api/admin/code'
 
-import { Ref, reactive, ref, toRefs } from 'vue'
-import { cloneDeep, findIndex } from 'lodash-es'
-import commonUtil from '@/utils/commonUtil'
+import { reactive, Ref, toRefs } from 'vue'
+import { cloneDeep } from 'lodash-es'
+import CommonUtil from '@/utils/commonUtil'
 import CiamsCode from '@/api/admin/code/model'
 
 interface Icode {
@@ -75,7 +75,7 @@ export const useCodeStore = defineStore('code', () => {
    */
   function updateSelectedCodeInfo(modified) {
     const code = state.selectedCode.code
-    const codeObj = commonUtil.getObject(state.codeTree, 'code', code)
+    const codeObj = CommonUtil.getObject(state.codeTree, 'code', code)
 
     if (codeObj) {
       Object.keys(modified).forEach((key) => {

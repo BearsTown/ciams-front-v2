@@ -22,7 +22,6 @@
   import { computed, onBeforeMount, ref } from 'vue'
 
   import GroupLayer from '@/components/map/control/mapSetting/GroupLayer.vue'
-  import SingleLayer from '@/components/map/control/mapSetting/SingleLayer.vue'
 
   import UitMap from '@uitgis/ol-ugis-test/uitMap'
   import UitBaseMap from '@uitgis/ol-ugis-test/baseMap/uitBaseMap'
@@ -30,7 +29,6 @@
   import { MapWrapper } from '@/js/mapWrapper'
   import { CommonLayerTypes, MapType, ViewLayerTypes } from '@/enums/mapEnum'
 
-  import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
 
   const props = withDefaults(
@@ -39,8 +37,6 @@
     }>(),
     {},
   )
-
-  const globalStore = useGlobalStore()
 
   let uitMap: UitMap
   let uitBaseMap: UitBaseMap
@@ -65,8 +61,6 @@
     uitMap = mapWrap.value?.getUitMap()
     uitBaseMap = mapWrap.value?.getUitBaseMap()
   })
-
-  defineExpose({})
 </script>
 
 <style scoped lang="scss">

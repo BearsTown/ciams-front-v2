@@ -10,10 +10,10 @@
 <script setup lang="ts">
   import Left from '@/components/admin/Left.vue'
   import { useArchiveStore } from '@/stores/admin/archive'
-  import commonUtil from '@/utils/commonUtil'
   import { storeToRefs } from 'pinia'
   import { onMounted, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
+
   const archiveStore = useArchiveStore()
   const router = useRouter()
   const {

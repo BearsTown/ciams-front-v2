@@ -210,8 +210,8 @@ export const setStrokeColorWithColor = (
   feature: Feature,
   option: { strokeWidth?: number; color: string },
 ) => {
-  // const { r, g, b } = commonUtil.hex2rgb(color)
-  // const fillColor = commonUtil.rgbaToHex(r, g, b, 0.3)
+  // const { r, g, b } = CommonUtil.hex2rgb(color)
+  // const fillColor = CommonUtil.rgbaToHex(r, g, b, 0.3)
   const style = new Style({
     stroke: new Stroke({
       color: color_main,

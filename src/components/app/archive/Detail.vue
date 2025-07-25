@@ -63,7 +63,7 @@
           <template v-if="files.typeCode !== 'archiveImg'">
             <div
               class="file is-inline-flex"
-              @click="commonUtil.downloadFile(files.id, files.orgName)"
+              @click="CommonUtil.downloadFile(files.id, files.orgName)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -95,8 +95,7 @@
   import { onMounted, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { useArchiveStore } from '@/stores/app/archive/archive'
-  import { storeToRefs } from 'pinia'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
 
   const store = useArchiveStore()
   const route = useRoute()

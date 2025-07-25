@@ -179,7 +179,7 @@
   import { useAdminConfigStore } from '@/stores/admin/config'
   import { ref } from 'vue'
   import { useArchiveStore } from '@/stores/admin/archive'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import { cloneDeep } from 'lodash-es'
   import { storeToRefs } from 'pinia'
   const archiveStore = useArchiveStore()
@@ -251,13 +251,13 @@
         archiveStore
           .addCategory(params)
           .then(() => {
-            commonUtil.successMessage('추가 되었습니다.')
+            CommonUtil.successMessage('추가 되었습니다.')
             addCategoryDialog.value = false
             clear()
             archiveStore.reloadAction()
           })
           .catch(() => {
-            commonUtil.errorMessage('카테고리 등록중 오류가 발생했습니다.')
+            CommonUtil.errorMessage('카테고리 등록중 오류가 발생했습니다.')
           })
       }
     })
@@ -280,13 +280,13 @@
         archiveStore
           .modifyCategory(params)
           .then(() => {
-            commonUtil.successMessage('수정 되었습니다.')
+            CommonUtil.successMessage('수정 되었습니다.')
             addCategoryDialog.value = false
             clear()
             archiveStore.getCategoryList()
           })
           .catch(() => {
-            commonUtil.errorMessage('카테고리 수정중 오류가 발생했습니다.')
+            CommonUtil.errorMessage('카테고리 수정중 오류가 발생했습니다.')
           })
       }
     })
@@ -297,33 +297,33 @@
     if (!_category) {
       return false
     }
-    commonUtil
+    CommonUtil
       .confirm(`[${_category.name}] 카테고리를 삭제하시겠습니까?`)
       .then(() => {
         return archiveStore.deleteCategory(_category.categoryId)
       })
       .then(() => {
-        commonUtil.successMessage('삭제 되었습니다.')
+        CommonUtil.successMessage('삭제 되었습니다.')
         archiveStore.reloadAction()
       })
       .catch((err) => {
         console.log(err)
         if (err.response.status == 409) {
-          commonUtil.errorMessage(err.response.data)
+          CommonUtil.errorMessage(err.response.data)
         } else {
-          commonUtil.errorMessage('카테고리 삭제 중 오류가 발생했습니다.')
+          CommonUtil.errorMessage('카테고리 삭제 중 오류가 발생했습니다.')
         }
       })
   }
 
   function deleteArchiveAll(ids) {
-    commonUtil
+    CommonUtil
       .confirm('게시글을 삭제 하시겠습니까?', '게시글 삭제')
       .then(() => {
         return archiveStore.deleteArchive(ids)
       })
       .then(() => {
-        commonUtil.successMessage('삭제 되었습니다.')
+        CommonUtil.successMessage('삭제 되었습니다.')
         archiveStore.getArchiveList()
       })
   }
@@ -337,11 +337,11 @@
     archiveStore
       .modifyHidden(param)
       .then(() => {
-        commonUtil.successMessage('변경되었습니다.')
+        CommonUtil.successMessage('변경되었습니다.')
         return archiveStore.getArchiveList()
       })
       .catch(() => {
-        commonUtil.errorMessage('수정 중에 에러가 발생했습니다.')
+        CommonUtil.errorMessage('수정 중에 에러가 발생했습니다.')
       })
   }
 

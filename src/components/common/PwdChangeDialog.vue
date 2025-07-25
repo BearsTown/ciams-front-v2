@@ -185,10 +185,9 @@
   </CustomModal>
 </template>
 <script setup lang="ts">
-  import { toRefs, ref, reactive, computed } from 'vue'
+  import { computed, reactive } from 'vue'
   import { useUserStore } from '@/stores/user'
-  import { FormInstance, FormRules } from 'element-plus'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
 
   import CustomModal from '@/components/CustomModal.vue'
 
@@ -268,15 +267,15 @@
       store
         .changePassword(obj)
         .then(() => {
-          commonUtil.successMessage('패스워드가 변경되었습니다.')
+          CommonUtil.successMessage('패스워드가 변경되었습니다.')
           emits('close-dialog')
         })
         .catch((err) => {
           console.log(err)
           if (err.response.status === 401) {
-            commonUtil.errorMessage('현재 패스워드가 불일치 합니다.')
+            CommonUtil.errorMessage('현재 패스워드가 불일치 합니다.')
           } else {
-            commonUtil.errorMessage('회원가입 처리 중 에러가 발생했습니다.')
+            CommonUtil.errorMessage('회원가입 처리 중 에러가 발생했습니다.')
           }
         })
     } else {

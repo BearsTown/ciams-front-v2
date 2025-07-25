@@ -102,7 +102,7 @@
   import { planContentLinkAdd } from '@/api/app/planContentLink'
   import PlanContent from '@/api/app/planContent/model'
   import { API_INFO_CIAMS } from '@/config/config'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import Content from '@/components/common/Content.vue'
 
   const props = withDefaults(
@@ -155,7 +155,7 @@
 
   function modify(formName) {
     if (selectContentIds.value.length == 0) {
-      commonUtil.errorMessage('선택된 컨텐츠가 없습니다.')
+      CommonUtil.errorMessage('선택된 컨텐츠가 없습니다.')
       return
     }
 
@@ -166,14 +166,14 @@
       category: props.category,
     })
 
-    commonUtil.confirm('추가 하시겠습니까?', '컨텐츠 추가').then(() => {
+    CommonUtil.confirm('추가 하시겠습니까?', '컨텐츠 추가').then(() => {
       planContentLinkAdd(addForm.value)
         .then(() => {
-          commonUtil.successMessage('추가했습니다.')
+          CommonUtil.successMessage('추가했습니다.')
           emits('close-dialog', true)
         })
         .catch((err) => {
-          commonUtil.errorMessage('오류가 발생했습니다.')
+          CommonUtil.errorMessage('오류가 발생했습니다.')
           console.log(err)
         })
     })

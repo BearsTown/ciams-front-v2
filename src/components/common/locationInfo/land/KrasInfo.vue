@@ -212,17 +212,16 @@
   import { InsideCollapse } from '@/components/common/collapse'
 
   import Map from '@/js/map/map'
-  import commonUtil from '@/utils/commonUtil'
-  // import { useGmpssStore } from '@/stores/app'
+
   import { useMapStore } from '@/stores/map/map'
   import { useOpenApiStore } from '@/stores/app/openapi'
   import { MapType } from '@/enums/mapEnum'
 
   const loaded = ref<boolean>(false)
   const isActive = ref<boolean>(false)
-  // const gmpStore = useGmpssStore()
+
   const openApiStore = useOpenApiStore()
-  // const { locInfo } = storeToRefs(gmpStore)
+
   const { krasInfoItem: detailItem } = storeToRefs(openApiStore)
 
   const props = withDefaults(

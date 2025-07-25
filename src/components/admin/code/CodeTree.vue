@@ -85,12 +85,14 @@
     useYn: 'Y' | 'N'
     children?: []
   }
+
   import { cloneDeep } from 'lodash-es'
   import { onMounted, reactive, ref } from 'vue'
   import { useCodeStore } from '@/stores/admin/code'
   import { storeToRefs } from 'pinia'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import { Tree } from 'element-plus/es/components/tree-v2/src/types'
+
   const editTree = ref(false)
   const selectedCodeId = ref('')
 
@@ -162,7 +164,7 @@
         codeStore
           .addCode(newCodeForm)
           .then((res) => {
-            commonUtil.successMessage('저장되었습니다.')
+            CommonUtil.successMessage('저장되었습니다.')
             addCodeDialog.value = false
             // addNewCodeOnTree(res)
             init()
@@ -170,9 +172,9 @@
           .catch((err) => {
             console.log(err)
             if (err.response.status === 409) {
-              commonUtil.errorMessage('중복된 코드값이 존재합니다.')
+              CommonUtil.errorMessage('중복된 코드값이 존재합니다.')
             } else {
-              commonUtil.errorMessage('처리 중 에러가 발생했습니다.')
+              CommonUtil.errorMessage('처리 중 에러가 발생했습니다.')
             }
           })
       } else {
@@ -264,7 +266,7 @@
       })
       .catch((err) => {
         console.log(err)
-        commonUtil.errorMessage('코드 정보 중에 오류가 발생했습니다. ')
+        CommonUtil.errorMessage('코드 정보 중에 오류가 발생했습니다. ')
       })
   }
 
@@ -281,7 +283,7 @@
 
   :deep .is-current {
     font-weight: bold;
-    color: #7AAAD1;
+    color: #7aaad1;
   }
 </style>
 <style scoped>

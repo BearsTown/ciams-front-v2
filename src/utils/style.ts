@@ -1,4 +1,9 @@
-export function createLegend(data, levels, startColor, baseColor) {
+export function createLegend(
+  data: number[],
+  levels: number,
+  startColor: string,
+  baseColor: string,
+) {
   // 데이터 정렬 및 중복 제거
   const sortedData = [...new Set(data)].sort((a, b) => a - b)
 
@@ -18,13 +23,11 @@ export function createLegend(data, levels, startColor, baseColor) {
   }
 }
 
-export function jenks(data, n_classes) {
-  n_classes = parseInt(n_classes)
-  // data = [...new Set(data)].sort((a, b) => a - b);
+export function jenks(data: number[], n_classes: number) {
   const matrices = jenksMatrices(data, n_classes),
     lower_class_limits = matrices.lower_class_limits
   let k = data.length - 1
-  const kclass = []
+  const kclass: number[] = []
   let countNum = n_classes
 
   if (data.length < n_classes + 1) {
@@ -192,12 +195,13 @@ function rgbToHex(rgb) {
  * @param {number} steps - 생성할 색상 개수
  * @returns {Array<string>} 보간된 HEX 색상 배열
  */
-function interpolateColors(startColor, endColor, steps) {
+function interpolateColors(startColor: string, endColor: string, steps: number) {
+  const interpolatedColorArray: string[] = []
+
   const startRgb = hexToRgb(startColor)
   const endRgb = hexToRgb(endColor)
 
   const stepFactor = 1 / (steps - 1)
-  const interpolatedColorArray = []
 
   for (let i = 0; i < steps; i++) {
     const factor = stepFactor * i
@@ -213,12 +217,17 @@ function interpolateColors(startColor, endColor, steps) {
 
 /**
  * 급간 범위와 색상을 결합하여 범례 정보 생성
+ *
  * @param {Array<number>} breaks - 급간 경계값 배열
  * @param {Array<string>} colors - 색상 배열
  * @returns {Array<Object>} 범례 정보 배열
  */
-function createLegendInfo(breaks, colors) {
-  const legend = [] as object[]
+function createLegendInfo(breaks: number[], colors: string[]) {
+  // const legend = [] as object[]
+  const legend: {
+    range: string
+    color: string
+  }[] = []
 
   // 첫 번째 급간 (최소값 이하)
   legend.push({

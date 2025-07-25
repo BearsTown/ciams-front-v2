@@ -38,7 +38,6 @@
   import { MapWrapper } from '@/js/mapWrapper'
   import { ToggleButton } from '@/js/map/control/ToggleButton'
 
-  import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
 
   const props = withDefaults(
@@ -60,8 +59,6 @@
 
   const button = reactive(toggle)
 
-  const globalStore = useGlobalStore()
-
   let uitMap: UitMap
   let uitBaseMap: UitBaseMap
   const mapWrap = ref<MapWrapper>()
@@ -78,8 +75,6 @@
       closeIgnores: [],
     })
   })
-
-  defineExpose({})
 </script>
 
 <style scoped lang="scss">

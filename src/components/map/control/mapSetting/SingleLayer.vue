@@ -29,8 +29,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { onBeforeMount } from 'vue'
-
   import { MapLayer } from '@/js/layer'
 
   const props = withDefaults(
@@ -50,10 +48,6 @@
       .getLayer()
       ?.setOpacity(Number(el.value) / 100)
   }
-
-  onBeforeMount(async () => {})
-
-  defineExpose({})
 </script>
 
 <style scoped lang="scss">

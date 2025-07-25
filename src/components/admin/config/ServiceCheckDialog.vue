@@ -93,9 +93,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, toRefs, watch } from 'vue'
-  import commonUtil from '@/utils/commonUtil'
-  import Config from '@/api/admin/config/model'
+  import { computed } from 'vue'
 
   const props = withDefaults(
     defineProps<{

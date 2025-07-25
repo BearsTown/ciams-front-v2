@@ -16,15 +16,8 @@
   import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
 
   import { useAuthStore } from '@/stores/auth'
-  import { useGlobalStore } from '@/stores/app'
-
-  // import { usePlanAreaStore } from '@/stores/app/operation/planArea'
-  // const planAreaStore = usePlanAreaStore()
-  // const { modal } = storeToRefs(planAreaStore)
 
   const auth = useAuthStore()
-
-  const globalStore = useGlobalStore()
 
   const props = withDefaults(
     defineProps<{
@@ -53,19 +46,9 @@
     isActive.value = active
   }
 
-  function cancel() {}
-
   const getSelectedData = computed(() => {
     return distItem.value
   })
-
-  // watch(modal.value, () => {
-  //   //계획지역 수정 후 액션
-  //   if (modal.value.modifyAction && areaItem.value.rn == modal.value.selectItem.rn) {
-  //     Object.assign(areaItem.value, modal.value.selectItem)
-  //     emits('re-click')
-  //   }
-  // })
 
   defineExpose({
     setActive,

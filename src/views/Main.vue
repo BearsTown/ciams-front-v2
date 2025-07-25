@@ -126,7 +126,7 @@
   import PwdChangeDialog from '@/components/login/PwdChangeDialog.vue'
 
   import { MenuType } from '@/router'
-  import tokenUtil from '@/utils/tokenUtil'
+  import TokenUtil from '@/utils/tokenUtil'
   import CommonUtil from '@/utils/commonUtil'
   import { API_INFO_CIAMS } from '@/config/config'
 
@@ -185,7 +185,7 @@
   async function toPage(link) {
     await useAuthStore().checkToken()
 
-    if (!tokenUtil.getAccessToken()) {
+    if (!TokenUtil.getAccessToken()) {
       CommonUtil.errorMessage('사용자 로그인이 필요합니다.')
       await router.push('/')
     } else {

@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onMounted, ref, toRefs, watch } from 'vue'
+  import { computed, ref, toRefs, watch } from 'vue'
 
   import { TagCategory } from '@/types/common'
   import { CiamsZoneDTO } from '@/api/app/zone/model'
@@ -80,8 +80,6 @@
       }
     },
   )
-
-  onMounted(() => {})
 </script>
 
 <style scoped lang="scss">

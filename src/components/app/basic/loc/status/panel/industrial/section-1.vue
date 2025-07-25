@@ -1,0 +1,325 @@
+<template>
+  <PagePane :title="['산업별 분석', '산업별 사업체수']">
+    <template #sub>
+      <Source :list="sources" />
+    </template>
+
+    <template #center>
+      <div class="container">
+        <div class="top customScroll">
+          <div class="text-wrap">
+            <p>
+              - 공업지역 내 산업단지의 종사자밀도는 11.36인/ha 반면, 도시공업지역은 18.87인/ha로
+              1.5배 많은 종사자가 근무하고 있어 도시공업지역을 활성화시킬 수 있는 방안 필요
+            </p>
+            <p>
+              - 김천시는 도매 및 소매업수가 가장 많고, 공업지역과 도시공업지역에서는 제조업수가 가장
+              많으며, 제조업의 종사자수가 전체 지역에서 가장 많은 비중을 차지함
+            </p>
+          </div>
+        </div>
+
+        <div class="center">
+          <div class="left">
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                border: none;
+                box-shadow: none;
+              "
+            >
+              <span style="font-size: 12px; color: #616161"
+                >※「산업발전법」 제2조에 따른 산업을 대상으로 함</span
+              >
+              <div style="display: flex; height: 100%">
+                <v-chart class="chart" :option="chartData" autoresize />
+              </div>
+            </div>
+          </div>
+
+          <div class="right">
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                border: none;
+                box-shadow: none;
+              "
+            >
+              <div style="display: flex; flex-direction: column">
+                <div class="header-title" style="">지역별 사업체 밀도</div>
+                <div class="" style="display: flex; height: 100%">
+                  <Table1 :data="densities" type="corp" style="width: 70%" />
+                  <v-chart class="chart" :option="densityOption" autoresize style="width: 30%" />
+                </div>
+              </div>
+
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  flex: 1;
+                  margin-top: 8px;
+                  overflow-y: hidden;
+                "
+              >
+                <div class="header-title" style="">산업별 현황</div>
+                <Table2 group="사업체수(개)" :data="statuses" :columns="columns" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </PagePane>
+</template>
+
+<script setup lang="ts">
+  import { computed, onMounted, ref } from 'vue'
+
+  import VChart from 'vue-echarts'
+
+  import Source from '@/components/common/Source.vue'
+  import PagePane from '@/components/common/PagePane.vue'
+  import Table1 from '@/components/app/basic/loc/status/panel/industrial/table-1.vue'
+  import Table2 from '@/components/app/basic/loc/status/panel/industrial/table-2.vue'
+
+  import CommonUtil from '@/utils/commonUtil'
+
+  import { IndustrialDto } from '@/models/api/app/basic/loc/industry/industrial'
+
+  import { getSources } from '@/api/app/source'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getIndustrialInfo } from '@/api/app/basic/loc/ind-status'
+
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+
+  const cmmConfigStore = useCmmConfigStore()
+
+  const densities = ref<IndustrialDto.Density[]>([])
+  const statuses = ref<IndustrialDto.Status[]>([])
+  const densityOption = ref({})
+  const chartData = ref({})
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
+
+  const columns = computed(() => {
+    return [
+      {
+        prop: 'corpCnt1',
+        label: `${cmmConfigStore.cmmConfigState['SGG_NAME'].confValue}`,
+      },
+      {
+        prop: 'corpCnt2',
+        label: '공업지역',
+      },
+      {
+        prop: 'corpCnt3',
+        label: '도시공업지역',
+      },
+    ]
+  })
+
+  onMounted(async () => {
+    const { data: sourceData } = await getSources({
+      category: '산업현황분석',
+      targetId: 'B002',
+    })
+
+    sources.value = sourceData[0]?.sources
+
+    const { data: industrialInfo } = await getIndustrialInfo({
+      category: '산업',
+    })
+
+    densities.value = industrialInfo.densities
+    statuses.value = industrialInfo.statuses
+
+    densityOption.value = {
+      tooltip: {
+        trigger: 'item',
+      },
+      // legend: {
+      //   bottom: true,
+      // },
+      series: [
+        {
+          type: 'pie',
+          radius: '90%',
+          avoidLabelOverlap: false,
+          data: densities.value.map(({ name, corpDensity }) => ({ value: corpDensity, name })),
+          itemStyle: {
+            borderWidth: 1,
+            borderRadius: 5,
+            borderColor: '#fff',
+          },
+          label: {
+            show: true,
+            position: 'inside',
+            formatter: '{d}%',
+            color: '#fff',
+            fontSize: 12,
+          },
+          tooltip: {
+            formatter: function (params) {
+              return `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${params.color};"></span>
+        ${params.name}: ${params.value} (${params.percent}%)`
+            },
+          },
+          emphasis: {
+            itemStyle: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+        },
+      ],
+    }
+
+    chartData.value = {
+      grid: {
+        top: '5%',
+        left: '5%',
+        right: '5%',
+        containLabel: true,
+      },
+      legend: {
+        bottom: 10,
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow',
+          crossStyle: {
+            color: '#999',
+          },
+        },
+      },
+      xAxis: {
+        type: 'category',
+        data: statuses.value.map((item) => item.code),
+      },
+      yAxis: {
+        type: 'value',
+        name: '사업체수',
+        position: 'left',
+      },
+      series: columns.value.map((column, index) => ({
+        name: column.label,
+        type: 'bar',
+        // yAxisIndex: index,
+        data: statuses.value.map((item) => item[column.prop]),
+        tooltip: {
+          valueFormatter: function (value) {
+            if (value === undefined || value === null) {
+              value = 0
+            }
+            return CommonUtil.comma(value as number) + ' 개'
+          },
+        },
+      })),
+    }
+  })
+</script>
+
+<style lang="scss"></style>
+
+<style scoped lang="scss">
+  .container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .center {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      //overflow-y: hidden;
+      overflow: hidden;
+      height: 100%;
+      gap: 8px;
+
+      .left {
+        width: 50%;
+        padding: 10px;
+        background: #fff;
+        border-radius: 8px;
+      }
+
+      .right {
+        width: 50%;
+        padding: 10px;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        //margin-left: 8px;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .right-top {
+      }
+
+      .right-bottom {
+      }
+    }
+
+    .top {
+      height: 80px;
+      margin-bottom: 8px;
+      min-height: 100px;
+      max-height: 200px;
+
+      padding: 10px;
+      background: #fff;
+      border-radius: 8px;
+    }
+
+    .bottom {
+      height: 80px;
+      margin-top: 8px;
+      min-height: 100px;
+      max-height: 200px;
+
+      padding: 10px;
+      background: #fff;
+      border-radius: 8px;
+    }
+
+    .customScroll {
+      height: max-content;
+      overflow-y: auto;
+    }
+
+    .text-wrap {
+      color: #616161;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.5;
+      > p {
+        padding-left: 0.5em;
+        text-indent: -0.6em;
+      }
+    }
+  }
+
+  .border-box-square:first-child {
+    margin: 0;
+  }
+
+  .header-title {
+    margin: 5px 0;
+    color: #212121;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .customTable tr > td:not([rowspan]) {
+    border-left: 1px solid #e0e0e0;
+  }
+</style>

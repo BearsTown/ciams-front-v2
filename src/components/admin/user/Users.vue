@@ -152,13 +152,14 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { ref, onMounted, getCurrentInstance, reactive, ComponentInternalInstance } from 'vue'
+  import { onMounted, reactive, ref } from 'vue'
   import { cloneDeep } from 'lodash-es'
   import userTable from '@/components/admin/user/UserTable.vue'
   import { useUsersStore } from '@/stores/admin/users'
   import { storeToRefs } from 'pinia'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import { useAuthStore } from '@/stores/auth'
+
   const authStore = useAuthStore()
   const { userName: authUserName } = storeToRefs(authStore)
 
@@ -297,22 +298,20 @@
   }
 
   function initPass(loginId) {
-    commonUtil
-      .confirm(
-        '비밀번호 초기화 하시겠습니까?<br><span style="font-size:9pt">(사용자 아이디로 초기화 됩니다)</span>',
-        '',
-        true,
-      )
-      .then(() => {
-        store
-          .initPassword(loginId)
-          .then(() => {
-            commonUtil.successMessage('초기화되었습니다.')
-          })
-          .catch(() => {
-            commonUtil.errorMessage('초기화중에 오류가 발생했습니다.')
-          })
-      })
+    CommonUtil.confirm(
+      '비밀번호 초기화 하시겠습니까?<br><span style="font-size:9pt">(사용자 아이디로 초기화 됩니다)</span>',
+      '',
+      true,
+    ).then(() => {
+      store
+        .initPassword(loginId)
+        .then(() => {
+          CommonUtil.successMessage('초기화되었습니다.')
+        })
+        .catch(() => {
+          CommonUtil.errorMessage('초기화중에 오류가 발생했습니다.')
+        })
+    })
   }
 
   function openModifyDialog(user) {
@@ -326,7 +325,7 @@
         store
           .modifyUser(modifyUser)
           .then(() => {
-            commonUtil.successMessage('수정되었습니다.')
+            CommonUtil.successMessage('수정되었습니다.')
             searchUser()
             modifyUserDialog.value = false
 
@@ -336,9 +335,9 @@
           })
           .catch((err) => {
             if (err.response.status === 409) {
-              commonUtil.errorMessage(err.response.data)
+              CommonUtil.errorMessage(err.response.data)
             } else {
-              commonUtil.errorMessage('수정 처리 중 에러가 발생했습니다.')
+              CommonUtil.errorMessage('수정 처리 중 에러가 발생했습니다.')
             }
           })
       } else {
@@ -350,13 +349,13 @@
   function changeState(type) {
     const _myselfCheck = selectUsers.findIndex((a) => a.loginId == authUserName.value)
     if (selectUsers.length == 0) {
-      commonUtil.errorMessage('선택된 사용자가 없습니다.')
+      CommonUtil.errorMessage('선택된 사용자가 없습니다.')
     } else {
       switch (type) {
         case 'lock': {
           const _userList = selectUsers.filter((a) => !a.lock)
           if (checkConfirm(_userList)) {
-            commonUtil.confirm('잠금 하시겠습니까?').then(() => {
+            CommonUtil.confirm('잠금 하시겠습니까?').then(() => {
               const _param = {
                 lock: true,
                 userList: _userList.map((a) => a.loginId),
@@ -364,11 +363,11 @@
               store
                 .updateLock(_param)
                 .then(() => {
-                  commonUtil.successMessage('잠금되었습니다.')
+                  CommonUtil.successMessage('잠금되었습니다.')
                   searchUser()
                 })
                 .catch(() => {
-                  commonUtil.errorMessage('잠금 처리 중에 에러가 발생했습니다.')
+                  CommonUtil.errorMessage('잠금 처리 중에 에러가 발생했습니다.')
                 })
             })
           }
@@ -378,7 +377,7 @@
         case 'unlock': {
           const _userList = selectUsers.filter((a) => a.lock)
           if (checkConfirm(_userList)) {
-            commonUtil.confirm('잠금해제 하시겠습니까?').then(() => {
+            CommonUtil.confirm('잠금해제 하시겠습니까?').then(() => {
               const _param = {
                 lock: false,
                 userList: _userList.map((a) => a.loginId),
@@ -386,11 +385,11 @@
               store
                 .updateLock(_param)
                 .then(() => {
-                  commonUtil.successMessage('잠금해제 되었습니다.')
+                  CommonUtil.successMessage('잠금해제 되었습니다.')
                   searchUser()
                 })
                 .catch(() => {
-                  commonUtil.errorMessage('잠금해제 처리 중에 에러가 발생했습니다.')
+                  CommonUtil.errorMessage('잠금해제 처리 중에 에러가 발생했습니다.')
                 })
             })
           }
@@ -399,7 +398,7 @@
         case 'approve': {
           const _userList = selectUsers.filter((a) => a.roleYn == 'N')
           if (checkConfirm(_userList, '승인')) {
-            commonUtil.confirm('승인 하시겠습니까?').then(() => {
+            CommonUtil.confirm('승인 하시겠습니까?').then(() => {
               const _param = {
                 roleYn: 'Y',
                 userList: _userList.map((a) => a.loginId),
@@ -407,11 +406,11 @@
               store
                 .updateApprove(_param)
                 .then(() => {
-                  commonUtil.successMessage('승인되었습니다.')
+                  CommonUtil.successMessage('승인되었습니다.')
                   searchUser()
                 })
                 .catch(() => {
-                  commonUtil.errorMessage('승인중에 에러가 발생했습니다.')
+                  CommonUtil.errorMessage('승인중에 에러가 발생했습니다.')
                 })
             })
           }
@@ -419,26 +418,26 @@
         }
         case 'delete': {
           if (_myselfCheck > -1) {
-            commonUtil.errorMessage('본인 계정은 삭제 할 수 없습니다.')
+            CommonUtil.errorMessage('본인 계정은 삭제 할 수 없습니다.')
           } else if (checkConfirm(selectUsers, '삭제')) {
             const userList = selectUsers.map((a) => a.loginId)
 
-            commonUtil.confirm('삭제 하시겠습니까?').then(() =>
+            CommonUtil.confirm('삭제 하시겠습니까?').then(() =>
               store
                 .deleteUser(userList)
                 .then(() => {
-                  commonUtil.successMessage('삭제되었습니다.')
+                  CommonUtil.successMessage('삭제되었습니다.')
                   searchUser()
                 })
                 .catch(() => {
-                  commonUtil.errorMessage('삭제중에 에러가 발생했습니다.')
+                  CommonUtil.errorMessage('삭제중에 에러가 발생했습니다.')
                 }),
             )
           }
           break
         }
         default:
-          commonUtil.errorMessage('취소되었습니다.')
+          CommonUtil.errorMessage('취소되었습니다.')
           break
       }
     }
@@ -446,7 +445,7 @@
 
   var checkConfirm = function (userList, msg?) {
     if (userList.length == 0) {
-      commonUtil.errorMessage('처리가능한 사용자가 없습니다.')
+      CommonUtil.errorMessage('처리가능한 사용자가 없습니다.')
       return false
     } else {
       return true

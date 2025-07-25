@@ -128,8 +128,6 @@
 
   const { layoutSelected, currentMapType } = storeToRefs(globalStore)
 
-  // const mapStore = useMapStore(currentMapType.value)
-
   const visible = computed(() => {
     const mapStore = useMapStore(currentMapType.value)
     return mapStore.locationInfoVisible
@@ -138,8 +136,6 @@
   onActivated(() => {
     layoutSelected.value?.left?.collapse?.on()
   })
-
-  defineExpose({})
 </script>
 
 <style scoped lang="scss">

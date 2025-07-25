@@ -106,7 +106,7 @@
   import { storeToRefs } from 'pinia'
   import { ref } from 'vue'
   import { cloneDeep } from 'lodash-es'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
 
   const codeStore = useCodeStore()
 
@@ -126,7 +126,7 @@
   }
 
   function returnVal(value) {
-    return commonUtil.isEmpty(value) ? '-' : value
+    return CommonUtil.isEmpty(value) ? '-' : value
   }
 
   function validateCodeName(rule, value, callback) {
@@ -149,7 +149,7 @@
         codeStore
           .modifyCode(modifyCodeForm.value)
           .then((res: Icode) => {
-            commonUtil.successMessage('수정되었습니다.')
+            CommonUtil.successMessage('수정되었습니다.')
             modifyCodeDialog.value = false
 
             //결과 세팅
@@ -158,7 +158,7 @@
           })
           .catch((err) => {
             console.log(err)
-            commonUtil.errorMessage('처리 중 에러가 발생했습니다.')
+            CommonUtil.errorMessage('처리 중 에러가 발생했습니다.')
           })
       } else {
         return false
@@ -167,19 +167,19 @@
   }
 
   function removeSelectedCode() {
-    commonUtil.confirm('삭제 하시겠습니까?').then(() => {
+    CommonUtil.confirm('삭제 하시겠습니까?').then(() => {
       // console.log(codeTreeRef.value)
       codeStore
         .removeCode()
         .then(() => {
-          commonUtil.successMessage('선택한 코드를 삭제했습니다.')
+          CommonUtil.successMessage('선택한 코드를 삭제했습니다.')
         })
         .catch((err) => {
           console.log(err)
           if (err.response.status === 409) {
-            commonUtil.errorMessage('하위 코드가 존재해서 삭제 할 수 없습니다.')
+            CommonUtil.errorMessage('하위 코드가 존재해서 삭제 할 수 없습니다.')
           } else {
-            commonUtil.errorMessage('삭제 처리 도중 에러가 발생했습니다.')
+            CommonUtil.errorMessage('삭제 처리 도중 에러가 발생했습니다.')
           }
         })
     })

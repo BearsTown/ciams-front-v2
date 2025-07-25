@@ -98,8 +98,6 @@
       resizeObserver.observe(targetDiv.value)
     }
   })
-
-  defineExpose({})
 </script>
 
 <style scoped lang="scss">

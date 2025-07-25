@@ -94,14 +94,13 @@
 </template>
 
 <script setup lang="ts">
-  import { Plan } from '@/api/app/plan/model'
   import { planContentAreaList } from '@/api/app/planContent'
   import type PlanContent from '@/api/app/planContent/model'
   import { changePriority, planContentLinkDelete } from '@/api/app/planContentLink'
   import Content from '@/components/common/Content.vue'
   import { InsideCollapse } from '@/components/common/collapse'
   import { API_INFO_CIAMS } from '@/config/config'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import type { Ref } from 'vue'
   import { onActivated, onMounted, ref, watch } from 'vue'
   import draggable from 'vuedraggable'
@@ -110,7 +109,7 @@
   const props = withDefaults(
     defineProps<{
       // selectLinkVer: { ver: string; planContentLinkId: string } | null | undefined
-      item: Plan.Search.Row
+      item: any
       category: string
     }>(),
     {
@@ -135,15 +134,15 @@
    * 삭제
    */
   function delContent(item: PlanContent.Search.Row) {
-    commonUtil.confirm('삭제하시겠습니까?', '삭제').then(() => {
+    CommonUtil.confirm('삭제하시겠습니까?', '삭제').then(() => {
       if (item.planContentLinkId) {
         planContentLinkDelete(item.planContentLinkId, item.planContentId)
           .then(() => {
-            commonUtil.successMessage(`삭제되었습니다.`)
+            CommonUtil.successMessage(`삭제되었습니다.`)
             getList()
           })
           .catch((err) => {
-            commonUtil.errorMessage(`오류가 발생했습니다.`)
+            CommonUtil.errorMessage(`오류가 발생했습니다.`)
             console.log(err)
           })
       }
@@ -165,11 +164,11 @@
 
     changePriority(list)
       .then(() => {
-        commonUtil.successMessage(`수정되었습니다.`)
+        CommonUtil.successMessage(`수정되었습니다.`)
         isEdit.value = false
       })
       .catch((err) => {
-        commonUtil.errorMessage(`오류가 발생했습니다.`)
+        CommonUtil.errorMessage(`오류가 발생했습니다.`)
         console.log(err)
       })
   }

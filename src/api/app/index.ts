@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios'
-import tokenUtil from '@/utils/tokenUtil'
+import TokenUtil from '@/utils/tokenUtil'
 import { AbstractApiAxios } from '@/utils/apiAxios'
 import { useAuthStore } from '@/stores/auth'
 import { ResultData } from '@/api/app/model'
 import { API_INFO_CIAMS } from '@/config/config'
 import { authAxiosInstance, refreshToken } from '@/api/auth'
-import commonUtil from '@/utils/commonUtil'
+import CommonUtil from '@/utils/commonUtil'
 
 class CiamsAxios extends AbstractApiAxios<ResultData<any>> {
   constructor() {
@@ -19,7 +19,7 @@ class CiamsAxios extends AbstractApiAxios<ResultData<any>> {
   private setupInterceptors() {
     this.getAxios().interceptors.request.use(
       (config) => {
-        const token = tokenUtil.getAccessToken()
+        const token = TokenUtil.getAccessToken()
         config.headers['Authorization'] = token ? `bearer ${token}` : null
         return config
       },
@@ -65,7 +65,7 @@ class CiamsAxios extends AbstractApiAxios<ResultData<any>> {
           //   await router.replace('/')
           // }
         } else if (res.status === 403) {
-          commonUtil.errorMessage('통신 중 에러가 발생했습니다.')
+          CommonUtil.errorMessage('통신 중 에러가 발생했습니다.')
           // await router.replace('/')
         }
         return Promise.reject(error)
@@ -74,13 +74,13 @@ class CiamsAxios extends AbstractApiAxios<ResultData<any>> {
   }
 
   private retryRequest({ data }, { config }) {
-    tokenUtil.saveToken(data)
+    TokenUtil.saveToken(data)
     config.headers.Authorization = [data.token_type, data.access_token].join(' ')
     return authAxiosInstance.getAxios().request(config)
   }
 
   private getTokenByRefreshToken() {
-    const refresh = tokenUtil.getRefreshToken()
+    const refresh = TokenUtil.getRefreshToken()
     return refreshToken({
       grant_type: 'refresh_token',
       refresh_token: refresh,

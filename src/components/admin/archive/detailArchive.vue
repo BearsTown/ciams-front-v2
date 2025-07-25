@@ -72,7 +72,7 @@
         style="width: 100%; margin: 5px"
       >
         <div class="addFileList" v-if="filterList(files)">
-          <span class="file" @click="commonUtil.downloadFile(files.id, files.orgName)">
+          <span class="file" @click="CommonUtil.downloadFile(files.id, files.orgName)">
             <el-icon>
               <Download />
             </el-icon>
@@ -89,7 +89,7 @@
               height="21"
               viewBox="0 0 20 21"
               fill="none"
-              @click="commonUtil.downloadFile(files.id, files.orgName)"
+              @click="CommonUtil.downloadFile(files.id, files.orgName)"
               style="cursor: pointer"
             >
               <path
@@ -127,14 +127,12 @@
   import { onMounted, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { useArchiveStore } from '@/stores/admin/archive'
-  import { storeToRefs } from 'pinia'
-  import { reactive } from 'vue'
   import { API_INFO_CIAMS } from '@/config/config'
   import { File } from '@/api/app/file/model'
   import Archive from '@/api/admin/archive/model'
+  import CommonUtil from '@/utils/commonUtil'
+
   const archiveStore = useArchiveStore()
-  import sanitizeHtml from 'sanitize-html'
-  import commonUtil from '@/utils/commonUtil'
 
   const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/down/'
 
@@ -151,7 +149,7 @@
   }
 
   function deleteArchive() {
-    commonUtil
+    CommonUtil
       .confirm('게시글을 삭제 하시겠습니까?', '게시글 삭제')
       .then(() => {
         if (archiveId) {
@@ -160,7 +158,7 @@
         }
       })
       .then(() => {
-        commonUtil.successMessage('삭제 되었습니다.')
+        CommonUtil.successMessage('삭제 되었습니다.')
         goList()
       })
   }
@@ -172,7 +170,7 @@
   function modifyHidden() {
     let hiddenTxt = content.value.hidden ? '공개' : '비공개'
 
-    commonUtil
+    CommonUtil
       .confirm(`게시글을 ${hiddenTxt} 하시겠습니까?`, `게시글 ${hiddenTxt}`)
       .then(() => {
         if (archiveId) {
@@ -184,12 +182,12 @@
         }
       })
       .then(() => {
-        commonUtil.successMessage(`${hiddenTxt} 되었습니다.`)
+        CommonUtil.successMessage(`${hiddenTxt} 되었습니다.`)
         goList()
       })
       .catch((err) => {
         window.console.log(err)
-        commonUtil.errorMessage(`${hiddenTxt} 중에 오류가 발생했습니다.`)
+        CommonUtil.errorMessage(`${hiddenTxt} 중에 오류가 발생했습니다.`)
       })
   }
 

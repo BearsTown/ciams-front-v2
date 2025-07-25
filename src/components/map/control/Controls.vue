@@ -41,7 +41,7 @@
 
   import { Point } from 'ol/geom'
   import Feature from 'ol/Feature'
-  import { GeoJSON } from 'ol/format'
+  import { GeoJSON, WFS } from 'ol/format'
   import { always } from 'ol/events/condition'
   import { intersects } from 'ol/format/filter'
   import { DrawEvent } from 'ol/interaction/Draw'
@@ -52,7 +52,6 @@
   import UitDragZoomInteraction from '@uitgis/ol-ugis-test/interaction/uitDragZoom'
   import UitDrawInteraction from '@uitgis/ol-ugis-test/interaction/uitDraw'
   import { locationInfoStyle, measureAreaStyle, measureLineStyle } from '@/js/map/mapStyle'
-  import { fetchFeatures } from '@uitgis/ol-ugis-test/api/feature'
 
   import { API_INFO_MAPSTUDIO } from '@/config/config'
   import { MapInteractionType, MapType } from '@/enums/mapEnum'
@@ -64,6 +63,8 @@
 
   import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
+  import { urlWithParams } from '@uitgis/ol-ugis-test/util'
+  import CommonUtil from '@/utils/commonUtil'
 
   const globalStore = useGlobalStore()
 
@@ -253,18 +254,33 @@
         olMap!.getView().getProjection().getCode(),
       )
 
-      const res = await fetchFeatures({
-        url: API_INFO_MAPSTUDIO.PREFIX,
-        key: 'AF781CA7-729A-BA0C-C965-E6751C9CE3EA',
-        featureRequestProps: {
-          layers: 'CIAMS_P1_LSMD_CONT_LDREG',
-          filter: filter,
-          srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
+      const res = await fetch(
+        urlWithParams(API_INFO_MAPSTUDIO.PREFIX + '/uwfs', {
+          KEY: 'system',
+        }),
+        {
+          method: 'POST',
+          body: new XMLSerializer().serializeToString(
+            new WFS().writeGetFeature({
+              srsName: mapWrap.value?.getUitMap().getView().getProjection().getCode(),
+              featureNS: 'http://www.opengis.net/wfs',
+              featurePrefix: 'feature',
+              outputFormat: 'application/json',
+              featureTypes: ['CIAMS_LSMD_CONT_LDREG'],
+              filter,
+            }),
+          ),
         },
-      })
+      )
+
       let text = await res.text()
       text = text.replace(/\n/gi, '\\r\n')
       const features = new GeoJSON().readFeatures(text) as Feature[]
+
+      if (CommonUtil.isEmpty(features)) {
+        CommonUtil.errorMessage('필지정보가 존재하지 않습니다.')
+        return false
+      }
 
       mapStore.setSearchAddressFeature(features[0])
 

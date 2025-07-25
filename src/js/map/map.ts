@@ -36,7 +36,6 @@ import Filter from 'ol/format/filter/Filter'
 import { Extent } from 'ol/extent'
 import { Interaction } from 'ol/interaction'
 import { useMapStore } from '@/stores/map/map'
-import commonUtil from '@/utils/commonUtil'
 import CommonUtil from '@/utils/commonUtil'
 // import { useMapConfig } from '@/stores/map/mapConfig'
 import { vWorldAxiosInstance } from '@/api/vWorld'
@@ -155,7 +154,7 @@ const mapUtil = {
           })
           .catch((error) => {
             console.log(error)
-            // commonUtil.errorMessage('error' + error)
+            // CommonUtil.errorMessage('error' + error)
           })
           .finally(() => {
             globalStore.loadingOff()
@@ -175,7 +174,7 @@ const mapUtil = {
           })
           .catch((error) => {
             console.log(error)
-            // commonUtil.errorMessage('error' + error)
+            // CommonUtil.errorMessage('error' + error)
           })
           .finally(() => {
             globalStore.loadingOff()
@@ -222,7 +221,7 @@ const mapUtil = {
         return result
       })
       .catch((error) => {
-        commonUtil.errorMessage('데이터를 조회해올 수 없습니다.')
+        CommonUtil.errorMessage('데이터를 조회해올 수 없습니다.')
       })
   },
   /**
@@ -266,7 +265,7 @@ const mapUtil = {
       await this.delayGet(keyLayer, 'layer', 300)
     } catch (error) {
       console.log(error)
-      // commonUtil.errorMessage(error)
+      // CommonUtil.errorMessage(error)
       return
     }
     const currentLayer = keyLayer.layer
@@ -304,7 +303,7 @@ const mapUtil = {
       //     gmpStore.setRightKrasDetailItem(json)
       //   })
       //   .catch((error) => {
-      //     // commonUtil.errorMessage('error' + error)
+      //     // CommonUtil.errorMessage('error' + error)
       //   })
       //   .finally(() => {
       //     gmpStore.setIsLoadingKrasDetailItem(false)
@@ -313,7 +312,7 @@ const mapUtil = {
       gmpStore.setRightDataDetail(true, coord)
       return map.getView().getCenter()
     } catch (error) {
-      commonUtil.errorMessage('해당 구역에 필지정보가 존재하지 않습니다.')
+      CommonUtil.errorMessage('해당 구역에 필지정보가 존재하지 않습니다.')
     }
   },
   async drawHighlight(
@@ -360,8 +359,8 @@ const mapUtil = {
           draw?.un('drawend', l)
         })
       }
-      // const { r, g, b } = commonUtil.hex2rgb(color)
-      // const fillColor = commonUtil.rgbaToHex(r, g, b, 1)
+      // const { r, g, b } = CommonUtil.hex2rgb(color)
+      // const fillColor = CommonUtil.rgbaToHex(r, g, b, 1)
       const drawEndEvt = (e: DrawEvent) => {
         if (!e.feature.getGeometry()) return
         mapApi
@@ -373,7 +372,7 @@ const mapUtil = {
               LayerType.DRAWINFO,
             )?.getSource() as VectorSource
             if (features.length > 7) {
-              commonUtil.errorMessage(`7필지 이하로 선택해주세요`)
+              CommonUtil.errorMessage(`7필지 이하로 선택해주세요`)
               drawSource.clear()
               return
             }
@@ -397,10 +396,10 @@ const mapUtil = {
             }
           })
           .catch(() => {
-            commonUtil.errorMessage('필지생성중에 오류가 발생했습니다.')
+            CommonUtil.errorMessage('필지생성중에 오류가 발생했습니다.')
           })
       }
-      commonUtil.successMessage('esc를 누르면 종료됩니다.')
+      CommonUtil.successMessage('esc를 누르면 종료됩니다.')
       draw?.on('drawend', drawEndEvt)
       const evtHandler = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
@@ -466,10 +465,10 @@ const mapUtil = {
       filterdOptions: equalTo(key, val),
     })
     mapUtil.clearFeatures(currentMap, layerType)
-    // const { r: _r, g: _g, b: _b } = commonUtil.hex2rgb(color)
-    // const { r, g, b } = commonUtil.hex2rgb(repColor)
-    // const repFillColor = commonUtil.rgbaToHex(r, g, b, 0.3)
-    // const fillColor = commonUtil.rgbaToHex(_r, _g, _b, 0.3)
+    // const { r: _r, g: _g, b: _b } = CommonUtil.hex2rgb(color)
+    // const { r, g, b } = CommonUtil.hex2rgb(repColor)
+    // const repFillColor = CommonUtil.rgbaToHex(r, g, b, 0.3)
+    // const fillColor = CommonUtil.rgbaToHex(_r, _g, _b, 0.3)
     list.forEach(async ({ key, val, rep }) => {
       const features = await mapApi.getWFS(createOptions(key, val))
       /**
@@ -636,7 +635,7 @@ const mapUtil = {
     const mapControl = useMapStore()
     const currentMap = mapControl.getCurrentMap()
     if (!currentMap) {
-      commonUtil.errorMessage('지도가 존재하지않습니다.')
+      CommonUtil.errorMessage('지도가 존재하지않습니다.')
       return
     }
     const keyLayerStore = useKeyLayerStore()
@@ -892,7 +891,7 @@ const mapUtil = {
   },
   startRoadView(mapControl?: MapControl) {
     if (mapControl?.isRoadView === false) {
-      commonUtil.errorMessage('로드뷰가 실행되지 않았습니다.')
+      CommonUtil.errorMessage('로드뷰가 실행되지 않았습니다.')
       return false
     }
     const map = mapControl?.getMap()
@@ -1050,7 +1049,7 @@ const mapUtil = {
     if (!layer) return false
     const source = layer.getSource() as TileWMS | undefined
     if (!source) {
-      commonUtil.errorMessage('레이어가 존재하지 않습니다.')
+      CommonUtil.errorMessage('레이어가 존재하지 않습니다.')
       return false
     }
     return source.getParams()
@@ -1060,7 +1059,7 @@ const mapUtil = {
     if (!layer) return false
     const source = layer.getSource() as TileWMS | undefined
     if (!source) {
-      commonUtil.errorMessage('레이어가 존재하지 않습니다.')
+      CommonUtil.errorMessage('레이어가 존재하지 않습니다.')
       return false
     }
     source.updateParams(newParams)
@@ -1084,7 +1083,7 @@ const mapUtil = {
       return source
     } catch (error) {
       console.log(error)
-      // commonUtil.errorMessage(error as string)
+      // CommonUtil.errorMessage(error as string)
     }
   },
 
@@ -1096,7 +1095,7 @@ const mapUtil = {
       return layers[0]
     } catch (error) {
       console.log(error)
-      // commonUtil.errorMessage(error as string)
+      // CommonUtil.errorMessage(error as string)
     }
   },
   setVisibleLayer(layer: Layer, isShow: boolean) {
@@ -1120,7 +1119,7 @@ const mapUtil = {
       map.addLayer(layer)
     } catch (error) {
       console.log(error)
-      // commonUtil.errorMessage(error as string)
+      // CommonUtil.errorMessage(error as string)
     }
   },
   updateImageWmsSource(map: Map, id: string, source: Source) {
@@ -1308,7 +1307,7 @@ const mapUtil = {
     const vectorSource = vectorLayer.getSource() as VectorSource | undefined
     if (!vectorSource) {
       console.log('vectorSource가 존재하지 않습니다.')
-      // commonUtil.errorMessage('레이어가 존재하지 않습니다.')
+      // CommonUtil.errorMessage('레이어가 존재하지 않습니다.')
       return false
     }
     if (keyLayerZidx.zIndex) {
@@ -1349,9 +1348,9 @@ const mapUtil = {
       })
       .catch((err) => {
         if (err.name === 'NoFeature') {
-          commonUtil.errorMessage('해당 지역엔 계획운영 정보가 없습니다.')
+          CommonUtil.errorMessage('해당 지역엔 계획운영 정보가 없습니다.')
         } else {
-          // commonUtil.errorMessage('에러가 발생했습니다.')
+          // CommonUtil.errorMessage('에러가 발생했습니다.')
           console.log(err)
         }
       })

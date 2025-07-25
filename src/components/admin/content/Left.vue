@@ -63,16 +63,13 @@
 <script setup lang="ts">
   import AreaPageList from '@/components/common/ZoneTable/ZonePageList.vue'
   import { onMounted, ref } from 'vue'
-  import { Search } from '@element-plus/icons-vue'
-  import { getPlanArea, getPlanAreaLink } from '@/api/app/plan'
   import { pageObject } from '@/js/common'
-  import { Plan, CiamsPlanAreaLink } from '@/api/app/plan/model'
   import { getCodeSublist } from '@/api/app/common'
 
   const search = ref('')
   const pageObj = pageObject()
   const emits = defineEmits<{
-    (e: 'selectArea', item: Plan.Search.Row): void
+    (e: 'selectArea', any): void
   }>()
   const selectItem = ref('')
   const group1_list = ref<TempCodeList[]>([])
@@ -113,16 +110,16 @@
   }
 
   function searchPlanArea() {
-    getPlanArea({
-      size: 6,
-      pageNo: data.value.page.pageNo,
-      name: search.value,
-    }).then((res) => {
-      if (res) {
-        data.value.page = res.data.page
-        data.value.list = res.data.list
-      }
-    })
+    // getPlanArea({
+    //   size: 6,
+    //   pageNo: data.value.page.pageNo,
+    //   name: search.value,
+    // }).then((res) => {
+    //   if (res) {
+    //     data.value.page = res.data.page
+    //     data.value.list = res.data.list
+    //   }
+    // })
   }
 
   function reset() {

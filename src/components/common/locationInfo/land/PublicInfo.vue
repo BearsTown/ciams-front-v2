@@ -255,10 +255,10 @@
 
   const loaded = ref<boolean>(false)
   const isActive = ref<boolean>(false)
-  // const gmpStore = useGmpssStore()
+
   const globalStore = useGlobalStore()
   const openApiStore = useOpenApiStore()
-  // const { locInfo } = storeToRefs(gmpStore)
+
   const { publicDataInfoItem: detailItem } = storeToRefs(openApiStore)
 
   const props = withDefaults(

@@ -21,14 +21,13 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { ref, onMounted, getCurrentInstance, reactive, ComponentInternalInstance } from 'vue'
+  import { ref } from 'vue'
   import Left from '@/components/admin/content/Left.vue'
   import AreaMain from '@/components/admin/content/area/AreaMain.vue'
-  import { Plan } from '@/api/app/plan/model'
 
-  const item = ref({} as Plan.Search.Row)
+  const item = ref({})
 
-  function selectArea(_item: Plan.Search.Row) {
+  function selectArea(_item) {
     Object.assign(item.value, _item)
   }
 </script>

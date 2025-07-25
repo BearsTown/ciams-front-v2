@@ -75,7 +75,7 @@
 </template>
 <script setup lang="ts">
   import { useCodeStore } from '@/stores/admin/code'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import { storeToRefs } from 'pinia'
   import { ref } from 'vue'
   import draggable from 'vuedraggable'
@@ -101,12 +101,12 @@
     codeStore
       .changeCodePriority()
       .then(() => {
-        commonUtil.successMessage('코드 순서를 수정했습니다.')
+        CommonUtil.successMessage('코드 순서를 수정했습니다.')
         emits('change')
       })
       .catch((err) => {
         console.log(err)
-        commonUtil.errorMessage('코드 정보 수정 중에 오류가 발생했습니다.')
+        CommonUtil.errorMessage('코드 정보 수정 중에 오류가 발생했습니다.')
       })
   }
 </script>

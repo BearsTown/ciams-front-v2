@@ -121,7 +121,7 @@
 
 <script setup lang="ts">
   import { computed, ref, toRefs, watch } from 'vue'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import Config from '@/api/admin/config/model'
   import { cloneDeep } from 'lodash-es'
   import { useAdminConfigStore } from '@/stores/admin/config'
@@ -230,33 +230,33 @@
         let form = cloneDeep(modifyForm.value)
         form.attachFile = newAttachFile.value.file
 
-        commonUtil.confirm(`${typeNm} 하시겠습니까?`, `${typeNm}`).then(() => {
+        CommonUtil.confirm(`${typeNm} 하시겠습니까?`, `${typeNm}`).then(() => {
           if (type.value == 'ADD') {
             useAdminConfigStore()
               .addConfig(form)
               .then(() => {
-                commonUtil.successMessage(`${typeNm}했습니다.`)
+                CommonUtil.successMessage(`${typeNm}했습니다.`)
                 // getList()
                 emits('close-dialog', true)
               })
               .catch((err) => {
                 console.log(err)
                 if (err.response.status === 409) {
-                  commonUtil.errorMessage('중복된 ID값이 존재합니다.')
+                  CommonUtil.errorMessage('중복된 ID값이 존재합니다.')
                 } else {
-                  commonUtil.errorMessage('처리 중 에러가 발생했습니다.')
+                  CommonUtil.errorMessage('처리 중 에러가 발생했습니다.')
                 }
               })
           } else {
             useAdminConfigStore()
               .modifyConfig(form)
               .then(() => {
-                commonUtil.successMessage(`${typeNm}했습니다.`)
+                CommonUtil.successMessage(`${typeNm}했습니다.`)
                 emits('close-dialog', true)
               })
               .catch((err) => {
                 console.log(err)
-                commonUtil.errorMessage('처리 중 에러가 발생했습니다.')
+                CommonUtil.errorMessage('처리 중 에러가 발생했습니다.')
               })
           }
         })
@@ -267,16 +267,16 @@
   }
 
   function deleteConf() {
-    commonUtil.confirm(`삭제 하시겠습니까?`, `삭제`).then(() => {
+    CommonUtil.confirm(`삭제 하시겠습니까?`, `삭제`).then(() => {
       useAdminConfigStore()
         .deleteConfig(props.config.id)
         .then(() => {
-          commonUtil.successMessage(`삭제 했습니다.`)
+          CommonUtil.successMessage(`삭제 했습니다.`)
           emits('close-dialog', true)
         })
         .catch((err) => {
           console.log(err)
-          commonUtil.errorMessage('처리 중 에러가 발생했습니다.')
+          CommonUtil.errorMessage('처리 중 에러가 발생했습니다.')
         })
     })
   }

@@ -64,9 +64,7 @@
 </template>
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
-  import { storeToRefs } from 'pinia'
   import { useCodeStore } from '@/stores/admin/code'
-  import commonUtil from '@/utils/commonUtil'
   // import ConfigTypeDialog from './ConfigTypeDialog.vue'
 
   const codeStore = useCodeStore()
@@ -120,6 +118,6 @@
 
   .seleted {
     font-weight: bold;
-    color: #7AAAD1;
+    color: #7aaad1;
   }
 </style>

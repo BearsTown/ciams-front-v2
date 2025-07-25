@@ -11,7 +11,7 @@ import {
 } from '@/api/auth'
 import router from '@/router'
 import { Token } from '@/api/auth/model'
-import tokenUtil from '@/utils/tokenUtil'
+import TokenUtil from '@/utils/tokenUtil'
 import { getSessionUser } from '@/api/app/user'
 import { getMenu } from '@/api/app/access'
 
@@ -40,7 +40,7 @@ export const useAuthStore = defineStore('authStore', () => {
       grant_type: 'password',
     })
 
-    tokenUtil.saveToken(token)
+    TokenUtil.saveToken(token)
     await checkToken()
   }
 
@@ -48,7 +48,7 @@ export const useAuthStore = defineStore('authStore', () => {
    * access_token 유효성 체크
    */
   async function checkToken() {
-    const access_token = tokenUtil.getAccessToken()
+    const access_token = TokenUtil.getAccessToken()
     if (!access_token) {
       logInErrorStatus('notLoggedIn')
     } else {
@@ -76,7 +76,7 @@ export const useAuthStore = defineStore('authStore', () => {
    * refresh token을 이용하여 token 재발급
    */
   async function refreshToken() {
-    const refresh_token = tokenUtil.getRefreshToken()
+    const refresh_token = TokenUtil.getRefreshToken()
     if (!refresh_token) {
       logInErrorStatus('notLoggedIn')
     } else {
@@ -86,7 +86,7 @@ export const useAuthStore = defineStore('authStore', () => {
           refresh_token: refresh_token,
         })
 
-        tokenUtil.saveToken(data)
+        TokenUtil.saveToken(data)
 
         if (isLoggedIn.value) {
           await logInSuccess()
@@ -123,7 +123,7 @@ export const useAuthStore = defineStore('authStore', () => {
   }
 
   function logOut(type: 'sessionExpired' | 'loginOutAction') {
-    tokenUtil.removeToken()
+    TokenUtil.removeToken()
     isLoggedIn.value = false
     router.push('/')
     window.localStorage.setItem('isLogOutAction', type)

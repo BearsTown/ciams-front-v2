@@ -67,7 +67,6 @@
   import { MapWrapper } from '@/js/mapWrapper'
   import { BaseMap, BaseMapImg, BaseMapOption, MapType } from '@/enums/mapEnum'
 
-  import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
 
   const props = withDefaults(
@@ -163,8 +162,6 @@
       checked: false,
     },
   })
-
-  const globalStore = useGlobalStore()
 
   let uitMap: UitMap
   let uitBaseMap: UitBaseMap
@@ -266,8 +263,6 @@
 
     changeBaseMapOption(activeOptionKey.value)
   })
-
-  defineExpose({})
 </script>
 
 <style scoped lang="scss">

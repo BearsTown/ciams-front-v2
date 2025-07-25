@@ -59,10 +59,10 @@
 </template>
 
 <script setup lang="ts">
-  import tokenUtil from '@/utils/tokenUtil'
+  import TokenUtil from '@/utils/tokenUtil'
 
   function linkMaple() {
-    const accessToken = tokenUtil.getAccessToken()
+    const accessToken = TokenUtil.getAccessToken()
     const url = window.location.origin + '/ciams'
     const mapleUrl = `maple://${url}/oauth/check_token?${accessToken}`
 

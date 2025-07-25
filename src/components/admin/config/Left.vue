@@ -58,7 +58,6 @@
   import { onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
   import { useAdminConfigStore } from '@/stores/admin/config'
-  import commonUtil from '@/utils/commonUtil'
   import ConfigTypeDialog from './ConfigTypeDialog.vue'
 
   const configStore = useAdminConfigStore()
@@ -108,6 +107,6 @@
 
   .seleted {
     font-weight: bold;
-    color: #7AAAD1;
+    color: #7aaad1;
   }
 </style>

@@ -88,7 +88,7 @@
   import PlanContent from '@/api/app/planContent/model'
   import { cloneDeep } from 'lodash-es'
   import { API_INFO_CIAMS } from '@/config/config'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
 
   const props = withDefaults(
     defineProps<{
@@ -183,29 +183,29 @@
     formName.validate((valid, fields) => {
       let typeNm = type.value == 'ADD' ? '추가' : '수정'
       if (valid) {
-        commonUtil.confirm(`${typeNm} 하시겠습니까?`, `${typeNm}`).then(() => {
+        CommonUtil.confirm(`${typeNm} 하시겠습니까?`, `${typeNm}`).then(() => {
           if (type.value == 'ADD') {
             planContentAdd('planContent', modifyForm.value)
               .then(() => {
-                commonUtil.successMessage(`${typeNm}했습니다.`)
+                CommonUtil.successMessage(`${typeNm}했습니다.`)
                 modifyFormDialog.value = false
                 // getList()
                 emits('close-dialog', true)
               })
               .catch((err) => {
                 console.log(err)
-                commonUtil.errorMessage('오류가 발생했습니다.')
+                CommonUtil.errorMessage('오류가 발생했습니다.')
               })
           } else {
             planContentModify('planContent', modifyForm.value)
               .then(() => {
-                commonUtil.successMessage(`${typeNm}했습니다.`)
+                CommonUtil.successMessage(`${typeNm}했습니다.`)
                 modifyFormDialog.value = false
                 emits('close-dialog', true)
               })
               .catch((err) => {
                 console.log(err)
-                commonUtil.errorMessage('오류가 발생했습니다.')
+                CommonUtil.errorMessage('오류가 발생했습니다.')
               })
           }
         })
@@ -224,18 +224,18 @@
       if (!f.type.match('image/.*')) {
         isFileExtCheck = false
       }
-      if (commonUtil.checkFileSizeValid(f.size, 'MB', 100)) {
+      if (CommonUtil.checkFileSizeValid(f.size, 'MB', 100)) {
         isFileSizeCheck = false
       }
     })
 
     if (!isFileSizeCheck) {
-      commonUtil.errorMessage('첨부파일은 최대 100MB까지 업로드 가능합니다')
+      CommonUtil.errorMessage('첨부파일은 최대 100MB까지 업로드 가능합니다')
       return false
     }
 
     if (!isFileExtCheck) {
-      commonUtil.errorMessage('이미지 확장자만 업로드 가능합니다.')
+      CommonUtil.errorMessage('이미지 확장자만 업로드 가능합니다.')
       return false
     }
 

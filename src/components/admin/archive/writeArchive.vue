@@ -132,7 +132,7 @@
 
   import { onMounted, ref } from 'vue'
   import { reactive } from 'vue'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import { API_INFO_CIAMS } from '@/config/config'
   import { useArchiveStore } from '@/stores/admin/archive'
   import { storeToRefs } from 'pinia'
@@ -197,7 +197,7 @@
     })
 
     if (!isFileExtCheck) {
-      commonUtil.errorMessage('이미지 확장자만 업로드 가능합니다.')
+      CommonUtil.errorMessage('이미지 확장자만 업로드 가능합니다.')
       return false
     } */
 
@@ -242,7 +242,7 @@
       let typeNm = !archiveId ? '추가' : '수정'
 
       if (valid) {
-        commonUtil.confirm(`${typeNm} 하시겠습니까?`, `${typeNm}`).then(() => {
+        CommonUtil.confirm(`${typeNm} 하시겠습니까?`, `${typeNm}`).then(() => {
           let data = cloneDeep(content)
           data.contents = editorData.value
           attachFiles.value.forEach((obj) => data.attachFiles.push(obj.file))
@@ -252,23 +252,23 @@
             archiveStore
               .addArchive(data)
               .then((res) => {
-                commonUtil.successMessage(`${typeNm}했습니다.`)
+                CommonUtil.successMessage(`${typeNm}했습니다.`)
                 router.push(`/admin/archive/${res.archiveId}`)
               })
               .catch((err) => {
                 console.log(err)
-                commonUtil.errorMessage('오류가 발생했습니다.')
+                CommonUtil.errorMessage('오류가 발생했습니다.')
               })
           } else {
             archiveStore
               .modifyArchive(data)
               .then((res) => {
-                commonUtil.successMessage(`${typeNm}했습니다.`)
+                CommonUtil.successMessage(`${typeNm}했습니다.`)
                 router.push(`/admin/archive/${res.archiveId}`)
               })
               .catch((err) => {
                 console.log(err)
-                commonUtil.errorMessage('오류가 발생했습니다.')
+                CommonUtil.errorMessage('오류가 발생했습니다.')
               })
           }
         })

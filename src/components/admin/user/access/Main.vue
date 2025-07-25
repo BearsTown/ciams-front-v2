@@ -142,7 +142,7 @@
 </template>
 <script setup lang="ts">
   import { onMounted, ref, watch, onActivated } from 'vue'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import AccessService from '@/api/admin/access'
   import CodeService from '@/api/admin/code'
   import UserService from '@/api/admin/user'
@@ -206,11 +206,11 @@
       .then((res) => {
         selectUserList.value = res.data
 
-        commonUtil.successMessage('추가 되었습니다.')
+        CommonUtil.successMessage('추가 되었습니다.')
       })
       .catch((err) => {
         console.log(err)
-        commonUtil.errorMessage('추가 중 오류가 발생되었습니다.')
+        CommonUtil.errorMessage('추가 중 오류가 발생되었습니다.')
       })
       .finally(() => (dialogVisible.value = false))
   }
@@ -227,10 +227,10 @@
       return a.accessMenuCode == form.value.menuCode
     })
     if (index > -1) {
-      commonUtil.errorMessage('이미 추가된 메뉴입니다.')
+      CommonUtil.errorMessage('이미 추가된 메뉴입니다.')
       return
     } else if (!form.value.menuCode) {
-      commonUtil.errorMessage('선택된 메뉴가 없습니다.')
+      CommonUtil.errorMessage('선택된 메뉴가 없습니다.')
       return
     }
 
@@ -245,11 +245,11 @@
           return a.accessMenuCode == form.value.menuCode
         })
         let codeName = obj.accessMenuCodeName
-        commonUtil.successMessage(codeName + ' 메뉴가 추가 되었습니다.')
+        CommonUtil.successMessage(codeName + ' 메뉴가 추가 되었습니다.')
       })
       .catch((err) => {
         console.log(err)
-        commonUtil.errorMessage('추가 중 오류가 발생되었습니다.')
+        CommonUtil.errorMessage('추가 중 오류가 발생되었습니다.')
       })
   }
 
@@ -268,11 +268,11 @@
         .then((res) => {
           selectMenuList.value = res.data
 
-          commonUtil.successMessage(row.accessMenuCodeName + ' 메뉴가 삭제 되었습니다.')
+          CommonUtil.successMessage(row.accessMenuCodeName + ' 메뉴가 삭제 되었습니다.')
         })
         .catch((err) => {
           console.log(err)
-          commonUtil.errorMessage('삭제 중 오류가 발생되었습니다.')
+          CommonUtil.errorMessage('삭제 중 오류가 발생되었습니다.')
         })
     } else {
       AccessService.delete('user', {
@@ -282,11 +282,11 @@
         .then((res) => {
           selectUserList.value = res.data
 
-          commonUtil.successMessage('삭제 되었습니다.')
+          CommonUtil.successMessage('삭제 되었습니다.')
         })
         .catch((err) => {
           console.log(err)
-          commonUtil.errorMessage('삭제 중 오류가 발생되었습니다.')
+          CommonUtil.errorMessage('삭제 중 오류가 발생되었습니다.')
         })
     }
   }

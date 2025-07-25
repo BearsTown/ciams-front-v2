@@ -56,7 +56,6 @@
 <script setup lang="ts">
   import { useBoolean } from '@/hooks/useBoolean'
   import { useAuthStore } from '@/stores/auth'
-  import commonUtil from '@/utils/commonUtil'
   import { storeToRefs } from 'pinia'
   import { onMounted, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'

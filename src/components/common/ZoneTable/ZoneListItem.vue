@@ -18,10 +18,6 @@
 
   import { CiamsZoneDTO } from '@/api/app/zone/model'
 
-  import { useGlobalStore } from '@/stores/app'
-
-  const globalStore = useGlobalStore()
-
   const props = withDefaults(
     defineProps<{
       isActive?: boolean

@@ -21,7 +21,8 @@
 
 .customTable th {
   font-weight: 600;
-  color: #424242;
+  /*color: #424242;*/
+  color: #909399;
 }
 
 .customTable td {
@@ -41,7 +42,8 @@
 
 .customTable thead th,
 .customTable tbody th {
-  background: #f4f4f4;
+  /*background: #f4f4f4;*/
+  background: var(--el-fill-color-light);
 }
 
 .customTable th:not(:first-child),

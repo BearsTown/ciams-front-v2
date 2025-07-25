@@ -39,7 +39,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import archiveListTable from './archiveListTable.vue'
 
   const router = useRouter()
@@ -77,7 +77,7 @@
   //숨김
   function modifyArchives() {
     if (!selectedArchive.value.length) {
-      commonUtil.errorMessage('선택된 게시물이 없습니다.')
+      CommonUtil.errorMessage('선택된 게시물이 없습니다.')
     } else {
       emits('modifyArchives', selectedArchive.value, hidden.value)
       hiddenVisible.value = false
@@ -86,7 +86,7 @@
 
   function deleteArchiveAll() {
     if (!selectedArchive.value.length) {
-      commonUtil.errorMessage('선택된 게시물이 없습니다.')
+      CommonUtil.errorMessage('선택된 게시물이 없습니다.')
     } else {
       emits('deleteArchiveAll', selectedArchive.value)
     }

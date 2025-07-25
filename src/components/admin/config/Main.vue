@@ -164,7 +164,7 @@
   import { onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
   import { useAdminConfigStore } from '@/stores/admin/config'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import ConfigDialog from './ConfigDialog.vue'
   import ServiceCheckDialog from './ServiceCheckDialog.vue'
   const configStore = useAdminConfigStore()
@@ -233,7 +233,7 @@
       })
       .catch((err) => {
         console.log(err)
-        commonUtil.errorMessage('오류가 발생했습니다.')
+        CommonUtil.errorMessage('오류가 발생했습니다.')
       })
       .finally(() => {
         serviceDialogVisible.value = true

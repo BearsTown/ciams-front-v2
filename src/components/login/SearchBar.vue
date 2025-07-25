@@ -118,13 +118,12 @@
   import { useMapStore } from '@/stores/map/map'
   import { storeToRefs } from 'pinia'
   import { useAuthStore } from '@/stores/auth'
-  import commonUtil from '@/utils/commonUtil'
   import CommonUtil from '@/utils/commonUtil'
   // import { useMapConfig } from '@/stores/map/mapConfig'
   // import { usePlanAreaStore } from '@/stores/app/operation/planArea'
   import { useRouter } from 'vue-router'
 
-  import tokenUtil from '@/utils/tokenUtil'
+  import TokenUtil from '@/utils/tokenUtil'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   // import { useConfigStore } from '@/stores/config/config'
   import { MenuType } from '@/router'
@@ -264,8 +263,8 @@
     point: PointXY
     address: { data: string }
   }) => {
-    if (!tokenUtil.getAccessToken()) {
-      commonUtil.errorMessage('사용자 로그인이 필요합니다.')
+    if (!TokenUtil.getAccessToken()) {
+      CommonUtil.errorMessage('사용자 로그인이 필요합니다.')
       return false
     }
 
@@ -276,12 +275,12 @@
       // searchMapStore.setCurrentMapCoord(coord)
       // router.push({ name: zoneEstablishCheck ? 'Menu-1' : 'Menu-2' })
 
-      const mapStoure = useMapStore('Map-2')
+      const mapStoure = useMapStore('Map-Classify')
       mapStoure.setLocParams(params)
       // router.push({ name: 'Menu-2-Sub-4', query: { coord }, })
-      router.push({ name: 'Menu-2-Sub-4' })
+      router.push({ name: 'classify/comprehensive' })
     } else {
-      commonUtil.errorMessage('메뉴 접근 권한이 필요합니다.')
+      CommonUtil.errorMessage('메뉴 접근 권한이 필요합니다.')
       return false
     }
   }
@@ -297,7 +296,7 @@
 
       router.push({ name: 'operation' })
     } else {
-      commonUtil.errorMessage('메뉴 접근 권한이 필요합니다.')
+      CommonUtil.errorMessage('메뉴 접근 권한이 필요합니다.')
       return false
     }
   }
@@ -347,7 +346,7 @@
 
   const search = (_searchType?: string) => {
     if (!regType.test(keyword.value)) {
-      commonUtil.errorMessage('한글,숫자,특수문자(-)만 입력 가능 합니다.')
+      CommonUtil.errorMessage('한글,숫자,특수문자(-)만 입력 가능 합니다.')
       return
     }
 

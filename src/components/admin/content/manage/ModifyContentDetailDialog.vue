@@ -146,7 +146,7 @@
   import { planContentAdd, planContentModify } from '@/api/app/planContent'
   import PlanContent from '@/api/app/planContent/model'
   import { cloneDeep } from 'lodash-es'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import { API_INFO_CIAMS } from '@/config/config'
   const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/down/'
 
@@ -237,38 +237,38 @@
     // }
 
     if (modifyForm.value.detailList.length < 1) {
-      commonUtil.errorMessage('최소 1개이상의 상세정보 입력이 필요합니다.')
+      CommonUtil.errorMessage('최소 1개이상의 상세정보 입력이 필요합니다.')
 
       return false
     }
     formName.validate((valid, fields) => {
       let typeNm = type.value == 'ADD' ? '추가' : '수정'
       if (valid) {
-        commonUtil.confirm(`${typeNm} 하시겠습니까?`, `${typeNm}`).then(() => {
+        CommonUtil.confirm(`${typeNm} 하시겠습니까?`, `${typeNm}`).then(() => {
           let params = makeFormData(cloneDeep(modifyForm.value))
 
           if (type.value == 'ADD') {
             planContentAdd(params)
               .then(() => {
-                commonUtil.successMessage(`${typeNm}했습니다.`)
+                CommonUtil.successMessage(`${typeNm}했습니다.`)
                 modifyFormDialog.value = false
                 // getList()
                 emits('close-dialog', true)
               })
               .catch((err) => {
                 console.log(err)
-                commonUtil.errorMessage('오류가 발생했습니다.')
+                CommonUtil.errorMessage('오류가 발생했습니다.')
               })
           } else {
             planContentModify(params)
               .then(() => {
-                commonUtil.successMessage(`${typeNm}했습니다.`)
+                CommonUtil.successMessage(`${typeNm}했습니다.`)
                 modifyFormDialog.value = false
                 emits('close-dialog', true)
               })
               .catch((err) => {
                 console.log(err)
-                commonUtil.errorMessage('오류가 발생했습니다.')
+                CommonUtil.errorMessage('오류가 발생했습니다.')
               })
           }
         })
@@ -280,7 +280,7 @@
 
   function addContent() {
     if (modifyForm.value.detailList && modifyForm.value.detailList.length >= 10) {
-      commonUtil.errorMessage('최대 10개까지만 추가 가능합니다.')
+      CommonUtil.errorMessage('최대 10개까지만 추가 가능합니다.')
       return false
     }
 
@@ -333,18 +333,18 @@
       if (!f.type.match('image/.*')) {
         isFileExtCheck = false
       }
-      if (commonUtil.checkFileSizeValid(f.size, 'MB', 100)) {
+      if (CommonUtil.checkFileSizeValid(f.size, 'MB', 100)) {
         isFileSizeCheck = false
       }
     })
 
     if (!isFileSizeCheck) {
-      commonUtil.errorMessage('첨부파일은 최대 100MB까지 업로드 가능합니다')
+      CommonUtil.errorMessage('첨부파일은 최대 100MB까지 업로드 가능합니다')
       return false
     }
 
     if (!isFileExtCheck) {
-      commonUtil.errorMessage('이미지 확장자만 업로드 가능합니다.')
+      CommonUtil.errorMessage('이미지 확장자만 업로드 가능합니다.')
       return false
     }
 

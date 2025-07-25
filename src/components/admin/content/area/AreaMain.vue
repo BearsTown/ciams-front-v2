@@ -15,16 +15,15 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { onMounted, watch, ref, toRef } from 'vue'
+  import { ref, watch } from 'vue'
   import ContentManage from '@/components/admin/content/area/ContentManage.vue'
   import { TabsPaneContext } from 'element-plus'
-  import { Plan } from '@/api/app/plan/model'
 
   const props = withDefaults(
     defineProps<{
       // optionLinkVers: { ver: string; planContentLinkId: string; useYn: 'Y' | 'N' }[]
       // planAreaId: string
-      item: Plan.Search.Row
+      item: any
     }>(),
     {
       // optionLinkVers: () => [],

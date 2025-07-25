@@ -95,7 +95,7 @@
   import ModifyContentDialog from './ModifyContentDialog.vue'
   import ModifyContentDetailDialog from './ModifyContentDetailDialog.vue'
   import { API_INFO_CIAMS } from '@/config/config'
-  import commonUtil from '@/utils/commonUtil'
+  import CommonUtil from '@/utils/commonUtil'
   import CustomLoading from '@/components/CustomLoading.vue'
 
   const props = withDefaults(
@@ -138,20 +138,20 @@
   }
 
   function delContent(item: PlanContent.PlanContentModel) {
-    commonUtil.confirm('삭제하시겠습니까?', '삭제').then(() => {
+    CommonUtil.confirm('삭제하시겠습니까?', '삭제').then(() => {
       if (item.planContentId) {
         planContentLinkSelect({ planContentId: item.planContentId }).then((res) => {
           if (res.data.length > 0) {
-            commonUtil.errorMessage(`이미 추가된 컨턴츠 구역이 존재 합니다. 확인 후 삭제하십시오.`)
+            CommonUtil.errorMessage(`이미 추가된 컨턴츠 구역이 존재 합니다. 확인 후 삭제하십시오.`)
           } else {
             planContentDelete('planContent', item.planContentId)
               .then(() => {
-                commonUtil.successMessage(`삭제되었습니다.`)
+                CommonUtil.successMessage(`삭제되었습니다.`)
                 getList()
               })
               .catch((err) => {
                 console.log(err)
-                commonUtil.errorMessage('오류가 발생했습니다.')
+                CommonUtil.errorMessage('오류가 발생했습니다.')
               })
           }
         })
@@ -160,18 +160,18 @@
   }
 
   function delAllContent(item: PlanContent.PlanContentModel) {
-    commonUtil
+    CommonUtil
       .confirm('삭제하시겠습니까?<br>(이미 추가된 구역별 컨텐츠도 삭제됩니다 )', '삭제', true)
       .then(() => {
         if (item.planContentId) {
           planContentDelete('all', item.planContentId)
             .then(() => {
-              commonUtil.successMessage('삭제되었습니다')
+              CommonUtil.successMessage('삭제되었습니다')
               getList()
             })
             .catch((err) => {
               console.log(err)
-              commonUtil.errorMessage('오류가 발생했습니다.')
+              CommonUtil.errorMessage('오류가 발생했습니다.')
             })
         }
       })
@@ -200,19 +200,19 @@
   }
 
   function addAllContent(item: PlanContent.PlanContentModel) {
-    commonUtil
+    CommonUtil
       .confirm('전체 구역에 추가 하시겠습니까?<br>(이미 추가된 구역은 제외됩니다. )', '추가', true)
       .then(() => {
         if (item.planContentId) {
           loading.value = true
           planContentLinkAddArea(item.planContentId)
             .then(() => {
-              commonUtil.successMessage('추가되었습니다')
+              CommonUtil.successMessage('추가되었습니다')
               getList()
             })
             .catch((err) => {
               console.log(err)
-              commonUtil.errorMessage('오류가 발생했습니다.')
+              CommonUtil.errorMessage('오류가 발생했습니다.')
             })
             .finally(() => {
               loading.value = false

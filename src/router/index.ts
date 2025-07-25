@@ -1,11 +1,12 @@
+import { storeToRefs } from 'pinia'
 import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
-import { useGlobalStore } from '@/stores/app/index.js'
+import TokenUtil from '@/utils/tokenUtil'
+import CommonUtil from '@/utils/commonUtil'
+
 import { useAuthStore } from '@/stores/auth.js'
-import tokenUtil from '@/utils/tokenUtil'
-import commonUtil from '@/utils/commonUtil'
-import { storeToRefs } from 'pinia'
+import { useGlobalStore } from '@/stores/app/index.js'
 
 import menu1Icon from '@/assets/svg/menu/menu-1.svg'
 import menu2Icon from '@/assets/svg/menu/menu-2.svg'
@@ -15,17 +16,15 @@ import menu4Icon from '@/assets/svg/menu/menu-4.svg'
 export type MenuType = 'Menu-1' | 'Menu-2' | 'Menu-3' | 'Menu-4'
 
 export const RouteName = {
-  // 'Menu-1': 'Menu-1',
-  'Menu-1-Sub-1': 'Menu-1-Sub-1',
-  'Menu-1-Sub-2': 'Menu-1-Sub-2',
-  // 'Menu-1-Sub-3': 'Menu-1-Sub-3',
-  'Menu-2-Sub-1': 'Menu-2-Sub-1',
-  'Menu-2-Sub-2': 'Menu-2-Sub-2',
-  'Menu-2-Sub-3': 'Menu-2-Sub-3',
-  'Menu-2-Sub-4': 'Menu-2-Sub-4',
-  'Menu-3-Sub-1': 'Menu-3-Sub-1',
-  'Menu-3-Sub-2': 'Menu-3-Sub-2',
-  'Menu-3-Sub-3': 'Menu-3-Sub-3',
+  'basic/loc': 'basic/loc',
+  'basic/urban': 'basic/urban',
+  'classify/ita': 'classify/ita',
+  'classify/regional': 'classify/regional',
+  'classify/management': 'classify/management',
+  'classify/comprehensive': 'classify/comprehensive',
+  'plan/concept': 'plan/concept',
+  'plan/sector': 'plan/sector',
+  'plan/improvement': 'plan/improvement',
   'Menu-4': 'userArchive',
 } as const
 
@@ -49,24 +48,24 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'app',
-    redirect: '/menu-1',
+    redirect: '/basic',
     meta: {
       group: 'MAIN_MENU',
     },
     component: () => import('@/views/app'),
     children: [
       {
-        path: '/menu-1',
+        path: '/basic',
         name: 'Menu-1',
-        redirect: '/menu-1/sub-1',
+        redirect: '/basic/loc',
         meta: {
           title: '도시공업지역<br/>기초현황',
           icon: menu1Icon,
         },
         children: [
           {
-            path: 'sub-1',
-            name: 'Menu-1-Sub-1',
+            path: 'loc',
+            name: 'basic/loc',
             meta: {
               title: '김천시<br/>현황',
               layout: {
@@ -87,13 +86,13 @@ const routes: RouteRecordRaw[] = [
               },
             },
             components: {
-              left: () => import('@/views/app/menu-1/sub-1/left'),
-              panel: () => import('@/views/app/menu-1/sub-1/panel'),
+              left: () => import('@/views/app/basic/loc/left'),
+              panel: () => import('@/views/app/basic/loc/panel'),
             },
           },
           {
-            path: 'sub-2',
-            name: 'Menu-1-Sub-2',
+            path: 'urban',
+            name: 'basic/urban',
             meta: {
               title: '도시공업<br/>지역현황',
               layout: {
@@ -114,25 +113,25 @@ const routes: RouteRecordRaw[] = [
               },
             },
             components: {
-              left: () => import('@/views/app/menu-1/sub-2/left'),
-              panel: () => import('@/views/app/menu-1/sub-2/panel'),
+              left: () => import('@/views/app/basic/urban/left'),
+              panel: () => import('@/views/app/basic/urban/panel'),
             },
           },
         ],
       },
       {
-        path: '/menu-2',
+        path: '/classify',
         name: 'Menu-2',
-        redirect: '/menu-2/sub-1',
+        redirect: '/classify/ita',
         meta: {
-          mapType: 'Map-2',
+          mapType: 'Map-Classify',
           title: '도시공업지역<br/>유형화분석',
           icon: menu2Icon,
         },
         children: [
           {
-            path: 'sub-1',
-            name: 'Menu-2-Sub-1',
+            path: 'ita',
+            name: 'classify/ita',
             meta: {
               title: '산업기반<br/>분석',
               layout: {
@@ -157,16 +156,16 @@ const routes: RouteRecordRaw[] = [
               },
             },
             components: {
-              left: () => import('@/views/app/menu-2/sub-1/left'),
-              center: () => import('@/views/app/menu-2/center'),
-              right: () => import('@/views/app/menu-2/sub-1/right'),
-              bottom: () => import('@/views/app/menu-2/sub-1/bottom'),
-              locationInfo: () => import('@/views/app/menu-2/locInfo'),
+              left: () => import('@/views/app/classify-analysis/ita/left'),
+              center: () => import('@/views/app/classify-analysis/center'),
+              right: () => import('@/views/app/classify-analysis/ita/right'),
+              bottom: () => import('@/views/app/classify-analysis/ita/bottom'),
+              locationInfo: () => import('@/views/app/classify-analysis/locInfo'),
             },
           },
           {
-            path: 'sub-2',
-            name: 'Menu-2-Sub-2',
+            path: 'regional',
+            name: 'classify/regional',
             meta: {
               title: '지역여건<br/>분석',
               layout: {
@@ -187,15 +186,15 @@ const routes: RouteRecordRaw[] = [
               },
             },
             components: {
-              left: () => import('@/views/app/menu-2/sub-2/left'),
-              center: () => import('@/views/app/menu-2/center'),
-              right: () => import('@/views/app/menu-2/sub-2/right'),
-              locationInfo: () => import('@/views/app/menu-2/locInfo'),
+              left: () => import('@/views/app/classify-analysis/regional/left'),
+              center: () => import('@/views/app/classify-analysis/center'),
+              right: () => import('@/views/app/classify-analysis/regional/right'),
+              locationInfo: () => import('@/views/app/classify-analysis/locInfo'),
             },
           },
           {
-            path: 'sub-3',
-            name: 'Menu-2-Sub-3',
+            path: 'management',
+            name: 'classify/management',
             meta: {
               title: '관리유형<br/>구분',
               layout: {
@@ -216,15 +215,15 @@ const routes: RouteRecordRaw[] = [
               },
             },
             components: {
-              left: () => import('@/views/app/menu-2/sub-3/left'),
-              center: () => import('@/views/app/menu-2/center'),
-              right: () => import('@/views/app/menu-2/sub-3/right'),
-              locationInfo: () => import('@/views/app/menu-2/locInfo'),
+              left: () => import('@/views/app/classify-analysis/management/left'),
+              center: () => import('@/views/app/classify-analysis/center'),
+              right: () => import('@/views/app/classify-analysis/management/right'),
+              locationInfo: () => import('@/views/app/classify-analysis/locInfo'),
             },
           },
           {
-            path: 'sub-4',
-            name: 'Menu-2-Sub-4',
+            path: 'comprehensive',
+            name: 'classify/comprehensive',
             meta: {
               title: '유형화<br/>종합분석',
               layout: {
@@ -245,30 +244,30 @@ const routes: RouteRecordRaw[] = [
               },
             },
             components: {
-              left: () => import('@/views/app/menu-2/sub-4/left'),
-              center: () => import('@/views/app/menu-2/center'),
-              right: () => import('@/views/app/menu-2/sub-4/right'),
-              locationInfo: () => import('@/views/app/menu-2/locInfo'),
+              left: () => import('@/views/app/classify-analysis/comprehensive/left'),
+              center: () => import('@/views/app/classify-analysis/center'),
+              right: () => import('@/views/app/classify-analysis/comprehensive/right'),
+              locationInfo: () => import('@/views/app/classify-analysis/locInfo'),
             },
           },
         ],
       },
       {
-        path: '/menu-3',
+        path: '/plan',
         name: 'Menu-3',
-        redirect: '/menu-3/sub-1',
+        redirect: '/plan/concept',
         meta: {
-          mapType: 'Map-3-1-1',
+          mapType: 'Map-Concept',
           title: '도시공업지역<br/>기본계획',
           icon: menu3Icon,
         },
         children: [
           {
-            path: 'sub-1',
-            name: 'Menu-3-Sub-1',
+            path: 'concept',
+            name: 'plan/concept',
             meta: {
               title: '기본구상',
-              mapType: 'Map-3-1-1',
+              mapType: 'Map-Concept',
               layout: {
                 left: {
                   visible: true,
@@ -287,18 +286,17 @@ const routes: RouteRecordRaw[] = [
               },
             },
             components: {
-              left: () => import('@/views/app/menu-3/sub-1/left'),
-              center: () => import('@/views/app/menu-3/sub-1/center'),
-              right: () => import('@/views/app/menu-3/sub-1/right'),
-              locationInfo: () => import('@/views/app/menu-3/locInfo'),
+              left: () => import('@/views/app/plan/concept/left'),
+              center: () => import('@/views/app/plan/concept/center'),
+              right: () => import('@/views/app/plan/concept/right'),
+              locationInfo: () => import('@/views/app/plan/locInfo'),
             },
           },
           {
-            path: 'sub-2',
-            name: 'Menu-3-Sub-2',
+            path: 'sector',
+            name: 'plan/sector',
             meta: {
               title: '부문별<br/>계획',
-              mapType: 'Map-3-3-1',
               layout: {
                 left: {
                   visible: true,
@@ -317,13 +315,13 @@ const routes: RouteRecordRaw[] = [
               },
             },
             components: {
-              left: () => import('@/views/app/menu-3/sub-2/left'),
-              panel: () => import('@/views/app/menu-3/sub-2/panel'),
+              left: () => import('@/views/app/plan/sector/left'),
+              panel: () => import('@/views/app/plan/sector/panel'),
             },
           },
           {
-            path: 'sub-3',
-            name: 'Menu-3-Sub-3',
+            path: 'improvement',
+            name: 'plan/improvement',
             meta: {
               title: '정비구역<br/>계획',
               layout: {
@@ -344,11 +342,11 @@ const routes: RouteRecordRaw[] = [
               },
             },
             components: {
-              left: () => import('@/views/app/menu-3/sub-3/left'),
-              panel: () => import('@/views/app/menu-3/sub-3/panel'),
-              // center: () => import('@/views/app/menu-3/sub-3/center'),
-              // right: () => import('@/views/app/menu-3/sub-3/right'),
-              // locationInfo: () => import('@/views/app/menu-3/sub-3/locInfo'),
+              left: () => import('@/views/app/plan/Improvement-zone/left'),
+              panel: () => import('@/views/app/plan/Improvement-zone/panel'),
+              // center: () => import('@/views/app/plan/sub-3/center'),
+              // right: () => import('@/views/app/plan/sub-3/right'),
+              // locationInfo: () => import('@/views/app/plan/sub-3/locInfo'),
             },
           },
         ],
@@ -459,7 +457,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
   const whiteList = ['/', '/signUp']
-  const token = tokenUtil.getAccessToken()
+  const token = TokenUtil.getAccessToken()
 
   if (to.meta.mapType) {
     const globalStore = useGlobalStore()
@@ -474,7 +472,7 @@ router.beforeEach((to, from, next) => {
       next()
     } else {
       authStore.logInErrorStatus('notLoggedIn')
-      commonUtil.errorMessage('사용자 로그인이 필요합니다.')
+      CommonUtil.errorMessage('사용자 로그인이 필요합니다.')
     }
   }
 })

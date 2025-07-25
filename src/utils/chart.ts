@@ -1,4 +1,4 @@
-import type { Attribute, Item, RatioOptions } from '@/utils/data.types'
+import type { Attribute, Item, RatioOptions } from '@/types/data'
 
 export function calculateRatios(
   dataList: Item[],
