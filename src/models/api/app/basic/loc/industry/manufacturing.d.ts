@@ -1,15 +1,20 @@
+import { SourceGroupDTO } from '@/api/app/source/model'
+import { CiamsBasicLocDescription } from '@/models/api/app/basic/loc/ciams-basic-loc-description'
+
 export namespace ManufacturingDto {
   namespace Find {
     export interface Params {
+      type: string
       category: string
     }
   }
 
   export interface Info {
-    notes: string[]
     statuses: Status[]
     densities: Density[]
     increases: Increase[]
+    sources: SourceGroupDTO.Find.Result[]
+    descriptions: CiamsBasicLocDescription[]
   }
 
   export interface Density {
@@ -48,6 +53,8 @@ export namespace ManufacturingDto {
     export interface Info {
       statuses: CategoryStatus.Status[]
       categoryGroups: CategoryStatus.CategoryGroup[]
+      sources: SourceGroupDTO.Find.Result[]
+      descriptions: CiamsBasicLocDescription[]
     }
 
     export interface Status {

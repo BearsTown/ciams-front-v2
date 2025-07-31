@@ -8,16 +8,9 @@
       <div class="container">
         <div class="top customScroll">
           <div class="text-wrap">
-            <p>
-              - 지역 내 경제적 파급효과가 큰 선도산업 중 특히 LQ분석 지수가 높은 초기반산업은
-              화학섬유 제조업, 철도장비 제조업, 전구 및 조명장치 제조업, 합성고무 및 플라스틱 물질
-              제조업으로 나타났으며
-            </p>
-            <p>
-              - 앞으로 김천시 지역경제의 중추적 역할을 할 것으로 예상되는 신흥산업에는 특수 목적용
-              기계 제조업, 자동차 차체 및 트레일러 제조업, 구조용 금속제품, 탱크 및 증기발생기
-              제조업 등으로 나타남
-            </p>
+            <template v-for="desc in descriptions" :key="desc.id">
+              <p v-if="desc.description">- {{ desc.description }}</p>
+            </template>
           </div>
         </div>
         <div class="center">
@@ -240,6 +233,7 @@
   import PagePane from '@/components/common/PagePane.vue'
 
   import { ItaDto } from '@/models/api/app/basic/loc/characteristic/ita'
+  import { CiamsBasicLocDescription } from '@/models/api/app/basic/loc/ciams-basic-loc-description'
 
   import { pageObject } from '@/js/common'
 
@@ -252,6 +246,7 @@
 
   const records = ref<ItaDto.Data.Search.Row[]>()
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
+  const descriptions = ref<CiamsBasicLocDescription[]>([])
 
   const getRowStyle = ({ row }: { row: ItaDto.ItaData }) => {
     let color = ''
@@ -307,6 +302,7 @@
     const { data } = await getItaInfo()
 
     sources.value = data?.sources[0]?.sources
+    descriptions.value = data.descriptions
 
     runSearch()
   })

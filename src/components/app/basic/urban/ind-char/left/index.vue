@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-  import { onActivated, onBeforeMount, onMounted, ref } from 'vue'
+  import { onActivated, onBeforeMount, ref } from 'vue'
 
   import { InsideCollapse } from '@/components/common/collapse'
   import DistList from '@/components/common/DistList/DistList.vue'
@@ -49,13 +49,12 @@
 
   import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
 
-  import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
-  import { useBasicUrbanIndCharStore } from '@/stores/app/basic/urban/ind-char'
+  import { useBasicUrbanInstanceStore } from '@/stores/app/basic/urban/common'
 
   const distListRef = ref<InstanceType<typeof DistList>>()
 
-  const basicUrbanIndCharStore = useBasicUrbanIndCharStore()
+  const basicUrbanIndCharStore = useBasicUrbanInstanceStore('Map-Urban-IndChar')
 
   const mapType: MapType = 'Map-Urban-IndChar'
   const mapLayerGroupType: MapLayerGroupType = 'Menu-1-2-4'
@@ -65,9 +64,6 @@
 
   const state = basicUrbanIndCharStore.state
 
-  function load() {}
-
-  // 카레고리 변경
   async function handleSwitchChange(categoryId) {
     await basicUrbanIndCharStore.setActiveCategory(categoryId)
   }
@@ -86,20 +82,14 @@
     distListRef.value?.selectIndex()
   }
 
-  onMounted(async () => {})
-
   onBeforeMount(async () => {
     await basicUrbanIndCharStore.init(3)
-
-    load()
-
     await handleSwitchChange(basicUrbanIndCharStore.state.categories[0].id)
   })
 
   onActivated(() => {
     mapStore.currentMapGroup = 'Menu-1-2-4'
-    //
-    // mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
+
     basicUrbanIndCharStore.mapWrap.value?.setViewLayersVisible(layerGroupName!, true)
   })
 </script>

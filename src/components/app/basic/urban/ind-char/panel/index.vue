@@ -7,7 +7,11 @@
     <template #center>
       <div class="container">
         <div class="top customScroll">
-          <div class="text-wrap">{{ text }}</div>
+          <div class="text-wrap">
+            <template v-for="desc in descriptions" :key="desc.id">
+              <p v-if="desc.description">- {{ desc.description }}</p>
+            </template>
+          </div>
         </div>
 
         <div class="center">
@@ -19,7 +23,7 @@
             </MapWrapperView>
           </div>
           <div class="right">
-            <TabDDetail />
+            <DetailPane :map-type="mapType" />
           </div>
         </div>
       </div>
@@ -28,13 +32,13 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onActivated, onBeforeMount, onMounted, ref, watch } from 'vue'
+  import { onActivated, onBeforeMount, ref, watch } from 'vue'
 
   import Source from '@/components/common/Source.vue'
   import PagePane from '@/components/common/PagePane.vue'
   import Controls from '@/components/map/control/Controls.vue'
   import MapWrapperView from '@/components/map/MapWrapper.vue'
-  import TabDDetail from '@/components/app/basic/urban/ind-char/panel/Tab-D-Detail.vue'
+  import DetailPane from '@/components/app/basic/urban/DetailPane.vue'
 
   import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
 
@@ -50,24 +54,31 @@
   import { MapWrapper } from '@/js/mapWrapper'
   import { API_INFO_MAPSTUDIO } from '@/config/config'
 
+  import { CiamsBasicUrbanDescription } from '@/models/api/app/basic/urban/ciams-basic-urban'
+
   import { getSources } from '@/api/app/source'
-  import { SourceGroupDTO } from '@/api/app/source/model'
+  import { getDataInfo } from '@/api/app/basic/urban/data'
 
   import { useMapStore } from '@/stores/map/map'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import { useBasicUrbanIndCharStore } from '@/stores/app/basic/urban/ind-char'
+  import { useBasicUrbanInstanceStore } from '@/stores/app/basic/urban/common'
+  import { SourceGroupDTO } from '@/api/app/source/model'
+
+  const mapType: MapType = 'Map-Urban-IndChar'
 
   const cmmConfigStore = useCmmConfigStore()
-  const basicUrbanIndCharStore = useBasicUrbanIndCharStore()
+  const basicUrbanIndCharStore = useBasicUrbanInstanceStore(mapType)
 
   const mapConfig = ref<MapWrapperConfig>()
-  const mapType: MapType = 'Map-Urban-IndChar'
   const mapLayerGroupType: MapLayerGroupType = 'Menu-1-2-4'
   const commonLayerType: CommonLayerGroup = 'COMMON_LAYER_GROUP_1-2-4'
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
   const mapStore = useMapStore(mapType)
   const mapWrap = ref<MapWrapper>()
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
+  const descriptions = ref<CiamsBasicUrbanDescription[]>([])
+
+  const state = basicUrbanIndCharStore.state
 
   const labelLayer = new UitWMSLayer({
     baseUrl: API_INFO_MAPSTUDIO.PREFIX,
@@ -250,38 +261,19 @@
     })
   }
 
-  const summary = {
-    15: {
-      DIST_KEY_001: '선도산업이 58개(50%)로 가장 많음 (대표 선도산업 : 전구 및 조명장치 제조업)',
-      DIST_KEY_002:
-        '선도산업, 신흥산업, 특화성장산업이 각각 7개(29.2%)씩 입지 (대표 선도산업 : 자동차 및 모터사이클 수리업)',
-      DIST_KEY_003:
-        '선도산업이 4개(66.7%)로 가장 많음 (대표 선도산업 : 시멘트, 석회, 플라스터 및 그 제품 제조업)',
-      DIST_KEY_004: '쇠퇴산업이 2개(66.7%)로 가장 많음 (대표 선도산업 : 음ㆍ식료품 및 담배 도매업)',
-      DIST_KEY_005:
-        '선도산업, 특화성장산업, 비특화성장산업이 각각 3개(33.3%)씩 입지 (대표 선도산업 : 자동차 및 모터사이클 수리업)',
-    },
-    16: {
-      DIST_KEY_001:
-        '초기반산업이 43개(37.1%)로 가장 많음 (대표 초기반산업 : 전구 및 조명장치 제조업)',
-      DIST_KEY_002: '보통이 11개(45.8%)로 가장 많음 (대표 초기반산업 : 자동차 신품 부품 제조업)',
-      DIST_KEY_003:
-        '초기반산업, 기반산업이 각각 3개(50.0%)씩 입지 (대표 초기반산업 : 시멘트, 석회, 플라스터 및 그 제품 제조업)',
-      DIST_KEY_004: '초기반산업이 2개(66.7%)로 가장 많음 (대표 초기반산업 : 담배 제조업)',
-      DIST_KEY_005: '기반산업, 보통, 비기반산업이 각각 1개(33.3%)씩 입지 (대표 초기반산업 : 없음)',
-    },
-  }
+  const fetchDataInfo = async () => {
+    if (!CommonUtil.isEmpty(state.activeCategory) && !CommonUtil.isEmpty(state.activeDistId)) {
+      const params = {
+        dataGroupId: state.activeCategory!.id,
+        targetId: state.activeDistId!,
+      }
 
-  const state = basicUrbanIndCharStore.state
-
-  const text = computed(() => {
-    if (!CommonUtil.isEmpty(state.activeCategory) && !CommonUtil.isEmpty(state.activeDistFeature)) {
-      return `최근 10년간(2011~2021년) ${state.activeDistFeature!.get('DIST_NAME')}의 ${
-        state.activeCategory!.name
-      } 결과 ${summary[state.activeCategory!.id][state.activeDistFeature!.get('DIST_NO')]}`
+      const { data } = await getDataInfo(params)
+      descriptions.value = data.descriptions
+    } else {
+      descriptions.value = []
     }
-    return ''
-  })
+  }
 
   watch(
     () => state.activeCategory?.id,
@@ -300,7 +292,13 @@
     { immediate: true },
   )
 
-  onMounted(async () => {})
+  watch(
+    [() => state.activeCategory, () => state.activeDistId],
+    () => {
+      fetchDataInfo()
+    },
+    { immediate: true },
+  )
 
   onBeforeMount(() => {
     init()
@@ -413,6 +411,11 @@
       font-size: 15px;
       font-weight: 400;
       line-height: 1.5;
+
+      > p {
+        padding-left: 0.5em;
+        text-indent: -0.6em;
+      }
     }
   }
 

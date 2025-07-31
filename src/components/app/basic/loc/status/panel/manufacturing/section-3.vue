@@ -8,14 +8,9 @@
       <div class="container">
         <div class="top customScroll">
           <div class="text-wrap">
-            <p>
-              - 김천시는 가공조립형과 생활관련형 제조업수가 447개로 가장 많았으나, 김천시 종사자의
-              84%에 해당하는 인력이 가공조립형, 기초소재형에 종사하고 있음
-            </p>
-            <p>
-              - 공업지역에서 일하는 기초소재형 종사자는 김천시 기초소재형 종사자의 63%에 해당하며,
-              도시공업지에서 일하는 기초소재형 종사자는 37%에 해당함
-            </p>
+            <template v-for="desc in descriptions" :key="desc.id">
+              <p v-if="desc.description">- {{ desc.description }}</p>
+            </template>
           </div>
         </div>
         <div class="center">
@@ -142,26 +137,21 @@
   import StatusTable from '@/components/app/basic/loc/status/panel/manufacturing/table.vue'
 
   import CommonUtil from '@/utils/commonUtil'
-  import { API_INFO_CIAMS } from '@/config/config'
 
   import { SourceGroupDTO } from '@/api/app/source/model'
   import { ManufacturingDto } from '@/models/api/app/basic/loc/industry/manufacturing'
-
-  import { getSources } from '@/api/app/source'
   import { getCategoryStatusInfo } from '@/api/app/basic/loc/ind-status'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { CiamsBasicLocDescription } from '@/models/api/app/basic/loc/ciams-basic-loc-description'
 
   const cmmConfigStore = useCmmConfigStore()
 
-  const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
-  const imgSrc = prefixPath + '45252c84-6272-49dc-a246-62c8f581158c'
-
   const option = ref({})
-
+  const chartData = ref({})
   const statuses = ref<ManufacturingDto.CategoryStatus.Status[]>([])
   const categoryGroups = ref<ManufacturingDto.CategoryStatus.CategoryGroup[]>([])
-  const chartData = ref({})
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
+  const descriptions = ref<CiamsBasicLocDescription[]>([])
 
   const columns = computed(() => {
     return [
@@ -208,17 +198,12 @@
   })
 
   onMounted(async () => {
-    const { data: sourceData } = await getSources({
-      category: '산업현황분석',
-      targetId: 'B006',
-    })
-
-    sources.value = sourceData[0]?.sources
-
     const { data: clsInfo } = await getCategoryStatusInfo()
 
     statuses.value = clsInfo.statuses
     categoryGroups.value = clsInfo.categoryGroups
+    descriptions.value = clsInfo.descriptions
+    sources.value = clsInfo.sources[0]?.sources
   })
 
   // const test1 = computed(() => {

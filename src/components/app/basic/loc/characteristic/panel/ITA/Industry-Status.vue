@@ -17,8 +17,8 @@
 
             <el-divider border-style="dashed" style="margin: 5px 0" />
 
-            <template v-for="(memo, idx) in memos" :key="memo">
-              <p>- {{ memo }}</p>
+            <template v-for="desc in descriptions" :key="desc.id">
+              <p v-if="desc.description">- {{ desc.description }}</p>
             </template>
           </div>
         </div>
@@ -204,6 +204,8 @@
 
   import { ItaDto } from '@/models/api/app/basic/loc/characteristic/ita'
   import { StatusDto } from '@/models/api/app/basic/loc/characteristic/status'
+  import { CiamsBasicLocDescription } from '@/models/api/app/basic/loc/ciams-basic-loc-description'
+
   import { SourceGroupDTO } from '@/api/app/source/model'
 
   import {
@@ -219,9 +221,10 @@
   const pageInfo = pageObj.pageInfo
   pageInfo.currentPageSize = 20
 
-  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
   const repData = ref<StatusDto.IndustryRep[]>([])
+  const sources = ref<SourceGroupDTO.SourceDTO[]>([])
   const statusData = ref<ItaDto.Data.Search.Row[]>([])
+  const descriptions = ref<CiamsBasicLocDescription[]>([])
 
   const currentTabComponent = computed(() => basicLocIndCharITAStore.selectedTabId)
 
@@ -287,12 +290,12 @@
 
     repData.value = rawStatusData.industryReps
     sources.value = rawStatusData.sources[0]?.sources
+    descriptions.value = rawStatusData.descriptions
 
     const rawTempData = await getIndustryStatusTemp({
       type: props.type,
     })
 
-    memos.value = rawTempData.memo
     imgSrc.value = rawTempData.image
 
     runSearch()

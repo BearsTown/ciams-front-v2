@@ -10,9 +10,9 @@ export namespace StatusDto {
 
       export interface Result {
         // image
-        // notes
         industryReps: IndustryRep[]
         sources: SourceGroupDTO.Find.Result[]
+        descriptions: CiamsBasicLocDescription[]
       }
     }
   }

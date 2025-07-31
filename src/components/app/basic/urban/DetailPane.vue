@@ -7,7 +7,7 @@
       @tab-change="tabChangeListener"
     >
       <el-tab-pane
-        v-for="data in basicUrbanDistrictStore.years"
+        v-for="data in store.years"
         :label="`${data.title}`"
         :name="data.id"
         :key="data.id"
@@ -18,11 +18,7 @@
     <div class="top">
       <div style="display: flex; padding-bottom: 5px">
         <el-text style="margin-right: 5px">지도</el-text>
-        <el-switch
-          size="small"
-          v-model="basicUrbanDistrictStore.layerVisible"
-          :disabled="!basicUrbanDistrictStore.getSelectDetail()"
-        />
+        <el-switch size="small" v-model="store.layerVisible" :disabled="!store.getSelectDetail()" />
       </div>
 
       <el-table
@@ -93,30 +89,36 @@
   import DataChart from '@/components/app/basic/urban/DataChart.vue'
 
   import CommonUtil from '@/utils/commonUtil'
-
-  import { useBasicUrbanDistrictStore } from '@/stores/app/basic/urban/district'
+  import { useBasicUrbanInstanceStore } from '@/stores/app/basic/urban/common'
+  import { MapType } from '@/enums/mapEnum'
 
   interface SummaryMethodProps<T = any> {
     columns: TableColumnCtx<T>[]
     data: T[]
   }
 
-  const basicUrbanDistrictStore = useBasicUrbanDistrictStore()
+  const props = withDefaults(
+    defineProps<{
+      mapType: MapType
+    }>(),
+    {},
+  )
+  const store = useBasicUrbanInstanceStore(props.mapType)
 
-  const state = basicUrbanDistrictStore.state
+  const state = store.state
 
   const year = ref()
 
   const filteredTableData = computed(() => {
-    return basicUrbanDistrictStore.getSelectDetail()?.tableData?.filter((row) => row.visible)
+    return store.getSelectDetail()?.tableData?.filter((row) => row.visible)
   })
 
   const filteredChartData = computed(() => {
-    return basicUrbanDistrictStore.getSelectDetail()?.chartData
+    return store.getSelectDetail()?.chartData
   })
 
   function tabChangeListener(year) {
-    basicUrbanDistrictStore.updateYear(year)
+    store.updateYear(year)
   }
 
   const getSummaries = (param: SummaryMethodProps) => {

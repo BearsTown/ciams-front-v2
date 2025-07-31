@@ -8,11 +8,9 @@
       <div class="container">
         <div class="top customScroll">
           <div class="text-wrap">
-            <p>- 도시공업지역 전기장비제조업, 자동차 및 트레일러 제조업 순으로 종사자수가 많음</p>
-            <p>
-              - 지난 10년간 화학물질 및 화학제품 제조업의 증가가 가장 많으며, 자동차 및 트레일러
-              제조업은 지난 10년간 사업체수와 종사자수 모두 가장 많이 감소하였음
-            </p>
+            <template v-for="desc in descriptions" :key="desc.id">
+              <p v-if="desc.description">- {{ desc.description }}</p>
+            </template>
           </div>
         </div>
         <div class="center">
@@ -89,30 +87,25 @@
   import Table2 from '@/components/app/basic/loc/status/panel/industrial/table-2.vue'
 
   import CommonUtil from '@/utils/commonUtil'
-  import { API_INFO_CIAMS } from '@/config/config'
 
   import { SourceGroupDTO } from '@/api/app/source/model'
   import { ManufacturingDto } from '@/models/api/app/basic/loc/industry/manufacturing'
-
-  import { getSources } from '@/api/app/source'
   import { getManufacturingInfo } from '@/api/app/basic/loc/ind-status'
 
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
+  import { CiamsBasicLocDescription } from '@/models/api/app/basic/loc/ciams-basic-loc-description'
 
   const cmmConfigStore = useCmmConfigStore()
 
-  const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
-  const imgSrc = prefixPath + '45252c84-6272-49dc-a246-62c8f581158c'
-
   const option = ref({})
-
-  const densities = ref<ManufacturingDto.Density[]>([])
-  const statuses = ref<ManufacturingDto.Status[]>([])
-  const increases = ref<ManufacturingDto.Increase[]>([])
-  const densityOption = ref({})
   const chartData = ref({})
   const chartData1 = ref({})
+  const densityOption = ref({})
+  const statuses = ref<ManufacturingDto.Status[]>([])
+  const densities = ref<ManufacturingDto.Density[]>([])
+  const increases = ref<ManufacturingDto.Increase[]>([])
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
+  const descriptions = ref<CiamsBasicLocDescription[]>([])
 
   const columns = computed(() => {
     return [
@@ -132,20 +125,16 @@
   })
 
   onMounted(async () => {
-    const { data: sourceData } = await getSources({
-      category: '산업현황분석',
-      targetId: 'B004',
-    })
-
-    sources.value = sourceData[0]?.sources
-
     const { data: mfgInfo } = await getManufacturingInfo({
+      type: 'B005',
       category: '제조업',
     })
 
-    densities.value = mfgInfo.densities
     statuses.value = mfgInfo.statuses
+    densities.value = mfgInfo.densities
     increases.value = mfgInfo.increases
+    descriptions.value = mfgInfo.descriptions
+    sources.value = mfgInfo.sources[0]?.sources
 
     densityOption.value = {
       tooltip: {

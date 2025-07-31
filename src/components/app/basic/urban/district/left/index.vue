@@ -13,7 +13,7 @@
     <el-divider border-style="dashed" style="margin: 10px 0" />
 
     <div class="customScroll" style="flex: 1; overflow-y: auto">
-      <template v-for="(category, idx) in state.categories" :key="category.id">
+      <template v-for="category in state.categories" :key="category.id">
         <InsideCollapse
           :title="category.name"
           :is-open="category.active.status"
@@ -37,25 +37,23 @@
 </template>
 
 <script setup lang="ts">
-  import { onActivated, onBeforeMount, onMounted, reactive, ref } from 'vue'
+  import { onActivated, onBeforeMount, ref } from 'vue'
 
   import { InsideCollapse } from '@/components/common/collapse'
   import DistList from '@/components/common/DistList/DistList.vue'
 
   import { Style } from 'ol/style'
-
-  import { MapLayer } from '@/js/layer'
   import { MapWrapper } from '@/js/mapWrapper'
   import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
 
   import { GisCiamsDistDTO } from '@/api/app/gis/dist/model'
 
   import { useMapStore } from '@/stores/map/map'
-  import { useBasicUrbanDistrictStore } from '@/stores/app/basic/urban/district'
+  import { useBasicUrbanInstanceStore } from '@/stores/app/basic/urban/common'
 
   const distListRef = ref<InstanceType<typeof DistList>>()
 
-  const basicUrbanDistrictStore = useBasicUrbanDistrictStore()
+  const basicUrbanDistrictStore = useBasicUrbanInstanceStore('Map-Urban-Dist')
 
   const mapType: MapType = 'Map-Urban-Dist'
   const mapLayerGroupType: MapLayerGroupType = 'Menu-1-2-2'
@@ -64,8 +62,6 @@
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
 
   const state = basicUrbanDistrictStore.state
-
-  const mapLayers = reactive<MapLayer[]>([])
 
   async function handleSwitchChange(categoryId) {
     await basicUrbanDistrictStore.setActiveCategory(categoryId)
@@ -84,8 +80,6 @@
 
     distListRef.value?.selectIndex()
   }
-
-  onMounted(async () => {})
 
   onBeforeMount(async () => {
     await basicUrbanDistrictStore.init(1)

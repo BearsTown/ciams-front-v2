@@ -33,7 +33,7 @@ function getScopes() {
  * @param type
  */
 function getDensityInfo(type: string) {
-  return http.get<ResultData<DensityDto.DensityInfo>>(`${prefix}/density/${type}`)
+  return http.get<ResultData<DensityDto.DensityInfo>>(`${prefix}/density/${type}/info`)
 }
 
 /**

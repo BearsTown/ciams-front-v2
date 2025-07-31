@@ -67,7 +67,7 @@
   const childRefs = ref<MenuCollapse[]>([])
   const activeBtnChildRefs = ref<ActiveButton[]>([])
 
-  function handleCustomEvent(isOpen: boolean, menu: object, index: number) {
+  function handleCustomEvent(isOpen: boolean, menu: GeneralDataDto.DataItem, index: number) {
     if (!isOpen) return
 
     childRefs.value.forEach((child, i) => {
@@ -77,6 +77,7 @@
     })
 
     selectedMenu.value = menu
+    selectedItem.value = menu.children?.[0]
   }
 
   function handleStatusGroupChange(isActive: boolean, item: object) {

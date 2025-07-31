@@ -7,7 +7,11 @@
     <template #center>
       <div class="container">
         <div class="top customScroll">
-          <div class="text-wrap"></div>
+          <div class="text-wrap">
+            <template v-for="desc in descriptions" :key="desc.id">
+              <p v-if="desc.description">- {{ desc.description }}</p>
+            </template>
+          </div>
         </div>
 
         <div class="center">
@@ -19,7 +23,7 @@
             </MapWrapperView>
           </div>
           <div class="right">
-            <TabBDetail />
+            <DetailPane :map-type="mapType" />
           </div>
         </div>
       </div>
@@ -34,7 +38,7 @@
   import PagePane from '@/components/common/PagePane.vue'
   import Controls from '@/components/map/control/Controls.vue'
   import MapWrapperView from '@/components/map/MapWrapper.vue'
-  import TabBDetail from '@/components/app/basic/urban/district/panel/Tab-B-Detail.vue'
+  import DetailPane from '@/components/app/basic/urban/DetailPane.vue'
 
   import { UitWFSLayer, UitWMSLayer, UitWMTSLayer } from '@uitgis/ol-ugis-test/layer'
 
@@ -50,24 +54,31 @@
   import { MapWrapper } from '@/js/mapWrapper'
   import { API_INFO_MAPSTUDIO } from '@/config/config'
 
+  import { CiamsBasicUrbanDescription } from '@/models/api/app/basic/urban/ciams-basic-urban'
+
   import { getSources } from '@/api/app/source'
   import { SourceGroupDTO } from '@/api/app/source/model'
 
   import { useMapStore } from '@/stores/map/map'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import { useBasicUrbanDistrictStore } from '@/stores/app/basic/urban/district'
+  import { useBasicUrbanInstanceStore } from '@/stores/app/basic/urban/common'
+  import { getDataInfo } from '@/api/app/basic/urban/data'
+
+  const mapType: MapType = 'Map-Urban-Dist'
 
   const cmmConfigStore = useCmmConfigStore()
-  const basicUrbanDistrictStore = useBasicUrbanDistrictStore()
+  const basicUrbanDistrictStore = useBasicUrbanInstanceStore(mapType)
 
   const mapConfig = ref<MapWrapperConfig>()
-  const mapType: MapType = 'Map-Urban-Dist'
   const mapLayerGroupType: MapLayerGroupType = 'Menu-1-2-2'
   const commonLayerType: CommonLayerGroup = 'COMMON_LAYER_GROUP_1-2-2'
   const layerGroupName = ViewLayerTypes[mapType]![mapLayerGroupType]
   const mapStore = useMapStore(mapType)
   const mapWrap = ref<MapWrapper>()
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
+  const descriptions = ref<CiamsBasicUrbanDescription[]>([])
+
+  const state = basicUrbanDistrictStore.state
 
   const labelLayer = new UitWMSLayer({
     baseUrl: API_INFO_MAPSTUDIO.PREFIX,
@@ -250,8 +261,22 @@
     })
   }
 
+  const fetchDataInfo = async () => {
+    if (!CommonUtil.isEmpty(state.activeCategory) && !CommonUtil.isEmpty(state.activeDistId)) {
+      const params = {
+        dataGroupId: state.activeCategory!.id,
+        targetId: state.activeDistId!,
+      }
+
+      const { data } = await getDataInfo(params)
+      descriptions.value = data.descriptions
+    } else {
+      descriptions.value = []
+    }
+  }
+
   watch(
-    () => basicUrbanDistrictStore.state.activeCategory?.id,
+    () => state.activeCategory?.id,
     async (id) => {
       if (CommonUtil.isEmpty(id)) {
         sources.value = []
@@ -263,6 +288,14 @@
 
         sources.value = sourceData[0]?.sources
       }
+    },
+    { immediate: true },
+  )
+
+  watch(
+    [() => state.activeCategory, () => state.activeDistId],
+    () => {
+      fetchDataInfo()
     },
     { immediate: true },
   )
@@ -374,6 +407,11 @@
       font-size: 15px;
       font-weight: 400;
       line-height: 1.5;
+
+      > p {
+        padding-left: 0.5em;
+        text-indent: -0.6em;
+      }
     }
   }
 </style>

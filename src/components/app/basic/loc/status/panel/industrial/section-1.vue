@@ -8,14 +8,9 @@
       <div class="container">
         <div class="top customScroll">
           <div class="text-wrap">
-            <p>
-              - 공업지역 내 산업단지의 종사자밀도는 11.36인/ha 반면, 도시공업지역은 18.87인/ha로
-              1.5배 많은 종사자가 근무하고 있어 도시공업지역을 활성화시킬 수 있는 방안 필요
-            </p>
-            <p>
-              - 김천시는 도매 및 소매업수가 가장 많고, 공업지역과 도시공업지역에서는 제조업수가 가장
-              많으며, 제조업의 종사자수가 전체 지역에서 가장 많은 비중을 차지함
-            </p>
+            <template v-for="desc in descriptions" :key="desc.id">
+              <p v-if="desc.description">- {{ desc.description }}</p>
+            </template>
           </div>
         </div>
 
@@ -90,8 +85,8 @@
   import CommonUtil from '@/utils/commonUtil'
 
   import { IndustrialDto } from '@/models/api/app/basic/loc/industry/industrial'
+  import { CiamsBasicLocDescription } from '@/models/api/app/basic/loc/ciams-basic-loc-description'
 
-  import { getSources } from '@/api/app/source'
   import { SourceGroupDTO } from '@/api/app/source/model'
   import { getIndustrialInfo } from '@/api/app/basic/loc/ind-status'
 
@@ -99,11 +94,12 @@
 
   const cmmConfigStore = useCmmConfigStore()
 
-  const densities = ref<IndustrialDto.Density[]>([])
-  const statuses = ref<IndustrialDto.Status[]>([])
-  const densityOption = ref({})
   const chartData = ref({})
+  const densityOption = ref({})
+  const statuses = ref<IndustrialDto.Status[]>([])
+  const densities = ref<IndustrialDto.Density[]>([])
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
+  const descriptions = ref<CiamsBasicLocDescription[]>([])
 
   const columns = computed(() => {
     return [
@@ -123,19 +119,15 @@
   })
 
   onMounted(async () => {
-    const { data: sourceData } = await getSources({
-      category: '산업현황분석',
-      targetId: 'B002',
-    })
-
-    sources.value = sourceData[0]?.sources
-
     const { data: industrialInfo } = await getIndustrialInfo({
+      type: 'B003',
       category: '산업',
     })
 
-    densities.value = industrialInfo.densities
     statuses.value = industrialInfo.statuses
+    densities.value = industrialInfo.densities
+    descriptions.value = industrialInfo.descriptions
+    sources.value = industrialInfo.sources[0]?.sources
 
     densityOption.value = {
       tooltip: {

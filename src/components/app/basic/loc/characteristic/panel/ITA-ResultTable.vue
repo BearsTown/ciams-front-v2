@@ -13,8 +13,8 @@
       <el-table-column label="코드" align="center" width="55px">
         <template #default="{ row }"> {{ row?.tcode }}{{ row?.clsCode }}</template>
       </el-table-column>
-      <el-table-column label="대분류" prop="codeNm" align="center" />
-      <el-table-column label="산업" prop="insNm" align="center" />
+      <el-table-column label="대분류" prop="codeNm" align="center" min-width="220px" />
+      <el-table-column label="산업" prop="insNm" align="center" min-width="290px" />
     </el-table-column>
     <el-table-column label="산업입지계수(LQ)" align="center">
       <el-table-column label="분석값" prop="lqValue" align="right" width="80px" sortable>

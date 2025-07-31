@@ -77,6 +77,7 @@
 
   .customTab {
     display: flex;
+    overflow: visible;
     padding: 10px 0 10px 0;
     justify-content: space-between;
 
@@ -85,6 +86,8 @@
       padding: 0 !important;
       //margin-left: 5px !important;
       background-color: white;
+      border-radius: 0;
+      box-shadow: 2px 2px 3px 2px rgba(0, 0, 0, 0.12);
     }
 
     .customTab-item:first-child {

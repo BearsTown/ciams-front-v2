@@ -9,8 +9,8 @@ export namespace ItaDto {
       }
 
       export interface Result {
-        // notes
         sources: SourceGroupDTO.Find.Result[]
+        descriptions: CiamsBasicLocDescription[]
       }
     }
   }

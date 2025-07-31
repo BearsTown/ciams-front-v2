@@ -8,14 +8,14 @@
       <div class="container">
         <div class="top customScroll">
           <div class="text-wrap">
-            <template v-for="note in notes" :key="note">
-              <p>- {{ note }}</p>
+            <template v-for="desc in descriptions" :key="desc.id">
+              <p v-if="desc.description">- {{ desc.description }}</p>
             </template>
           </div>
         </div>
         <div class="center" style="position: relative">
           <div class="left customScroll">
-            <DensityImage title="asd" :densities="densities" />
+            <DensityImage title="" :densities="densities" />
           </div>
           <div style="position: absolute; bottom: 10px; left: 10px; width: 80px">
             <el-image :src="imgSrc" fit="cover" />
@@ -35,37 +35,34 @@
 
   import { API_INFO_CIAMS } from '@/config/config'
 
-  import { getSources } from '@/api/app/source'
+  import { CiamsBasicLocDescription } from '@/models/api/app/basic/loc/ciams-basic-loc-description'
   import { SourceGroupDTO } from '@/api/app/source/model'
   import { getDensityInfo } from '@/api/app/basic/loc/ind-status'
-  
+
   import { useBasicLocIndStatusDensityStore } from '@/stores/app/basic/loc/ind-status/density'
 
-  const menu1Sub1Tab2Page3Store = useBasicLocIndStatusDensityStore()
+  const basicLocIndStatusDensityStore = useBasicLocIndStatusDensityStore()
 
   const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
   const imgSrc = prefixPath + '1_2.산업특성분석_3p_범례.png'
 
-  const notes = ref<string[]>([])
   const densities = ref<DensityImage[]>([])
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
+  const descriptions = ref<CiamsBasicLocDescription[]>([])
 
-  const title = computed(() => ['사업체 밀도변화', `${menu1Sub1Tab2Page3Store.selectedTab?.name}`])
+  const title = computed(() => [
+    '사업체 밀도변화',
+    `${basicLocIndStatusDensityStore.selectedTab?.name}`,
+  ])
 
   watch(
-    () => menu1Sub1Tab2Page3Store.selectedTab,
+    () => basicLocIndStatusDensityStore.selectedTab,
     async (selectedTab) => {
       if (selectedTab) {
         const { data: rawData } = await getDensityInfo(selectedTab.id)
-        notes.value = rawData.notes
         densities.value = rawData.densities
-
-        const { data: sourceData } = await getSources({
-          category: '산업현황분석',
-          targetId: 'B001',
-        })
-
-        sources.value = sourceData[0]?.sources
+        descriptions.value = rawData.descriptions
+        sources.value = rawData.sources[0]?.sources
       }
     },
     { immediate: true },
