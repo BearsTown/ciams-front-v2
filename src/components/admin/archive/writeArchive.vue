@@ -12,7 +12,9 @@
         <el-button type="primary" @click="saveArchive"> 저장</el-button>
       </el-col>
     </el-row>
+
     <el-divider />
+
     <el-form
       class="container-c"
       ref="uploadFormRef"
@@ -39,12 +41,17 @@
         </div>
       </el-form-item>
 
-      <!-- <el-divider /> -->
-      <el-form-item label="내용" required prop="contents" style="height: 450px" class="content-box">
-        <editor-form :content="editorData" @get-data="getData" />
+      <el-form-item label="내용" required prop="contents" style="flex: 1" class="content-box">
+        <editor-form
+          ref="editorRef"
+          v-model="content.contents"
+          type-code="archive/content"
+          :link-id="linkId"
+        />
       </el-form-item>
 
       <el-divider />
+
       <el-form-item label="첨부파일">
         <!-- 기존 파일 -->
         <span class="attachFile" v-for="file in oldAttachFiles" :key="file.id">
@@ -75,7 +82,8 @@
       </el-form-item>
 
       <el-divider />
-      <el-form-item label="대표이미지" style="flex: 1">
+
+      <el-form-item label="대표이미지" style="">
         <el-form-item
           prop="attachFiles"
           style="width: fit-content; display: flex; flex-direction: column"
@@ -130,13 +138,13 @@
   import EditorForm from './EditorForm.vue'
   import { cloneDeep } from 'lodash-es'
 
-  import { onMounted, ref } from 'vue'
-  import { reactive } from 'vue'
+  import { onMounted, reactive, ref } from 'vue'
   import CommonUtil from '@/utils/commonUtil'
   import { API_INFO_CIAMS } from '@/config/config'
   import { useArchiveStore } from '@/stores/admin/archive'
   import { storeToRefs } from 'pinia'
   import { File } from '@/api/app/file/model'
+
   const archiveStore = useArchiveStore()
   const { categoryList } = storeToRefs(archiveStore)
 
@@ -145,6 +153,8 @@
   const router = useRouter()
   const archiveId = route.params.archiveId
   const writeCategoryList = ref([] as any[])
+  const editorRef = ref<InstanceType<typeof EditorForm>>()
+  const linkId = ref<string>()
 
   const rules = {
     title: [{ required: true, message: '제목을 입력해주세요', trigger: 'blur' }],
@@ -160,6 +170,7 @@
     imgFile: {} as File,
     removeFilesIds: [] as string[],
     categoryId: '',
+    imageFileIds: [] as string[],
   })
 
   const uploadFormRef = ref()
@@ -236,7 +247,7 @@
 
   //등록 및 수정
   function saveArchive() {
-    content.contents = editorData.value
+    // content.contents = editorData.value
 
     uploadFormRef.value.validate((valid, fields) => {
       let typeNm = !archiveId ? '추가' : '수정'
@@ -244,9 +255,11 @@
       if (valid) {
         CommonUtil.confirm(`${typeNm} 하시겠습니까?`, `${typeNm}`).then(() => {
           let data = cloneDeep(content)
-          data.contents = editorData.value
+          // data.contents = editorData.value
+          data.contents = content.contents
           attachFiles.value.forEach((obj) => data.attachFiles.push(obj.file))
           data.imgFile = imgFile.value
+          data.imageFileIds = editorRef.value.imageFileIds
 
           if (!archiveId) {
             archiveStore
@@ -287,13 +300,15 @@
         content.title = _archive.title
         content.categoryId = _archive.categoryId
         content.contents = _archive.contents
-        editorData.value = _archive.contents
+        // editorData.value = _archive.contents
         oldAttachFiles.value = _archive.archiveFiles.filter((data) => data.typeCode === 'archive')
         let imgFile = _archive.archiveFiles.filter((data) => data.typeCode === 'archiveImg')
         if (imgFile.length > 0) {
           imgFilePreview.value = prefixPath + imgFile[0].id
           oldImgFileId.value = imgFile[0].id
         }
+
+        linkId.value = _archiveId
       })
     }
 
@@ -302,7 +317,7 @@
     })
   })
 </script>
-<style scoped>
+<style scoped lang="scss">
   .container-c {
     height: 100%;
     background-color: white;
@@ -374,15 +389,6 @@
 
   :deep .el-form-item__content {
     height: 100%;
-  }
-
-  :deep .ck.ck-editor {
-    margin-right: 10px;
-  }
-
-  :deep .ck-editor__editable {
-    height: 420px;
-    overflow: auto;
   }
 
   :deep .el-form-item__error {

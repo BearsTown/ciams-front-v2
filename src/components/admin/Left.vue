@@ -15,6 +15,7 @@
       </svg>
       <span class="text">{{ userName }}</span>
     </div>
+
     <div class="sidebar-menu" v-for="item in menu" :key="item.key">
       <div class="title">{{ item.name }}</div>
       <ul class="menu-list" v-for="subItem in item.sub" :key="subItem.key">
@@ -31,9 +32,10 @@
 </template>
 
 <script setup lang="ts">
-  import { useAuthStore } from '@/stores/auth'
-  import { storeToRefs } from 'pinia'
   import { onMounted, ref, watch } from 'vue'
+  import { storeToRefs } from 'pinia'
+
+  import { useAuthStore } from '@/stores/auth'
 
   const authStore = useAuthStore()
   const { userName } = storeToRefs(authStore)
@@ -76,6 +78,7 @@
     initKey.value = props.defaultKey
   })
 </script>
+
 <style scoped>
   @import '@/assets/css/referencePage.css';
 </style>

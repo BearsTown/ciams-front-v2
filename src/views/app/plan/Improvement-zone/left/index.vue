@@ -2,74 +2,54 @@
   <div class="zoningSetting">
     <ul class="zoningSetting-tab customTab">
       <li
-        v-for="(tab, index) in menu3sub3store.tabList"
+        v-for="(group, index) in groups"
         :key="index"
-        @click.prevent="handleTabChange(tab.id)"
-        :class="{ active: menu3sub3store.selectedTabId == tab.id }"
+        @click.prevent="handleTabChange(group)"
+        :class="{ active: group.isActive }"
         class="customTab-item"
       >
-        {{ tab.name }}
+        {{ group.title }}
       </li>
     </ul>
 
     <div class="zoningSetting-content border-container">
       <keep-alive>
-        <component :is="currentTabComponent" />
+        <component
+          :is="Left"
+          v-if="selectedGroupId"
+          :key="selectedGroupId"
+          :parent-id="selectedGroupId"
+        />
       </keep-alive>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { computed, DefineComponent, onMounted, ref } from 'vue'
-  import { storeToRefs } from 'pinia'
+  import { computed, onMounted } from 'vue'
 
-  import TabAComp from '@/components/app/plan/Improvement-zone/left/tab-A'
-  import TabBComp from '@/components/app/plan/Improvement-zone/left/tab-B'
+  import Left from '@/components/app/plan/Improvement-zone/left'
 
-  import { MapWrapper } from '@/js/mapWrapper'
-  import { useBoolean } from '@/hooks/useBoolean'
+  import { ContentMenu } from '@/models/services/app/content-menu'
+  import { getContentMenuList } from '@/services/app/content-menu'
 
-  import { useGlobalStore } from '@/stores/app'
-  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
-  import { Menu3Sub3TabIdType, useMenu3Sub3store } from '@/stores/app/plan/Improvement-zone'
+  import { usePlanImprovementZoneStore } from '@/stores/app/plan/Improvement-zone'
 
-  const globalStore = useGlobalStore()
-  const { layoutSelected } = storeToRefs(globalStore)
+  const planImprovementZoneStore = usePlanImprovementZoneStore()
 
-  const { status: isActive, toggle } = useBoolean(false)
-
-  const cmmConfigStore = useCmmConfigStore()
-  const menu3sub3store = useMenu3Sub3store()
-
-  const components: Record<Menu3Sub3TabIdType, DefineComponent> = {
-    TabA: TabAComp,
-    TabB: TabBComp,
-  }
-  const currentTabComponent = computed(() => components[menu3sub3store.selectedTabId] || TabAComp)
-
-  const mapWrap = ref<MapWrapper>()
-
-  function handleTabChange(tabId: Menu3Sub3TabIdType) {
-    menu3sub3store.selectedTabId = tabId
-
-    switch (menu3sub3store.selectedTabId) {
-      case 'TabA': {
-        // isActiveTimePoint.value = false
-        // layoutSelected.value?.right?.visible.off()
-        break
-      }
-      case 'TabB': {
-        // isActiveTimePoint.value = false
-        // layoutSelected.value?.right?.visible.off()
-
-        break
-      }
-    }
+  function handleTabChange(group: ContentMenu) {
+    planImprovementZoneStore.selectGroup(group)
   }
 
-  onMounted(() => {
-    handleTabChange(menu3sub3store.selectedTabId)
+  const groups = computed<ContentMenu[]>(() => planImprovementZoneStore.groups)
+  const selectedGroupId = computed<number | undefined>(
+    () => planImprovementZoneStore?.selectedGroup?.id,
+  )
+
+  onMounted(async () => {
+    const data = await getContentMenuList(2)
+    planImprovementZoneStore.setGroupList(data)
+    planImprovementZoneStore.selectGroup(data[0])
   })
 </script>
 

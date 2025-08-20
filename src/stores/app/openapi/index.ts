@@ -3,8 +3,14 @@ import { reactive, toRefs } from 'vue'
 
 import Kgeo from '@/api/app/land/kgeo/model'
 
+interface State {
+  krasInfoItem: any
+  kgeoInfoItem: Kgeo.UnionMap
+  publicDataInfoItem: any
+}
+
 export const useOpenApiStore = defineStore('useOpenApiStore', () => {
-  const state = reactive({
+  const state = reactive<State>({
     krasInfoItem: {},
     kgeoInfoItem: {} as Kgeo.UnionMap,
     publicDataInfoItem: {},

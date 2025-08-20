@@ -1,35 +1,43 @@
-import { reactive, toRefs } from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import { useBoolean, UseBoolean } from '@/hooks/useBoolean'
+import { ContentMenu } from '@/models/services/app/content-menu'
 
-interface Menu3Sub2 {
-  showInfo: UseBoolean
-  selectedTabId: Menu3Sub2TabIdType
-}
+export const usePlanSectorStore = defineStore('planSectorStore', () => {
+  const groups = ref<ContentMenu[]>([])
 
-const tabList = [
-  { name: '산업육성 및 지원 방안', id: 'TabA', isActive: false },
-  { name: '공간관리방안', id: 'TabB', isActive: false },
-  { name: '환경관리방안', id: 'TabC', isActive: true },
-] as const
-
-export type Menu3Sub2TabIdType = (typeof tabList)[number]['id']
-
-export const useMenu3Sub2Store = defineStore('menu3Sub2Store', () => {
-  const state = reactive<Menu3Sub2>({
-    showInfo: useBoolean(false),
-    selectedTabId: 'TabA',
-  })
-
-  function selectTab(tabId: Menu3Sub2TabIdType) {
-    state.selectedTabId = tabId
+  function setGroupList(list: ContentMenu[]) {
+    groups.value = list
   }
 
-  return {
-    ...toRefs(state),
+  function selectGroup(group: ContentMenu) {
+    groups.value.forEach((item) => {
+      item.isActive = item.id === group.id
+      if (item.isActive && item.children && !selectedItem.value) {
+        selectItem(item.children[0])
+      }
+    })
+  }
 
-    tabList,
-    selectTab,
+  function selectItem(item: ContentMenu) {
+    selectedGroup.value?.children?.forEach((child) => {
+      child.isActive = child.id === item.id
+    })
+  }
+
+  const selectedGroup = computed<ContentMenu | undefined>(() =>
+    groups.value.find((item) => item.isActive),
+  )
+  const selectedItem = computed<ContentMenu | undefined>(() =>
+    selectedGroup.value?.children?.find((item) => item.isActive),
+  )
+
+  return {
+    groups,
+    selectedGroup,
+    selectedItem,
+    setGroupList,
+    selectGroup,
+    selectItem,
   }
 })

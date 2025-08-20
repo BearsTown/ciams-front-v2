@@ -1,6 +1,7 @@
 import { API_INFO_CIAMS } from '@/config/config'
 import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
 import { saveAs } from 'file-saver'
+import { v4 as uuidV4 } from 'uuid'
 
 interface Iarr {
   [k: string]: string | [] | number | boolean
@@ -251,5 +252,14 @@ export default {
     }
 
     return result
+  },
+
+  generateUUID(low: boolean) {
+    const UUID = uuidV4()
+    if (low) {
+      return UUID.split('-')[0]
+    } else {
+      return UUID
+    }
   },
 }

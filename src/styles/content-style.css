@@ -459,3 +459,20 @@
     display: none;
   }
 }
+
+
+.ck.ck-balloon-panel {
+  z-index: 10000 !important;
+}
+
+.ck.ck-dropdown__panel {
+  z-index: 10000 !important;
+}
+
+.ck.ck-dialog-overlay {
+  z-index: 10000 !important;
+}
+
+.ck.ck-modal {
+  z-index: 10001 !important;
+}

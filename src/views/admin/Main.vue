@@ -90,25 +90,25 @@
       icon: 'Cpu',
       usePanel: false,
     },
-    // {
-    //   key: '3',
-    //   name: '구역계획</br>관리',
-    //   path: '/admin/content',
-    //   usePanel: true,
-    //   icon: 'DataLine',
-    //   // children: [
-    //   //   {
-    //   //     key: '3-1',
-    //   //     name: '계획관리',
-    //   //     path: '/admin/content',
-    //   //   },
-    //   //   {
-    //   //     key: '3-2',
-    //   //     name: '구역별 계획지정',
-    //   //     path: '/admin/contentArea',
-    //   //   },
-    //   // ],
-    // },
+    {
+      key: '3',
+      name: '계획관리',
+      path: '/admin/content',
+      usePanel: false,
+      icon: 'DataLine',
+      // children: [
+      //   {
+      //     key: '3-1',
+      //     name: '계획관리',
+      //     path: '/admin/content',
+      //   },
+      //   {
+      //     key: '3-2',
+      //     name: '구역별 계획지정',
+      //     path: '/admin/contentArea',
+      //   },
+      // ],
+    },
     {
       key: '4',
       name: '자료실',

@@ -125,7 +125,6 @@
 .el-button {
   font-family: 'Pretendard', sans-serif;
   &:hover {
-    opacity: 0.8;
   }
 }
 
@@ -148,5 +147,5 @@
   color: var(--el-color-success);
 }
 .el-tabs__item:hover {
-  transition: 0.2s;
+  transition: 0.3s;
 }

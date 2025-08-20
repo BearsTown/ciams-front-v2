@@ -5,18 +5,12 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { ConfigEnv, defineConfig, loadEnv, UserConfig } from 'vite'
 import ckeditor5 from '@ckeditor/vite-plugin-ckeditor5'
 import { fileURLToPath } from 'url'
-import Unocss from 'unocss/vite'
-import {
-  presetAttributify,
-  presetIcons,
-  presetUno,
-  transformerDirectives,
-  transformerVariantGroup,
-} from 'unocss'
 
 import { proxy } from './src/config/proxy'
 import { wrapperEnv } from './src/utils/getEnv'
+import { createRequire } from 'node:module'
 
+const require = createRequire(import.meta.url)
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = resolve(__filename, '..')
 
@@ -58,7 +52,9 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       //   ],
       //   transformers: [transformerDirectives(), transformerVariantGroup()],
       // }),
-      ckeditor5({ theme: resolve('node_modules/@ckeditor/ckeditor5-theme-lark') }),
+      ckeditor5({
+        theme: require.resolve('@ckeditor/ckeditor5-theme-lark'),
+      }),
     ],
     // define: {
     //   global: '',

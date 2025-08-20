@@ -53,11 +53,10 @@
         </div>
       </div>
       <!-- eslint-disable vue/no-v-html -->
-      <div
-        v-html="detailArchvieData.contents"
-        class="text-wrap detailContent ck-content customScroll scrollY"
-        style="line-height: 32px"
-      ></div>
+      <div class="detailContent customScroll scrollY">
+        <div v-html="detailArchvieData.contents" class="ck-content" style="width: 100%"></div>
+      </div>
+
       <div class="file-wrap">
         <div class="addFileList" v-for="files in detailArchvieData.archiveFiles" :key="files.id">
           <template v-if="files.typeCode !== 'archiveImg'">
@@ -126,6 +125,7 @@
 
   .detailContent {
     overflow: auto;
+    line-height: 1.5;
   }
 
   .is-inline-flex {

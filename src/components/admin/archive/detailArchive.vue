@@ -1,6 +1,6 @@
 <template>
   <div class="content detail">
-    <div class="customCard">
+    <div class="customCard ck-editor">
       <div class="customCard-header">
         <div>
           <el-button type="warning" size="small" v-if="content.hidden" @click="modifyHidden">
@@ -61,11 +61,10 @@
         </div>
       </div>
       <!-- eslint-disable vue/no-v-html -->
-      <div
-        v-html="content.contents"
-        class="text-wrap detailContent ck-content"
-        style="line-height: 32px"
-      ></div>
+      <div class="detailContent customScroll scrollY">
+        <div v-html="content.contents" class="ck-content" style="width: 100%"></div>
+      </div>
+
       <!-- <div
         v-for="files in detailArchive.archiveFiles"
         :key="files.id"
@@ -149,8 +148,7 @@
   }
 
   function deleteArchive() {
-    CommonUtil
-      .confirm('게시글을 삭제 하시겠습니까?', '게시글 삭제')
+    CommonUtil.confirm('게시글을 삭제 하시겠습니까?', '게시글 삭제')
       .then(() => {
         if (archiveId) {
           let ids = [archiveId]
@@ -170,8 +168,7 @@
   function modifyHidden() {
     let hiddenTxt = content.value.hidden ? '공개' : '비공개'
 
-    CommonUtil
-      .confirm(`게시글을 ${hiddenTxt} 하시겠습니까?`, `게시글 ${hiddenTxt}`)
+    CommonUtil.confirm(`게시글을 ${hiddenTxt} 하시겠습니까?`, `게시글 ${hiddenTxt}`)
       .then(() => {
         if (archiveId) {
           let params = {
@@ -213,6 +210,7 @@
 
   .detailContent {
     overflow: auto;
+    line-height: 1.5;
   }
 </style>
 

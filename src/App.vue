@@ -60,6 +60,9 @@
   /* reset */
   @import '@/assets/css/reset.css';
 
+  /* CKEditor */
+  @import '@/assets/css/ckeditor-fix.css';
+
   /* font */
   @import '@/assets/css/typhography.css';
 

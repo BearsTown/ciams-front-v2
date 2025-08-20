@@ -35,7 +35,7 @@
 .customTab-item:not(.disabled):hover {
   cursor: pointer;
   color: #7aaad1;
-  transition: 0.1s;
+  transition: 0.3s;
 }
 
 .customTab-item:not(.disabled).active {

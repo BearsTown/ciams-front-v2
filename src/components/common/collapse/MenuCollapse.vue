@@ -128,7 +128,7 @@
     background: #fff;
     //text-align: center;
     box-shadow: 2px 2px 3px 2px rgba(0, 0, 0, 0.12);
-    transition: 0.2s;
+    transition: 0.3s;
 
     &:hover {
       color: var(--ugis-color-white);

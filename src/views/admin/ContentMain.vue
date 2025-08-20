@@ -1,48 +1,46 @@
 <template>
   <div id="reference" class="active">
-    <Left @click="clickSubMenu" :menu="menu" :default-key="defaultContentKey" />
+    <Left
+      v-if="defaultContentKey"
+      @click="clickSubMenu"
+      :menu="menu"
+      :default-key="defaultContentKey"
+    />
+
     <div class="admin-container">
-      <transition name="slide-fade" mode="out-in">
-        <keep-alive>
-          <component :is="tabComponent" ref="current" />
-        </keep-alive>
-      </transition>
+      <ContentMain v-if="selectedMenu" :data="selectedMenu" :key="selectedMenu.id" />
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
+  import { computed, markRaw, onMounted, ref } from 'vue'
+
   import Left from '@/components/admin/Left.vue'
-  import Content from '@/components/admin/content/manage/Index.vue'
-  import AreaContent from '@/components/admin/content/area/Index.vue'
-  import { ref } from 'vue'
-  import { markRaw } from 'vue'
-  import { onMounted } from 'vue'
+
+  import ContentMain from '@/components/admin/content'
+
+  import { getContentMenuGroupList } from '@/api/admin/content-menu'
 
   const tabComponent = ref()
-  const defaultContentKey = ref('AreaContent')
+  const selectedMenu = ref<{
+    id: string | number
+    title: string
+  }>()
 
-  const menu = [
+  const defaultContentKey = computed(() => menu.value[0]?.sub[0]?.key)
+
+  const menu = ref<{}[]>([
     {
       key: 'ContentMain',
-      name: '구역계획',
-      sub: [
-        {
-          key: 'Content',
-          name: '계획 관리',
-          content: Content,
-        },
-        {
-          key: 'AreaContent',
-          name: '구역별 계획 지정',
-          content: AreaContent,
-        },
-      ],
+      name: '계획관리',
+      sub: [],
     },
-  ]
+  ])
 
   const clickSubMenu = (key) => {
     let find
-    menu.forEach((item) => {
+    menu.value.forEach((item) => {
       if (item.sub.length > 0) {
         return item.sub.forEach((_item) => {
           if (key == _item.key) find = _item
@@ -53,6 +51,10 @@
     })
     try {
       if (find) {
+        selectedMenu.value = {
+          id: find.key,
+          title: find.name,
+        }
         tabComponent.value = markRaw(find.content)
       }
     } catch (e) {
@@ -60,8 +62,21 @@
     }
   }
 
-  onMounted(() => {
-    tabComponent.value = markRaw(AreaContent)
+  onMounted(async () => {
+    const { data } = await getContentMenuGroupList()
+
+    menu.value[0].sub = data.map((item) => ({
+      key: String(item.id),
+      name: item.title,
+      content: ContentMain,
+    }))
+
+    const firstMenu = menu.value[0].sub[0]
+    selectedMenu.value = {
+      id: Number(firstMenu.key),
+      title: firstMenu.name,
+    }
+    tabComponent.value = markRaw(firstMenu.content)
   })
 </script>
 <style scoped>

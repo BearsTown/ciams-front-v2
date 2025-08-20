@@ -874,7 +874,7 @@
 .map-sideBar .btn-sideBarMenu:not(:disabled),
 .map-sideBar .btn-sideBarMenu:not(:disabled) .title,
 .map-sideBar .btn-sideBarMenu:not(:disabled) svg * {
-  transition: 0.1s;
+  transition: 0.3s;
 }
 
 /* 기본 SVG 색상 */
@@ -962,14 +962,14 @@
 .map-sideBar .menu-list > li:not(.disabled):hover {
   color: #7aaad1;
   cursor: pointer;
-  transition: 0.1s;
+  transition: 0.3s;
 }
 
 .map-sideBar .menu-list > li:not(.disabled).active {
   background: #fff;
   font-weight: 700;
   color: #7aaad1;
-  transition: 0.1s;
+  transition: 0.3;
 }
 
 /* 사용자 하위메뉴 */

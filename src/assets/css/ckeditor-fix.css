@@ -1,0 +1,57 @@
+.ck-editor .ck-content li {
+    margin: 0.5em 0 !important;
+    line-height: 1.6 !important;
+    display: list-item !important;
+}
+
+.ck-editor .ck-content ul {
+    margin: 1em 0 !important;
+    padding-left: 2em !important;
+}
+
+.ck-editor .ck-content ol {
+    margin: 1em 0 !important;
+    padding-left: 2em !important;
+    list-style-type: decimal !important;
+}
+
+
+/*
+.ck-editor .ck-content li {
+    display: list-item !important;
+    margin: 0.5em 0 !important;
+    line-height: 1.6 !important;
+}
+
+.ck-editor .ck-content ul {
+    margin: 1em 0 !important;
+    padding-left: 2em !important;
+}
+
+.ck-editor .ck-content ul ul {
+    margin: 0.5em 0 !important;
+    list-style-type: circle !important;
+}
+
+.ck-editor .ck-content ul ul ul {
+    list-style-type: square !important;
+}
+
+.ck-editor .ck-content ol {
+    list-style-type: decimal !important;
+    margin: 1em 0 !important;
+    padding-left: 2em !important;
+}
+
+.ck-editor .ck-content ol ol {
+    list-style-type: lower-alpha !important;
+    margin: 0.5em 0 !important;
+}
+
+.ck-editor .ck-content ol ol ol {
+    list-style-type: lower-roman !important;
+}
+*/
+
+
+

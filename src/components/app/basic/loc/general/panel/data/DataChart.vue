@@ -179,4 +179,13 @@
     font-weight: 700;
     letter-spacing: -0.02em;
   }
+
+  :deep(.el-button):hover {
+    opacity: 0.8;
+    transition: 0.3s;
+  }
+
+  :deep(.el-button) {
+    margin-left: 3px !important;
+  }
 </style>

@@ -5,8 +5,8 @@
         <div class="center">
           <div class="left customScroll">
             <div class="container">
-              <div style="width: 100%; height: 100%">
-                <el-empty :description="title[1]" :image-size="400" style="height: 100%" />
+              <div class="ck-editor" style="width: 100%; height: 100%; line-height: 1.5">
+                <div v-html="content.contents" class="ck-content" style="padding: 10px"></div>
               </div>
             </div>
           </div>
@@ -18,6 +18,9 @@
 
 <script setup lang="ts">
   import PagePane from '@/components/common/PagePane.vue'
+  import { onActivated, ref } from 'vue'
+  import Archive from '@/api/admin/archive/model'
+  import archiveService from '@/api/app/archive/archiveService'
 
   const props = withDefaults(
     defineProps<{
@@ -27,6 +30,13 @@
       title: () => [],
     },
   )
+
+  const content = ref({} as Archive.Archive)
+
+  onActivated(async () => {
+    const { data } = await archiveService.getArchiveDetail('58b6a8bb-472e-4e7a-935b-13c69a2ba28d')
+    content.value = data
+  })
 </script>
 
 <style lang="scss"></style>

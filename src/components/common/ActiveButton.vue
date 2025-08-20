@@ -78,7 +78,7 @@
     background: #fff;
     //text-align: center;
     box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12);
-    transition: 0.2s;
+    transition: 0.3s;
 
     &:not(.is-disabled):hover {
       //color: var(--ugis-color-white);

@@ -62,6 +62,7 @@ namespace Archive {
     contents?: string
     imgFile?: MultipartFile
     attachFiles?: MultipartFile[]
+    imageFileIds?: string[]
   }
 }
 

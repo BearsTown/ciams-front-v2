@@ -38,7 +38,13 @@
     },
   )
 
-  const { status: isOpen, toggle } = useBoolean(props.isOpen)
+  const { status: isOpen, toggle, on, off } = useBoolean(props.isOpen)
+
+  defineExpose({
+    on,
+    off,
+    toggle,
+  })
 </script>
 
 <style scoped lang="scss">

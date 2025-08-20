@@ -1,28 +1,26 @@
 <template>
   <div class="panel">
     <keep-alive>
-      <component :is="currentTabComponent" />
+      <component
+        :is="Pane"
+        :v-if="selectedItemId"
+        :key="selectedItemId"
+        :menu-id="selectedItemId"
+      />
     </keep-alive>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { computed, DefineComponent } from 'vue'
+  import { computed } from 'vue'
 
-  import TabAComp from '@/views/app/plan/sector/panel/page-1'
-  import TabBComp from '@/views/app/plan/sector/panel/page-2'
-  import TabCComp from '@/views/app/plan/sector/panel/page-3'
-  import { Menu3Sub2TabIdType, useMenu3Sub2Store } from '@/stores/app/plan/sector'
+  import Pane from '@/components/app/plan/sector/panel'
 
-  const menu3sub2store = useMenu3Sub2Store()
+  import { usePlanSectorStore } from '@/stores/app/plan/sector'
 
-  const components: Record<Menu3Sub2TabIdType, DefineComponent> = {
-    TabA: TabAComp,
-    TabB: TabBComp,
-    TabC: TabCComp,
-  }
+  const planSectorStore = usePlanSectorStore()
 
-  const currentTabComponent = computed(() => components[menu3sub2store.selectedTabId] || TabAComp)
+  const selectedItemId = computed(() => planSectorStore?.selectedItem?.id)
 </script>
 
 <style scoped lang="scss">
@@ -30,7 +28,6 @@
     width: 100%;
     height: 100%;
     padding: 10px;
-    //padding: 15px 12px;
     background-color: #f4f4f4;
   }
 </style>

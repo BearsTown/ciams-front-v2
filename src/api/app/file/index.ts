@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from 'axios'
 
 import { ResultData } from '@/api/app/model'
 import { ciamsAxiosInstance as http } from '@/api/app'
-import FileDto from '@/api/app/file/model'
+import FileDto, { File } from '@/api/app/file/model'
 
 const prefix = '/api/v1/file'
 
@@ -38,4 +38,13 @@ export function pdfFile(id: string) {
     responseType: 'blob',
   }
   return http.get<ResultData<Blob>>(`${prefix}/pdf/${id}`, config)
+}
+
+export function uploadEditorImage(data: FormData) {
+  const config: AxiosRequestConfig = {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }
+  return http.post<ResultData<File[]>>(`${prefix}/upload-editor`, data, config)
 }
