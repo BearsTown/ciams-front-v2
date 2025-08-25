@@ -16,7 +16,7 @@
     <el-divider />
 
     <el-form
-      class="container-c"
+      class="container-c customScroll"
       ref="uploadFormRef"
       :rules="rules"
       :model="content"

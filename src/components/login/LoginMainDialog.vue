@@ -81,6 +81,9 @@
 <script setup lang="ts">
   import { useAuthStore } from '@/stores/auth'
   import { computed, reactive, ref } from 'vue'
+
+  import CommonUtil from '@/utils/commonUtil'
+
   import { useGlobalStore } from '@/stores/app'
 
   const props = withDefaults(
@@ -144,7 +147,7 @@
         })
         .catch((err) => {
           loginForm.password = ''
-          debugger
+
           if (
             err.response.data.error_description &&
             err.response.data.error_description.indexOf('locked') > -1

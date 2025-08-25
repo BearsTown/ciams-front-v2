@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios'
+import router from '@/router'
 import TokenUtil from '@/utils/tokenUtil'
 import { AbstractApiAxios } from '@/utils/apiAxios'
 import { useAuthStore } from '@/stores/auth'
 import { ResultData } from '@/api/app/model'
 import { API_INFO_CIAMS } from '@/config/config'
 import { authAxiosInstance, refreshToken } from '@/api/auth'
-import CommonUtil from '@/utils/commonUtil'
 
 class CiamsAxios extends AbstractApiAxios<ResultData<any>> {
   constructor() {
@@ -36,37 +36,22 @@ class CiamsAxios extends AbstractApiAxios<ResultData<any>> {
       async (error) => {
         const res = error.response
         if (res.status === 401) {
-          return this.getTokenByRefreshToken()
-            .then((res) => this.retryRequest(res, error))
-            .catch((err) => {
-              if (res.status === 401) {
-                const authStore = useAuthStore()
-                authStore.logOut('sessionExpired')
-              }
-            })
-
-          // const description = res.data.error_description
-          // if (description.indexOf('Access token expired') > -1) {
-          //   return this.getTokenByRefreshToken()
-          //     .then((res) => this.retryRequest(res, error))
-          //     .catch((err) => {
-          //       const _errorDescription = err.response.data.error_description
-          //       if (_errorDescription.indexOf('Invalid refresh token') > -1) {
-          //         const authStore = useAuthStore()
-          //          debugger
-          //         authStore.logOut('sessionExpired')
-          //       }
-          //     })
-          // } else if (description.indexOf('Invalid refresh token') > -1) {
-          //   const authStore = useAuthStore()
-          //   debugger
-          //   authStore.logOut('sessionExpired')
-          // } else if (description.indexOf('Full authentication is required') > -1) {
-          //   await router.replace('/')
-          // }
+          const description = res.data.error_description
+          if (description.indexOf('Jwt expired') > -1) {
+            return this.getTokenByRefreshToken()
+              .then((res) => this.retryRequest(res, error))
+              .catch((err) => {
+                const error = err.response.data.error
+                if (error.indexOf('invalid_grant') > -1) {
+                  const authStore = useAuthStore()
+                  authStore.logOut('sessionExpired')
+                }
+              })
+          } else if (description.indexOf('Full authentication is required') > -1) {
+            await router.replace('/')
+          }
         } else if (res.status === 403) {
-          CommonUtil.errorMessage('통신 중 에러가 발생했습니다.')
-          // await router.replace('/')
+          await router.replace('/')
         }
         return Promise.reject(error)
       },

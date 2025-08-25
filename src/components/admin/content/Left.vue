@@ -134,12 +134,12 @@
       }
 
       case 'DELETE': {
-        CommonUtil.confirm(`컨텐츠를 삭제 하시겠습니까?`, '삭제')
+        CommonUtil.confirm(`메뉴를 삭제 하시겠습니까?`, '삭제')
           .then(async () => {
             await deleteContentMenu(data.id)
           })
           .then(async () => {
-            CommonUtil.successMessage('컨텐츠 삭제 성공')
+            CommonUtil.successMessage('메뉴 삭제 성공')
             await reload()
           })
         break
