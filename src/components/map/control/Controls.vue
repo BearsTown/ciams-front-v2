@@ -501,21 +501,21 @@
       //     },
       //   ],
       // },
-      // {
-      //   button: new TriggerButton({
-      //     id: 'print',
-      //     title: '출력',
-      //     iconName: 'print',
-      //   }),
-      //   listeners: [
-      //     {
-      //       key: 'click',
-      //       fn: () => {
-      //         globalStore.printDialog = true
-      //       },
-      //     },
-      //   ],
-      // },
+      {
+        button: new TriggerButton({
+          id: 'print',
+          title: '출력',
+          iconName: 'print',
+        }),
+        listeners: [
+          {
+            key: 'click',
+            fn: () => {
+              globalStore.printDialog = true
+            },
+          },
+        ],
+      },
     ])
 
     controls.value?.forEach((control) => {
@@ -529,7 +529,6 @@
 
 <style lang="scss">
   @import '@/assets/css/mapController.css';
-  @import '@/assets/css/printModal.css';
 </style>
 
 <style scoped lang="scss"></style>

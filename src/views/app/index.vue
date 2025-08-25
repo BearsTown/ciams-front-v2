@@ -20,7 +20,7 @@
       top="28vh"
       :fullscreen="false"
     >
-      <MapPrint style="width: 100%; height: 600px" :map-type="currentMapType" />
+      <MapPrint style="width: 100%; height: 100%" :map-type="currentMapType" />
     </el-dialog>
   </div>
 </template>
@@ -109,7 +109,7 @@
   @import '@/assets/css/zoningSetting.css';
 
   .dialog-map-print {
-    //width: 960px;
+    width: auto;
 
     .el-dialog__header {
       display: none !important;

@@ -266,19 +266,6 @@
 </script>
 
 <style scoped lang="scss">
-  .map-filter-normal {
-    filter: none;
-  }
-  .map-filter-gray {
-    filter: grayscale(1);
-  }
-  .map-filter-light {
-    filter: brightness(1.2);
-  }
-  .map-filter-dark {
-    filter: brightness(0.5);
-  }
-
   .mapController .dropdown.bgMap .form {
     max-height: 760px;
     min-height: 760px;

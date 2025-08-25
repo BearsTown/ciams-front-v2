@@ -33,6 +33,7 @@
 
 <script setup lang="ts">
   import { onActivated, onBeforeMount, ref, watch } from 'vue'
+  import { storeToRefs } from 'pinia'
 
   import Source from '@/components/common/Source.vue'
   import PagePane from '@/components/common/PagePane.vue'
@@ -59,6 +60,7 @@
   import { getSources } from '@/api/app/source'
   import { getDataInfo } from '@/api/app/basic/urban/data'
 
+  import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
   import { useBasicUrbanInstanceStore } from '@/stores/app/basic/urban/common'
@@ -66,8 +68,11 @@
 
   const mapType: MapType = 'Map-Urban-IndChar'
 
+  const globalStore = useGlobalStore()
   const cmmConfigStore = useCmmConfigStore()
   const basicUrbanIndCharStore = useBasicUrbanInstanceStore(mapType)
+
+  const { currentMapType } = storeToRefs(globalStore)
 
   const mapConfig = ref<MapWrapperConfig>()
   const mapLayerGroupType: MapLayerGroupType = 'Menu-1-2-4'
@@ -305,6 +310,8 @@
   })
 
   onActivated(async () => {
+    currentMapType.value = mapType
+
     mapWrap.value = await mapStore.getMapInstance()
     mapWrap.value?.getUitBaseMap().updateSize()
     mapWrap.value?.getUitMap()?.refresh()
