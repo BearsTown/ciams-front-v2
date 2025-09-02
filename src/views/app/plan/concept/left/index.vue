@@ -1,6 +1,6 @@
 <template>
   <div style="display: flex; width: 100%; height: 100%; padding: 15px 12px; flex-direction: column">
-    <button class="popButton" @click="showImage(1)">
+    <button class="popButton" @click="showImage('PLAN_CONCEPT_1')">
       <span style="padding: 5px 0">1. 도시공업지역 활성화 목표 및 전략</span>
     </button>
     <div
@@ -37,7 +37,7 @@
         />
       </div>
     </div>
-    <button class="popButton" @click="showImage(2)">
+    <button class="popButton" @click="showImage('PLAN_CONCEPT_2')">
       <span style="padding: 5px 0">3. 도시공업지역 기본구상(안)</span>
     </button>
 
@@ -68,11 +68,13 @@
 
   import { MapLayer } from '@/js/layer'
   import { useBoolean } from '@/hooks/useBoolean'
+
   import { API_INFO_CIAMS, API_INFO_MAPSTUDIO } from '@/config/config'
   import { MapLayerGroupType, MapType, ViewLayerTypes } from '@/enums/mapEnum'
 
   import { MapWrapper } from '@/js/mapWrapper'
 
+  import { getConfig } from '@/api/app/config'
   import { CiamsZoneDTO } from '@/api/app/zone/model'
 
   import { useGlobalStore } from '@/stores/app'
@@ -224,14 +226,12 @@
     uitVectorLayer2.clear()
   }
 
-  function showImage(type) {
-    if (type === 1) {
-      srcList.value = [prefixPath + '2b4a606a-5fa4-4213-8546-c10426903dfb']
-    } else if (type === 2) {
-      srcList.value = [prefixPath + 'e05f587b-5d3b-4f24-a326-34389f7a209f']
-    }
+  async function showImage(type: string) {
+    const { data } = await getConfig(type)
+    const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image'
+    srcList.value = [`${prefixPath}/${data?.attachFile?.id}`]
 
-    nextTick(() => {
+    await nextTick(() => {
       imageRef.value?.showPreview()
     })
   }

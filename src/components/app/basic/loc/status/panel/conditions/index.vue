@@ -22,23 +22,29 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
 
   import PagePane from '@/components/common/PagePane.vue'
 
+  import { getConfig } from '@/api/app/config'
   import { API_INFO_CIAMS } from '@/config/config'
 
   import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   const cmmConfigStore = useCmmConfigStore()
 
-  const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
-  const imgSrc = prefixPath + '527a91f3-3cd8-4187-aaeb-3e25c980b137'
+  const imgSrc = ref<string>('')
 
   const title = computed(() => [
     '산업현황분석',
     `${cmmConfigStore.cmmConfigState['SGG_NAME'].confValue} 산업여건변화`,
   ])
+
+  onMounted(async () => {
+    const { data } = await getConfig('BASIC_LOC_STATUS_CONDITIONS')
+    const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image'
+    imgSrc.value = `${prefixPath}/${data?.attachFile?.id}`
+  })
 </script>
 
 <style lang="scss"></style>

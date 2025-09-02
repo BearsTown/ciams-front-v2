@@ -33,9 +33,9 @@
               </div>
               <el-image
                 style="width: 100%; height: 100%"
-                :src="imgSrcC"
+                :src="imgSrc"
                 fit="scale-down"
-                :preview-src-list="[imgSrcC]"
+                :preview-src-list="[imgSrc]"
                 :preview-teleported="true"
                 :zoom-rate="1.2"
               />
@@ -214,6 +214,7 @@
     getItaData,
   } from '@/api/app/basic/loc/characteristic'
   import { useBasicLocIndCharITAStore } from '@/stores/app/basic/loc/ind-char/ITA'
+  import { getConfig } from '@/api/app/config'
 
   const basicLocIndCharITAStore = useBasicLocIndCharITAStore()
 
@@ -249,7 +250,7 @@
 
   const memos = ref<string[]>([])
   const imgSrc = ref<string>('')
-  const imgSrcC = computed(() => `${prefixPath}${imgSrc.value}`)
+  // const imgSrcC = computed(() => `${prefixPath}${imgSrc.value}`)
 
   const prefixPath = `${API_INFO_CIAMS.PREFIX}/api/v1/file/image/`
 
@@ -296,7 +297,9 @@
       type: props.type,
     })
 
-    imgSrc.value = rawTempData.image
+    const { data } = await getConfig(rawTempData.image)
+    const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image'
+    imgSrc.value = `${prefixPath}/${data?.attachFile?.id}`
 
     runSearch()
   })

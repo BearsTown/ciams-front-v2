@@ -53,6 +53,7 @@
 
   onBeforeMount(async () => {
     await loadConfig()
+    await useAuthStore().checkToken()
   })
 </script>
 

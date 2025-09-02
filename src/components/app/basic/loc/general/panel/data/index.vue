@@ -85,10 +85,11 @@
 
   watch(
     () => basicLocGeneralStore.selectedItem,
-    async () => {
-      console.log(basicLocGeneralStore.selectedItem.id)
-
-      await loadGroup(basicLocGeneralStore.selectedItem.id)
+    async (item) => {
+      if (item) {
+        console.log(basicLocGeneralStore.selectedItem.id)
+        await loadGroup(basicLocGeneralStore.selectedItem.id)
+      }
     },
     { immediate: false },
   )

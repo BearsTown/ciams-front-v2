@@ -27,13 +27,14 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, watch } from 'vue'
+  import { computed, onMounted, ref, watch } from 'vue'
 
   import Source from '@/components/common/Source.vue'
   import PagePane from '@/components/common/PagePane.vue'
   import DensityImage from '@/components/app/basic/loc/status/panel/density/Density-Image.vue'
 
   import { API_INFO_CIAMS } from '@/config/config'
+  import { getConfig } from '@/api/app/config'
 
   import { CiamsBasicLocDescription } from '@/models/api/app/basic/loc/ciams-basic-loc-description'
   import { SourceGroupDTO } from '@/api/app/source/model'
@@ -43,9 +44,7 @@
 
   const basicLocIndStatusDensityStore = useBasicLocIndStatusDensityStore()
 
-  const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
-  const imgSrc = prefixPath + '1_2.산업특성분석_3p_범례.png'
-
+  const imgSrc = ref<string>('')
   const densities = ref<DensityImage[]>([])
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
   const descriptions = ref<CiamsBasicLocDescription[]>([])
@@ -67,6 +66,12 @@
     },
     { immediate: true },
   )
+
+  onMounted(async () => {
+    const { data } = await getConfig('BASIC_LOC_STATUS_DENSITY_LEGEND')
+    const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image'
+    imgSrc.value = `${prefixPath}/${data?.attachFile?.id}`
+  })
 </script>
 
 <style lang="scss"></style>

@@ -22,12 +22,20 @@
 </template>
 
 <script setup lang="ts">
+  import { onMounted, ref } from 'vue'
+
   import PagePane from '@/components/common/PagePane.vue'
 
   import { API_INFO_CIAMS } from '@/config/config'
+  import { getConfig } from '@/api/app/config'
 
-  const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image/'
-  const imgSrc = prefixPath + '2044e732-c692-4ea0-9a8d-fc3554768949'
+  const imgSrc = ref<string>('')
+
+  onMounted(async () => {
+    const { data } = await getConfig('BASIC_LOC_GENERAL_PLANS')
+    const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image'
+    imgSrc.value = `${prefixPath}/${data?.attachFile?.id}`
+  })
 </script>
 
 <style lang="scss"></style>

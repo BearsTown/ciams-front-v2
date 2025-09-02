@@ -72,25 +72,25 @@ function getIndustryStatusTemp(params: any): Promise<object> {
       switch (params.type) {
         case '선도산업':
           resolve({
-            image: '55f9be97-cc9a-4e66-9896-52d2d84c5251',
+            image: 'BASIC_LOC_CHAR_DENSITY_1',
           })
           break
         case '신흥산업':
           resolve({
-            image: 'ce6de25a-1183-4993-b8bb-6075aa84ffff',
+            image: 'BASIC_LOC_CHAR_DENSITY_2',
           })
           break
         case '쇠퇴산업':
           resolve({
-            image: '425cb4e2-4be5-4f44-b9f6-6166c9cd4a6c',
+            image: 'BASIC_LOC_CHAR_DENSITY_3',
           })
           break
         case '초기반산업':
           resolve({
-            image: '69566077-c24e-4c53-84d2-96a49505e97d',
+            image: 'BASIC_LOC_CHAR_DENSITY_4',
           })
           break
       }
-    }, 100)
+    }, 10)
   })
 }
