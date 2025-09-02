@@ -20,7 +20,12 @@
               class="customScroll scrollX"
               style="height: 100%"
             >
-              <Main ref="mainRef" :category="data.category" :select-type="selectTypeObj" />
+              <Main
+                ref="mainRef"
+                v-if="selectTypeObj"
+                :category="data.category"
+                :select-type="selectTypeObj"
+              />
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -36,7 +41,6 @@
   import { ref } from 'vue'
   import Left from '@/components/admin/user/access/Left.vue'
   import Main from '@/components/admin/user/access/Main.vue'
-  import { useAdminConfigStore } from '@/stores/admin/config'
 
   const selectTypeObj = ref('')
   const mainRef = ref()

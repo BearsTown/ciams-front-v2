@@ -80,6 +80,6 @@ interface CiamsZone {
   locResult: string
   locReCd: string
   division: string
-  baseYear: number
-  pastYear: number
+  baseYear: string
+  pastYear: string
 }

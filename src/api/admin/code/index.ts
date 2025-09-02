@@ -2,7 +2,7 @@ import { ResultData } from '@/api/app/model'
 import { ciamsAxiosInstance as http } from '@/api/app'
 import CiamsCode from '@/api/admin/code/model'
 
-const prefix = '/api/v1/codes'
+const prefix = '/api/v1/admin/codes'
 
 export default {
   getCodeList(parentCode: string) {

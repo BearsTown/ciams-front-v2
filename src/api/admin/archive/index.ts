@@ -3,24 +3,24 @@ import { ResultData } from '@/api/app/model'
 import { AxiosRequestConfig } from 'axios'
 import Archive from './model'
 
-const prefix = '/api/v1/archive'
-const categroyPrefix = '/api/v1/category'
+const prefix = '/api/v1/admin/archive'
+const categoryPrefix = '/api/v1/admin/category'
 
 export default {
   addCategory(params: Archive.ModifyCategory) {
-    return http.post<ResultData<any>>(`${categroyPrefix}/add`, params)
+    return http.post<ResultData<any>>(`${categoryPrefix}/add`, params)
   },
 
   modifyCategory(params: Archive.ModifyCategory) {
-    return http.put<ResultData<any>>(`${categroyPrefix}/modify`, params)
+    return http.put<ResultData<any>>(`${categoryPrefix}/modify`, params)
   },
 
   getCategory() {
-    return http.get<ResultData<any>>(`${categroyPrefix}`)
+    return http.get<ResultData<any>>(`${categoryPrefix}`)
   },
 
   deleteCategory(categoryId: string) {
-    return http.delete(`${categroyPrefix}/${categoryId}`)
+    return http.delete(`${categoryPrefix}/${categoryId}`)
   },
 
   getArchive(params: Archive.FindArchive) {

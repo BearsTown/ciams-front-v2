@@ -2,7 +2,7 @@ import { ResultData } from '@/api/app/model'
 import { ciamsAxiosInstance as http } from '@/api/app'
 import { AxiosRequestConfig } from 'axios'
 
-const prefix = '/api/v1/access'
+const prefix = '/api/v1/admin/access'
 
 export default {
   getList(

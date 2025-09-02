@@ -1,7 +1,7 @@
 import { ResultData } from '@/api/app/model'
 import { ciamsAxiosInstance as http } from '@/api/app'
 
-const prefix = '/api/v1/user'
+const prefix = '/api/v1/admin/user'
 
 export default {
   getList(params: {

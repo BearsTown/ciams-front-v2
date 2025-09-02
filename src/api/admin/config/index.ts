@@ -5,7 +5,7 @@ import { ResultData } from '@/api/app/model'
 import { ciamsAxiosInstance as http } from '@/api/app'
 import { object } from 'vue-types'
 
-const prefix = '/api/v1/config'
+const prefix = '/api/v1/admin/config'
 
 export default {
   getConfigList(confType: string) {

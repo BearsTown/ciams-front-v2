@@ -83,7 +83,7 @@
 
     <div class="main-box">
       <h2 class="main-title">
-        <b>{{ systemInfo.title_kor }}</b> {{ systemInfo.version }}<br />({{ systemInfo.title_eng }})
+        <div v-html="formattedSystemInfo"></div>
       </h2>
 
       <!--검색바-->
@@ -114,7 +114,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onBeforeMount, onMounted, onUnmounted, reactive, ref } from 'vue'
+  import { computed, onBeforeMount, onMounted, onUnmounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
   import { useRouter } from 'vue-router'
   import { ElMessage } from 'element-plus'
@@ -129,17 +129,13 @@
   import TokenUtil from '@/utils/tokenUtil'
   import CommonUtil from '@/utils/commonUtil'
   import { API_INFO_CIAMS } from '@/config/config'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   import { getConfig } from '@/api/app/config'
 
   import { useGlobalStore } from '@/stores/app'
   import { useAuthStore } from '@/stores/auth'
 
-  const systemInfo = reactive({
-    title_kor: '',
-    title_eng: '',
-    version: '',
-  })
   const router = useRouter()
   const store = useAuthStore()
   const { userName, isLoggedIn, isAdmin, userInfo, menuInfo } = storeToRefs(store)
@@ -147,7 +143,28 @@
   const isPwdChangeVisible = ref<boolean>(false)
   const mapSearchBarRef = ref()
   const isShowLogo = ref(false)
-  const sgg_image_main = ref('')
+
+  const sgg_image_main = computed(() => {
+    const data = cmmConfigStore.cmmConfigState['SGG_IMAGE_MAIN']
+
+    if (data && data.attachFile) {
+      const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image'
+      return `${prefixPath}/${data.attachFile.id}`
+    }
+    return ''
+  })
+
+  const formattedSystemInfo = computed(() => {
+    const kor = cmmConfigStore.cmmConfigState['SYSTEM_NAME_KOR']?.confValue
+    const eng = cmmConfigStore.cmmConfigState['SYSTEM_NAME_ENG']?.confValue
+    const version = cmmConfigStore.cmmConfigState['SYSTEM_VERSION']?.confValue
+
+    if (kor === undefined || eng === undefined || version === undefined) {
+      return import.meta.env.VITE_APP_TITLE
+    }
+
+    return `<b>${kor}</b> ${version}<br />(${eng})`
+  })
 
   const pwChangeModal = ref(false)
   const searchActive = ref(false)
@@ -161,6 +178,8 @@
   const globalStore = useGlobalStore()
   const { loading } = storeToRefs(globalStore)
   const alarmVisible = ref(false)
+
+  const cmmConfigStore = useCmmConfigStore()
 
   /** ============================= */
 
@@ -218,26 +237,25 @@
   }
 
   async function loadInfo() {
-    const { data } = await getConfig('SGG_IMAGE_MAIN')
-
-    if (data && data.attachFile) {
-      const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image'
-      sgg_image_main.value = `${prefixPath}/${data.attachFile.id}`
-    }
-
-    const { data: kor } = await getConfig('SYSTEM_NAME_KOR')
-    const { data: eng } = await getConfig('SYSTEM_NAME_ENG')
-    const { data: version } = await getConfig('SYSTEM_VERSION')
-
-    if (kor) systemInfo.title_kor = `${kor.confValue}`
-    if (eng) systemInfo.title_eng = `${eng.confValue}`
-    if (version) systemInfo.version = `${version.confValue}`
+    // const { data } = await getConfig('SGG_IMAGE_MAIN')
+    // const data = cmmConfigStore.cmmConfigState['SGG_IMAGE_MAIN'].confValue
+    //
+    // if (data && data.attachFile) {
+    //   const prefixPath = API_INFO_CIAMS.PREFIX + '/api/v1/file/image'
+    //   sgg_image_main.value = `${prefixPath}/${data.attachFile.id}`
+    // }
+    // const { data: kor } = await getConfig('SYSTEM_NAME_KOR')
+    // const { data: eng } = await getConfig('SYSTEM_NAME_ENG')
+    // const { data: version } = await getConfig('SYSTEM_VERSION')
+    //
+    // if (kor) systemInfo.title_kor = `${kor.confValue}`
+    // if (eng) systemInfo.title_eng = `${eng.confValue}`
+    // if (version) systemInfo.version = `${version.confValue}`
   }
 
   onBeforeMount(async () => {
-    await loadInfo()
+    // await loadInfo()
     await useAuthStore().checkToken()
-    console.log('Main-check')
   })
 
   onMounted(async () => {

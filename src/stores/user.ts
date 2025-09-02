@@ -1,15 +1,11 @@
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import JSEncrypt from 'jsencrypt'
 
 import User from '@/api/app/user/model'
 import { getRsaPublicKey } from '@/api/auth'
 import { useAuthStore } from '@/stores/auth'
-import {
-  register as apiRegister,
-  changePassword as apiChangePassword,
-  getUser,
-} from '@/api/app/user'
-import { ref } from 'vue'
+import { changePassword as apiChangePassword, register as apiRegister } from '@/api/app/user'
 
 export const useUserStore = defineStore('userStore', () => {
   const userInfo = ref()

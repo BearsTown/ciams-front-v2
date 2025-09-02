@@ -105,7 +105,7 @@
 
   async function init() {
     await classifyAnalysisITAStore.init(3)
-    await classifyAnalysisITAStore.setActiveCategory(15)
+    await classifyAnalysisITAStore.setActiveCategory(14)
   }
 
   function tabChangeListener(year) {
