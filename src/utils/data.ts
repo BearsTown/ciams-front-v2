@@ -191,6 +191,10 @@ export function processChartData(params) {
       axisPointer: {
         type: 'shadow',
       },
+      axisLabel: {
+        interval: 0,
+        fontSize: 10,
+      },
     },
   ]
 
@@ -205,7 +209,8 @@ export function processChartData(params) {
     const item = {
       name: attr.label,
       type: attr.seriesType,
-      barMaxWidth: '50%',
+      // barWidth: 20,
+      barMaxWidth: '20',
       [`${axis === 'X' ? 'y' : 'x'}AxisIndex`]: idx,
       data: [] as object[],
       tooltip: {

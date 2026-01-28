@@ -5,6 +5,7 @@ export namespace CharResultDto {
     namespace Search {
       export interface Params extends PageReq {
         sggCd: string
+        orderByList?: OrderBy[]
       }
 
       export interface Row extends CharResultData {
@@ -14,6 +15,11 @@ export namespace CharResultDto {
       export interface Result {
         page: PageRes
         list: Row[]
+      }
+
+      export interface OrderBy {
+        column: string
+        direction: 'ASC' | 'DESC'
       }
     }
   }
@@ -33,5 +39,7 @@ export namespace CharResultDto {
     lqRec: string
     corpCnt: number
     workerCnt: number
+    isTopCorp: boolean
+    isTopWorker: boolean
   }
 }

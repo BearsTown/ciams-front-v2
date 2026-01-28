@@ -11,7 +11,15 @@
     defineProps<{
       tagCategory?: TagCategory
     }>(),
-    {},
+    {
+      tagCategory: () => {
+        return {
+          label: '-',
+          value: '-',
+          color: '#b2b2b2',
+        }
+      },
+    },
   )
 </script>
 

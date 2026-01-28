@@ -2,7 +2,7 @@
   <div style="display: flex; flex-direction: column; width: 100%; height: 100%">
     <div class="result-header">검색결과 총 {{ pageInfo.totalCount }}건</div>
 
-    <ITAResultTable :data="itaResultItems" />
+    <ITAResultTable :data="itaResultItems" @update:sort="runSearch" />
 
     <div class="result-pagination">
       <el-pagination
@@ -49,13 +49,11 @@
   }
 
   async function search(pageNo: number, size: number) {
-    const params = {
+    const { data } = await getItaResultDataList({
       size,
       pageNo,
       ...currentParams.value!,
-    }
-
-    const { data } = await getItaResultDataList(params)
+    })
     responseData(data)
   }
 
@@ -63,9 +61,10 @@
     runSearch()
   }
 
-  function runSearch() {
+  function runSearch(orders?: CharResultDto.Char.Search.OrderBy[]) {
     const params: CharResultDto.Char.Search.Params = {
       sggCd: props.sggCd,
+      orderByList: orders,
     }
 
     setParams(params)

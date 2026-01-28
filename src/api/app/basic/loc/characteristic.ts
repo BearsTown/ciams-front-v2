@@ -1,7 +1,5 @@
 import { ciamsAxiosInstance as http } from '@/api/app'
 import { ResultData } from '@/api/app/model'
-import { AxiosRequestConfig } from 'axios'
-import qs from 'qs'
 
 import { ItaDto } from '@/models/api/app/basic/loc/characteristic/ita'
 import { StatusDto } from '@/models/api/app/basic/loc/characteristic/status'
@@ -50,13 +48,14 @@ function getIndustryStatus(params: StatusDto.IndustryStatus.Find.Params) {
  * @param params
  */
 function getItaResultDataList(params: CharResultDto.Char.Search.Params) {
-  const config: AxiosRequestConfig = {
-    params,
-    paramsSerializer: (params) => {
-      return qs.stringify(params, { arrayFormat: 'comma' })
-    },
-  }
-  return http.get<ResultData<CharResultDto.Char.Search.Result>>(`${prefix}/ita/result`, config)
+  // const config: AxiosRequestConfig = {
+  //   params,
+  //   paramsSerializer: (params) => {
+  //     return qs.stringify(params, { arrayFormat: 'comma' })
+  //   },
+  // }
+  // return http.get<ResultData<CharResultDto.Char.Search.Result>>(`${prefix}/ita/result`, config)
+  return http.post<ResultData<CharResultDto.Char.Search.Result>>(`${prefix}/ita/result`, params)
 }
 
 /**

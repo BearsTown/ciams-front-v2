@@ -1,7 +1,16 @@
 <template>
   <div style="height: 100%; display: flex; flex-direction: column">
-    <div style="margin-bottom: 5px; display: flex; justify-content: flex-end">
-      <el-text v-if="unitDisplay">{{ unitDisplay }}</el-text>
+    <div style="display: flex; flex: 1; flex-direction: row; margin-bottom: 5px">
+      <div style="flex: 1">
+        <el-text style="font-size: 12px; color: #616161" v-if="annoDisplay">
+          ※ 사업체 수가 2개 이하인 경우 사업체의 비밀보호를 위하여 x로 표기
+        </el-text>
+      </div>
+      <div style="">
+        <el-text style="font-size: 12px; color: #616161" v-if="unitDisplay"
+          >{{ unitDisplay }}
+        </el-text>
+      </div>
     </div>
     <el-table
       size="small"
@@ -55,9 +64,14 @@
     {},
   )
 
+  const dataName = ref<string>()
   const dataColumns = ref<GeneralDataDto.DataColumn[]>([])
   const tableColumns = ref<GeneralDataDto.DataColumn[] | GeneralDataDto.PivotColumn[]>([])
   const tableData = ref<{ [key: string]: any }[]>([])
+
+  const annoDisplay = computed(
+    () => dataName.value === 'status_econ_ind_va' || dataName.value === 'status_econ_ind_ship',
+  )
 
   const units = computed(() => {
     const units = dataColumns.value
@@ -80,7 +94,14 @@
 
   function formatValue(row, column) {
     const value = row[column.name]
-    if (CommonUtil.isEmpty(value)) return '-'
+    // if (CommonUtil.isEmpty(value)) return '-'
+    if (CommonUtil.isEmpty(value)) {
+      if (dataName.value === 'status_econ_ind_va' || dataName.value === 'status_econ_ind_ship') {
+        return 'x'
+      } else {
+        return '-'
+      }
+    }
     if (['INTEGER', 'DOUBLE'].includes(column.dataType)) {
       return CommonUtil.comma(value)
     }
@@ -113,6 +134,7 @@
       }
 
       tableData.value = newDataInfo.data || []
+      dataName.value = newDataInfo?.dataTable?.dataName
     },
     { immediate: true },
   )

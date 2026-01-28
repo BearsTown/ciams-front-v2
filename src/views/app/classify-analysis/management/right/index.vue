@@ -217,7 +217,7 @@
   const result = computed(() => (overview?.value?.locResult === '양호' ? '관리형' : '정비형'))
 
   function tagColor(dvsCd: string) {
-    return state.tags?.find((tag) => tag.value === dvsCd)?.color
+    return state.tags?.find((tag) => tag.value === dvsCd)?.color ?? '#b2b2b2'
   }
 
   function dialogChangeListener(state: boolean) {

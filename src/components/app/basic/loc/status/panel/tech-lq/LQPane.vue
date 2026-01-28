@@ -111,7 +111,7 @@
           fill: new Fill({
             color,
           }),
-          zIndex: 100,
+          zIndex: sggCd === sggCode.value ? 1 : 0,
         })
 
         const labelStyle = new Style({

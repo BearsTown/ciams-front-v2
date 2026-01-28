@@ -9,7 +9,15 @@
         <div class="top customScroll">
           <div class="text-wrap">
             <template v-for="desc in descriptions" :key="desc.id">
-              <p v-if="desc.description">- {{ desc.description }}</p>
+              <p v-if="desc.description && desc.targetId && desc.targetId !== 'COMMON'">
+                ㆍ{{ desc.description }}
+              </p>
+              <p
+                v-else-if="desc.description && (!desc.targetId || desc.targetId === 'COMMON')"
+                style="white-space: pre-wrap; font-size: 12px"
+              >
+                {{ desc.description }}
+              </p>
             </template>
           </div>
         </div>

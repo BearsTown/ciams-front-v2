@@ -9,7 +9,7 @@
         <div class="top customScroll">
           <div class="text-wrap">
             <template v-for="desc in descriptions" :key="desc.id">
-              <p v-if="desc.description">- {{ desc.description }}</p>
+              <p v-if="desc.description">ㆍ{{ desc.description }}</p>
             </template>
           </div>
         </div>

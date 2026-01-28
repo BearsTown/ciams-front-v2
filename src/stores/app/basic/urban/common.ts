@@ -5,7 +5,7 @@ import Feature from 'ol/Feature'
 import { GeoJSON, WFS } from 'ol/format'
 import VectorSource from 'ol/source/Vector'
 import { Stroke, Style } from 'ol/style'
-import { intersects, like as likeFilter } from 'ol/format/filter'
+import { like as likeFilter } from 'ol/format/filter'
 
 import { UitWFSLayer } from '@uitgis/ol-ugis-test/layer'
 import { urlWithParams } from '@uitgis/ol-ugis-test/util'
@@ -290,8 +290,12 @@ export const useBasicUrbanInstanceStore = (mapType: MapType) => {
     async function loadIndustryFeatures() {
       const projectionCode = mapWrap.value?.getUitMap().getView().getProjection().getCode()
 
+      // const filterCondition = !CommonUtil.isEmpty(state.activeDistFeature)
+      //   ? intersects('SHAPE', state.activeDistFeature!.getGeometry()!, projectionCode)
+      //   : undefined
+
       const filterCondition = !CommonUtil.isEmpty(state.activeDistFeature)
-        ? intersects('SHAPE', state.activeDistFeature!.getGeometry()!, projectionCode)
+        ? likeFilter('dist_no', state.activeDistFeature?.get('DIST_NO'))
         : undefined
 
       const wfsOptions: any = {

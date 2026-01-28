@@ -166,6 +166,11 @@
       zoneNo: item.zoneNo,
     })
 
+    await classifyAnalysisRegionalStore.setDesc({
+      zoneNo: item.zoneNo,
+      category: 'AR0200',
+    })
+
     const res = await fetchFeatures({
       url: API_INFO_MAPSTUDIO.PREFIX,
       key: 'F91A8E17-FA4F-81B6-D344-0FAFBB68DFF2',

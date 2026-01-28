@@ -126,7 +126,7 @@
 
               <div class="container" style="margin-top: 5px">
                 <div class="title" style="display: flex; align-items: center; font-size: 15px">
-                  <span style="flex: 1">주요도입산업</span>
+                  <span style="flex: 1">대상지 사업체 현황</span>
                 </div>
 
                 <table class="customTable">
@@ -147,6 +147,7 @@
                           v-if="idx === 0"
                           :rowspan="industry.list.length"
                           style="vertical-align: middle"
+                          :style="{ 'background-color': backColor(industry.category) }"
                         >
                           {{ industry.category }}
                         </td>
@@ -158,7 +159,12 @@
               </div>
             </el-tab-pane>
 
-            <el-tab-pane label="지역여건분석" name="Tab-B" style="height: 100%">
+            <el-tab-pane
+              label="지역여건분석"
+              name="Tab-B"
+              style="height: 100%"
+              class="customScroll"
+            >
               <PieChartItem
                 style="margin-top: 0"
                 title="산업시설 노후도"
@@ -208,7 +214,14 @@
                 :data="{ value: overview?.roadRate, names: ['도로', '비도로'] }"
                 :sources="source5"
               />
+
+              <Description
+                title="대상지 지역여건"
+                :use-type="false"
+                :descs="descFilterByType('AR0200')"
+              />
             </el-tab-pane>
+
             <el-tab-pane label="현황도" name="Tab-C" style="height: 100%" class="customScroll">
               <template v-for="item in info?.images" :key="item">
                 <template v-for="img in item?.list" :key="img">
@@ -223,34 +236,7 @@
         </div>
       </div>
 
-      <div class="container customScroll" style="margin-top: 5px">
-        <div class="title" style="display: flex; align-items: center; font-size: 15px">
-          <span style="flex: 1">종합분석</span>
-        </div>
-
-        <table class="customTable">
-          <colgroup>
-            <col style="width: 30%" />
-            <col />
-          </colgroup>
-          <thead>
-            <tr>
-              <th scope="col" style="text-align: center">구분</th>
-              <th scope="col" style="text-align: center">설명</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-for="desc in info?.descs" :key="desc">
-              <tr v-for="(item, idx) in desc.list" :key="idx">
-                <td v-if="idx === 0" :rowspan="desc.list.length" style="vertical-align: middle">
-                  {{ desc.category }}
-                </td>
-                <td style="text-align: left">{{ item }}</td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
-      </div>
+      <Description title="종합분석" :descs="descFilterByType('AR0400')" />
     </div>
 
     <el-dialog
@@ -284,6 +270,7 @@
   import { getComprehensiveInfo } from '@/api/app/classify-analysis/comprehensive'
 
   import { useClassifyAnalysisComprehensiveStore } from '@/stores/app/classify-analysis/comprehensive'
+  import Description from '@/components/app/classify-analysis/Description.vue'
 
   const classifyAnalysisComprehensiveStore = useClassifyAnalysisComprehensiveStore()
 
@@ -295,7 +282,19 @@
   const overview = computed<CiamsZoneDTO.Overview.Find.Result | undefined>(() => state.overview)
 
   function tagColor(itaReCd: string) {
-    return state.tags?.find((tag) => tag.value === itaReCd)?.color
+    return state.tags?.find((tag) => tag.value === itaReCd)?.color ?? '#b2b2b2'
+  }
+
+  function backColor(category: string) {
+    switch (category) {
+      case '선도산업': {
+        return '#e6b9b8'
+      }
+      case '신흥산업': {
+        return '#dbe6c3'
+      }
+    }
+    return ''
   }
 
   function dialogChangeListener(state: boolean) {
@@ -310,6 +309,21 @@
   const source3 = filterByTargetId('E003')
   const source4 = filterByTargetId('E004')
   const source5 = filterByTargetId('E005')
+
+  const descFilterByType = computed(() => {
+    return (category: string) => {
+      return info.value?.descs
+        .find((item) => item.category === category)
+        ?.list.reduce((acc, item) => {
+          const type = item.type
+          if (!acc[type]) {
+            acc[type] = []
+          }
+          acc[type].push(item)
+          return acc
+        }, {})
+    }
+  })
 
   watch(
     () => overview.value,

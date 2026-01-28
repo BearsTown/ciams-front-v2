@@ -9,7 +9,7 @@
         <div class="top customScroll">
           <div class="text-wrap">
             <template v-for="desc in descriptions" :key="desc.id">
-              <p v-if="desc.description">- {{ desc.description }}</p>
+              <p v-if="desc.description">ㆍ{{ desc.description }}</p>
             </template>
           </div>
         </div>
@@ -139,7 +139,7 @@
       series: [
         {
           type: 'pie',
-          radius: '90%',
+          radius: '50%',
           avoidLabelOverlap: false,
           data: densities.value.map(({ name, workerDensity }) => ({ value: workerDensity, name })),
           itemStyle: {
@@ -149,10 +149,10 @@
           },
           label: {
             show: true,
-            position: 'inside',
+            // position: 'inside',
             formatter: '{d}%',
-            color: '#fff',
-            fontSize: 12,
+            // color: '#fff',
+            fontSize: 10,
           },
           tooltip: {
             formatter: function (params) {

@@ -137,7 +137,7 @@
   const overview = computed<CiamsZoneDTO.Overview.Find.Result | undefined>(() => state.overview)
 
   function tagColor(itaReCd: string) {
-    return state.tags?.find((tag) => tag.value === itaReCd)?.color
+    return state.tags?.find((tag) => tag.value === itaReCd)?.color ?? '#b2b2b2'
   }
 
   function getRowStyle(itaReCd: string) {

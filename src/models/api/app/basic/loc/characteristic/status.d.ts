@@ -26,5 +26,6 @@ export namespace StatusDto {
     corpName: string
     location: string
     workerCnt: number
+    sales: number
   }
 }

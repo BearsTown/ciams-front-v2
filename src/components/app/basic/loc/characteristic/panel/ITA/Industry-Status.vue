@@ -18,7 +18,7 @@
             <el-divider border-style="dashed" style="margin: 5px 0" />
 
             <template v-for="desc in descriptions" :key="desc.id">
-              <p v-if="desc.description">- {{ desc.description }}</p>
+              <p v-if="desc.description">ㆍ{{ desc.description }}</p>
             </template>
           </div>
         </div>
@@ -62,6 +62,7 @@
                 <el-table-column label="사업체명" prop="corpName" align="center" />
                 <el-table-column label="위치" prop="location" align="center" />
                 <el-table-column
+                  v-if="useWorkerCnt"
                   label="종사자수"
                   prop="workerCnt"
                   align="right"
@@ -69,6 +70,17 @@
                 >
                   <template #default="{ row: { workerCnt } }">
                     {{ Number.isFinite(workerCnt) ? CommonUtil.comma(workerCnt) : '-' }}
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  v-if="useSales"
+                  label="매출액"
+                  prop="sales"
+                  align="right"
+                  header-align="center"
+                >
+                  <template #default="{ row: { sales } }">
+                    {{ Number.isFinite(sales) ? CommonUtil.comma(sales) : '-' }}
                   </template>
                 </el-table-column>
               </el-table>
@@ -93,10 +105,18 @@
                 :show-header="true"
                 scrollbar-always-on
                 border
+                :cell-style="cellStyle"
+                @sort-change="handleSortChange"
               >
                 <el-table-column label="업종" align="center" fixed>
                   <el-table-column label="구분" prop="category" align="center" width="120px" />
-                  <el-table-column label="코드" align="center" width="55px">
+                  <el-table-column
+                    label="코드"
+                    align="center"
+                    width="65px"
+                    sortable="custom"
+                    prop="combinedCode"
+                  >
                     <template #default="{ row }"> {{ row?.tcode }}{{ row?.clsCode }}</template>
                   </el-table-column>
                   <el-table-column label="산업내용" prop="insNm" align="center" min-width="230px" />
@@ -107,7 +127,7 @@
                   header-align="right"
                   align="right"
                   width="110px"
-                  sortable
+                  sortable="custom"
                 >
                   <template #header>
                     <span style="text-align: center; display: inline-block"
@@ -123,7 +143,7 @@
                   header-align="right"
                   align="right"
                   width="110px"
-                  sortable
+                  sortable="custom"
                 >
                   <template #header>
                     <span style="text-align: center; display: inline-block">
@@ -139,7 +159,7 @@
                   header-align="right"
                   align="right"
                   width="110px"
-                  sortable
+                  sortable="custom"
                 >
                   <template #header>
                     <span style="text-align: center; display: inline-block"
@@ -150,7 +170,7 @@
                     {{ Number.isFinite(rsValue) ? CommonUtil.comma(rsValue?.toFixed(1)) : '-' }}
                   </template>
                 </el-table-column>
-                <el-table-column prop="corpCnt" align="right" width="90px" sortable>
+                <el-table-column prop="corpCnt" align="right" width="90px" sortable="custom">
                   <template #header>
                     <span style="text-align: center; display: inline-block"
                       >사업체수
@@ -160,7 +180,7 @@
                     {{ Number.isFinite(corpCnt) ? CommonUtil.comma(corpCnt) : '-' }}
                   </template>
                 </el-table-column>
-                <el-table-column prop="workerCnt" align="right" width="90px" sortable>
+                <el-table-column prop="workerCnt" align="right" width="90px" sortable="custom">
                   <template #header>
                     <span style="text-align: center; display: inline-block"
                       >종사자수</span
@@ -215,6 +235,7 @@
   } from '@/api/app/basic/loc/characteristic'
   import { useBasicLocIndCharITAStore } from '@/stores/app/basic/loc/ind-char/ITA'
   import { getConfig } from '@/api/app/config'
+  import { TableColumnCtx } from 'element-plus'
 
   const basicLocIndCharITAStore = useBasicLocIndCharITAStore()
 
@@ -222,6 +243,10 @@
   const pageInfo = pageObj.pageInfo
   pageInfo.currentPageSize = 20
 
+  const currentParams = ref<ItaDto.Data.Search.Params>()
+
+  const useSales = ref<boolean>(false)
+  const useWorkerCnt = ref<boolean>(false)
   const repData = ref<StatusDto.IndustryRep[]>([])
   const sources = ref<SourceGroupDTO.SourceDTO[]>([])
   const statusData = ref<ItaDto.Data.Search.Row[]>([])
@@ -254,34 +279,82 @@
 
   const prefixPath = `${API_INFO_CIAMS.PREFIX}/api/v1/file/image/`
 
-  const top5lqValue = computed<number[]>(() =>
-    [...statusData.value]
-      .sort((a, b) => b.lqValue - a.lqValue)
-      .slice(0, 5)
-      .map((item) => item.lqValue),
-  )
+  // const top5lqValue = computed<number[]>(() =>
+  //   [...statusData.value]
+  //     .sort((a, b) => b.lqValue - a.lqValue)
+  //     .slice(0, 5)
+  //     .map((item) => item.lqValue),
+  // )
+
+  function setParams(params: ItaDto.Data.Search.Params) {
+    currentParams.value = params
+  }
 
   async function search(pageNo: number, size: number) {
     const { data } = await getItaData({
       size,
       pageNo,
-      type: props.type,
+      ...currentParams.value!,
     })
     responseData(data)
   }
 
-  function runSearch() {
+  function runSearch(orders?: ItaDto.Data.Search.OrderBy[]) {
+    const params: ItaDto.Data.Search.Params = {
+      type: props.type,
+      orderByList: orders,
+    }
+
+    setParams(params)
     search(1, pageInfo.currentPageSize)
   }
 
   function responseData(data: ItaDto.Data.Search.Result) {
     statusData.value = data.list
-
     pageObj.setPageData(data.page)
   }
 
   function handleCurrentChange(pageNo: number) {
     search(pageNo, pageInfo.currentPageSize)
+  }
+
+  const hasAnyValue = (data: StatusDto.IndustryRep[], key: string) =>
+    data.some((item) => item[key] != null)
+
+  const cellStyle = ({ row, column }) => {
+    if (column.property === 'corpCnt' && row.isTopCorp) {
+      return {
+        color: 'blue',
+        fontWeight: 'bold',
+      }
+    } else if (column.property === 'workerCnt' && row.isTopWorker) {
+      return {
+        color: 'red',
+        fontWeight: 'bold',
+      }
+    }
+    return {}
+  }
+
+  const handleSortChange = (data: { column: TableColumnCtx<Object>; prop: string; order: any }) => {
+    if (!data.order || !data.prop) {
+      // emits('update:sort', [])
+      runSearch([])
+      return
+    }
+
+    const direction: 'ASC' | 'DESC' = data.order === 'ascending' ? 'ASC' : 'DESC'
+
+    const orderByList: ItaDto.Data.Search.OrderBy[] =
+      data.prop === 'combinedCode'
+        ? [
+            { column: 'tCode', direction },
+            { column: 'clsCode', direction },
+          ]
+        : [{ column: data.prop, direction }]
+
+    // emits('update:sort', orderByList)
+    runSearch(orderByList)
   }
 
   onMounted(async () => {
@@ -292,6 +365,9 @@
     repData.value = rawStatusData.industryReps
     sources.value = rawStatusData.sources[0]?.sources
     descriptions.value = rawStatusData.descriptions
+
+    useSales.value = hasAnyValue(repData.value, 'sales')
+    useWorkerCnt.value = hasAnyValue(repData.value, 'workerCnt')
 
     const rawTempData = await getIndustryStatusTemp({
       type: props.type,

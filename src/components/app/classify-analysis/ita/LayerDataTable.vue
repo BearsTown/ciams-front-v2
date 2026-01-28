@@ -49,7 +49,12 @@
         </el-table-column>
         <template v-for="(item, index) in state.attributes" :key="index">
           <el-table-column :label="item.label" align="center">
-            <el-table-column :label="item.unit" align="center" :prop="`${item.name}.value`">
+            <el-table-column
+              :label="item.unit"
+              align="right"
+              header-align="center"
+              :prop="`${item.name}.value`"
+            >
               <template #default="{ row: { data } }">
                 {{
                   data?.[item.name].value === 0 ? '-' : CommonUtil.comma(data?.[item.name].value)
@@ -59,7 +64,8 @@
             <el-table-column
               v-if="item.useRatio"
               label="비율(%)"
-              align="center"
+              align="right"
+              header-align="center"
               :prop="`${item.name}.ratio`"
             >
               <template #default="{ row: { data } }">
@@ -120,7 +126,6 @@
         sums[index] = h('div', { style: {} }, ['합계'])
         return
       }
-
       if (CommonUtil.isEmpty(column.property)) {
         return
       }
@@ -139,7 +144,11 @@
             return prev
           }
         }, 0)
-        sums[index] = CommonUtil.comma(total.toFixed(0))
+        if (column.property.includes('ratio')) {
+          sums[index] = total.toFixed(1)
+        } else {
+          sums[index] = CommonUtil.comma(total.toFixed(0))
+        }
       }
     })
 

@@ -1,5 +1,6 @@
 import { SourceGroupDTO } from '@/api/app/source/model'
 import { PageReq, PageRes } from '@/api/app/model'
+import { OrderBy } from '@/models/api/app/basic/loc/characteristic/char-result'
 
 export namespace ItaDto {
   namespace Info {
@@ -19,6 +20,7 @@ export namespace ItaDto {
     namespace Search {
       export interface Params extends PageReq {
         type?: string
+        orderByList?: OrderBy[]
       }
 
       export interface Row extends ItaData {
@@ -28,6 +30,11 @@ export namespace ItaDto {
       export interface Result {
         page: PageRes
         list: Row[]
+      }
+
+      export interface OrderBy {
+        column: string
+        direction: 'ASC' | 'DESC'
       }
     }
   }
@@ -52,6 +59,8 @@ export namespace ItaDto {
     lqRec: string
     corpCnt: number
     workerCnt: number
+    isTopCorp: boolean
+    isTopWorker: boolean
   }
 
   export interface Adjacent {

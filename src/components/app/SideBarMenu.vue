@@ -110,11 +110,13 @@
   import { getConfig } from '@/api/app/config'
 
   import { useAuthStore } from '@/stores/auth'
+  import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
   const route = useRoute()
   const router = useRouter()
 
   const authStore = useAuthStore()
+  const cmmConfigStore = useCmmConfigStore()
 
   const { isAdmin, userInfo, menuInfo } = storeToRefs(authStore)
 
@@ -167,7 +169,12 @@
   }
 
   function toLabel(title: string) {
-    return title?.replaceAll(' ', '<br />')
+    let label = title?.replaceAll(' ', '<br />')
+    if (title.includes('{SGG_NAME}')) {
+      const sggName = computed(() => `${cmmConfigStore.cmmConfigState['SGG_NAME']?.confValue}`)
+      label = title?.replaceAll('{SGG_NAME}', sggName?.value)
+    }
+    return label
   }
 
   function isMenuCheck(key: MenuType) {

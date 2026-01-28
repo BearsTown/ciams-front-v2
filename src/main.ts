@@ -9,7 +9,7 @@ import InlineSvg from 'vue-inline-svg'
 
 import { use as echartsUse } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
-import { BarChart, LineChart, PieChart, ScatterChart } from 'echarts/charts'
+import { BarChart, LineChart, PieChart, ScatterChart, EffectScatterChart } from 'echarts/charts'
 import {
   GridComponent,
   LegendComponent,
@@ -59,6 +59,7 @@ echartsUse([
   BarChart,
   PieChart,
   ScatterChart,
+  EffectScatterChart,
   GridComponent,
   TitleComponent,
   TooltipComponent,

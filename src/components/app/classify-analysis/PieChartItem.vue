@@ -104,7 +104,10 @@
         label: {
           show: true,
           position: 'inside',
-          formatter: '{b}\n{c}%',
+          // formatter: '{b}\n{c}%',
+          formatter: (params) => {
+            return `${params.name}\n${params.value.toFixed(1)}%`
+          },
           color: '#fff',
           textBorderColor: '#000',
           textBorderWidth: 2,
@@ -126,11 +129,20 @@
   function valueFormatter(val: number | string, unit: string) {
     if (typeof val === 'string') {
       return `${val} ${unit}`
-    } else if (CommonUtil.isInvalidNumber(val)) {
-      return `${unit}`
-    } else {
-      return `${CommonUtil.comma(val)} ${unit}`
     }
+
+    if (CommonUtil.isInvalidNumber(val)) {
+      return unit === '%' ? `0.0 ${unit}` : `${unit}`
+    }
+
+    let formattedVal: string
+    if (unit === '%') {
+      formattedVal = CommonUtil.comma(val.toFixed(1))
+    } else {
+      formattedVal = CommonUtil.comma(val)
+    }
+
+    return `${formattedVal} ${unit}`
   }
 </script>
 

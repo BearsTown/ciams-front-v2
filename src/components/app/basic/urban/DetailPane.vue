@@ -26,11 +26,10 @@
         size="small"
         :show-header="true"
         show-summary
-        style="z-index: 0"
+        style="z-index: 0; height: auto"
         empty-text="데이터가 없습니다."
         scrollbar-always-on
-        height="260"
-        max-height="260"
+        max-height="350"
         border
         :summary-method="getSummaries"
         :cell-style="getCellStyle"
@@ -40,7 +39,7 @@
             <div :style="{ width: '15px', height: '15px', backgroundColor: color }"></div>
           </template>
         </el-table-column>
-        <el-table-column label="구분" align="center">
+        <el-table-column label="구분" align="left" header-align="center">
           <template #default="{ row: { label } }">
             {{ label }}
           </template>
@@ -48,6 +47,7 @@
         <template v-for="(item, index) in state.attributes" :key="index">
           <el-table-column :label="item.label" align="center">
             <el-table-column
+              width="100"
               :label="item.unit"
               align="right"
               header-align="center"
@@ -60,6 +60,7 @@
               </template>
             </el-table-column>
             <el-table-column
+              width="100"
               v-if="item.useRatio"
               label="비율(%)"
               align="right"
@@ -67,7 +68,7 @@
               :prop="`${item.name}.ratio`"
             >
               <template #default="{ row: { data } }">
-                {{ data?.[item.name].ratio === 0 ? '0.0' : data?.[item.name].ratio }}
+                {{ data?.[item.name].value === 0 ? '-' : data?.[item.name].ratio.toFixed(1) }}
               </template>
             </el-table-column>
           </el-table-column>
@@ -129,7 +130,6 @@
         sums[index] = h('div', { style: {} }, ['합계'])
         return
       }
-
       if (CommonUtil.isEmpty(column.property)) {
         return
       }
@@ -148,7 +148,11 @@
             return prev
           }
         }, 0)
-        sums[index] = CommonUtil.comma(total.toFixed(0))
+        if (column.property.includes('ratio')) {
+          sums[index] = total.toFixed(1)
+        } else {
+          sums[index] = CommonUtil.comma(total.toFixed(0))
+        }
       }
     })
 

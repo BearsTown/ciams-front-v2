@@ -9,7 +9,7 @@
         <div class="top customScroll">
           <div class="text-wrap">
             <template v-for="desc in descriptions" :key="desc.id">
-              <p v-if="desc.description">- {{ desc.description }}</p>
+              <p v-if="desc.description">ㆍ{{ desc.description }}</p>
             </template>
           </div>
         </div>
@@ -259,9 +259,9 @@
       case '신흥산업':
         backgroundColor = '#dbe6c3'
         break
-      case '쇠퇴산업':
-        backgroundColor = '#B5AAA7'
-        break
+      // case '쇠퇴산업':
+      //   backgroundColor = '#B5AAA7'
+      //   break
     }
 
     switch (row.lqRec) {

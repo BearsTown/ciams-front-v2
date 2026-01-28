@@ -1,3 +1,5 @@
+import { CiamsAnalysisDescription } from '@/models/api/app/classify-analysis/ciams-analysis'
+
 export namespace ConceptDto {
   namespace Info {
     namespace Find {
@@ -39,7 +41,7 @@ interface CiamsPlanZoneImage {
 
 interface BaseDescDTO {
   category: string
-  list: string[]
+  list: CiamsAnalysisDescription[]
 }
 
 interface ZoneDescDTO {

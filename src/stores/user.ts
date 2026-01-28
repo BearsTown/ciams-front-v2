@@ -13,10 +13,13 @@ export const useUserStore = defineStore('userStore', () => {
     const { data: rsa } = await getRsaPublicKey()
     const encrypt = new JSEncrypt()
     encrypt.setPublicKey(rsa)
-    user.password = encrypt.encrypt(user.password)
+    // user.password = encrypt.encrypt(user.password)
 
     // const { data: result } = await apiRegister(user)
-    return await apiRegister(user)
+    return await apiRegister({
+      ...user,
+      password: encrypt.encrypt(user.password),
+    })
   }
 
   async function changePassword(param: User.PwdChange) {

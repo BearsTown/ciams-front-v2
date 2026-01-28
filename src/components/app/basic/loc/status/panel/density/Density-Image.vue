@@ -1,7 +1,12 @@
 <template>
   <el-space
     wrap
-    style="display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; height: 100%"
+    :style="{
+      display: 'grid',
+      gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
+      width: '100%',
+      height: '100%',
+    }"
   >
     <el-card v-for="year in years" :key="year">
       <template #header>
@@ -37,6 +42,9 @@
   )
 
   const activeYear = ref()
+  const columnCount = computed(() => {
+    return years.value?.length > 3 ? 4 : years.value?.length
+  })
   const years = computed(() => props.densities?.map((density) => density.year))
   const yearImage = computed(() => {
     return props.densities?.reduce((acc, density) => {

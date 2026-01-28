@@ -39,7 +39,7 @@
                 <ul class="">
                   <template v-for="(desc, idx) in item?.list" :key="idx">
                     <li style="line-height: 1.5; letter-spacing: -0.28px; color: #616161">
-                      ∘ {{ desc }}
+                      ㆍ{{ desc }}
                     </li>
                   </template>
                 </ul>
@@ -53,7 +53,7 @@
                 <ul class="">
                   <template v-for="(desc, idx) in item?.list" :key="idx">
                     <li style="line-height: 1.5; letter-spacing: -0.28px; color: #616161">
-                      ∘ {{ desc }}
+                      ㆍ{{ desc }}
                     </li>
                   </template>
                 </ul>
@@ -137,7 +137,7 @@
   const overview = computed<CiamsZoneDTO.Overview.Find.Result | undefined>(() => state.overview)
 
   function tagColor(itaReCd: string) {
-    return state.tags?.find((tag) => tag.value === itaReCd)?.color
+    return state.tags?.find((tag) => tag.value === itaReCd)?.color ?? '#b2b2b2'
   }
 
   async function getImage(id: number) {
@@ -154,7 +154,18 @@
     async () => {
       if (overview.value?.zoneNo) {
         const { data } = await getMenu3Sub1Info(overview.value?.zoneNo)
-        info.value = data
+
+        const orders1 = ['기본방향', '공간관리방안']
+        const orders2 = ['위치도', '현황사진', '기본구상']
+        info.value = {
+          ...data,
+          zoneDescs: [...data.zoneDescs].sort(
+            (a, b) => orders1.indexOf(a.category) - orders1.indexOf(b.category),
+          ),
+          zoneImages: [...data.zoneImages].sort(
+            (a, b) => orders2.indexOf(a.category) - orders2.indexOf(b.category),
+          ),
+        }
       } else {
         info.value = undefined
       }

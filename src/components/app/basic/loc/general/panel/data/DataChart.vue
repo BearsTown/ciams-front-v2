@@ -50,7 +50,7 @@
       const series = ref()
 
       const data = newDataInfo.data || []
-      const legend = newDataInfo.chartInfo.legend
+      let legend = newDataInfo.chartInfo.legend
       const categories = newDataInfo.chartInfo.categories
 
       const totalTextLength = legend.reduce((sum, item) => sum + item.length, 0)
@@ -89,18 +89,79 @@
       } else {
         const columns = newDataInfo.columns || []
 
-        series.value = columns
-          .filter((col) => col.useAxis)
-          .map((col) => ({
-            name: col.label,
-            type: col.seriesType === 'stack' ? 'bar' : col.seriesType,
-            stack: col.seriesType === 'stack' ? 'total' : '',
-            // label: {
-            //   show: true,
-            //   position: col.seriesType === 'stack' ? 'inside' : 'top',
-            // },
-            data: data.map((item) => item[col.name]),
-          }))
+        /**
+         * 안동시 요구사항
+         */
+        // 증감 시리즈 생성 함수
+        const createCAGRSeries = (data, cagrField) => {
+          const positiveData = data.map((item) => (item[cagrField] >= 0 ? item[cagrField] : 0))
+          const negativeData = data.map((item) => (item[cagrField] < 0 ? item[cagrField] : 0))
+
+          return [
+            {
+              name: '증가',
+              type: 'bar',
+              stack: 'total',
+              itemStyle: {
+                color: '#e74c3c',
+              },
+              data: positiveData,
+              emphasis: {
+                focus: 'series',
+              },
+              label: {
+                show: true,
+                position: 'top',
+                formatter: (params) => (params.value > 0 ? params.value : ''),
+              },
+            },
+            {
+              name: '감소',
+              type: 'bar',
+              stack: 'total',
+              itemStyle: {
+                color: '#3498db',
+              },
+              data: negativeData,
+              emphasis: {
+                focus: 'series',
+              },
+              label: {
+                show: true,
+                position: 'bottom',
+                formatter: (params) => (params.value < 0 ? params.value : ''),
+              },
+            },
+          ]
+        }
+        switch (newDataInfo.dataTable.dataName) {
+          case 'status_pop_emd_pop_cagr': {
+            series.value = createCAGRSeries(data, 'pop_cagr')
+            legend = ['증가', '감소']
+            break
+          }
+
+          case 'status_pop_emd_hh_cagr': {
+            series.value = createCAGRSeries(data, 'hh_cagr')
+            legend = ['증가', '감소']
+            break
+          }
+          default:
+            series.value = columns
+              .filter((col) => col.useAxis)
+              .map((col) => ({
+                name: col.label,
+                type: col.seriesType === 'stack' ? 'bar' : col.seriesType,
+                stack: col.seriesType === 'stack' ? 'total' : '',
+                // label: {
+                //   show: true,
+                //   position: col.seriesType === 'stack' ? 'inside' : 'top',
+                // },
+                data: data.map((item) => item[col.name]),
+              }))
+
+            break
+        }
       }
 
       // ECharts configuration
@@ -159,6 +220,10 @@
         xAxis: {
           type: 'category',
           data: categories,
+          // axisLabel: {
+          //   interval: 0,
+          //   rotate: 45,
+          // },
         },
         yAxis: {
           type: 'value',

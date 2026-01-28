@@ -7,17 +7,24 @@
     :show-header="true"
     :cell-style="cellStyle"
     scrollbar-always-on
+    @sort-change="handleSortChange"
     border
   >
     <el-table-column label="산업분류" align="center" fixed>
-      <el-table-column label="코드" align="center" width="55px">
+      <el-table-column
+        label="코드"
+        align="center"
+        width="65px"
+        sortable="custom"
+        prop="combinedCode"
+      >
         <template #default="{ row }"> {{ row?.tcode }}{{ row?.clsCode }}</template>
       </el-table-column>
       <el-table-column label="대분류" prop="codeNm" align="center" min-width="220px" />
       <el-table-column label="산업" prop="insNm" align="center" min-width="290px" />
     </el-table-column>
     <el-table-column label="산업입지계수(LQ)" align="center">
-      <el-table-column label="분석값" prop="lqValue" align="right" width="80px" sortable>
+      <el-table-column label="분석값" prop="lqValue" align="right" width="80px" sortable="custom">
         <template #header>
           <span style="text-align: center; display: inline-block">분석값</span></template
         >
@@ -28,7 +35,7 @@
       <el-table-column label="분류" prop="lqClass" align="center" width="80px" />
     </el-table-column>
     <el-table-column label="고용성장률(Growth)" align="center">
-      <el-table-column label="분석값" prop="grValue" align="right" width="80px" sortable>
+      <el-table-column label="분석값" prop="grValue" align="right" width="80px" sortable="custom">
         <template #header>
           <span style="text-align: center; display: inline-block">분석값</span></template
         >
@@ -39,7 +46,7 @@
       <el-table-column label="분류" prop="grClass" align="center" width="80px" />
     </el-table-column>
     <el-table-column label="지역할당효과(RS)" align="center" width="80px">
-      <el-table-column label="분석값" prop="rsValue" align="right" width="80px" sortable>
+      <el-table-column label="분석값" prop="rsValue" align="right" width="80px" sortable="custom">
         <template #header>
           <span style="text-align: center; display: inline-block">분석값</span></template
         >
@@ -51,7 +58,7 @@
     </el-table-column>
     <el-table-column label="ITA분석" prop="itaRec" align="center" width="100px" />
     <el-table-column label="LQ분석" prop="lqRec" align="center" width="100px" />
-    <el-table-column label="사업체수" prop="corpCnt" align="right" width="90px" sortable>
+    <el-table-column label="사업체수" prop="corpCnt" align="right" width="90px" sortable="custom">
       <template #header>
         <span style="text-align: center; display: inline-block">사업체수</span></template
       >
@@ -59,7 +66,7 @@
         {{ Number.isFinite(corpCnt) ? CommonUtil.comma(corpCnt) : '-' }}
       </template>
     </el-table-column>
-    <el-table-column label="종사자수" prop="workerCnt" align="right" width="90px" sortable>
+    <el-table-column label="종사자수" prop="workerCnt" align="right" width="90px" sortable="custom">
       <template #header>
         <span style="text-align: center; display: inline-block">종사자수</span></template
       >
@@ -71,11 +78,10 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue'
-
   import CommonUtil from '@/utils/commonUtil'
 
   import { CharResultDto } from '@/models/api/app/basic/loc/characteristic/char-result'
+  import { TableColumnCtx } from 'element-plus'
 
   const props = withDefaults(
     defineProps<{
@@ -86,27 +92,27 @@
     },
   )
 
-  const top5corp = computed<number[]>(() =>
-    [...props.data]
-      .sort((a, b) => b.corpCnt - a.corpCnt)
-      .slice(0, 5)
-      .map((item) => item.corpCnt),
-  )
-
-  const top5worker = computed<number[]>(() =>
-    [...props.data]
-      .sort((a, b) => b.workerCnt - a.workerCnt)
-      .slice(0, 5)
-      .map((item) => item.workerCnt),
-  )
+  // const top5corp = computed<number[]>(() =>
+  //   [...props.data]
+  //     .sort((a, b) => b.corpCnt - a.corpCnt)
+  //     .slice(0, 5)
+  //     .map((item) => item.corpCnt),
+  // )
+  //
+  // const top5worker = computed<number[]>(() =>
+  //   [...props.data]
+  //     .sort((a, b) => b.workerCnt - a.workerCnt)
+  //     .slice(0, 5)
+  //     .map((item) => item.workerCnt),
+  // )
 
   const cellStyle = ({ row, column }) => {
-    if (column.property === 'corpCnt' && top5corp.value.includes(row.corpCnt)) {
+    if (column.property === 'corpCnt' && row.isTopCorp) {
       return {
         color: 'blue',
         fontWeight: 'bold',
       }
-    } else if (column.property === 'workerCnt' && top5worker.value.includes(row.workerCnt)) {
+    } else if (column.property === 'workerCnt' && row.isTopWorker) {
       return {
         color: 'red',
         fontWeight: 'bold',
@@ -114,6 +120,29 @@
     }
     return {}
   }
+
+  const handleSortChange = (data: { column: TableColumnCtx<Object>; prop: string; order: any }) => {
+    if (!data.order || !data.prop) {
+      emits('update:sort', [])
+      return
+    }
+
+    const direction: 'ASC' | 'DESC' = data.order === 'ascending' ? 'ASC' : 'DESC'
+
+    const orderByList: CharResultDto.Char.Search.OrderBy[] =
+      data.prop === 'combinedCode'
+        ? [
+            { column: 'tCode', direction },
+            { column: 'clsCode', direction },
+          ]
+        : [{ column: data.prop, direction }]
+
+    emits('update:sort', orderByList)
+  }
+
+  const emits = defineEmits<{
+    (e: 'update:sort', value: CharResultDto.Char.Search.OrderBy[]): void
+  }>()
 </script>
 
 <style lang="scss"></style>

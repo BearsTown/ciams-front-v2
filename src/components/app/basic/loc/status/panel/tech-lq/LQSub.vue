@@ -45,21 +45,21 @@
       <div style="margin-bottom: 3px; display: flex; flex-direction: row; align-items: center">
         <el-tag size="small" type="info">사업체</el-tag>
         <el-text style="margin-left: 5px; font-size: 13px">
-          {{ techTxt }}
+          {{ corpItem.header }}
           <span style="color: blue">
-            {{ corpLqsText }}
+            {{ corpItem.lqsTxt }}
           </span>
-          {{ corpLqsText ? endTxt : '' }}
+          {{ corpItem.endTxt }}
         </el-text>
       </div>
       <div style="display: flex; flex-direction: row; align-items: center">
         <el-tag size="small" type="info">종사자</el-tag>
         <el-text style="margin-left: 5px; font-size: 13px">
-          {{ techTxt }}
+          {{ workerItem.header }}
           <span style="color: blue">
-            {{ workerLqsText }}
+            {{ workerItem.lqsTxt }}
           </span>
-          {{ workerLqsText ? endTxt : '' }}
+          {{ workerItem.endTxt }}
         </el-text>
       </div>
     </div>
@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onActivated, onMounted, ref } from 'vue'
+  import { computed, onActivated, onMounted, reactive, ref } from 'vue'
 
   import VChart from 'vue-echarts'
 
@@ -94,6 +94,12 @@
     {},
   )
 
+  interface LqTextItem {
+    header?: string
+    lqsTxt?: string
+    endTxt?: string
+  }
+
   const cmmConfigStore = useCmmConfigStore()
 
   const sggCode = ref<string>()
@@ -102,14 +108,10 @@
   const items = ref([] as object[])
   const activeName = ref('')
 
-  const corpLqs = ref<string[]>([])
-  const workerLqs = ref<string[]>([])
   const tableData = ref<TechLQDto.TechLQ.Find.Result[]>([])
 
-  const techTxt = ref('')
-  const corpLqsText = computed(() => corpLqs.value.map((item) => `[${item}]`).join(', '))
-  const workerLqsText = computed(() => workerLqs.value.map((item) => `[${item}]`).join(', '))
-  const endTxt = computed(() => `의 지역 집적도가 높음`)
+  const corpItem = reactive<LqTextItem>({})
+  const workerItem = reactive<LqTextItem>({})
 
   async function handleCustomEvent(isActive: boolean, code: string, index: number) {
     if (!isActive) return
@@ -185,6 +187,7 @@
         symbolSize: 30,
         name: '지역',
         type: 'scatter',
+        zlevel: 1,
         emphasis: {
           scale: true,
         },
@@ -208,6 +211,21 @@
           fontSize: 10,
         },
       },
+      {
+        type: 'effectScatter',
+        symbolSize: 25,
+        zlevel: 10,
+        z: 10,
+        labelLayout: {
+          hideOverlap: false,
+        },
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{b}',
+          color: 'white',
+        },
+      },
     ],
     labelLayout: {
       hideOverlap: true, // 겹침 자동 방지
@@ -220,8 +238,8 @@
         const x = params.data.value[0]
         const y = params.data.value[1]
 
-        const samePoints = option.value.series[0].data.filter(
-          (d) => d.value[0] === x && d.value[1] === y,
+        const samePoints = option.value.series.flatMap((series) =>
+          series.data.filter((d) => d.value[0] === x && d.value[1] === y),
         )
 
         let tooltipText = `사업체: ${x} <br/> 종사자: ${y}<br/>`
@@ -290,15 +308,34 @@
     activeName.value = items.value[0].code
 
     if (CommonUtil.isEmpty(techData)) {
-      techTxt.value = `-`
+      corpItem.header = `집적도 높은 업종 없음`
+      workerItem.header = `집적도 높은 업종 없음`
     } else {
-      techTxt.value = `${techData?.parentTechNm} 산업은 `
-      corpLqs.value = techData?.techs
+      const corpLqs = techData?.techs
         ?.filter((tech) => tech.corpQualified)
         .map((tech) => tech.techNm)
-      workerLqs.value = techData?.techs
+
+      const workerLqs = techData?.techs
         ?.filter((tech) => tech.workerQualified)
         .map((tech) => tech.techNm)
+
+      const endTxt = `의 지역 집적도가 높음`
+
+      if (Array.isArray(corpLqs) && corpLqs.length > 0) {
+        corpItem.header = `${techData?.parentTechNm} 산업은 `
+        corpItem.lqsTxt = corpLqs?.map((item) => `[${item}]`).join(', ')
+        corpItem.endTxt = endTxt
+      } else {
+        corpItem.header = `집적도 높은 업종 없음`
+      }
+
+      if (Array.isArray(workerLqs) && workerLqs.length > 0) {
+        workerItem.header = `${techData?.parentTechNm} 산업은 `
+        workerItem.lqsTxt = workerLqs?.map((item) => `[${item}]`).join(', ')
+        workerItem.endTxt = endTxt
+      } else {
+        workerItem.header = `집적도 높은 업종 없음`
+      }
     }
 
     await loadData(props.lqParentCode)
@@ -311,10 +348,32 @@
 
     tableData.value = techLQ
 
-    option.value.series[0].data = tableData.value.map((item, index) => ({
+    const { matched, unmatched } = tableData.value.reduce<{
+      matched: TechLQDto.TechLQ.Find.Result[]
+      unmatched: TechLQDto.TechLQ.Find.Result[]
+    }>(
+      (acc, item) => {
+        if (sggName.value === item.sggNm) {
+          acc.matched.push(item)
+        } else {
+          acc.unmatched.push(item)
+        }
+
+        return acc
+      },
+      { matched: [], unmatched: [] },
+    )
+
+    option.value.series[0].data = unmatched.map((item, index) => ({
       name: item.sggNm,
       value: [item.corpLq, item.workerLq],
-      itemStyle: { color: sggName.value === item.sggNm ? 'red' : colors[index] },
+      itemStyle: { color: colors[index] },
+    }))
+
+    option.value.series[1].data = matched.map((item, index) => ({
+      name: item.sggNm,
+      value: [item.corpLq, item.workerLq],
+      itemStyle: { color: 'RED' },
     }))
 
     updateData()

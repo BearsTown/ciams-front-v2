@@ -67,7 +67,7 @@ const routes: RouteRecordRaw[] = [
             path: 'loc',
             name: 'basic/loc',
             meta: {
-              title: '김천시<br/>현황',
+              title: '{SGG_NAME}<br/>현황',
               layout: {
                 left: {
                   visible: true,

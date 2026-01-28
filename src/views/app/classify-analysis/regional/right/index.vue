@@ -110,6 +110,14 @@
           :data="{ value: overview?.roadRate, names: ['도로', '비도로'] }"
           :sources="source5"
         />
+
+        <Item
+          title="산업밀집도"
+          :value1="overview ? `${overview.density} 개/㎡` : ''"
+          :value2="overview ? `${overview.densityRe}` : ''"
+        />
+
+        <Description title="대상지 지역여건" :use-type="false" :descs="state.desc" />
       </div>
     </div>
   </div>
@@ -126,6 +134,8 @@
   import { SourceGroupDTO } from '@/api/app/source/model'
 
   import { useClassifyAnalysisRegionalStore } from '@/stores/app/classify-analysis/regional'
+  import Item from '@/components/app/classify-analysis/Item.vue'
+  import Description from '@/components/app/classify-analysis/Description.vue'
 
   const classifyAnalysisRegionalStore = useClassifyAnalysisRegionalStore()
 
@@ -134,7 +144,7 @@
   const overview = computed<CiamsZoneDTO.Overview.Find.Result | undefined>(() => state.overview)
 
   function tagColor(itaReCd: string) {
-    return state.tags?.find((tag) => tag.value === itaReCd)?.color
+    return state.tags?.find((tag) => tag.value === itaReCd)?.color ?? '#b2b2b2'
   }
 
   function getRowStyle(locReCd: string) {
