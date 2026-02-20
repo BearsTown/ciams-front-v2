@@ -131,7 +131,7 @@
     <div class="customCard">
       <InsideCollapse title="토지이용계획" :is-open="true">
         <template #sub>
-          <div style="display: flex">
+          <div style="display: flex; justify-content: end">
             <button type="button" class="btn-basic" @click.prevent.stop="getSV0000000167()">
               조회
             </button>
@@ -242,8 +242,8 @@
   import { MapType } from '@/enums/mapEnum'
   import CommonUtil from '@/utils/commonUtil'
 
-  import Kgeo from '@/api/app/land/kgeo/model'
-  import { getKgeoServiceData } from '@/api/app/land/kgeo'
+  import Kgeo from '@/api/app/kgeo/model'
+  import { getKgeoServiceData } from '@/api/app/kgeo'
 
   import { useGlobalStore } from '@/stores/app'
   import { useMapStore } from '@/stores/map/map'
@@ -272,7 +272,7 @@
   const { kgeoInfoItem: detailItem } = storeToRefs(openApiStore)
 
   const ladUsePlanLawB = ref([] as KeyValue[])
-  const SV0000000167 = ref({} as Kgeo.Result.SV0000000167)
+  const SV0000000167 = ref({} as Kgeo.SV0000000167.Result)
 
   function loadData() {
     Map.getLandVworld('KGEO', props.mapType)
@@ -286,13 +286,13 @@
     const { data } = await getKgeoServiceData('SV0000000167', { pnu })
 
     if (data.code === 200) {
-      SV0000000167.value = data.result as Kgeo.Result.SV0000000167
+      SV0000000167.value = data.result as Kgeo.SV0000000167.Result
       if (!CommonUtil.isEmpty(SV0000000167.value)) {
         ladUsePlanLawB.value = getLawStr(SV0000000167.value.base.ladUsePlanLawB)
       }
     } else {
       ladUsePlanLawB.value = [] as KeyValue[]
-      SV0000000167.value = {} as Kgeo.Result.SV0000000167
+      SV0000000167.value = {} as Kgeo.SV0000000167.Result
     }
 
     globalStore.loadingOff()
@@ -332,7 +332,7 @@
   watch(locInfo, () => {
     openApiStore.setKgeoInfoItem({})
     ladUsePlanLawB.value = [] as KeyValue[]
-    SV0000000167.value = {} as Kgeo.Result.SV0000000167
+    SV0000000167.value = {} as Kgeo.SV0000000167.Result
     loaded.value = false
     if (isActive.value) {
       loadData()

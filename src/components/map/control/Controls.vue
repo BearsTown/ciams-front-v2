@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mapController"
+    class="mapController no-print"
     :class="{
       active: rightOpenStatus,
     }"
@@ -212,13 +212,13 @@
       useFreehand: true,
       useSnap: false,
       drawStyle: new Style({
-        image: new CircleStyle({
-          radius: 3,
-          fill: new Fill({ color: 'red' }),
-          stroke: new Stroke({
-            color: 'black',
-          }),
-        }),
+        // image: new CircleStyle({
+        //   radius: 3,
+        //   fill: new Fill({ color: 'red' }),
+        //   stroke: new Stroke({
+        //     color: 'black',
+        //   }),
+        // }),
       }),
       featureStyle: locationInfoStyle,
       zIndex: 5000,

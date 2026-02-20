@@ -45,7 +45,7 @@ import { Fill, Stroke } from 'ol/style'
 import { getKrasData } from '@/api/app/land/kras'
 // import { usePlanAreaStore } from '@/stores/app/operation/planArea'
 import { DrawEvent } from 'ol/interaction/Draw'
-import { getKgeoUnionData } from '@/api/app/land/kgeo'
+import { getKgeoBuildInfo, getKgeoLandData } from '@/api/app/kgeo'
 
 import { useCmmConfigStore } from '@/stores/config/cmmConfig'
 
@@ -162,7 +162,7 @@ const mapUtil = {
         break
       }
       case 'KGEO': {
-        const { data } = await getKgeoUnionData(pnu + '')
+        const { data } = await getKgeoLandData(pnu + '')
         openApiStore.setKgeoInfoItem(data)
         globalStore.loadingOff()
         break
@@ -182,6 +182,36 @@ const mapUtil = {
         break
       }
     }
+  },
+
+  async getBuildVworld(type: 'KRAS' | 'KGEO' | 'PUBLIC', mapType: MapType) {
+    const globalStore = useGlobalStore()
+    const openApiStore = useOpenApiStore()
+    globalStore.loadingOn()
+
+    const mapStore = useMapStore(mapType)
+
+    const { pnu, point } = mapStore.locInfo
+
+    this.getVwordInfo({ point }, pnu).then((res) => {
+      mapStore.setAddress({
+        id: pnu,
+        point: { x: point.x, y: point.y },
+        address: {
+          parcel: res.text,
+          zipcode: res.zipcode,
+          type: res.type,
+        },
+      })
+    })
+    // switch (type) {
+    //   case 'KGEO': {
+    //     const { data } = await getKgeoBuildInfo(pnu + '')
+    //     openApiStore.setKgeoBuildInfo(data)
+    //     globalStore.loadingOff()
+    //     break
+    //   }
+    // }
   },
 
   async getLandKrasInfo(pnu: number, coord: { id: string; point: { x: number; y: number } }) {

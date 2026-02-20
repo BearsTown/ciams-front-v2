@@ -3,7 +3,11 @@
     <div :id="mapConfig.baseMapId" class="base-map"></div>
     <div :id="mapConfig.olMapId" class="ol-map"></div>
 
-    <div v-if="mapConfig.isMapLocation" class="mapLocation" :class="{ active: rightOpenStatus }">
+    <div
+      v-if="mapConfig.isMapLocation"
+      class="mapLocation no-print"
+      :class="{ active: rightOpenStatus }"
+    >
       <span class="location-text">X : {{ centerRef[0] }}</span>
       <span class="location-text">Y : {{ centerRef[1] }}</span>
     </div>

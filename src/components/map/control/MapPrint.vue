@@ -213,6 +213,11 @@
       // mapPrint!.image(code, { contentId: 'modal-content' }, { proxyUrl: '/' })
     } else {
       mapPrint!.image(code, { contentId: 'modal-content' })
+
+      // const canvas = await mapPrint!.getImgCanvasFromPrint(
+      //   document.getElementById('modal-content') as HTMLElement,
+      // )
+      // canvas.toDataURL()
     }
   }
 

@@ -7,6 +7,8 @@ import UitBaseMap from '@uitgis/ol-ugis-test/baseMap/uitBaseMap'
 import { MapLayer } from '@/js/layer'
 import { CommonLayerGroup, MapType, MapWrapperConfig, ViewLayerGroup } from '@/enums/mapEnum'
 
+import Zoom from 'ol/control/Zoom'
+
 export class MapWrapper {
   private mapType: MapType
   private config: MapWrapperConfig
@@ -67,6 +69,15 @@ export class MapWrapper {
       }),
     })
     uitMap.init()
+
+    uitMap
+      ?.getMap()
+      ?.getControls()
+      .forEach((control) => {
+        if (control instanceof Zoom) {
+          uitMap?.getMap()?.removeControl(control)
+        }
+      })
 
     const uitBaseMap = new UitBaseMap({
       target: this.config.baseMapId,

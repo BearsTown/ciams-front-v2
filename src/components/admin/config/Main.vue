@@ -277,4 +277,9 @@
     opacity: 0.5;
     text-decoration: line-through;
   }
+
+  .customTable {
+    width: 100%;
+    table-layout: fixed;
+  }
 </style>
